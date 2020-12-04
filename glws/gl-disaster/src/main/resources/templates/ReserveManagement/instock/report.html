@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('入库信息')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+
+        <form class="form-horizontal m" id="form-allocation-edit" th:object="${kInstock}">
+            <h2 class="col-sm-12" style="text-align: center;font-weight: bold ">
+                入库信息
+            </h2>
+            <h3 style="margin-left: 6%">
+                ---------基本信息---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            </h3>
+            <input name="id" th:field="*{id}" id="id" type="hidden">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">物资名称：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${kInstock.name}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">入库时间：</label>
+
+                        <div class="col-sm-8">
+                            <div name="warehousingTime" th:text="${#dates.format(kInstock.warehousingTime,'yyyy-MM-dd HH:mm:ss')}" class=" form-control-static"    type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">入库方式：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${kInstock.warehousingMode}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+            <h3 style="margin-left: 6%">
+                ----------详细信息---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            </h3>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">接货人电话：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${kInstock.receiverNumber}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">送货人：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${kInstock.deliveryPerson}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">送货人电话：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${kInstock.reasonNumber}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">接货人：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${kInstock.receiver}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">货物金额：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${kInstock.goodsMoney}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">货物数量：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${kInstock.goodsNumber}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">原因：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${kInstock.reason}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        </form>
+        <div class="button-b" style="margin-left: 70%" id="button-set">
+            <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+            <button type="button" class="btn btn-w-m btn-info" onclick="report()" >确认入库</button>
+
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "reserves/instock";
+        $("#form-allocation-edit").validate({
+            focusCleanup: true
+        });
+
+
+
+        $("input[name='warehousingTime']").datetimepicker({
+            format: "yyyy-mm-dd hh:ii:ss",
+            minView: "month",
+            autoclose: true
+        });
+
+
+        function report() {
+            var id=$("#id").val();
+                $.operate.save(prefix + "/cancel", {"instockId": id});
+        }
+    </script>
+</body>
+</html>

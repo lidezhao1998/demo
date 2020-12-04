@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('鼠虫害危害情况')" />
+    <style>
+        body{
+            position: relative;
+            background-color: #000000;
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        ul,li{
+            list-style: none;
+        }
+        .clear:after{
+            display: block;
+            content: "";
+            clear:both;
+        }
+
+        #mainleft,#mainright{
+            float:left;
+            height: 75%;
+            margin-top: -60px;
+        }
+        #mainleft{
+            width:23%;
+        }
+        #mapchart{
+            width: 100%;
+            height: 100%;
+        }
+
+        /*悬浮框*/
+        #plan{
+            margin: 10px;
+            background-color: #011C31;
+            border-top: 1px solid #27BFC4;
+            border-left: 1px solid #27BFC4;
+            font-size: 12px;
+            color: #fff;
+            width: 200px;
+        }
+        #plan li{
+            height: 20px;
+            padding-left: 10px;
+            border-bottom: 1px solid #27BFC4;
+
+        }
+        #plan li:first-child{
+            font-size: 14px;
+            height: 22px;
+        }
+        #plan li:first-child img{
+            width: 10px;
+            display: inline-block;
+            margin:4px 4px 0 -4px;
+        }
+        #plan li span{
+            display: inline-block;
+        }
+        #plan li span:first-child{
+            width: 70px;
+        }
+        #plan li span:nth-child(2){
+            width: 60px;
+        }
+        #plan li span:nth-child(3){
+            width: 50px;
+        }
+        /*排行榜*/
+        #mainright{
+            width: 22%;
+        }
+        #mainright{
+            padding: 10px;
+        }
+        #rank{
+            background-color: rgba(119,119,119,.3);
+            width:98%;
+            height: 94%;
+            color: white;
+            position: relative;
+        }
+        #rank li p{
+            float: left;
+        }
+        /*四个角*/
+        #rank>li.corner>p{
+            width: 16px;
+            height: 16px;
+        }
+        #rank>li:first-child>p:first-child{
+            float: left;
+            border-top: 1px solid #27BFC4;
+            border-left: 1px solid #27BFC4;
+        }
+        #rank>li:first-child>p:last-child{
+            float: right;
+            border-top: 1px solid #27BFC4;
+            border-right: 1px solid #27BFC4;
+        }
+        #rank>li.corner:last-child{
+            position: absolute;
+            bottom:0;
+            width: 100%;
+        }
+        #rank>li:last-child>p:first-child{
+            float: left;
+            border-bottom: 1px solid #27BFC4;
+            border-left: 1px solid #27BFC4;
+        }
+        #rank>li:last-child>p:last-child{
+            float: right;
+            border-bottom: 1px solid #27BFC4;
+            border-right: 1px solid #27BFC4;
+        }
+        /*排行榜主体*/
+        #rank>li.thead{
+            margin-bottom: 8px;
+        }
+        #rank>li.tobdy:hover{
+            background-color: rgba(255,255,255,.2);
+        }
+        #rank>li.tobdy{
+            height: 9.3%;
+            padding-top: 10px;
+        }
+        #rank>li.tobdy>p:first-child{
+            width: 20%;
+        }
+        #rank>li.tobdy>p:first-child span{
+            display: block;
+            width:20px;
+            height: 20px;
+            text-align: center;
+            background-color: #27BFC4;
+            margin:auto;
+        }
+        #rank>li.tobdy>p:nth-child(2){
+            width: 25%;
+        }
+
+        /*进度条区域*/
+        #rank>li.tobdy>div{
+            float: left;
+            width: 51%;
+            height: 100%;
+        }
+        #rank>li.tobdy>div>ul li:first-child{
+            float: left;
+        }
+        #rank>li.tobdy>div>ul li:last-child{
+            float: right;
+        }
+        #rank p.prog-bg,#rank p.prog-on{
+            height: 4px;
+            border-radius:4px;
+        }
+        #rank p.prog-bg {
+            width: 100%;
+            margin-top: 4px;
+            background-color: rgba(119,119,119,.5);
+        }
+        #rank p.prog-on{
+            background-color: #95BA2E;
+            margin-top: -4px;
+        }
+    </style>
+</head>
+
+<body class="gray-bg" style="background-color: whitesmoke">
+
+    <div class="row">
+        <div class="col-sm-6">
+        <div style="height:600px;margin-right:50px"  class="echarts" id="echarts-map-chart"></div>
+        </div>
+
+
+        <div class="col-sm-6" id="hid" style="background-color: whitesmoke">
+            <div class="tabs-container" style="background-color: whitesmoke">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 柱状图</a>
+                    </li>
+                    <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">折线图</a>
+                    </li>
+                </ul>
+                <div class="tab-content" style="background-color: #000080">
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="panel-body">
+                            <div id="echarts-histogram-chart" style="width: 800px;height:400px;"></div>
+                        </div>
+                    </div>
+                    <div id="tab-2" class="tab-pane">
+                        <div class="panel-body">
+                            <div id="echarts-line-chart" style="width: 800px;height:400px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+    <!--选项卡-->
+  <!--  <div class="row">
+        <div class="col-sm-12">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="false"> 折线图</a>
+                    </li>
+                    <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">柱状图</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="panel-body">
+                            <div id="echarts-line-chart" style="width: 1300px;height:600px;"></div>
+
+                        </div>
+                    </div>
+                    <div id="tab-2" class="tab-pane">
+                        <div class="panel-body">
+                            <div id="echarts-histogram-chart" style="width: 1300px;height:600px;"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        &lt;!&ndash;折线图&ndash;&gt;
+        &lt;!&ndash; <div  id="echarts-line-chart" style="width: 1300px;height:600px;"></div>&ndash;&gt;
+
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>-->
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script type="text/javascript">
+
+
+    /*地图统计*/
+   $(function () {
+       $("#hid").attr("style","display:none;");
+       var prefix = ctx + "zaihai/sczjtj";
+
+        var dataList = []
+        var dataList2 = []
+        var dataList3 = []
+
+
+        //后端获取json数据
+        //请求地图数据
+        $.ajax({
+            url: prefix + "/getRequestCount",    //请求发送到dataActiont处
+            type: 'post',
+            dataType: 'json',
+            success: function (data) {
+
+                if (data.success) {
+                    dataList = data.dataList;
+                    dataList2 = data.engineeringhazardList;
+                    dataList3 = data.seriousAreaList;
+
+                    var mapChart = echarts.init(document.getElementById("echarts-map-chart"));
+                    // echart图表自适应
+                    window.addEventListener("resize", function() {
+                        mapChart.resize();
+                    });
+
+                    var mapoption = {
+                        visualMap: {
+                            show: true,
+                            min: 0, // 指定 visualMapContinuous 组件的允许的最小值。'min' 必须用户指定。[visualMap.min, visualMax.max] 形成了视觉映射的『定义域』。
+                            max: 1000, // 指定 visualMapContinuous 组件的允许的最大值
+                            text: ['High', 'Low'], // 两端的文本，如 ['High', 'Low'] 如例子：http://www.echartsjs.com/gallery/editor.html?c=doc-example/map-visualMap-continuous-text&edit=1&reset=1
+                            realtime: false, // 拖拽时，是否实时更新。
+                            calculable: false, // 是否显示拖拽用的手柄（手柄能拖拽调整选中范围）。
+                            hoverLink: false, // 打开 hoverLink 功能时，鼠标悬浮到 visualMap 组件上时，鼠标位置对应的数值 在 图表中对应的图形元素，会高亮。
+                            inRange: {
+                                // inRange (object)定义 在选中范围中 的视觉元素。（用户可以和 visualMap 组件交互，用鼠标或触摸选择范围）1、symbol: 图元的图形类别。2、symbolSize: 图元的大小。3、color: 图元的颜色。4、colorAlpha: 图元的颜色的透明度。5、opacity: 图元以及其附属物（如文字标签）的透明度。6、
+                                color: ['#0494e1', '#004098']
+                            },
+                        },
+
+                        title: {
+                            text: '草原鼠虫害预警',
+                            subtext: '',
+                            x: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            x: 'left',
+                            data: ['鼠害危害面积', '虫害危害面积'],
+                            selected: {
+                                '鼠害危害面积': false,
+
+                            },
+                            formatter: function (params) {
+                                if (params.indexOf('\n') == -1) {
+                                    return params;
+                                } else {
+                                    return '{white|' + params.split('\n')[0] + '}\n' + params.split('\n')[1];
+                                }
+                            },
+                            textStyle: {
+                                rich: {
+                                    white: {
+                                        color: "#fff",
+                                        fontSize: 12,
+                                        padding: [6, 0, 0, 0]
+                                    }
+                                }
+                            }
+                        },
+                        dataRange: {
+/*                            orient: 'horizontal',*/
+                            min: 0,
+                            max: 250000,
+                            x: 'left',
+                            y: 'bottom',
+                            text: ['高', '低'],           // 文本，默认为数值文本
+                            calculable: true
+/*
+                            splitNumber: 0
+*/
+                        },
+                        toolbox: {
+                            show: true,
+                            orient: 'vertical',
+                            x: 'right',
+                            y: 'center',
+                            feature: {
+                                mark: {show: true},
+                                dataView: {show: true, readOnly: false},
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        roamController: {
+                            show: true,
+                            x: 'right',
+                            mapTypeControl: {
+                                'china': true
+                            }
+                        },
+
+                        series: [
+
+                            {
+                                name: '鼠害危害面积',
+                                type: 'map',
+                                mapType: 'china',
+                                itemStyle: {
+                                    normal: {
+                                        label: {show: true}, color: 'blue',fontSize: 5,
+                                        areaStyle: {
+                                            color: 'blue',//默认的地图板块颜色
+                                        },
+                                        textStyle: {
+                                            fontSize: 5,
+                                            fontWeight: 'bold',
+                                            color: 'red'
+                                        }
+                                    },//默认是否显示省份名称
+
+                                    emphasis: {label: {show: true}},
+
+                                },
+
+                                data: dataList
+                            },
+                            {
+                                name: '虫害危害面积',
+                                type: 'map',
+                                mapType: 'china',
+                                itemStyle: {
+                                    normal: {label: {show: true}},
+                                    emphasis: {label: {show: true}},
+                                    areaStyle: {
+                                        color: 'red',//默认的地图板块颜色
+                                    },
+                                },
+                                data: dataList2
+                            },
+                        ]
+                    };
+                    mapChart.setOption(mapoption);//先渲染出空地图
+                    mapChart.on('dblclick', function (params) {
+                        document.getElementById("hid").style.display="none";//显示
+
+                    });
+
+                    //点击回显
+                    mapChart.on('click', function (params) {
+
+                            var province=params.data.name
+                        document.getElementById("hid").style.display="";//显示
+
+
+                        console.log(params);//此处写点击事件内容
+                        var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+                        var harmTotalarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                        var engineeringhazard = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                        var seriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                        var engineeringSeriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                        var defensiveArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                        var controlarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+
+                        var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+
+                        //var province = [[${province}]]
+
+                        var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+                        $.ajax({
+                            type: "post",
+                            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                            url: prefix + "/getOption",    //请求发送到dataActiont处
+                            data: {province: province},
+                            dataType: "json",        //返回数据形式为json
+                            success: function (result) {
+                                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                                if (result) {
+
+                                    for (var i = 0; i < result.length; i++) {
+                                        year.push(result[i].year);
+                                        harmTotalarea.push(result[i].harmTotalarea);
+                                        engineeringhazard.push(result[i].engineeringhazard);
+                                        seriousArea.push(result[i].seriousArea);
+                                        engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                        defensiveArea.push(result[i].defensiveArea);
+                                        controlarea.push(result[i].controlarea);
+
+                                        week.push(result[i].week);
+                                    }
+                                    lineChart.hideLoading();    //隐藏加载动画
+                                    lineChart.setOption({        //加载数据图表
+                                        title: {
+                                            text: '草原虫害防治'
+                                        },
+                                        tooltip: {
+                                            trigger: 'axis',
+
+                                        },
+                                        legend: {
+                                            width: "70%",
+                                            data: ['危害总面积', '严重危害面积', '工程区危害面积', '工程区严重危害面积', '当年防治面积', '持续控制面积'],
+                                            selected: {
+                                                '工程区严重危害面积': false,
+                                                '严重危害面积': false,
+                                                '工程区危害面积': false,
+                                                '当年防治面积': false,
+                                                '持续控制面积': false,
+
+                                            },
+                                        },
+                                        calculable: true,
+                                        xAxis: {
+                                            boundaryGap: false,
+                                            data: year
+                                        },
+                                        yAxis: {
+                                            type: 'value'
+                                        },
+                                        series: [
+                                            {
+                                                name: '危害总面积',
+                                                type: 'line',
+                                                smooth: true,
+                                                stack: '危害总面积',
+                                                data: harmTotalarea
+                                            },
+                                            {
+                                                name: '严重危害面积',
+                                                type: 'line',
+                                                smooth: true,
+                                                stack: '危害总面积',
+                                                data: engineeringhazard
+                                            },
+                                            {
+                                                name: '工程区危害面积',
+                                                type: 'line',
+                                                smooth: true,
+                                                stack: '工程区危害面积',
+                                                data: seriousArea
+                                            },
+                                            {
+                                                name: '工程区严重危害面积',
+                                                type: 'line',
+                                                smooth: true,
+                                                stack: '工程区严重危害面积',
+                                                data: engineeringSeriousArea
+                                            },
+                                            {
+                                                name: '当年防治面积',
+                                                type: 'line',
+                                                smooth: true,
+                                                stack: '当年防治面积',
+                                                data: defensiveArea
+                                            },
+                                            {
+                                                name: '持续控制面积',
+                                                type: 'line',
+                                                smooth: true,
+                                                stack: '持续控制面积',
+                                                data: controlarea
+                                            }
+                                        ]
+
+                                    });
+                                    window.onresize = lineChart.resize;
+                                }
+                            },
+                            error: function (errorMsg) {
+                                //请求失败时执行该函数
+                                alert("图表请求数据失败!");
+                                lineChart.hideLoading();
+                            }
+                        });
+
+                        console.log(params);
+
+
+                        /*柱状图*/
+
+                        var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+                        var harmTotalarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                        var engineeringhazard = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                        var seriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                        var engineeringSeriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                        var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                        var city = [];
+                        var defensiveArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                        var controlarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+
+
+                        var lineChart1 = echarts.init(document.getElementById("echarts-histogram-chart"));
+                        $.ajax({
+                            type: "post",
+                            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                            url: prefix + "/getOptionHistogram",    //请求发送到dataActiont处
+                            data: {province: province},
+                            dataType: "json",        //返回数据形式为json
+                            success: function (result) {
+                                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                                if (result) {
+
+                                    for (var i = 0; i < result.length; i++) {
+                                        year.push(result[i].year);
+                                        harmTotalarea.push(result[i].harmTotalarea);
+                                        engineeringhazard.push(result[i].engineeringhazard);
+                                        seriousArea.push(result[i].seriousArea);
+                                        engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                        city.push(result[i].city);
+                                        defensiveArea.push(result[i].defensiveArea);
+                                        controlarea.push(result[i].controlarea);
+
+
+                                    }
+                                    lineChart1.hideLoading();    //隐藏加载动画
+                                    lineChart1.setOption({        //加载数据图表
+                                        title: {
+                                            text: '草原虫害防治'
+                                        },
+                                        tooltip: {
+                                            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                                type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                                            }
+                                        },
+                                        legend: {
+                                            width: "70%",
+                                            data: ['危害总面积', '严重危害面积', '工程区危害面积', '工程区严重危害面积', '当年防治面积', '持续控制面积'],
+                                            /*selected:{
+                                                '工程区危害总面积' :false,
+                                                '严重危害面积' :false,
+                                                '工程区危害面积' :false,
+                                            },*/
+                                        },
+                                        calculable: true,
+                                        xAxis: {
+                                            data: city
+                                        },
+                                        yAxis: {
+                                            type: 'value'
+                                        },
+                                        series: [{
+                                            name: '危害总面积',
+                                            type: 'bar',
+                                            stack: '总量',
+                                            barWidth: 40,//柱图宽度
+                                            data: harmTotalarea
+                                        },
+                                            {
+                                                name: '严重危害面积',
+                                                type: 'bar',
+                                                stack: '总量',
+                                                barWidth: 40,//柱图宽度
+                                                data: engineeringhazard
+                                            },
+                                            {
+                                                name: '工程区危害面积',
+                                                type: 'bar',
+                                                stack: '总量',
+                                                barWidth: 40,//柱图宽度
+                                                data: seriousArea
+                                            },
+                                            {
+                                                name: '工程区严重危害面积',
+                                                type: 'bar',
+                                                stack: '总量',
+                                                barWidth: 40,//柱图宽度
+                                                data: engineeringSeriousArea
+                                            },
+                                            {
+                                                name: '当年防治面积',
+                                                type: 'bar',
+                                                stack: '总量',
+                                                barWidth: 40,//柱图宽度
+                                                data: defensiveArea
+                                            },
+                                            {
+                                                name: '持续控制面积',
+                                                type: 'bar',
+                                                stack: '总量',
+                                                barWidth: 40,//柱图宽度
+                                                data: controlarea
+                                            }
+                                        ]
+
+                                    });
+                                    window.onresize = lineChart1.resize;
+
+                                }
+                            },
+                            error: function (errorMsg) {
+                                //请求失败时执行该函数
+                                alert("图表请求数据失败!");
+                                lineChart1.hideLoading();
+                            }
+                        });
+                    });
+                    $(window).resize(mapChart.resize);
+
+
+                } else {
+                    console.log("getRequestCount 加载失败")
+                }
+            },
+            error: function (jqXHR) {
+                alert("getRequestCount发生错误：" + jqXHR.status);
+                // }
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

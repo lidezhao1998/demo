@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('科技成果信息列表')" />
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-striped table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: whitesmoke;
+        height: 55px;
+    }
+    /*按钮背景色*/
+    .btn-success{
+        background-color: #30923E;
+    }
+</style>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>成果名称：</p>
+                            <input type="text" name="sumbitter"/>
+                        </li>
+                        <!--<li>
+                            <p>成果类型：</p>
+                            <select name="type" th:with="type=${@dict.getType('')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>-->
+                        <!-- <li>
+                             <p>所属技术领域：</p>
+                             <input type="text" name="technicalField"/>
+                         </li>
+                         <li>
+                             <p>email：</p>
+                             <input type="text" name="email"/>
+                         </li>
+                         <li>
+                             <p>地址：</p>
+                             <input type="text" name="address"/>
+                         </li>-->
+                        <li>
+                            <p>联系方式：</p>
+                            <input type="text" name="phone"/>
+                        </li>
+                        <!-- <li>
+                             <p>传真：</p>
+                             <input type="text" name="fax"/>
+                         </li>
+                         <li>
+                             <p>技术成熟度：</p>
+                             <input type="text" name="technologyMaturity"/>
+                         </li>
+                         <li>
+                             <p>研发方式：</p>
+                             <input type="text" name="rdmethods"/>
+                         </li>
+                         <li>
+                             <p>合作方式：</p>
+                             <input type="text" name="cooperationMethod"/>
+                         </li>
+                         <li>
+                             <p>成果应用情况：</p>
+                             <input type="text" name="resultsApplication"/>
+                         </li>
+                         <li>
+                             <p>实施成果转化需求：</p>
+                             <input type="text" name="demand"/>
+                         </li>
+                         <li>
+                             <p>成果应用行业：</p>
+                             <input type="text" name="industry"/>
+                         </li>
+                         <li>
+                             <p>获奖类别：</p>
+                             <input type="text" name="awardCategory"/>
+                         </li>
+                         <li>
+                             <p>获奖级别：</p>
+                             <input type="text" name="awardLevel"/>
+                         </li>-->
+                        <li class="select-time">
+                            <p>创建时间：</p>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreatTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreatTime]"/>
+                        </li>
+                        <!-- <li>
+                             <p>创建人：</p>
+                             <input type="text" name="createBy"/>
+                         </li>
+                         -->
+                        <li>
+                            <p>状态：</p>
+                            <select name="status">
+                                <option value="">所有</option>
+                                <option value="0">驳回</option>
+                                <option value="1">未审核</option>
+                                <option value="2">已审核</option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('achievements:technologyassess:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('achievements:technologyassess:remove')}]];
+    var detailFlag = [[${@permission.hasPermi('achievements:technologyassess:detail')}]];
+
+    var prefix = ctx + "achievements/technologyassess";
+
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            detailUrl: prefix + "/detail{id}",
+            modalName: "科技成果信息",
+            columns: [{
+                checkbox: false
+            },
+                {
+                    field : 'id',
+                    title : '序号',
+                    align: 'center',
+                    visible: false
+                },
+                {
+                    field : 'sumbitter',
+                    align: 'center',
+                    title : '成果名称'
+                },
+                {
+                    field : 'type',
+                    align: 'center',
+                    title : '成果类型'
+                },
+                {
+                    field : 'technicalField',
+                    align: 'center',
+                    title : '所属技术领域'
+                },
+                {
+                    field : 'email',
+                    align: 'center',
+                    title : 'Email'
+                },
+                {
+                    field : 'address',
+                    align: 'center',
+                    title : '地址'
+                },
+                {
+                    field : 'phone',
+                    align: 'center',
+                    title : '联系方式'
+                },
+                /*{
+                    field : 'fax',
+                    align: 'center',
+                    title : '邮政编码'
+                },*/
+                {
+                    field : 'technologyMaturity',
+                    align: 'center',
+                    title : '技术成熟度'
+                },
+                /*{
+                    field : 'rdmethods',
+                    align: 'center',
+                    title : '研发方式'
+                },*/
+                {
+                    field : 'cooperationMethod',
+                    align: 'center',
+                    title : '合作方式'
+                },
+                {
+                    field : 'resultsApplication',
+                    align: 'center',
+                    title : '成果应用情况'
+                },
+                /*{
+                    field : 'demand',
+                    align: 'center',
+                    title : '实施成果转化需求'
+                },*/
+                {
+                    field : 'industry',
+                    align: 'center',
+                    title : '成果应用行业'
+                },
+                {
+                    field : 'awardCategory',
+                    align: 'center',
+                    title : '获奖类别'
+                },
+                {
+                    field : 'awardLevel',
+                    align: 'center',
+                    title : '获奖级别'
+                },
+                {
+                    align: 'center',
+                    field : 'creatTime',
+                    title : '创建时间'
+                },
+                {
+                    field : 'createBy',
+                    align: 'center',
+                    title : '创建人'
+                },
+                {
+                    field : 'status',
+                    align: 'center',
+                    title : '状态',
+                    visible: editFlag == 'hidden' ? false : true,
+                    formatter: function (value, row, index) {
+                        return statusTool(row);
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        if (row.status==0){
+                            var actions = [];
+                            actions.push('<a style="width: 45.44px;height: 22px" class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.id + '\')"><i class="fa fa-info"></i>查看</a>');
+                            return actions.join('');
+                        }else if(row.status==1){
+                            var actions = [];
+                            actions.push('<a style="width: 45.44px;height: 22px" class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.id + '\')"><i class="fa fa-info"></i>查看</a>');
+                            return actions.join('');
+                        }else if (row.status==2){
+                            var actions = [];
+                            actions.push('<a style="width: 45.44px;height: 22px" class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.id + '\')"><i class="fa fa-info"></i>查看</a>');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="cancelAuthUser(\'' + row.id + '\')"><i class="fa fa-remove"></i>撤回</a> ');
+                            return actions.join('');
+                        }
+
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /* -详情展开 */
+    function detail(id) {
+        var url = prefix + '/detail/' + id;
+        $.modal.openTab("详情展开", url);
+    }
+
+
+    /* -撤回发布信息 */
+    function cancelAuthUser(publishId,status) {
+        if(status=='0'){
+            $.modal.confirm("确认要撤回发布信息吗？", function() {
+                $.operate.post(prefix + "/cancel", { "id": id});
+            })
+        }else if(status=='1'){
+            $.modal.confirm("该任务已经被审核,是否要继续撤回", function() {
+                $.operate.post(prefix + "/cancel", { "id": id});
+            })
+        }else {
+            $.modal.confirm("该任务尚未发布!", function() {
+            })
+        }
+
+    }
+
+    function statusTool(row) {
+        if (row.status=='0') {
+            return '<p>驳回</p> ';
+        } else if (row.status=='1') {
+            return '<p>未审核</p> ';
+        }else if (row.status=='2') {
+            return '<p>已审核</p> ';
+        }
+
+    }
+</script>
+</body>
+</html>

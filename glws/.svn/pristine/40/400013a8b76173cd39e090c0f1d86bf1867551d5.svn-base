@@ -1,0 +1,154 @@
+package com.ruoyi.zaihai.ReserveManagement.controller;
+
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.zaihai.ReserveManagement.domain.KMaterialType;
+import com.ruoyi.zaihai.ReserveManagement.service.IKMaterialTypeService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * 物资类型Controller
+ * 
+ * @author ruoyi
+ * @date 2020-06-17
+ */
+@Controller
+@RequestMapping("/reserves/type")
+public class KMaterialTypeController extends BaseController
+{
+    private String prefix = "ReserveManagement/type";
+
+    @Autowired
+    private IKMaterialTypeService kMaterialTypeService;
+
+    @RequiresPermissions("reserves:type:view")
+    @GetMapping()
+    public String type()
+    {
+        return prefix + "/manufactor";
+    }
+
+    /**
+     * 查询物资类型列表
+     */
+    @RequiresPermissions("reserves:type:list")
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(KMaterialType kMaterialType)
+    {
+        startPage();
+        List<KMaterialType> list = kMaterialTypeService.selectKMaterialTypeList(kMaterialType);
+        return getDataTable(list);
+    }
+
+    /**
+     * 导出物资类型列表
+     */
+    @RequiresPermissions("reserves:type:export")
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(KMaterialType kMaterialType)
+    {
+        List<KMaterialType> list = kMaterialTypeService.selectKMaterialTypeList(kMaterialType);
+        ExcelUtil<KMaterialType> util = new ExcelUtil<KMaterialType>(KMaterialType.class);
+        return util.exportExcel(list, "type");
+    }
+
+    /**
+     * 新增物资类型
+     */
+    @GetMapping("/add")
+    public String add()
+    {
+        return prefix + "/add";
+    }
+
+    /**
+     * 新增保存物资类型
+     */
+    @RequiresPermissions("reserves:type:add")
+    @Log(title = "物资类型", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(KMaterialType kMaterialType)
+    {
+        return toAjax(kMaterialTypeService.insertKMaterialType(kMaterialType));
+    }
+
+    /**
+     * 修改物资类型
+     */
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        KMaterialType kMaterialType = kMaterialTypeService.selectKMaterialTypeById(id);
+        mmap.put("kMaterialType", kMaterialType);
+        return prefix + "/edit";
+    }
+
+    /**
+     * 修改保存物资类型
+     */
+    @RequiresPermissions("reserves:type:edit")
+    @Log(title = "物资类型", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(KMaterialType kMaterialType)
+    {
+        return toAjax(kMaterialTypeService.updateKMaterialType(kMaterialType));
+    }
+
+    /**
+     * 删除物资类型
+     */
+    @RequiresPermissions("reserves:type:remove")
+    @Log(title = "物资类型", businessType = BusinessType.DELETE)
+    @PostMapping( "/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids)
+    {
+        return toAjax(kMaterialTypeService.deleteKMaterialTypeByIds(ids));
+    }
+
+
+    /**
+     * 查询物资字典详细
+     */
+    @RequiresPermissions("reserves:type:list")
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long dictId, ModelMap mmap)
+    {
+        mmap.put("dict", kMaterialTypeService.selectDictTypeById(dictId));
+        mmap.put("dictList", kMaterialTypeService.selectDictTypeAll());
+        return prefix + "/data";
+    }
+    /**
+     *功能描述 编码校验
+     * @author sunlei
+     * @date 2020/10/20
+     * @param
+     * @return [code, mmap]
+     */
+    @PostMapping("/checkCode")
+    @ResponseBody
+    public boolean checkCode(String code, ModelMap mmap) {
+        boolean falg = kMaterialTypeService.checkCode(code);
+        return !falg;
+    }
+
+
+
+
+
+
+}

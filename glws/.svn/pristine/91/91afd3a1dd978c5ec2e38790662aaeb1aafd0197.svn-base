@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CDataManagementMapper">
+
+    <resultMap type="CDataManagement" id="CDataManagementResult">
+        <result property="id"    column="ID"    />
+        <result property="name"    column="NAME"    />
+        <result property="time"    column="TIME"    />
+        <result property="sampleNumber"    column="SAMPLE_NUMBER"    />
+        <result property="provincialLevelName"    column="PROVINCIAL_LEVEL_NAME"    />
+        <result property="cityLevelName"    column="CITY_LEVEL_NAME"    />
+        <result property="peopleNumber"    column="PEOPLE_NUMBER"    />
+        <result property="registeredCapital"    column="REGISTERED_CAPITAL"    />
+        <result property="personName"    column="PERSON_NAME"    />
+        <result property="controlPlace"    column="CONTROL_PLACE"    />
+        <result property="controlType"    column="CONTROL_TYPE"    />
+        <result property="status"    column="STATUS"    />
+        <result property="phone"    column="PHONE"    />
+        <result property="legalRepresentative"    column="LEGAL_REPRESENTATIVE"    />
+        <result property="userName"    column="USER_NAME"    />
+        <result property="industry"    column="INDUSTRY"    />
+        <result property="unifiedCode"    column="UNIFIED_CODE"    />
+        <result property="organizationCode"    column="ORGANIZATION_CODE"    />
+        <result property="business"    column="BUSINESS"    />
+        <result property="taxpayer"    column="TAXPAYER"    />
+        <result property="registrationAuthority"    column="REGISTRATION_AUTHORITY"    />
+        <result property="administrativeDivision"    column="ADMINISTRATIVE_DIVISION"    />
+        <result property="registeredAddress"    column="REGISTERED_ADDRESS"    />
+        <result property="businessScope"    column="BUSINESS_SCOPE"    />
+        <result property="remarks"    column="REMARKS"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateBy"    column="UPDATE_BY"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="reportTime"    column="REPORT_TIME"    />
+    </resultMap>
+
+    <sql id="selectCDataManagementVo">
+        select ID, NAME, TIME, PEOPLE_NUMBER,PROVINCIAL_LEVEL_NAME, CITY_LEVEL_NAME, COUNTY_LEVEL_NAME, REGISTERED_CAPITAL, PERSON_NAME, CONTROL_PLACE, CONTROL_TYPE, STATUS, PHONE, LEGAL_REPRESENTATIVE, USER_NAME, INDUSTRY, UNIFIED_CODE, ORGANIZATION_CODE, BUSINESS, TAXPAYER, REGISTRATION_AUTHORITY, ADMINISTRATIVE_DIVISION, REGISTERED_ADDRESS, BUSINESS_SCOPE, REMARKS, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME,REPORT_TIME from c_data_management
+    </sql>
+
+    <select id="selectCDataManagementList" parameterType="CDataManagement" resultMap="CDataManagementResult">
+        <include refid="selectCDataManagementVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="time != null "> and TIME = #{time}</if>
+            <if test="peopleNumber != null "> and PEOPLE_NUMBER = #{peopleNumber}</if>
+            <if test="provincialLevelName != null  and provincialLevelName != ''"> and PROVINCIAL_LEVEL_NAME like concat('%', #{provincialLevelName}, '%')</if>
+            <if test="cityLevelName != null  and cityLevelName != ''"> and CITY_LEVEL_NAME like concat('%', #{cityLevelName}, '%')</if>
+            <if test="countyLevelName != null  and countyLevelName != ''"> and COUNTY_LEVEL_NAME like concat('%', #{countyLevelName}, '%')</if>
+            <if test="registeredCapital != null "> and REGISTERED_CAPITAL = #{registeredCapital}</if>
+            <if test="personName != null  and personName != ''"> and PERSON_NAME like concat('%', #{personName}, '%')</if>
+            <if test="controlPlace != null  and controlPlace != ''"> and CONTROL_PLACE = #{controlPlace}</if>
+            <if test="controlType != null  and controlType != ''"> and CONTROL_TYPE = #{controlType}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="phone != null  and phone != ''"> and PHONE = #{phone}</if>
+            <if test="legalRepresentative != null  and legalRepresentative != ''"> and LEGAL_REPRESENTATIVE = #{legalRepresentative}</if>
+            <if test="userName != null  and userName != ''"> and USER_NAME like concat('%', #{userName}, '%')</if>
+            <if test="industry != null  and industry != ''"> and INDUSTRY = #{industry}</if>
+            <if test="unifiedCode != null  and unifiedCode != ''"> and UNIFIED_CODE = #{unifiedCode}</if>
+            <if test="organizationCode != null  and organizationCode != ''"> and ORGANIZATION_CODE = #{organizationCode}</if>
+            <if test="business != null  and business != ''"> and BUSINESS = #{business}</if>
+            <if test="taxpayer != null  and taxpayer != ''"> and TAXPAYER = #{taxpayer}</if>
+            <if test="registrationAuthority != null  and registrationAuthority != ''"> and REGISTRATION_AUTHORITY = #{registrationAuthority}</if>
+            <if test="administrativeDivision != null  and administrativeDivision != ''"> and ADMINISTRATIVE_DIVISION = #{administrativeDivision}</if>
+            <if test="registeredAddress != null  and registeredAddress != ''"> and REGISTERED_ADDRESS = #{registeredAddress}</if>
+            <if test="businessScope != null  and businessScope != ''"> and BUSINESS_SCOPE = #{businessScope}</if>
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="reportTime != null "> and REPORT_TIME = #{reportTime}</if>
+            <if test="params != null">
+                <if test="params.beginCreateTime!=null and params.beginCreateTime!=''">
+                    and    TIME &gt;=#{params.beginCreateTime}
+                </if>
+                <if test="params.endCreateTime!=null and params.endCreateTime!=''">
+                    and   TIME &lt;=DATE_ADD(#{params.endCreateTime},INTERVAL 1 DAY)
+                </if>
+            </if>
+        </where>
+        order by CREATE_TIME desc
+    </select>
+
+    <select id="selectCDataManagementById" parameterType="Long" resultMap="CDataManagementResult">
+        <include refid="selectCDataManagementVo"/>
+        where ID = #{id}
+    </select>
+
+    <insert id="insertCDataManagement" parameterType="CDataManagement" useGeneratedKeys="true" keyProperty="id">
+        insert into c_data_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="time != null ">TIME,</if>
+            <if test="peopleNumber != null ">PEOPLE_NUMBER,</if>
+            <if test="registeredCapital != null ">REGISTERED_CAPITAL,</if>
+            <if test="personName != null  and personName != ''">PERSON_NAME,</if>
+            <if test="controlPlace != null  and controlPlace != ''">CONTROL_PLACE,</if>
+            <if test="provincialLevelName != null  and provincialLevelName != ''">PROVINCIAL_LEVEL_NAME,</if>
+            <if test="cityLevelName != null  and cityLevelName != ''">CITY_LEVEL_NAME,</if>
+            <if test="countyLevelName != null  and countyLevelName != ''">COUNTY_LEVEL_NAME,</if>
+            <if test="controlType != null  and controlType != ''">CONTROL_TYPE,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="phone != null  and phone != ''">PHONE,</if>
+            <if test="legalRepresentative != null  and legalRepresentative != ''">LEGAL_REPRESENTATIVE,</if>
+            <if test="userName != null  and userName != ''">USER_NAME,</if>
+            <if test="industry != null  and industry != ''">INDUSTRY,</if>
+            <if test="unifiedCode != null  and unifiedCode != ''">UNIFIED_CODE,</if>
+            <if test="organizationCode != null  and organizationCode != ''">ORGANIZATION_CODE,</if>
+            <if test="business != null  and business != ''">BUSINESS,</if>
+            <if test="taxpayer != null  and taxpayer != ''">TAXPAYER,</if>
+            <if test="registrationAuthority != null  and registrationAuthority != ''">REGISTRATION_AUTHORITY,</if>
+            <if test="administrativeDivision != null  and administrativeDivision != ''">ADMINISTRATIVE_DIVISION,</if>
+            <if test="registeredAddress != null  and registeredAddress != ''">REGISTERED_ADDRESS,</if>
+            <if test="businessScope != null  and businessScope != ''">BUSINESS_SCOPE,</if>
+            <if test="remarks != null  and remarks != ''">REMARKS,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="reportTime != null ">REPORT_TIME,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="time != null ">#{time},</if>
+            <if test="peopleNumber != null ">#{peopleNumber},</if>
+            <if test="registeredCapital != null ">#{registeredCapital},</if>
+            <if test="personName != null  and personName != ''">#{personName},</if>
+            <if test="controlPlace != null  and controlPlace != ''">#{controlPlace},</if>
+            <if test="controlType != null  and controlType != ''">#{controlType},</if>
+            <if test="provincialLevelName != null  and provincialLevelName != ''">#{provincialLevelName},</if>
+            <if test="cityLevelName != null  and cityLevelName != ''">#{cityLevelName},</if>
+            <if test="countyLevelName != null  and countyLevelName != ''">#{countyLevelName},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="legalRepresentative != null  and legalRepresentative != ''">#{legalRepresentative},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="industry != null  and industry != ''">#{industry},</if>
+            <if test="unifiedCode != null  and unifiedCode != ''">#{unifiedCode},</if>
+            <if test="organizationCode != null  and organizationCode != ''">#{organizationCode},</if>
+            <if test="business != null  and business != ''">#{business},</if>
+            <if test="taxpayer != null  and taxpayer != ''">#{taxpayer},</if>
+            <if test="registrationAuthority != null  and registrationAuthority != ''">#{registrationAuthority},</if>
+            <if test="administrativeDivision != null  and administrativeDivision != ''">#{administrativeDivision},</if>
+            <if test="registeredAddress != null  and registeredAddress != ''">#{registeredAddress},</if>
+            <if test="businessScope != null  and businessScope != ''">#{businessScope},</if>
+            <if test="remarks != null  and remarks != ''">#{remarks},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="reportTime != null ">#{reportTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCDataManagement" parameterType="CDataManagement">
+        update c_data_management
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="time != null ">TIME = #{time},</if>
+            PEOPLE_NUMBER = #{peopleNumber},
+            <if test="registeredCapital != null ">REGISTERED_CAPITAL = #{registeredCapital},</if>
+            <if test="personName != null  and personName != ''">PERSON_NAME = #{personName},</if>
+            <if test="controlPlace != null  and controlPlace != ''">CONTROL_PLACE = #{controlPlace},</if>
+            <if test="controlType != null  and controlType != ''">CONTROL_TYPE = #{controlType},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            PHONE = #{phone},
+            PROVINCIAL_LEVEL_NAME = #{provincialLevelName},
+            CITY_LEVEL_NAME = #{cityLevelName},
+            COUNTY_LEVEL_NAME = #{countyLevelName},
+            LEGAL_REPRESENTATIVE = #{legalRepresentative},
+           USER_NAME = #{userName},
+           INDUSTRY = #{industry},
+            UNIFIED_CODE = #{unifiedCode},
+            ORGANIZATION_CODE = #{organizationCode},
+           BUSINESS = #{business},
+            TAXPAYER = #{taxpayer},
+            REGISTRATION_AUTHORITY = #{registrationAuthority},
+           ADMINISTRATIVE_DIVISION = #{administrativeDivision},
+            REGISTERED_ADDRESS = #{registeredAddress},
+          BUSINESS_SCOPE = #{businessScope},
+            <if test="remarks != null  and remarks != ''">REMARKS = #{remarks},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY = #{updateBy},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="reportTime != null ">REPORT_TIME = #{reportTime},</if>
+
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCDataManagementById" parameterType="Long">
+        delete from c_data_management where ID = #{id}
+    </delete>
+
+    <delete id="deleteCDataManagementByIds" parameterType="String">
+        delete from c_data_management where ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

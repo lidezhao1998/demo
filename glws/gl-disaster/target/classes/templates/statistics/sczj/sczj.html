@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原鼠害发生与防治情况列表')"/>
+</head>
+<body class="gray-bg">
+<style>
+    /*修改表头颜色*/
+    .table-bordered table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: white;
+    }
+
+</style>
+<script type="text/javascript">
+    $(document).ready(function() {
+        //tab页面切换 页面刷新效果
+        $('ul.nav-tabs>li>a').on('click',function() {
+            var $this = $(this);
+            var divId = $this.attr("href");
+            var srcVal = $(divId).children("iframe").attr("src");
+            $(divId).children("iframe").attr("src",srcVal);
+        });
+    });
+</script>
+<div class="container-div">
+    <div class="row">
+        <div id="search" class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input type="hidden" id="provinceHidden"/>
+                <input type="hidden" id="cityHidden"/>
+                <div class="select-list">
+                    <ul>
+                        <!-- <li>
+                             <div id="province">
+                             <label class="col-sm-3 control-label" style="margin-top: 7px">省：</label>
+                             <div class="col-sm-8">
+                                 <select id="addrProvince"
+                                         style="width: 130px;height: 34px;border:1px solid #e5e6e7"
+                                         name="province" onchange="getCities(this.value) "
+                                         required="required"></select>
+                             </div>
+                             </div>
+                         </li>-->
+                        <li>
+                            <div id="province">
+                                <span>省份：</span>
+                                <select id="addrProvince" name="province" onchange="getCities(this.value)"
+                                        style="width: 150px;height:30px; "></select>
+                            </div>
+                        </li>
+                        <li>
+                            <div id="city">
+                                <!--  <label class="col-sm-3 control-label" style="margin-top: 7px">市：</label>
+                                  <div class="col-sm-8">
+                                      <select
+                                              id="addrCity" name="city"
+                                              style="width: 130px;height: 34px;border:1px solid #e5e6e7"
+                                              onchange="getAreas(this.value)" required="required"> </select>
+                                  </div>-->
+                                <span>市：</span>
+                                <select
+                                        id="addrCity" name="city" onchange="getAreas(this.value)"
+                                        style="width: 150px;height:30px; ">
+                                </select>
+                            </div>
+                        </li>
+                        <li>
+                            <div id="area">
+                                <input id="valuearea" type="hidden"/>
+                                <em class="i-bit"></em><span>县/区：</span>
+                                <select id="addrArea" name="county"
+                                        style="width: 150px;height:30px; ">
+                                </select>
+                            </div>
+                        </li>
+                        <li class="select-time">
+                            <p>年度：</p>
+                            <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                        </li>
+                        <!--<li>-->
+                        <!--<label class="col-sm-3 control-label" style="margin-top: 7px;width: 75px;margin-right: -23px;">县/区：</label>-->
+
+                        <!--<div class="col-sm-8">-->
+                        <!--<select id="addrArea" name="countyLevelName"-->
+                        <!--style="width: 130px;height: 34px;border:1px solid #e5e6e7"-->
+                        <!--onchange="getlngLat()" required="required">-->
+                        <!--</select>-->
+                        <!--</div>-->
+                        <!--</li>-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+
+           <!-- <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="zaihai:sczj:export">
+                <i class="fa fa-download"></i> 导出
+            </a>-->
+            <a class="btn btn-warning" onclick="Echars()" >
+                <i class="fa fa-download"></i> 图表展示
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('zaihai:sczj:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('zaihai:sczj:remove')}]];
+    var prefix = ctx + "zaihai/sczjtj";
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2',
+            type: 'year'
+        });
+    });
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            pagination: false,
+            showExport: true,
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            modalName: "草原鼠害发生与防治情况",
+            detailView: false,
+           /* onExpandRow: function (index, row, $detail) {
+                if(row.roleName =='区级'){
+                }
+                else if(row.roleName =='市级'){
+                    //市级用户查看
+                    initChildTable2(index, row, $detail);
+
+                }else if(row.roleName =='省级' || row.roleName =='省级审核员'){
+                        //省级用户查看
+                        initChildTable2(index, row, $detail);
+                    }else{
+                        initChildTable(index, row, $detail);
+
+                }
+            },*/
+            columns: [
+                [
+                    {
+                        rowspan: 2,
+                        colspan: 1,
+                        field: 'year',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '年度'
+
+                    },
+                    {
+                        rowspan: 2,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'province',
+                        title: '所属省',
+                        formatter: function(value, row, index) {
+                            if(value=='合计'){
+                                return "合计";
+                            }else{
+                                return '<a href="javascript:void(0)" onclick="detailList(\'' + row.province + '\')">' + value + '</a>';
+                            }
+                        }
+                    },
+                    {
+                        rowspan: 2,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'city',
+                        title: '所属市',
+                        formatter: function(value, row, index){
+                            if(value==null || value==""){
+                                return "合计";
+                            }else{
+                                return '<a href="javascript:void(0)" onclick="cityList(\'' + row.city + '\')">' + value + '</a>';
+                            }
+                        }
+
+                    },
+                    {
+                        rowspan: 2,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'county',
+                        title: '所属县',
+
+                    },
+
+                    {
+                        rowspan: 1,
+                        colspan: 4,
+                        align: 'center',
+                        valign: 'middle',
+                        title: '危害情况（万亩）'
+                    },
+                    {
+                        rowspan: 1,
+                        colspan: 8,
+                        align: 'center',
+                        valign: 'middle',
+                        title: '当年防治面积（万亩）'
+                    },
+                    {
+                        rowspan: 1,
+                        colspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        title: '持续控制</br>面积（万亩）'
+                    },
+                    {
+                        rowspan: 1,
+                        colspan: 5,
+                        align: 'center',
+                        valign: 'middle',
+                        title: '投入防治'
+                    }, {
+                    rowspan: 2,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'remarks',
+                    title: '备注'
+                }
+                ],
+
+                [
+                    {
+                        field: 'harmTotalarea',
+                        title: '危害总面积',
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'engineeringhazard',
+                        title: '其中工程</br>区危害面</br>积',
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'seriousArea',
+                        title: '严重危害</br>总面积',
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'engineeringSeriousArea',
+                        title: '其中区工</br>程区严重</br>危害面积',
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'chemistryControl',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '化学防治'
+                    },
+                    {
+                        field: 'cBotulinumtoxin',
+                        align: 'center',
+                        valign: 'middle',
+                        title: 'C型肉毒</br>素'
+                    },
+                    {
+                        field: 'dBotulinumtoxin',
+                        align: 'center',
+                        valign: 'middle',
+                        title: 'D型肉毒</br>素'
+                    },
+                    {
+                        field: 'tripterygium',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '雷公藤'
+                    },
+                    {
+                        field: 'curcumae',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '莪术醇'
+                    },
+                    {
+                        field: 'hawkMouse',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '招鹰控鼠'
+                    },
+                    {
+                        field: 'foxRat',
+                        title: '野化狐狸</br>控鼠',
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'physicalControl',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '物理防治'
+                    },
+                    {
+                        field: 'hawkDeratization',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '招鹰灭鼠'
+                    },
+                    {
+                        field: 'rodentControl',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '野化狐狸'
+                    },
+                    {
+                        field: 'artisan',
+                        title: '技术人员</br>(人/天)',
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'work',
+                        title: '出工</br>(人/天)',
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'plane',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '飞机</br>(架/次)'
+                    },
+                    {
+                        field: 'controlApparatus',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '防治器械'
+                    },
+                    {
+                        field: 'car',
+                        title: '车辆</br>(辆/天)',
+                        align: 'center',
+                        valign: 'middle',
+                    }
+                ]],
+            onLoadSuccess: function (row) {
+                debugger;
+                var roleName= [[${roleName}]];
+                var length= row.rows.length;
+                var code = row.rows[0].code;
+                if (roleName=='国家级') {
+                    $('#city').hide();
+                    $('#area').hide();
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'city');
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'county');
+                    document.getElementById("bootstrap-table").rows[length+1].cells[0].innerHTML="-";
+                }else if(roleName=='省级'){
+                    $('#area').hide();
+                    if (code!=null &&code!=''){
+                        $("#provinceHidden").val(code);
+                    }
+                    getCities(code)
+                    $('#province').hide();
+
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'province');
+                    document.getElementById("bootstrap-table").rows[length+1].cells[0].innerHTML="-";
+                    /*$('#bootstrap-table').bootstrapTable('hideColumn', 'city');*/
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'county');
+                }else if(roleName=='市级'){
+                    row.rows.pop()
+                    if (code!=null &&code!=''){
+                        $("#addrCity").val(code);
+                    }
+                    getAreas(code);
+                    $('#city').hide();
+                    $('#province').hide();
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'province');
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'city');
+                    /*$('#bootstrap-table').bootstrapTable('hideColumn', 'county');*/
+                }else if(roleName=='区级'){
+                    row.rows.pop()
+                    $('#search').hide();
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'city');
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'province');
+                }else if(roleName=='省级审核员'){
+                    if (code!=null &&code!=''){
+                        $("#provinceHidden").val(code);
+                    }
+                    getCities(code)
+                    $('#province').hide();
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'province');
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'county');
+                    document.getElementById("bootstrap-table").rows[length+1].cells[0].innerHTML="-";
+                }
+
+            }
+            // 初始化隐藏列
+            /* initHiddenColumns:function(row){
+                 alert()
+                $.each(target.hiddenColumns, function(i, field) {
+                    target.find("."+field+"_cls").hide();
+                });
+            };*/
+        };
+        $.table.init(options);
+
+    });
+    $(function () {
+        getProvinces();
+    });
+
+
+    //子表列表
+    initChildTable = function (index, row, $detail) {
+        var province = row.province;
+        var cur_table = $detail.html('<div><table style="background:#E6E6FA" ></table></div>').find('table');
+        $(cur_table).bootstrapTable({
+            url: prefix + "/ParentList",
+            method:'post',
+            sidePagination:"server",
+            contentType: "application/x-www-form-urlencoded",   // 编码类型
+            detailView: true,
+            onExpandRow: function (index, row, $detail) {
+                initChildTable2(index, row, $detail);
+            },
+            queryParams: {
+                province: province,
+
+            },
+            columns: [
+
+                {
+                    field: 'year',
+                    align: 'center',
+                    valign: 'middle',
+                    width: '0.1%'
+                },
+
+                {
+                    field: 'city',
+                    align: 'center',
+                    valign: 'middle',
+                    width:'3%'
+
+                },
+
+                {
+                    field: 'harmTotalarea',
+                    width:'6.2%'
+                },
+                {
+                    field: 'engineeringhazard',
+                    width:'4.9%'
+
+                },
+                {
+                    field: 'seriousArea',
+                    width:'4.9%'
+
+
+                },
+                {
+                    field: 'engineeringSeriousArea',
+                    width:'4.9%'
+
+                },
+                {
+                    field: 'chemistryControl',
+                    width:'4.9%'
+                },
+                {
+                    field: 'cBotulinumtoxin',
+                    width:'4.9%'
+                },
+                {
+                    field: 'dBotulinumtoxin',
+                    width:'4.7%'
+                },
+                {
+                    field: 'tripterygium',
+                    width:'4%'
+
+                },
+                {
+                    field: 'curcumae',
+                    width:'4%'
+
+                },
+                {
+                    field: 'hawkMouse',
+                    width:'4.9%'
+
+                },
+                {
+                    field: 'foxRat',
+                    width:'4.9%'
+
+                },
+                {
+                    field: 'physicalControl',
+                    width:'5.2%'
+
+                },
+                {
+                    field: 'hawkDeratization',
+                    width:'4.9%'
+
+                },
+                {
+                    field: 'rodentControl',
+                    width:'5%'
+
+                },
+                {
+                    field: 'artisan',
+                    width:'5%'
+
+                },
+                {
+                    field: 'work',
+                    width:'3.9%'
+
+                },
+                {
+                    field: 'plane',
+                    width:'3.9%'
+
+                },
+                {
+                    field: 'controlApparatus',
+                    width:'5%'
+
+                },
+                {
+                    field: 'car',
+                    width:'3.9%'
+
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'remarks',
+                    //width:'2%'
+
+                },
+            ],
+        });
+    };
+
+
+    //三级表列表
+    initChildTable2 = function (index, row, $detail) {
+        var city = row.city;
+        var cur_table = $detail.html('<div style="padding-left:21px;"><table style="background:#D4F2E7" ></table></div>').find('table');
+        $(cur_table).bootstrapTable({
+            url: prefix + "/ParentList",
+            method: 'post',
+            sidePagination: "server",
+            contentType: "application/x-www-form-urlencoded",   // 编码类型
+            queryParams: {
+                city: city,
+
+            },
+            columns: [
+
+                {
+                    field: 'year',
+                    align: 'center',
+                    valign: 'middle',
+                    width: '0.1%'
+                },
+
+                {
+                    field: 'county',
+                    align: 'center',
+                    valign: 'middle',
+                    width:'3%'
+
+                },
+
+                {
+                    field: 'harmTotalarea',
+                    width:'6.3%'
+                },
+                {
+                    field: 'engineeringhazard',
+                    width:'5%'
+
+                },
+                {
+                    field: 'seriousArea',
+                    width:'5.1%'
+
+
+                },
+                {
+                    field: 'engineeringSeriousArea',
+                    width:'5.1%'
+
+                },
+                {
+                    field: 'chemistryControl',
+                    width:'5.1%'
+                },
+                {
+                    field: 'cBotulinumtoxin',
+                    width:'5.1%'
+                },
+                {
+                    field: 'dBotulinumtoxin',
+                    width:'4.8%'
+                },
+                {
+                    field: 'tripterygium',
+                    width:'4.1%'
+
+                },
+                {
+                    field: 'curcumae',
+                    width:'4.1%'
+
+                },
+                {
+                    field: 'hawkMouse',
+                    width:'5.1%'
+
+                },
+                {
+                    field: 'foxRat',
+                    width:'5.1%'
+
+                },
+                {
+                    field: 'physicalControl',
+                    width:'5.3%'
+
+                },
+                {
+                    field: 'hawkDeratization',
+                    width:'5%'
+
+                },
+                {
+                    field: 'rodentControl',
+                    width:'5.1%'
+
+                },
+                {
+                    field: 'artisan',
+                    width:'5.1%'
+
+                },
+                {
+                    field: 'work',
+                    width:'4%'
+
+                },
+                {
+                    field: 'plane',
+                    width:'4%'
+
+                },
+                {
+                    field: 'controlApparatus',
+                    width:'5%'
+
+                },
+                {
+                    field: 'car',
+                    width:'3.9%'
+
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'remarks',
+                    //width:'2%'
+
+                },
+            ],
+        });
+
+    };
+    function getProvinces() {
+        //  var url = "<%=basePath%>dict/getProvinces";
+        var url = ctx + "caiji/survey/getProvinces";
+        $.ajax({
+            "url": url,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                //alert(JSON.stringify(data))
+                var op = document.createElement("option");
+                op.value = '';
+                op.text = "----- 请选择省 -------";
+                document.getElementById("addrProvince").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictLabel;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrProvince").appendChild(op);
+                }
+            }
+        });
+        getCities();
+    }
+
+    // ===== 加载市列表 =====
+    function getCities(value) {
+        $("#addrCity").empty();
+        $("#addrArea").empty();
+        var url = ctx + "caiji/survey/getCities";
+        /*var data = "provinceCode=" +$("#provinceHidden").val();*/
+        var data = "provinceCode=" + value;
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = '';
+                op.text = "----- 请选择市 -------";
+                document.getElementById("addrCity").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictLabel;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrCity").appendChild(op);
+                }
+            }
+        });
+        getAreas();
+        // var op2 = document.createElement("option");
+        // op2.value = '';
+        // document.getElementById("addrArea").appendChild(op2);
+    }
+    // ===== 加载区列表 =====
+    function getAreas(value) {
+        /*debugger;*/
+        $("#addrArea").empty();
+        $("#addrdz").empty();
+        //var url = "<%=basePath%>dict/getAreas";
+        var url = ctx + "caiji/survey/getAreas";
+        /*var data = "cityCode=" +  $("#addrCity").val();*/
+        var data = "cityCode=" + value;
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = '';
+                op.text = "----- 请选择县/区 -------";
+                document.getElementById("addrArea").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictLabel;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrArea").appendChild(op);
+                }
+            }
+        });
+
+    }
+
+
+
+    function Echars() {
+        var url = prefix + '/Echars';
+        $.modal.openFull("鼠害发生防治情况统计图", url);
+    }
+
+    function statusTools(row) {
+        var a=row.city;
+        var b=row.county;
+        var c=row.province;
+        JSON.stringify()
+
+        if (row.status=='3') {
+            $('#bootstrap-table').bootstrapTable('hideColumn', 'province');
+            return '<p>a</p> ';
+
+            /*
+                        $('#bootstrap-table').bootstrapTable('hideColumn', 'province');
+            */
+        }else if(row.status=='4'){
+            $('#bootstrap-table').bootstrapTable('hideColumn', 'province');
+
+            return '<p>b</p> ';
+
+        }else  if(row.status=='1'){
+            $('#bootstrap-table').bootstrapTable('hideColumn', 'city');
+
+            return '<p>'+JSON.stringify(c)+'</p> ';
+
+        }else  if(row.status=='2'){
+            $('#bootstrap-table').bootstrapTable('hideColumn', 'city');
+
+            return '<p>'+JSON.stringify(c)+'</p> ';
+
+        }
+
+    }
+
+    /** 查询省级详情*/
+    function detailList(province) {
+        var url = prefix + '/detailList/'+ province;
+        $.modal.openTab("区县鼠害发生与防治列表", url);
+    }
+    /** 市级详情查询 */
+    function cityList(city){
+        var url = prefix + '/cityList/' + city;
+        $.modal.openTab("区县鼠害发生与防治列表", url);
+    }
+</script>
+</body>
+</html>

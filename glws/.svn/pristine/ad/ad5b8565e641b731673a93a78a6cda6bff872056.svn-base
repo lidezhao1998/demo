@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.analyze.mapper.ProductionAnalyzeMapper">
+    
+    <resultMap type="ProductionAnalyze" id="ProductionAnalyzeResult">
+    	<id     property="id"      column="id"      />
+        <result property="year"    column="year"    />
+        <result property="value"     column="value"     />
+        <result property="createBy"      column="create_by"      />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"      column="update_by"      />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+    
+    <sql id="selectProductionAnalyzeVo">
+        select id,year,value,create_by,create_time,update_by,update_time
+		from a_production_analyze
+    </sql>
+    
+    <!-- 查询条件 -->
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="id !=null">
+				and id = #{id}
+			</if>
+		</where>
+	</sql>
+    
+    <select id="selectProductionAnalyze" parameterType="ProductionAnalyze" resultMap="ProductionAnalyzeResult">
+        <include refid="selectProductionAnalyzeVo"/>
+        <include refid="sqlwhereSearch"/>
+    </select>
+    
+    <select id="selectProductionAnalyzeList" parameterType="ProductionAnalyze" resultMap="ProductionAnalyzeResult">
+        <include refid="selectProductionAnalyzeVo"/>
+        <where>
+			<if test="id != null and id != ''">
+				AND id =#{id}
+			</if>
+		</where>
+        order by id
+    </select>
+    <select id="selectDictDataByType" resultType="com.ruoyi.system.domain.SysDictData">
+
+    </select>
+    <select id="getProvincesCode" resultType="java.lang.String">
+      SELECT  dict_code from sys_dict_data where  dict_label=#{provinces}
+    </select>
+    <select id="getCityCode" resultType="java.lang.String">
+   SELECT  dict_code from sys_dict_data where  dict_label=#{city} and dict_parent=#{provincesCode}
+
+    </select>
+
+
+</mapper>

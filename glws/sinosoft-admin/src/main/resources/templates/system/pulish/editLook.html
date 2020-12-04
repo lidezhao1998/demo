@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('退牧还草工程任务发布列表')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+
+    <div class="col-sm-9  pull-left" style="padding: 0px;">
+        <table id="bootstrap-table"></table>
+    </div>
+    <div class="col-sm-3  pull-right" style="background:#FFFFFF;padding: 0px;">
+        <form class="form-horizontal m" id="form-publish-edit" th:object="${tTaskPublish}" style="margin: 3px">
+            <input name="publishId" th:field="*{publishId}" type="hidden">
+
+                <table class="table table-striped " style="text-align: center;">
+                    <tr>
+                        <td colspan="3" align="left">草原保护工程任务</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;background:#3CC4A9;">年份</td>
+                        <td style="font-size: 12px;padding: 0px;background:#3CC4A9;"></td>
+                        <td style="font-size: 12px;padding: 0px;background:#3CC4A9;">省份</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.year}" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                        <td style="font-size: 12px;padding: 0px;"></td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.province}" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;background:#3CC4A9;">围栏部分</td>
+                        <td style="font-size: 12px;padding: 0px;background:#3CC4A9;">建设规模（万亩）</td>
+                        <td style="font-size: 12px;padding: 0px;background:#3CC4A9;">建设投资（万元）</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;">围栏合计</td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.wlScale}+万亩" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.wlInvestment}+万元" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;background:#3CC4A9;">其他部分</td>
+                        <td style="font-size: 12px;padding: 0px;background:#3CC4A9;">建设规模（万亩）</td>
+                        <td style="font-size: 12px;padding: 0px;background:#3CC4A9;">建设投资（万元）</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;">退化草原改良</td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.thzyglSize}+万亩" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.thzyglMoney}+万元" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;">人工种草地</td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.rgscdSize}+万亩" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.rgscdMoney}+万元" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;">含饲棚围</td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.hspjSize}+万亩" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.hspjMoney}+万元" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;">黑土滩</td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.httSize}+万亩" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.httMoney}+万元" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;">毒害草</td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.dhcSize}+万亩" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.dhcMoney}+万元" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;">总合计</td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.zgmCount}+万亩" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.zjeCount}+万元" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;background:#3CC4A9;">中央资金</td>
+                        <td style="font-size: 12px;padding: 0px;background:#3CC4A9;"></td>
+                        <td style="font-size: 12px;padding: 0px;background:#3CC4A9;">地方资金</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.zyMoney}+万元" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                        <td style="font-size: 12px;padding: 0px;"></td>
+                        <td style="font-size: 12px;padding: 0px;">
+                            <div th:text="${tTaskPublish.dfMoney}+万元" class="form-control-static" type="text"
+                                 disabled="disabled" style="font-size: 12px;">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+        </form>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+
+<script th:inline="javascript">
+    var detailFlag = [[${@permission.hasPermi('system:publish:detail')}]];
+    var editFlag = [[${@permission.hasPermi('system:publish:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:publish:remove')}]];
+    var prefix = ctx + "system/review";
+
+
+    $(function () {
+
+        var options = {
+            url: prefix + "/listReview",
+            createUrl: prefix + "/add/{id}",
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            pagination: false,
+            detailView: true,
+            onExpandRow: function (index, row, $detail) {
+                initChildTable(index, row, $detail);
+                // var aaa = JSON.stringify(row);
+                // alert(aaa);
+            },
+            columns: [[
+                {
+                    field: 'index',
+                    title: '序号',
+                    rowspan: 2,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    pagination: false,
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+
+                },
+                {
+                    title: '任务地区',
+                    field: 'dz',
+                    rowspan: 2,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle'
+
+                },
+
+                {
+                    title: '围栏建设部分',
+                    rowspan: 1,
+                    colspan: 2,
+                    align: 'center',
+                    valign: 'middle',
+                    border: 1
+                },
+                {
+                    title: '其他建设部分',
+                    rowspan: 1,
+                    colspan: 2,
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    title: '总合计',
+                    rowspan: 1,
+                    colspan: 2,
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    title: '任务状态',
+                    rowspan: 2,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    visible: editFlag == 'hidden' ? false : true,
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    },
+                },
+            ],
+                [
+                    {
+                        field: 'wlScale',
+                        title: '规模合计(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'wlInvestment',
+                        title: '投资合计(万元)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+
+                        field: 'qtmjCount',
+                        title: '其他规模合计(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'qtjeCount',
+                        title: '其他投资合计(万元)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'totalScale',
+                        title: '总规模(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'totalInvestment',
+                        title: '总投资(万元)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+
+                ],
+
+            ]
+
+        };
+        $.table.init(options);
+    });
+
+    //子表列表
+    initChildTable = function (index, row, $detail) {
+        var province = row.province;
+        var year = row.year;
+        var cur_table = $detail.html('<div style="padding-left:8px;"><table style="background:#D4F2E7" ></table></div>').find('table');
+        $(cur_table).bootstrapTable({
+                url: prefix + "/listCityReview",
+                method: 'post',
+                sidePagination: "server",
+                contentType: "application/x-www-form-urlencoded",   // 编码类型
+                detailView: true,
+                onExpandRow: function (index, row, $detail) {
+                    initGrandChildTable(index, row, $detail);
+                },
+                queryParams: {
+                    province: province,
+                    year: year,
+                },
+                columns: [
+                    {
+                        width: '3%',
+                        field: 'index',
+                        // title: '序号',
+                        align: 'center',
+                        valign: 'middle',
+                        pagination: false,
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+
+                    },
+                    {
+                        // title: '任务地区',
+                        width: '15%',
+                        field: 'dz',
+                        align: 'center',
+                        valign: 'middle'
+
+                    },
+                    {
+                        width: '12%',
+                        field: 'wlScale',
+                        // title: '规模合计(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        width: '12%',
+                        field: 'wlInvestment',
+                        // title: '投资合计(万元)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        width: '15%',
+                        field: 'qtmjCount',
+                        // title: '其他规模合计(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        width: '15%',
+                        field: 'qtjeCount',
+                        // title: '其他投资合计(万元)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        width: '10%',
+                        field: 'totalScale',
+                        // title: '总规模(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        width: '10%',
+                        field: 'totalInvestment',
+                        // title: '总投资(万元)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        // title: '任务状态',
+                        width: '7%',
+                        align: 'center',
+                        valign: 'middle',
+                        visible: editFlag == 'hidden' ? false : true,
+                        formatter: function (value, row, index) {
+                            return statusTools(row);
+                        },
+                    },
+                ]
+            }
+        );
+    };
+
+
+    //孙子表列表
+    initGrandChildTable = function (index, row, $detail) {
+        var resolveId = row.resolveId;
+        var cur_table = $detail.html('<div style="padding-left: 23px;"><table style="background:#ffffff" ></table></div>').find('table');
+        $(cur_table).bootstrapTable({
+                url: prefix + "/listAreaReview",
+                method: 'post',
+                sidePagination: "server",
+                contentType: "application/x-www-form-urlencoded",   // 编码类型
+                queryParams: {
+                    resolveId: resolveId,
+                },
+                columns: [
+                    {
+                        width: '3%',
+                        field: 'index',
+                        // title: '序号',
+                        align: 'center',
+                        valign: 'middle',
+                        pagination: false,
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+
+                    },
+                    {
+                        // title: '任务地区',
+                        width: '15%',
+                        field: 'address',
+                        align: 'center',
+                        valign: 'middle'
+
+                    },
+                    {
+                        width: '12%',
+                        field: 'wlScale',
+                        // title: '规模合计(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        width: '12%',
+                        field: 'wlInvestment',
+                        // title: '投资合计(万元)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        width: '15%',
+                        field: 'qtmjCount',
+                        // title: '其他规模合计(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        width: '15%',
+                        field: 'qtjeCount',
+                        // title: '其他投资合计(万元)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        width: '10%',
+                        field: 'totalScale',
+                        // title: '总规模(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        width: '10%',
+                        field: 'totalInvestment',
+                        // title: '总投资(万元)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        // title: '任务状态',
+                        width: '7%',
+                        align: 'center',
+                        valign: 'middle',
+                        visible: editFlag == 'hidden' ? false : true,
+                        formatter: function (value, row, index) {
+                            return statusTools(row);
+                        },
+                    },
+                    {
+                        width: '3%',
+                        align: 'center',
+                        valign: 'middle',
+                        formatter: function (value, row, index) {
+                            if (row.auditName == "市级") {
+                                var actions = [];
+                                actions.push('<a class="btn btn-success btn-xs ' + addFlag + '" href="javascript:void(0)" onclick="$.operate.addFul(\'' + row.reportId + '\')"><i class="fa fa-edit"></i>查看详情</a> ');
+                                return actions.join('');
+                            }
+                        }
+                    },
+                ]
+            }
+        );
+    };
+
+    /* 审核状态显示 */
+    function statusTools(row) {
+        if (row.status == '0') {
+            return '<p>未审核</p> ';
+        } else if (row.status == '1') {
+            return '<p>通过</p> ';
+        } else if (row.status == '2') {
+            return '<p>驳回</p> ';
+        } else if (row.status == '3') {
+            return '<p>未审核</p> ';
+        } else if (row.status == '4') {
+            return '<p>通过</p> ';
+        } else if (row.status == '5') {
+            return '<p>驳回</p> ';
+        }
+    }
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+    function chehui(id) {
+
+        var url = ctx + "system/publish/chehui/" + id;
+        $.ajax({
+            "url": url,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                alert(data)
+
+            }
+        });
+    }
+
+
+    //求出全有的规模面积
+
+    $(function () {
+        var thzyglSize = document.getElementById("thzyglSize").value;
+        var rgscdSize = document.getElementById("rgscdSize").value;
+        var hspjSize = document.getElementById("hspjSize").value;
+        var httSize = document.getElementById("httSize").value;
+        var dhcSize = document.getElementById("dhcSize").value;
+        var wlScale = document.getElementById("wlScale").value;
+        // var ykcyzlSize = document.getElementById("ykcyzlSize").value;
+        // var hj = document.getElementById("hj").value;
+
+        //判断不为空
+        if (thzyglSize == '') {
+            var thzyglSize = 0;
+        }
+        if (rgscdSize == '') {
+            var rgscdSize = 0;
+        }
+        if (hspjSize == '') {
+            var hspjSize = 0;
+        }
+        if (httSize == '') {
+            var httSize = 0;
+        }
+        if (dhcSize == '') {
+            var dhcSize = 0;
+        }
+        if (wlScale == '') {
+            var wlScale = 0;
+        }
+        // if (ykcyzlSize == '') {
+        //     var ykcyzlSize = 0;
+        // }
+        // if (hj == '') {
+        //     var hj = 0;
+        // }
+
+
+        zmj.value = (parseFloat(thzyglSize) + parseFloat(rgscdSize) + parseFloat(hspjSize) + parseFloat(httSize) + parseFloat(dhcSize) + parseFloat(wlScale)).toFixed(2);
+
+    });
+
+    //求出全有的投入金额
+
+    $(function () {
+
+        var thzyglMoney = $("#thzyglMoney").val();
+        var rgscdMoney = $("#rgscdMoney").val();
+        var hspjMoney = $("#hspjMoney").val();
+        var httMoney = $("#httMoney").val();
+        var dhcMoney = $("#dhcMoney").val();
+        var wlInvestment = $("#wlInvestment").val();
+        // var ykcazlMoney = $("#ykcazlMoney").val();
+        // var tzhj = $("#tzhj").val();
+
+        //判断不为空
+        if (thzyglMoney == '') {
+            var thzyglMoney = 0;
+        }
+        if (rgscdMoney == '') {
+            var rgscdMoney = 0;
+        }
+        if (hspjMoney == '') {
+            var hspjMoney = 0;
+        }
+        if (httMoney == '') {
+            var httMoney = 0;
+        }
+        if (dhcMoney == '') {
+            var dhcMoney = 0;
+        }
+        if (wlInvestment == '') {
+            var wlInvestment = 0;
+        }
+        // if (ykcazlMoney == '') {
+        //     var ykcazlMoney = 0;
+        // }
+        // if (tzhj == '') {
+        //     var tzhj = 0;
+        // }
+
+
+        //相加
+        zhj.value = (parseFloat(thzyglMoney) + parseFloat(rgscdMoney) + parseFloat(hspjMoney) + parseFloat(httMoney) + parseFloat(dhcMoney) + parseFloat(wlInvestment)).toFixed(2);
+    });
+
+
+    //求出全有的投入金额
+    $(function () {
+        var zyMoney = $("#zyMoney").val();
+        var dfMoney = $("#dfMoney").val();
+
+
+        //判断不为空
+        if (zyMoney == '') {
+            var zyMoney = 0;
+        }
+        if (dfMoney == '') {
+            var dfMoney = 0;
+        }
+
+        //相加
+        zdhj.value = (parseFloat(zyMoney) + parseFloat(dfMoney)).toFixed(2);
+    });
+
+</script>
+</body>
+</html>

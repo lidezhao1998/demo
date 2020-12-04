@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增【毒害草知识库信息')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-knowledge-add">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">中文名：</label>
+                    <div class="col-sm-8">
+                        <input name="chineseName" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">学名：</label>
+                    <div class="col-sm-8">
+                        <input name="scientificName" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">别名：</label>
+                    <div class="col-sm-8">
+                        <input name="alias" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">俗名：</label>
+                    <div class="col-sm-8">
+                        <input name="commonName" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">科_亚科：</label>
+                    <div class="col-sm-8">
+                        <input name="divisionSubfamily" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">属_亚属：</label>
+                    <div class="col-sm-8">
+                        <input name="genusSubgenus" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">形态特征：</label>
+                    <div class="col-sm-8">
+                        <input name="morphologicalCharacter" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">形态图名称：</label>
+                    <div class="col-sm-8">
+                        <input name="morphologyName" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">生态图名称：</label>
+                    <div class="col-sm-8">
+                        <input name="ecologicalMapName" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">分布_国内：</label>
+                    <div class="col-sm-8">
+                        <input name="distributionDomestic" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">分布_国外：</label>
+                    <div class="col-sm-8">
+                        <input name="distributionAbroad" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">生境：</label>
+                    <div class="col-sm-8">
+                        <input name="habitat" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">分布图名称：</label>
+                    <div class="col-sm-8">
+                        <input name="distributionmapName" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">有毒部位：</label>
+                    <div class="col-sm-8">
+                        <input name="toxicParts" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">有毒成分：</label>
+                    <div class="col-sm-8">
+                        <input name="toxicIngredients" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">危害动物：</label>
+                    <div class="col-sm-8">
+                        <input name="harmfulAnimals" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">危害：</label>
+                    <div class="col-sm-8">
+                        <input name="harm" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">中毒机理：</label>
+                    <div class="col-sm-8">
+                        <input name="poisoningMechanism" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">中毒症状：</label>
+                    <div class="col-sm-8">
+                        <input name="poisoningSymptoms" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">诊断：</label>
+                    <div class="col-sm-8">
+                        <input name="diagnosis" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">防治方法：</label>
+                    <div class="col-sm-8">
+                        <input name="controlMethods" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">编码：</label>
+                    <div class="col-sm-8">
+                        <input name="code" class="form-control" type="text">
+                        <div id="spanCode"></div>
+                    </div>
+                </div>
+            </div>
+
+    </form>
+
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandler()"  ><i class="fa fa-check"></i>保 存</button>&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('form-publish-add', 'bootstrap-table1')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/poisonknowledge";
+    $("#form-knowledge-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+
+                    if ($.validate.form()) {
+                        $.operate.save(prefix + "/add", $('#form-knowledge-add').serialize());
+                    }
+    }
+</script>
+</body>
+</html>

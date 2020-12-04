@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>审核意见</title>
+	<link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <style>
+        .ideacls{
+            float: left;
+        }
+        .ideaclss{
+            margin-left: 40px;
+        }
+        .text-center{
+            border: 1px solid＃000 ;
+        }
+        .queren{
+            margin-top: 10px;
+        }
+        .ideatextarea{
+            height: 50px;
+        }
+        .m{
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        .ideacomm{
+            float: right;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+    <div class="row animated fadeInRight">
+        <div class="ibox float-e-margins">
+            <div id="ibox-content">
+
+                 <div id="vertical-timeline" class="vertical-container light-timeline">
+
+                     <form class="form-horizontal" id="form-survey-add">
+                         <div class="vertical-timeline-block" th:each="c, State : ${flowIdea}">
+                             <div class="vertical-timeline-icon blue-bg">
+                                 <i class="fa fa-file-text"></i>
+                             </div>
+
+                             <div class="vertical-timeline-content">
+                                 <span th:text="${c.idea}"></span>
+                                 <div name="c.ideatime" th:text="${#dates.format(c.ideatime, 'yyyy-MM-dd HH:mm')}" class=" form-control-static ideacomm"  >
+                                 </div>
+                                 <div name="c.username" class="form-control-static ideacomm" th:text="*{c.username}"></div>
+
+                             </div>
+                         </div>
+                   <form>
+                 </div>
+             </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script>
+        $(document).ready(function(){
+            $('#lightVersion').click(function(event) {
+                event.preventDefault();
+                $('#ibox-content').removeClass('ibox-content');
+                $('#vertical-timeline').removeClass('dark-timeline');
+                $('#vertical-timeline').addClass('light-timeline');
+            });
+            $('#darkVersion').click(function(event) {
+                event.preventDefault();
+                $('#ibox-content').addClass('ibox-content');
+                $('#vertical-timeline').removeClass('light-timeline');
+                $('#vertical-timeline').addClass('dark-timeline');
+            });
+        });
+        var prefix = ctx + "system/survey";
+        $("#form-idea-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/ideaAdd", $('#form-idea-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

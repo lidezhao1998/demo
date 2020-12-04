@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head>
+    <title>上报添加</title>
+    <th:block th:include="include :: header('新增退牧还草工程进度')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<style>
+    input{
+        width: 60%;
+        height: 20px;
+        border:1px solid #e5e6e7;
+        text-align:center;
+    }
+    .table tbody tr:first-child td{
+        font-size: 12px;
+        font-weight: bold;
+        background:#3CC4A9;
+        color: white;
+    }
+</style>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-report-add" >
+        <input id="mapId" name="mapId" type="hidden">
+        <div class="col-sm-12 search-collapse" style="margin-top: 0px">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>年份：</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="year" style="height: 30px;border:1px solid #f7f7f7;text-align:center;width: 70px;" placeholder="请选择" id="test2"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="btn-group-sm" id="toolbar" role="group">
+                    <a class="btn btn-primary btn-rounded btn-sm" onclick="ht()" shiro:hasPermission="system:report:add">
+                        <i class="fa fa-plus"></i> 添加绘图
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 search-collapse">
+            <div class="col-sm-8  pull-left" style="padding: 0px;">
+                <table class="table select-table table-striped" style="text-align:center;">
+                    <tbody>
+                    <tr>
+                        <td style="width: 130px;">围栏部分</td>
+                        <td>围栏合计</td>
+                        <td>禁牧建设</td>
+                        <td>休牧建设</td>
+                        <td>划区轮休</td>
+                        <td>石漠化治理</td>
+                        <!--<td>总合计</td>-->
+                    </tr>
+                    <tr>
+                        <td>建设规模(万亩)</td>
+                        <!--围栏合计-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input id="wlScale" name="wlScale"  type="text" maxlength="8" min onchange="sum()"
+                                       onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--禁牧建设-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="jmSize" id="jmSize"  type="text" maxlength="8" min
+                                       onchange="sum()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--休牧建设-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="xmSize" id="xmSize"  type="text" maxlength="8" min
+                                       onchange="sum()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--划区轮休-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="hqlxSize" id="hqlxSize"  type="text" maxlength="8" min onchange="sum()"
+                                       onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--石漠化治理-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="smhzlSize" id="smhzlSize"  type="text" maxlength="8" min onchange="sum()"
+                                       onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--总合计-->
+                        <!--<td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="zmj" id="zmj" type="text" maxlength="8" min readonly="readonly">
+                            </div>
+                        </td>-->
+                    </tr>
+                    <tr>
+                        <td>建设投资(万元)</td>
+                        <!--围栏合计-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="wlInvestment" id="wlInvestment"  type="text" maxlength="8" min
+                                       onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--禁牧建设-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="jmMoney" id="jmMoney"  type="text" maxlength="8" min
+                                       onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--休牧建设-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="xmMoney" id="xmMoney"  type="text" maxlength="8" min
+                                       onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--划区轮休-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="hqlxMoney" id="hqlxMoney"  type="text" maxlength="8" min
+                                       onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--石漠化治理-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="smhzlMoney" id="smhzlMoney"  type="text" maxlength="8" min
+                                       onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table select-table table-striped" style="text-align:center;">
+                    <tbody>
+                    <tr>
+                        <td style="width: 130px;">其他部分</td>
+                        <td>退化草原改良</td>
+                        <td>人工种草地</td>
+                        <td>含饲棚圈</td>
+                        <td>黑土滩</td>
+                        <td>毒害草</td>
+                        <!--<td>总合计</td>-->
+                    </tr>
+                    <tr>
+                        <td>建设规模(万亩)</td>
+                        <!--退化草原改良-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="thcyglSize" id="thcyglSize"  type="text" maxlength="8" min
+                                       onchange="sum()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--人工种草地-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="rgscdSize" id="rgscdSize"  type="text" maxlength="8" min
+                                       onchange="sum()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--含饲棚圈-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="hspjSize" id="hspjSize"  type="text" maxlength="8" min onchange="sum()"
+                                       onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--黑土滩-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="httSize" id="httSize"  type="text" maxlength="8" min onchange="sum()"
+                                       onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--毒害草-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="dhcSize" id="dhcSize"  type="text" maxlength="8" min onchange="sum()"
+                                       onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--总合计-->
+                        <!--<td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="zmj" id="zmj" type="text" maxlength="8" min readonly="readonly">
+                            </div>
+                        </td>-->
+                    </tr>
+                    <tr>
+                        <td>建设投资(万元)</td>
+                        <!--退化草原改良-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="thcyglMoney" id="thcyglMoney"  type="text" maxlength="8" min
+                                       onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--人工种草地-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="rgscdMoney" id="rgscdMoney" type="text" maxlength="8" min
+                                       onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--含饲棚圈-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="hspjMoney" id="hspjMoney" type="text" maxlength="8" min
+                                       onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--黑土滩-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="httMoney" id="httMoney"  type="text" maxlength="8" min
+                                       onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--毒害草-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="dhcMoney" id="dhcMoney"  type="text" maxlength="8" min
+                                       onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <!--总合计-->
+                        <!--<td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="zhj" id="zhj" type="text" maxlength="8" min readonly="readonly">
+                            </div>
+                        </td>-->
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table table-striped " style="text-align: center;">
+                    <tbody>
+                    <tr>
+                        <td>其他部分</td>
+                        <td>地方资金</td>
+                        <td>中央资金</td>
+                        <td>资金合计</td>
+                    </tr>
+                    <tr>
+                        <td>单位(万元)</td>
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="dfMoney" id="dfMoney"  type="text" maxlength="8" min
+                                       onchange="zysumMoney()()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="zyMoney" id="zyMoney"  type="text" maxlength="8" min
+                                       onchange="zysumMoney()()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input name="zdhj" id="zdhj" type="text" maxlength="8" min readonly="readonly">
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-4  pull-right">
+                <table class="table-striped " style="text-align: left;height: 145px;width: 360px;margin-top: 10px">
+                    <tr style="background-image: url('../../../img/ic_guhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                        <td style="font-size: 16px;padding-left: 45px;">
+                            <img src="../../../img/ic_gmhj.png" height="32" width="32"/>
+                            <span style="margin-left: 10px">规模总合计</span>
+                            <span id="zgmCount"  style="font-size: 22px;color: #6b87f9">0</span>
+                            <span>万亩</span>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table-striped " style="text-align: left;height: 145px;width: 360px;margin-top: 10px">
+                    <tr style="background-image: url('../../../img/ic_tzhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                        <td style="font-size: 16px;padding-left: 45px;">
+                            <img src="../../../img/ic_tzhj.png" height="32" width="32"/>
+                            <span style="margin-left: 10px">投资总合计</span>
+                            <span id="zjeCount"  style="font-size: 22px;color: #fe7d51">0</span>
+                            <span>万元</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandler()"><i
+                    class="fa fa-check"></i>保 存
+            </button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeTab()"><i class="fa fa-reply-all"></i>关 闭
+            </button>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/report";
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#concreteTime'
+            , type: 'year'
+        });
+    });
+    $("#form-report-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        let gis_id = sessionStorage.getItem("gis_id");
+        $("#mapId").val(gis_id);
+        let year = $('#test2').val();
+        if(year == ''){
+            $.modal.confirm("请选择年份", function () {})
+            return;
+        }
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-report-add').serialize());
+            sessionStorage.setItem("gis_id","");
+        }
+    }
+
+    $("#month_concreteTime").datetimepicker({
+        format: "mm",
+        minView: "month",
+        autoclose: true
+    });
+    $("#year_concreteTime").datetimepicker({
+        format: "yyyy",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='auditTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    /*绘图弹框*/
+    function ht() {
+        let mapId= sessionStorage.getItem("gis_id");
+        if(mapId!=null && mapId!=''){
+            hiddenht();
+        }else{
+            var id = $("#resolveId").val();
+            var prefix = ctx + "system/gisMap";
+            var url = prefix + '/getGisMap/' + 0;
+            $.modal.openFull("", url);
+        }
+
+    }
+    function hiddenht() {
+        let gis_id = sessionStorage.getItem("gis_id");
+        var mapId = gis_id;
+        var prefix = ctx + "system/gisMap";
+        var url = prefix + '/getGisMap/' + mapId;
+        $.modal.openFull("", url);
+    }
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2',
+            type: 'year',
+        });
+    });
+
+    function closeTab(){
+        sessionStorage.setItem("gis_id",'');
+        closeItem();
+    }
+
+    //求出全有的规模面积
+    function sum() {
+        var wlScale = $("#wlScale").val();
+        var jmSize = $("#jmSize").val();
+        var xmSize = $("#xmSize").val();
+        var hqlxSize = $("#hqlxSize").val();
+        var smhzlSize = $("#smhzlSize").val();
+        var thzyglSize = $("#thcyglSize").val();
+        var rgscdSize = $("#rgscdSize").val();
+        var hspjSize = $("#hspjSize").val();
+        var httSize = $("#httSize").val();
+        var dhcSize = $("#dhcSize").val();
+        if(wlScale == ''){
+            wlScale = 0;
+        }
+        if(jmSize == ''){
+            jmSize = 0;
+        }
+        if(xmSize == ''){
+            xmSize = 0;
+        }
+        if(hqlxSize == ''){
+            hqlxSize = 0;
+        }
+        if(smhzlSize == ''){
+            smhzlSize = 0;
+        }
+        if(thzyglSize == ''){
+            thzyglSize = 0;
+        }
+        if(rgscdSize == ''){
+            rgscdSize = 0;
+        }
+        if(hspjSize == ''){
+            hspjSize = 0;
+        }
+        if(httSize == ''){
+            httSize = 0;
+        }
+        if(dhcSize == ''){
+            dhcSize = 0;
+        }
+        let sum = (parseFloat(wlScale) + parseFloat(jmSize) + parseFloat(xmSize) + parseFloat(hqlxSize) + parseFloat(smhzlSize)
+            + parseFloat(thzyglSize) + parseFloat(rgscdSize) + parseFloat(hspjSize) + parseFloat(httSize) + parseFloat(dhcSize)).toFixed(2);
+        $("#zgmCount").text(sum);
+    }
+
+    //求出全有的投入金额
+    function summoney() {
+        var wlInvestment = $("#wlInvestment").val();
+        var jmMoney = $("#jmMoney").val();
+        var xmMoney = $("#xmMoney").val();
+        var hqlxMoney = $("#hqlxMoney").val();
+        var smhzlMoney = $("#smhzlMoney").val();
+        var thzyglMoney = $("#thcyglMoney").val();
+        var rgscdMoney = $("#rgscdMoney").val();
+        var hspjMoney = $("#hspjMoney").val();
+        var httMoney = $("#httMoney").val();
+        var dhcMoney = $("#dhcMoney").val();
+        if(wlInvestment == ''){
+            wlInvestment = 0;
+        }
+        if(jmMoney == ''){
+            jmMoney = 0;
+        }
+        if(xmMoney == ''){
+            xmMoney = 0;
+        }
+        if(hqlxMoney == ''){
+            hqlxMoney = 0;
+        }
+        if(smhzlMoney == ''){
+            smhzlMoney = 0;
+        }
+        if(thzyglMoney == ''){
+            thzyglMoney = 0;
+        }
+        if(rgscdMoney == ''){
+            rgscdMoney = 0;
+        }
+        if(hspjMoney == ''){
+            hspjMoney = 0;
+        }
+        if(httMoney == ''){
+            httMoney = 0;
+        }
+        if(dhcMoney == ''){
+            dhcMoney = 0;
+        }
+        let sum = (parseFloat(wlInvestment) + parseFloat(jmMoney) + parseFloat(xmMoney) + parseFloat(hqlxMoney) + parseFloat(smhzlMoney)
+            + parseFloat(thzyglMoney) + parseFloat(rgscdMoney) + parseFloat(hspjMoney) + parseFloat(httMoney) + parseFloat(dhcMoney)).toFixed(2);
+        $("#zjeCount").text(sum);
+    }
+
+    //求出全有的投入金额
+    function zysumMoney() {
+        var zyMoney = $("#zyMoney").val();
+        var dfMoney = $("#dfMoney").val();
+        if(zyMoney == ''){
+            zyMoney = 0;
+        }
+        if(dfMoney == ''){
+            dfMoney = 0;
+        }
+        $("#zdhj").val((parseFloat(zyMoney) + parseFloat(dfMoney)).toFixed(2));
+    }
+</script>
+</body>
+</html>

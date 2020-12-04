@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" >
+<head>
+    <th:block th:include="include :: header('发生防治年报添加页面')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-fznb-add">
+            <h2 class="col-sm-12" style="text-align: center;font-weight: bold ">
+                年报信息
+            </h2>
+            <h4 class="form-header h4">基本信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">编号：</label>
+                        <div class="col-sm-8">
+                            <input name="number" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group" style="margin-top: 10px ">
+                        <label class="col-sm-3 control-label">年度：</label>
+                        <div class="input-group date">
+                            <div class="col-sm-8">
+                                <input name="year" class="form-control" placeholder="yyyy" type="text" style="display:block;float:left;width:421.33px " required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">省级名称：</label>
+                        <div class="col-sm-8">
+                            <select id="addrProvince" style="width: 420px;height: 34px;border:1px solid #e5e6e7"
+                                    name="province" onchange="getCities()" required="required">
+                                <option value="">----- 所在省 -------</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">市：</label>
+                        <div class="col-sm-8">
+                            <select
+                                    id="addrCity" name="city" style="width: 420px;height: 34px;border:1px solid #e5e6e7"
+                                    onchange="getAreas()" required="required"></select></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">县：</label>
+                        <div class="col-sm-8">
+                            <select id="addrArea" name="county" style="width: 420px;height: 34px;border:1px solid #e5e6e7"
+                                    onchange="getlngLat()" required="required">
+                            </select></div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">经济损失：</label>
+                        <div class="col-sm-8">
+                            <input name="economicLoss" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">家畜死亡：</label>
+                        <div class="col-sm-8">
+                            <input name="livestockDeath" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">其中工程区危害面积：</label>
+                        <div class="col-sm-8">
+                            <input name="hazardArea" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">危害总面积：</label>
+                        <div class="col-sm-8">
+                            <input name="hazardAllArea" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">当年防治用量（吨）：</label>
+                        <div class="col-sm-8">
+                            <input name="controlDosage" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">亩用量（毫升）：</label>
+                        <div class="col-sm-8">
+                            <input name="muDosage" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="form-header h4">鼠害信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">中央(鼠害)：</label>
+                        <div class="col-sm-8">
+                            <input name="ratharmCenter" class="form-control" type="text" >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">省(鼠害)：</label>
+                        <div class="col-sm-8">
+
+                            <input name="ratharmProvince"  class="form-control" type="text">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">市(鼠害)：</label>
+                        <div class="col-sm-8">
+                            <input name="ratharmCity"  class="form-control" type="text">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">县(鼠害)：</label>
+                        <div class="col-sm-8">
+                            <input name="ratharmCounty"  class="form-control" type="text">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="form-header h4">虫害信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">中央(虫害)：</label>
+                        <div class="col-sm-8">
+                            <input name="insectharmCenter" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">省级(虫害)：</label>
+                        <div class="col-sm-8">
+                            <input name="insectharmProvince"  class="form-control" type="text">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地级(虫害)：</label>
+                        <div class="col-sm-8">
+                            <input name="insectharmCity" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">县级(虫害)：</label>
+                        <div class="col-sm-8">
+                            <input name="insectharmCounty" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        <div class="button-s" style="margin-left: 70%">
+            <button type="button" class="btn btn-w-m btn-primary" onclick="saveup()" >提 交</button>
+            <button type="button" class="btn btn-w-m btn-primary" onclick="save()" >保 存</button>
+            <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "caiji/fznb";
+        $("#form-fznb-add").validate({
+            focusCleanup: true
+        });
+
+
+        $("input[name='creatTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        function save() {
+            if ($.validate.form()) {
+                $.modal.confirm("确认要点击确定吗?", function () {
+                    saveTab(prefix + "/add", $('#form-fznb-add').serialize());
+                });
+            }
+        }
+        function saveTab(url, data, callback) {
+            var config = {
+                url: url,
+                type: "post",
+                dataType: "json",
+                data: data,
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                },
+                success: function(result) {
+                    if (typeof callback == "function" ) {
+                        callback(result);
+                    }
+                    if (result.code == web_status.SUCCESS) {
+                        confirmdemo(result.msg,function() {
+                            reload();
+                        });
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                }
+            };
+            $.ajax(config)
+        }
+        function saveup(){
+            if ($.validate.form()) {
+                $.modal.confirm("确认要点击确定吗?", function () {
+                    saveModal(prefix + "/add1", $('#form-fznb-add').serialize());
+                });
+            }
+        }
+        $("input[name='year']").datetimepicker({
+            format: "yyyy",
+            startView: 4,
+            minView: 4,
+            maxView: 4,
+            autoclose: true
+        });
+        function confirmdemo(content, callBack) {
+            layer.confirm(content, {
+                icon: 3,
+                title: "系统提示",
+                btn: ['确认']
+            },  function (index) {
+                layer.close(index);
+
+                callBack(true);
+
+            });
+        };
+
+        // 保存信息 弹出提示框
+        function saveModal(url, data, callback) {
+            var config = {
+                url: url,
+                type: "post",
+                dataType: "json",
+                data: data,
+                success: function(result) {
+                    if (typeof callback == "function" ) {
+                        callback(result);
+                    }
+                    if (result.code == web_status.SUCCESS) {
+                        confirmdemo(result.msg,function() {
+                            reload();
+                        });
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+
+                }
+            };
+            $.ajax(config)
+        }
+        function reload () {
+            parent.location.reload();
+        }
+
+
+        //省市区三级联动
+        $(function () {
+            getProvinces();
+        });
+
+        function getProvinces() {
+            //  var url = "<%=basePath%>dict/getProvinces";
+            var url = ctx + "caiji/survey/getProvinces";
+            $.ajax({
+                "url": url,
+                "type": "GET",
+                "dataType": "json",
+                "success": function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("addrProvince").appendChild(op);
+                    }
+                }
+            });
+        }
+
+        // ===== 加载市列表 =====
+        function getCities() {
+            $("#addrCity").empty();
+            $("#addrArea").empty();
+            var url = ctx + "caiji/survey/getCities";
+            var data = "provinceCode=" + $("#addrProvince").val();
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function (data) {
+                    var op = document.createElement("option");
+                    op.value = "";
+                    op.text = "----- 所在市 -------";
+                    document.getElementById("addrCity").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("addrCity").appendChild(op);
+                    }
+                }
+            });
+        }
+
+        // ===== 加载区列表 =====
+        function getAreas() {
+            $("#addrArea").empty();
+            $("#addrdz").empty();
+            //var url = "<%=basePath%>dict/getAreas";
+            var url = ctx + "caiji/survey/getAreas";
+            var data = "cityCode=" + $("#addrCity").val();
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function (data) {
+                    var op = document.createElement("option");
+                    op.value = "";
+                    op.text = "----- 所在区 -------";
+                    document.getElementById("addrArea").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("addrArea").appendChild(op);
+                    }
+                }
+            });
+
+        }
+
+
+
+
+        $(function(){
+            getProvinces1();
+            var op1 = document.createElement("option");
+            op1.value = -1;
+            op1.text ="----- 所在市 -------";
+            document.getElementById("city").appendChild(op1);
+            var op2 = document.createElement("option");
+            op2.value = -1;
+            op2.text = "----- 所在区 -------";
+            document.getElementById("county").appendChild(op2);
+            var op3 = document.createElement("option");
+
+        });
+        function getProvinces1() {
+            //  var url = "<%=basePath%>dict/getProvinces";
+            var url=ctx+"caiji/survey/getProvinces";
+            $.ajax({
+                "url": url,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+                    //alert(JSON.stringify(data))
+                    var op = document.createElement("option");
+                    op.value = -1;
+                    op.text = "----- 所在省 -------";
+                    document.getElementById("province").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("province").appendChild(op);
+                    }
+                }
+            });
+            getCities1();
+        }
+        // ===== 加载市列表 =====
+        function getCities1() {
+            $("#city").empty();
+            $("#county").empty();
+            var url=ctx+"caiji/survey/getCities";
+            var data = "provinceCode=" + $("#province").val();
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+                    var op = document.createElement("option");
+                    op.value = -1;
+                    op.text ="----- 所在市 -------";
+                    document.getElementById("city").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("city").appendChild(op);
+                    }
+                }
+            });
+            getAreas1();
+            var op2 = document.createElement("option");
+            op2.value = -1;
+            op2.text = "----- 所在区 -------";
+            document.getElementById("county").appendChild(op2);
+        }
+
+        // ===== 加载区列表 =====
+        function getAreas1() {
+            $("#county").empty();
+            $("#addrdz").empty();
+            //var url = "<%=basePath%>dict/getAreas";
+            var url=ctx+"caiji/survey/getAreas";
+            var data = "cityCode=" + $("#city").val();
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+                    var op = document.createElement("option");
+                    op.value = -1;
+                    op.text = "----- 所在区 -------";
+                    document.getElementById("county").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("county").appendChild(op);
+                    }
+                }
+            });
+
+        }
+
+
+        $(function(){
+            getProvinces2();
+            var op1 = document.createElement("option");
+            op1.value = -1;
+            op1.text ="----- 所在市 -------";
+            document.getElementById("insectharmCity").appendChild(op1);
+            var op2 = document.createElement("option");
+            op2.value = -1;
+            op2.text = "----- 所在区 -------";
+            document.getElementById("insectharmCounty").appendChild(op2);
+            var op3 = document.createElement("option");
+
+        });
+        function getProvinces2() {
+            //  var url = "<%=basePath%>dict/getProvinces";
+            var url=ctx+"caiji/survey/getProvinces";
+            $.ajax({
+                "url": url,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+                    //alert(JSON.stringify(data))
+                    var op = document.createElement("option");
+                    op.value = -1;
+                    op.text = "----- 所在省 -------";
+                    document.getElementById("insectharmProvince").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("insectharmProvince").appendChild(op);
+                    }
+                }
+            });
+            getCities2();
+        }
+        // ===== 加载市列表 =====
+        function getCities2() {
+            $("#insectharmCity").empty();
+            $("#insectharmCounty").empty();
+            var url=ctx+"caiji/survey/getCities";
+            var data = "provinceCode=" + $("#insectharmProvince").val();
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+                    var op = document.createElement("option");
+                    op.value = -1;
+                    op.text ="----- 所在市 -------";
+                    document.getElementById("insectharmCity").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("insectharmCity").appendChild(op);
+                    }
+                }
+            });
+            getAreas2();
+            var op2 = document.createElement("option");
+            op2.value = -1;
+            op2.text = "----- 所在区 -------";
+            document.getElementById("insectharmCounty").appendChild(op2);
+        }
+
+        // ===== 加载区列表 =====
+        function getAreas2() {
+            $("#insectharmCounty").empty();
+            $("#addrdz").empty();
+            //var url = "<%=basePath%>dict/getAreas";
+            var url=ctx+"caiji/survey/getAreas";
+            var data = "cityCode=" + $("#insectharmCity").val();
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+                    var op = document.createElement("option");
+                    op.value = -1;
+                    op.text = "----- 所在区 -------";
+                    document.getElementById("insectharmCounty").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("insectharmCounty").appendChild(op);
+                    }
+                }
+            });
+
+        }
+    </script>
+</body>
+</html>

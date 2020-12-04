@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改鼠害知识库信息')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: jasny-bootstrap-css" />
+
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-knowledge-edit" th:object="${cRatKnowledge}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">中文名称：</label>
+                        <div class="col-sm-8">
+                            <input name="chineseName" th:field="*{chineseName}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">拼音：</label>
+                        <div class="col-sm-8">
+                            <input name="pinyin" th:field="*{pinyin}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">拼音简写：</label>
+                        <div class="col-sm-8">
+                            <input name="pinyinjx" th:field="*{pinyinjx}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">代码：</label>
+                        <div class="col-sm-8">
+                            <input name="code" th:field="*{code}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">旧代码：</label>
+                        <div class="col-sm-8">
+                            <input name="oldCode" th:field="*{oldCode}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">拉丁名称：</label>
+                        <div class="col-sm-8">
+                            <input name="latinName" th:field="*{latinName}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">别名：</label>
+                        <div class="col-sm-8">
+                            <input name="alias" th:field="*{alias}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">等级：</label>
+                        <div class="col-sm-8">
+                            <input name="grade" th:field="*{grade}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">国标名称：</label>
+                        <div class="col-sm-8">
+                            <input name="gbName" th:field="*{gbName}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">国标代码：</label>
+                        <div class="col-sm-8">
+                            <input name="gbCode" th:field="*{gbCode}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">危害部位：</label>
+                        <div class="col-sm-8">
+                            <input name="hazardousParts" th:field="*{hazardousParts}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">危害症状：</label>
+                        <div class="col-sm-8">
+                            <input name=" harmfulSymptoms" th:field="*{harmfulSymptoms}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">发病环境：</label>
+                        <div class="col-sm-8">
+                            <input name=" pathogenicEnvironment" th:field="*{pathogenicEnvironment}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">寄生植物：</label>
+                        <div class="col-sm-8">
+                            <input name="parasiticPlants" th:field="*{parasiticPlants}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">调查方法：</label>
+                        <div class="col-sm-8">
+                            <input name="surveyMethods" th:field="*{surveyMethods}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">流行时间：</label>
+                        <div class="col-sm-8">
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input name="fashionTime" th:value="${#dates.format(cRatKnowledge.fashionTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">侵染循环：</label>
+                        <div class="col-sm-8">
+                            <input name="loop" th:field="*{loop}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">分布特点：</label>
+                        <div class="col-sm-8">
+                            <input name="distribution" th:field="*{distribution}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">国内分布：</label>
+                        <div class="col-sm-8">
+                            <input name="domesticDistribution" th:field="*{domesticDistribution}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">国外分布：</label>
+                        <div class="col-sm-8">
+                            <input name="distributionAbroad" th:field="*{distributionAbroad}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">区域类型：</label>
+                        <div class="col-sm-8">
+                            <select name="areaType" class="form-control m-b">
+                                <option value="">所有</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">检疫措施：</label>
+                        <div class="col-sm-8">
+                            <input name="quarantineMeasures" th:field="*{quarantineMeasures}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">防治措施：</label>
+                        <div class="col-sm-8">
+                            <input name="preventiveMeasures" th:field="*{preventiveMeasures}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">图片：</label>
+                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <input id="delespan" name="adultPattern" th:field="*{picture}" type="hidden">
+                            <div class="fileinput-new thumbnail" style="width: 120px; height: 80px;">
+                                <img id="test" th:src="(${cRatKnowledge.picture} == '') ? null : @{${cRatKnowledge.picture}}">
+                            </div>
+                            <a href="#" onclick="delespan()">删除</a>
+
+                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                            <div>
+                                <span class="btn btn-white btn-file"><span class="fileinput-new">选择图片</span><span class="fileinput-exists">更改</span><input type="file" class="" name="file"  id="picture" accept="image/*"/></span>
+                                <a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: jasny-bootstrap-js" />
+
+    <script type="text/javascript">
+        var prefix = ctx + "library/knowledge";
+        $("#form-knowledge-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-knowledge-edit').serialize());
+            }
+        }
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.modal.confirm("确认要修改信息吗？", function() {
+
+                    //alert($('#sixPhotos').val())
+                    // alert($('#form-knowledge-add').serialize())
+                    uploadFile();
+
+                    //$.operate.save(prefix + "/add", $('#form-knowledge-add').serialize());
+                })
+            }
+        }
+        //图片上传功能
+        function uploadFile() {
+            var url = ctx + "library/mouseknowledge/edit";
+
+            var formData = new FormData(document.getElementById("form-knowledge-edit"));
+
+            if ($("#picture").val().length <= 0) {
+                           // alert("没图1片")
+            }else if($("#picture")[0].files[0] ==null && $("#picture").val() !=null){
+
+                          //  alert("有原始图片，没有做修改")
+
+            }else{
+
+                           // alert("修改后的图片")
+                formData.append('file', $("#picture")[0].files[0]);
+
+            }
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                cache: false,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(result) {
+                    $.operate.successCallback(result);
+                }
+            });
+
+        }
+
+        //本地上传的图片删除，去掉图片的id即可
+        function delespan(){
+            var id=$("#id").val();
+            var type="picture";
+            var url = ctx + "library/mouseknowledge/delPothon";
+            $.ajax({
+                url: url,
+                type: 'post',
+                cache: false,
+                dataType:'json',
+                data: {id:id,type:type},
+                success: function(obj) {
+                    if(obj == '200'){
+                        $('#test').remove();
+                        $("#delespan").val(null);
+                       layer.alert("删除成功")
+
+
+                    }else {
+                        layer.alert("删除失败");
+                        return false;
+                    }
+                }
+            });
+        }
+
+
+        $("input[name='fashionTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

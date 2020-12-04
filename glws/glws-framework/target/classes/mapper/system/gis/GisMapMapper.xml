@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.gis.GisMapMapper">
+    <resultMap type="com.ruoyi.system.domain.gis.GisMap" id="GisMapResult">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="remark" column="remark"/>
+        <result property="geo" column="geo"/>
+        <result property="project_type" column="project_type"/>
+        <result property="centre" column="centre"/>
+        <result property="area" column="area"/>
+        <result property="address" column="address"/>
+        <result property="type" column="type"/>
+        <result property="gid" column="gid"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="hazard_rating" column="hazard_rating"/>
+    </resultMap>
+    <sql id="selectMapVo">
+        select id,name,remark,project_type,centre,area,address,type,gid,create_by,hazard_rating
+        from t_gis_map
+    </sql>
+    <insert id="insertGisMap">
+        insert into t_gis_map(
+        <if test="name != null and name != ''">name,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="geo != null and geo != ''">geo,</if>
+        <if test="type != null and type != ''">type,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="project_type != null and project_type != ''">project_type,</if>
+        <if test="centre != null and centre != ''">centre,</if>
+        <if test="area != null and area != ''">area,</if>
+        <if test="address != null and address != ''">address,</if>
+        <if test="hazard_rating != null and hazard_rating != ''">hazard_rating,</if>
+        create_time,
+        gid
+        )values(
+        <if test="name != null and name != ''">#{name},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="geo != null and geo != '' and geo != 'null'">ST_GeomFromText('${geo}'),</if>
+        <if test="type != null and type != '' and type != 'null'">#{type},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="project_type != null and project_type != ''">#{project_type},</if>
+        <if test="centre != null and centre != '' and centre != 'null' ">#{centre},</if>
+        <if test="area != null and area != '' and centre != 'null'">#{area},</if>
+        <if test="address != null and address != '' and centre != 'null'">#{address},</if>
+        <if test="hazard_rating != null and address != ''">#{hazard_rating},</if>
+        sysdate(),
+        unix_timestamp(now())
+        )
+    </insert>
+    <update id="updataGisMap">
+        update t_gis_map
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="hazard_rating != null and hazard_rating != ''">hazard_rating = #{hazard_rating},</if>
+            <if test="geo != null and geo != '' and geo != 'null'">geo=ST_GeomFromText('${geo}'),</if>
+            <if test="type != null and type != '' and type != 'null'">type = #{type},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="project_type != null and project_type != ''">project_type=#{project_type},</if>
+            <if test="centre != null and centre != '' and centre != 'null'">centre=#{centre},</if>
+            <if test="area != null and area != '' and area != 'null'">area=#{area},</if>
+            <if test="address != null and address != '' and address != 'null'">address=#{address},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="deleteGisMap">
+        delete from  t_gis_map where id = #{id}
+    </delete>
+
+    <select id="GisMapByCerateBy" resultType="com.ruoyi.system.domain.gis.GisMap">
+        <include refid="selectMapVo"/>
+        where create_by = #{createBy} and YEAR(create_time)=#{gisYear};
+    </select>
+    <select id="getGisMapById" resultMap="GisMapResult">
+        <include refid="selectMapVo"/>
+        where id = #{id}
+    </select>
+    <select id="getGisMapMaxId" resultType="java.lang.Long">
+        select ifnull(MAX(id),0) id from t_gis_map where create_time >= now()-interval 3 minute;
+    </select>
+    <select id="getGisMapYear" resultType="java.util.HashMap">
+        select CONCAT(YEAR(create_time),'-草原生态绘图') title,YEAR(create_time) year  from t_gis_map GROUP BY YEAR(create_time)
+    </select>
+    <select id="getListById" resultType="com.ruoyi.system.domain.gis.GisMap">
+        <include refid="selectMapVo"/>
+        where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="getArea" resultType="java.lang.String">
+        select AREA(ST_GeomFromText('${geo}'))
+    </select>
+</mapper>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('发生防治年报列表详情页面')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-fznb-add" th:object="${cTaskFznb}">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">编号：</label>
+                    <div class="col-sm-8">
+                        <div name="number" class="form-control-static"  style="font-weight: bold"  th:text="*{number}" >
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-6">
+                <div class="form-group" style="margin-top: 10px ">
+                    <label class="col-sm-3 control-label">年度：</label>
+                        <div class="col-sm-8">
+                            <div name="year" class="form-control-static" placeholder="yyyy-MM-dd" style="font-weight: bold"  th:text="*{year}" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">省：</label>
+                    <div class="col-sm-8">
+                        <div name="province" class="form-control-static" style="font-weight: bold"  th:text="*{province}">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">市：</label>
+                    <div class="col-sm-8">
+                        <div name="city" class="form-control-static" style="font-weight: bold"  th:text="*{city}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">县：</label>
+                    <div class="col-sm-8">
+                        <div name="county" class="form-control-static" style="font-weight: bold"  th:text="*{county}">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">类型：</label>
+                    <div class="col-sm-8">
+                        <div name="type" class="form-control-static" style="font-weight: bold"  th:text="*{type}">
+                        </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">中央：</label>
+                    <div class="col-sm-8">
+                        <div name="ratharmCenter" class="form-control-static" style="font-weight: bold"  th:text="*{ratharmCenter}">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">省级：</label>
+                    <div class="col-sm-8">
+                        <div name="ratharmProvince" class="form-control-static" style="font-weight: bold"  th:text="*{ratharmProvince}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">地级：</label>
+                    <div class="col-sm-8">
+                        <div name="ratharmCity" class="form-control-static" style="font-weight: bold"  th:text="*{ratharmCity}">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">县级：</label>
+                    <div class="col-sm-8">
+                        <div name="ratharmCounty" class="form-control-static" style="font-weight: bold"  th:text="*{ratharmCounty}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">中央：</label>
+                    <div class="col-sm-8">
+                        <div name="insectharmCenter" class="form-control-static" style="font-weight: bold"  th:text="*{insectharmCenter}">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">省级：</label>
+                    <div class="col-sm-8">
+                        <div name="insectharmProvince" class="form-control-static" style="font-weight: bold"  th:text="*{insectharmProvince}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">地级：</label>
+                    <div class="col-sm-8">
+                        <div name="insectharmCity" class="form-control-static" style="font-weight: bold"  th:text="*{insectharmCity}">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">县级：</label>
+                    <div class="col-sm-8">
+                        <div name="insectharmCounty" class="form-control-static" style="font-weight: bold"  th:text="*{insectharmCounty}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">经济损失：</label>
+                    <div class="col-sm-8">
+                        <div name="economicLoss" class="form-control-static" style="font-weight: bold"  th:text="*{economicLoss}">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">家畜死亡：</label>
+                    <div class="col-sm-8">
+                        <div name="livestockDeath" class="form-control-static" style="font-weight: bold"  th:text="*{livestockDeath}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">其中工程区危害面积：</label>
+                    <div class="col-sm-8">
+                        <div name="hazardArea" class="form-control-static" style="font-weight: bold"  th:text="*{hazardArea}">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">危害总面积：</label>
+                    <div class="col-sm-8">
+                        <div name="hazardAllArea" class="form-control-static" style="font-weight: bold"  th:text="*{hazardAllArea}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">当年防治用量（吨）：</label>
+                    <div class="col-sm-8">
+                        <div name="controlDosage" class="form-control-static" style="font-weight: bold"  th:text="*{controlDosage}">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">亩用量（毫升）：</label>
+                    <div class="col-sm-8">
+                        <div name="muDosage" class="form-control-static" style="font-weight: bold"  th:text="*{muDosage}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </form>
+    <div class="button-e" style="margin-left: 70%">
+        <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script type="text/javascript">
+    var prefix = ctx + "caiji/fznb";
+</script>
+</body>
+</html>

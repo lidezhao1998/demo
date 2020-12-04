@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原检测点数据')"/>
+</head>
+<body class="gray-bg" onLoad="load()">
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="container-div">
+            <div class="row">
+                <div id="map"  style="width:100%; height:320px;">
+                    <div class="header-r">
+                        <div class="header-r-bg">
+                            <a href="javascript:;" onclick="drawGis('Point','tab')">标记点</a>
+                        </div>
+                    </div>
+                    <div id="menu">
+                        <input type="button" id="off"/>
+                    </div>
+                </div>
+                <div class="col-sm-12 search-collapse">
+
+                    <form id="dept-form">
+                        <div class="select-list">
+                            <ul>
+                                <li>
+                                    名称：<input type="text" name="name"/>
+                                </li>
+                                <li>
+                                    状态：
+                                    <select name="status" id="status">
+                                        <option value="-1">所有</option>
+                                        <option value="0">未审核</option>
+                                        <option value="1">已审核</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('dept-form','slsj')"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('dept-form','slsj')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="btn-group-sm" id="shptoolbar" role="group">
+                   <!-- <a class="btn btn-success" onclick="$.operate.add(100)" shiro:hasPermission="system:shpFile:add">
+                        <i class="fa fa-plus"></i> 新增
+                    </a>-->
+                    <!--<a class="btn btn-warning " onclick="auditAllshp()">-->
+                    <!--<i class="fa fa-download"></i> 批量审核-->
+                    <!--</a>-->
+                </div>
+                <div class="col-sm-12 select-table table-striped">
+                    <table id="slsj"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="modal inmodal" id="myModal" align="center" tabindex="-1" role="dialog" aria-hidden="true">
+    <img id="img" name="img">
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript" src="http://api.tianditu.gov.cn/api?v=4.0&tk=3defde9e465f739e73513ce9e8595fe3"></script>
+<script th:inline="javascript">
+    var landsurveyPrefix = ctx + "extinterface/station";
+    $(function () {
+        var landsurveyoptions = {
+            id: "slsj",
+            toolbar: "shptoolbar",
+            url: landsurveyPrefix+"/list",
+            createUrl: landsurveyPrefix + "/add/{id}",
+            updateUrl: landsurveyPrefix + "/edit/{id}",
+            removeUrl: landsurveyPrefix + "/remove/{id}",
+            detailUrl: landsurveyPrefix + "/detail/{id}",
+            pageSize:3,
+            pageList:[5,10,15,20],//分页步进值
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            onClickRow:function (row,$element) {
+                debugger
+                locationCenter(row.lat,row.lon);
+            },
+            columns: [{
+                checkbox: true,
+                formatter:  function (value, row, index) {
+                    if (row.status == 1){
+                        return {
+                            disabled : true//设置是否可用
+                        };
+                    }
+                }
+            },
+                {
+                    field: 'id',
+                    title: 'ID'
+                },
+                // {
+                //     field:'id',
+                //     title:"ID",
+                //     visible: false
+                // },
+                {
+                    field: 'name',
+                    title: '名称'
+                },
+{
+                    field: 'lat',
+                    title: '经度'
+                },
+{
+                    field: 'lon',
+                    title: '纬度'
+                },
+
+                {
+                    field: 'status',
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        if(value==1){
+                            return "已审核";
+                        }else{
+                            return "未审核";
+                        }
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'left',
+                    formatter: function (value, row, index) {
+                        if (row.parentId != 0) {
+                            var actions = [];
+                            if(row.status!=1){
+                                actions.push('<a class="btn btn-info  btn-xs " href="javascript:void(0)" onclick="audit(\'' + row.id + '\')"><i class="fa fa-adjust"></i>审核通过</a> ');
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-trash"></i>删除</a>');
+                            }else{
+                                actions.push('<a class="btn btn-info  btn-xs " href="javascript:void(0)" onclick="unaudit(\'' + row.id + '\')"><i class="fa fa-adn"></i>驳回审核</a> ');
+                            }
+                            return actions.join('');
+                        } else {
+                            return "";
+                        }
+                    }
+                }]
+        };
+        $.table.init(landsurveyoptions);
+    });
+
+    function unaudit(id) {
+        $.modal.confirm("确定取消审核吗？", function() {
+            $.operate.post(landsurveyPrefix + "/updataStatus", {"id": id ,status:0});
+        })
+    }
+    function audit(id) {
+        $.modal.confirm("确定审核通过吗？", function() {
+            $.operate.post(landsurveyPrefix + "/updataStatus", {"id": id ,status:1});
+        })
+    }
+    var map,newDraw;
+    function load() {
+        var source_vec = new ol.source.XYZ({
+            url: "http://t3.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=3defde9e465f739e73513ce9e8595fe3",//parent.TiandituKey()为天地图密钥
+            wrapX: false
+        });
+        var TiandiMap_vec = new ol.layer.Tile({
+            title: "天地图矢量图层",
+            source: source_vec
+        });
+        var source_cva = new ol.source.XYZ({
+            url: "http://t3.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&v=4.0&tk=3defde9e465f739e73513ce9e8595fe3",//parent.TiandituKey()为天地图密钥
+            wrapX: false
+        });
+        var TiandiMap_cva = new ol.layer.Tile({
+            title: "天地图矢量注记图层",
+            source: source_cva
+
+        })
+        //实例化鼠标位置控件
+        var mousePositionControl = new ol.control.MousePosition({
+            //坐标格式
+            coordinateFormat: ol.coordinate.createStringXY(4),
+            //地图投影坐标系（若未设置则输出为默认投影坐标系下的坐标）
+            projection: 'EPSG:4326',
+            //坐标信息显示样式，默认是'ol-mouse-position'
+            className: 'custom-mouse-position',
+            //显示鼠标位置信息的目标容器
+            target: document.getElementById('mouse-position'),
+            //未定义坐标的标记
+            undefinedHTML: '&nbsp;'
+        });
+        //实例化Map对象加载地图
+        map = new ol.Map({
+            //地图容器div的ID
+            target: 'map',
+            //地图容器中加载的图层
+            layers: [TiandiMap_vec, TiandiMap_cva],
+            //地图视图设置
+            view: new ol.View({
+                //地图初始中心点
+                center: [105, 35],
+                projection: "EPSG:4326",
+                //地图初始显示级别
+                zoom: 5,
+                minZoom: 5,
+                maxZoom: 18,
+            }),
+            //加载控件到地图容器中
+            controls: ol.control.defaults({}).extend([mousePositionControl]) //加载鼠标位置控件
+        });
+        map.on('click', function (event) {
+            map.forEachFeatureAtPixel(event.pixel, function (feature) {
+                // 为移动到的feature发送自定义的mousemove消息
+                feature.dispatchEvent({type: 'click', event: event});
+            });
+        });
+    }
+    function drawGis(type,tableType) {
+        map.removeInteraction(newDraw); //移除绘制图形
+        var off = document.getElementById('off');
+        $("#off").val("取消绘制");
+        $("#off").show();
+        //绘制类型对象
+        var typeSelect = type;
+        //绘制对象
+        //实例化一个矢量图层Vector作为绘制层
+        var source = new ol.source.Vector({wrapX: false});
+        var vector = new ol.layer.Vector({
+            source: source,
+            style: new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: 'rgba(255, 255, 255, 0.2)'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: '#ffcc33',
+                    width: 2
+                }),
+                image: new ol.style.Circle({
+                    radius: 7,
+                    fill: new ol.style.Fill({
+                        color: '#ffcc33'
+                    })
+                })
+            })
+        });
+        //将绘制层添加到地图容器中
+        map.addLayer(vector);
+
+        //根据绘制类型进行交互绘制图形处理
+        function addInteraction() {
+            //绘制类型
+            var value = typeSelect;
+            if (value !== '') {
+                if(value=='Grassland'){
+                    value='Polygon';
+                }
+                if (source == null) {
+                    source = new ol.source.Vector({wrapX: false});
+                    //添加绘制层数据源
+                    vector.setSource(source);
+                }
+                var geometryFunction, maxPoints;
+
+                //实例化交互绘制类对象并添加到地图容器中
+                newDraw = new ol.interaction.Draw({
+                    //绘制层数据源
+                    source: source,
+                    /** @type {ol.geom.GeometryType} */
+                    //几何图形类型
+                    type: (value),
+                    //几何信息变更时调用函数
+                    geometryFunction: geometryFunction,
+                    //最大点数
+                    maxPoints: maxPoints
+                });
+                newDraw.on('drawend', function (e) {
+                    switch (typeSelect) {
+                        case 'Point':
+                            var coordinates_Point = e.feature.getGeometry().getCoordinates();
+                            if(tableType=="tab"){
+                                $.modal.open("标注信息", landsurveyPrefix + "/add?lon="+coordinates_Point[0]+"&lat="+coordinates_Point[1], 400, 550);
+                            }
+                            break;
+                    }
+                });
+                map.addInteraction(newDraw);
+            } else {
+                source = null;
+                //清空绘制图形
+                vector.setSource(source);
+            }
+        }
+
+        /**
+         * 用户更改绘制类型触发的事件.
+         * @param {Event} e 更改事件
+         */
+        off.onclick = function (e) {
+            //移除绘制图形
+            map.removeInteraction(newDraw);
+            typeSelect='';
+            $("#off").hide();
+            if (typeSelect != '')
+            //添加交互绘制功能控件
+                addInteraction();
+        };
+        //添加交互绘制功能控件
+        addInteraction();
+    }
+    //绘制点
+    function drawPoint(poi,id) {
+        //创建一个点
+        var point = new ol.Feature({
+            geometry: new ol.geom.Point(poi)
+        });
+        //设置点1的样式信息
+        point.setStyle(new ol.style.Style({
+            //填充色
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)'
+            }),
+            //边线颜色
+            stroke: new ol.style.Stroke({
+                color: '#F12A07',
+                width: 2
+            }),
+            //形状
+            image: new ol.style.Circle({
+                radius: 10,
+                fill: new ol.style.Fill({
+                    color:  '#F12A07'
+                })
+            })
+        }));
+
+        //实例化一个矢量图层Vector作为绘制层
+        var source = new ol.source.Vector({
+            features: [point]
+        });
+        //创建一个图层
+        var vector = new ol.layer.Vector({
+            source: source
+        });
+        //将绘制层添加到地图容器中
+        map.addLayer(vector);
+        // 为地图注册鼠标移动事件的监听
+        polygon.on('click', function (e) {
+            $.operate.edit(id);
+        });
+    }
+
+</script>
+<style type="text/css">
+    #map {
+        height: 50%;
+        width: 100%;
+    }
+    #gisRemove{
+        float: right;
+        position: absolute;
+        bottom: 52%;
+        right: 50%;
+        z-index: 2000;
+    }
+
+    #menu {
+        float: right;
+        position: absolute;
+        right: 50%;
+        z-index: 2000;
+    }
+    .header-r {
+        position: absolute;
+        z-index: 2;
+        height: 40px;
+        padding-left: 10px;
+        background: #fff;
+        background-size: 100%;
+        padding-right: 10px;
+        right: 20px;
+        top: 6px;
+        border-radius: 3px;
+    }
+    .header-r .header-r-bg {
+        margin-top: 5px;
+        display: inline-block;
+        padding: 0 5px;
+        background: #fff;
+        border-radius: 20px;
+    }
+    .header-r a {
+        position: relative;
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+        color: #000;
+        font-size: 14px;
+        padding: 0 10px 0 20px;
+    }
+    .header-r a:hover {
+        text-decoration: none !important;
+        color: #ff6600;
+    }
+    #off{
+        border: 0px;
+        cursor: pointer;
+        color: #13c6ae;
+        font-size: 16px;
+        display: none;
+        background-color: white;
+        width: 100px;
+        height: 36px;
+        border-radius: 16px;
+        outline: none;
+    }
+</style>
+</body>
+</html>

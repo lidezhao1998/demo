@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.analyze.mapper.SysGisMapMapper">
+    <resultMap type="com.sinosoft.analyze.domain.SysGisMap" id="SysGisMapResult">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="remark" column="remark"/>
+        <result property="coordinates" column="coordinates"/>
+        <result property="type" column="type"/>
+        <result property="color" column="color"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <insert id="insertGisMap">
+        insert into sys_gis_map(
+        <if test="name != null and name != ''">name,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="coordinates != null and coordinates != ''">coordinates,</if>
+        <if test="type != null and type != ''">type,</if>
+        <if test="color != null and color != ''">color,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="name != null and name != ''">#{name},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="coordinates != null and coordinates != ''">#{coordinates},</if>
+        <if test="type != null and type != ''">#{type},</if>
+        <if test="color != null and color != ''">#{color},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+    <update id="updataGisMap">
+        update sys_gis_map
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="coordinates != null and coordinates != ''">coordinates = #{coordinates},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="color != null">color = #{color},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="deleteGisMap">
+        delete from  sys_gis_map where id = #{id}
+    </delete>
+
+    <select id="GisMapByCerateBy" resultType="com.sinosoft.analyze.domain.SysGisMap">
+        select *
+        from sys_gis_map
+        where create_by = #{createBy}
+    </select>
+    <select id="getGisMapById" resultType="com.sinosoft.analyze.domain.SysGisMap">
+       select * from sys_gis_map where id = #{id}
+    </select>
+</mapper>

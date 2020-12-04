@@ -1,0 +1,55 @@
+package com.sinosoft.extinterface.domain;
+
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
+
+/**
+ * @author sunlei
+ * @description 气象数据
+ * @date 2020/09/07/15:45
+ */
+public class WeatherStation extends BaseEntity {
+    private long id;
+    //经度
+    @Excel(name = "经度")
+    private Double longitude;
+    //维度
+    @Excel(name = "维度")
+    private Double latitude;
+    //站点
+    @Excel(name = "站点")
+    private String site;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+}
+

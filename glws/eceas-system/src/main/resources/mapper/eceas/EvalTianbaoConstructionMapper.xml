@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.EvalTianbaoConstructionMapper">
+    
+    <resultMap type="EvalTianbaoConstruction" id="EvalTianbaoConstructionResult">
+        <result property="id"    column="ID"    />
+        <result property="annual"    column="ANNUAL"    />
+        <result property="area"    column="AREA"    />
+        <result property="afforestionAreaTotal"    column="AFFORESTION_AREA_TOTAL"    />
+        <result property="artificialAfforestionTotal"    column="ARTIFICIAL_AFFORESTION_TOTAL"    />
+        <result property="shrubArea"    column="SHRUB_AREA"    />
+        <result property="airSendAfforest"    column="AIR_SEND_AFFOREST"    />
+        <result property="newAfforestTotal"    column="NEW_AFFOREST_TOTAL"    />
+        <result property="noNewAfforestArea"    column="NO_NEW_AFFOREST_AREA"    />
+        <result property="haveNewAfforestArea"    column="HAVE_NEW_AFFOREST_AREA"    />
+        <result property="degraRepairArea"    column="DEGRA_REPAIR_AREA"    />
+        <result property="forestTendArea"    column="FOREST_TEND_AREA"    />
+        <result property="yearendAfforestArea"    column="YEAREND_AFFOREST_AREA"    />
+        <result property="manageAreaTotal"    column="MANAGE_AREA_TOTAL"    />
+        <result property="nationalForest"    column="NATIONAL_FOREST"    />
+        <result property="nationalPublicForest"    column="NATIONAL_PUBLIC_FOREST"    />
+        <result property="localPublicForest"    column="LOCAL_PUBLIC_FOREST"    />
+    </resultMap>
+
+    <sql id="selectEvalTianbaoConstructionVo">
+        select ID, ANNUAL, AREA, AFFORESTION_AREA_TOTAL, ARTIFICIAL_AFFORESTION_TOTAL, SHRUB_AREA, AIR_SEND_AFFOREST, NEW_AFFOREST_TOTAL, NO_NEW_AFFOREST_AREA, HAVE_NEW_AFFOREST_AREA, DEGRA_REPAIR_AREA, FOREST_TEND_AREA, YEAREND_AFFOREST_AREA, MANAGE_AREA_TOTAL, NATIONAL_FOREST, NATIONAL_PUBLIC_FOREST, LOCAL_PUBLIC_FOREST from eval_tianbao_construction
+    </sql>
+
+    <select id="selectEvalTianbaoConstructionList" parameterType="EvalTianbaoConstruction" resultMap="EvalTianbaoConstructionResult">
+        <include refid="selectEvalTianbaoConstructionVo"/>
+        <where>  
+            <if test="annual != null  and annual != ''"> and ANNUAL = #{annual}</if>
+            <if test="area != null  and area != ''"> and AREA = #{area}</if>
+            <if test="afforestionAreaTotal != null "> and AFFORESTION_AREA_TOTAL = #{afforestionAreaTotal}</if>
+            <if test="artificialAfforestionTotal != null "> and ARTIFICIAL_AFFORESTION_TOTAL = #{artificialAfforestionTotal}</if>
+            <if test="shrubArea != null "> and SHRUB_AREA = #{shrubArea}</if>
+            <if test="airSendAfforest != null "> and AIR_SEND_AFFOREST = #{airSendAfforest}</if>
+            <if test="newAfforestTotal != null "> and NEW_AFFOREST_TOTAL = #{newAfforestTotal}</if>
+            <if test="noNewAfforestArea != null "> and NO_NEW_AFFOREST_AREA = #{noNewAfforestArea}</if>
+            <if test="haveNewAfforestArea != null "> and HAVE_NEW_AFFOREST_AREA = #{haveNewAfforestArea}</if>
+            <if test="degraRepairArea != null "> and DEGRA_REPAIR_AREA = #{degraRepairArea}</if>
+            <if test="forestTendArea != null "> and FOREST_TEND_AREA = #{forestTendArea}</if>
+            <if test="yearendAfforestArea != null "> and YEAREND_AFFOREST_AREA = #{yearendAfforestArea}</if>
+            <if test="manageAreaTotal != null "> and MANAGE_AREA_TOTAL = #{manageAreaTotal}</if>
+            <if test="nationalForest != null "> and NATIONAL_FOREST = #{nationalForest}</if>
+            <if test="nationalPublicForest != null "> and NATIONAL_PUBLIC_FOREST = #{nationalPublicForest}</if>
+            <if test="localPublicForest != null "> and LOCAL_PUBLIC_FOREST = #{localPublicForest}</if>
+        </where>
+    </select>
+    
+    <select id="selectEvalTianbaoConstructionById" parameterType="Long" resultMap="EvalTianbaoConstructionResult">
+        <include refid="selectEvalTianbaoConstructionVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertEvalTianbaoConstruction" parameterType="EvalTianbaoConstruction" useGeneratedKeys="true" keyProperty="id">
+        insert into eval_tianbao_construction
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="annual != null  and annual != ''">ANNUAL,</if>
+            <if test="area != null  and area != ''">AREA,</if>
+            <if test="afforestionAreaTotal != null ">AFFORESTION_AREA_TOTAL,</if>
+            <if test="artificialAfforestionTotal != null ">ARTIFICIAL_AFFORESTION_TOTAL,</if>
+            <if test="shrubArea != null ">SHRUB_AREA,</if>
+            <if test="airSendAfforest != null ">AIR_SEND_AFFOREST,</if>
+            <if test="newAfforestTotal != null ">NEW_AFFOREST_TOTAL,</if>
+            <if test="noNewAfforestArea != null ">NO_NEW_AFFOREST_AREA,</if>
+            <if test="haveNewAfforestArea != null ">HAVE_NEW_AFFOREST_AREA,</if>
+            <if test="degraRepairArea != null ">DEGRA_REPAIR_AREA,</if>
+            <if test="forestTendArea != null ">FOREST_TEND_AREA,</if>
+            <if test="yearendAfforestArea != null ">YEAREND_AFFOREST_AREA,</if>
+            <if test="manageAreaTotal != null ">MANAGE_AREA_TOTAL,</if>
+            <if test="nationalForest != null ">NATIONAL_FOREST,</if>
+            <if test="nationalPublicForest != null ">NATIONAL_PUBLIC_FOREST,</if>
+            <if test="localPublicForest != null ">LOCAL_PUBLIC_FOREST,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="annual != null  and annual != ''">#{annual},</if>
+            <if test="area != null  and area != ''">#{area},</if>
+            <if test="afforestionAreaTotal != null ">#{afforestionAreaTotal},</if>
+            <if test="artificialAfforestionTotal != null ">#{artificialAfforestionTotal},</if>
+            <if test="shrubArea != null ">#{shrubArea},</if>
+            <if test="airSendAfforest != null ">#{airSendAfforest},</if>
+            <if test="newAfforestTotal != null ">#{newAfforestTotal},</if>
+            <if test="noNewAfforestArea != null ">#{noNewAfforestArea},</if>
+            <if test="haveNewAfforestArea != null ">#{haveNewAfforestArea},</if>
+            <if test="degraRepairArea != null ">#{degraRepairArea},</if>
+            <if test="forestTendArea != null ">#{forestTendArea},</if>
+            <if test="yearendAfforestArea != null ">#{yearendAfforestArea},</if>
+            <if test="manageAreaTotal != null ">#{manageAreaTotal},</if>
+            <if test="nationalForest != null ">#{nationalForest},</if>
+            <if test="nationalPublicForest != null ">#{nationalPublicForest},</if>
+            <if test="localPublicForest != null ">#{localPublicForest},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEvalTianbaoConstruction" parameterType="EvalTianbaoConstruction">
+        update eval_tianbao_construction
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="annual != null  and annual != ''">ANNUAL = #{annual},</if>
+            <if test="area != null  and area != ''">AREA = #{area},</if>
+            <if test="afforestionAreaTotal != null ">AFFORESTION_AREA_TOTAL = #{afforestionAreaTotal},</if>
+            <if test="artificialAfforestionTotal != null ">ARTIFICIAL_AFFORESTION_TOTAL = #{artificialAfforestionTotal},</if>
+            <if test="shrubArea != null ">SHRUB_AREA = #{shrubArea},</if>
+            <if test="airSendAfforest != null ">AIR_SEND_AFFOREST = #{airSendAfforest},</if>
+            <if test="newAfforestTotal != null ">NEW_AFFOREST_TOTAL = #{newAfforestTotal},</if>
+            <if test="noNewAfforestArea != null ">NO_NEW_AFFOREST_AREA = #{noNewAfforestArea},</if>
+            <if test="haveNewAfforestArea != null ">HAVE_NEW_AFFOREST_AREA = #{haveNewAfforestArea},</if>
+            <if test="degraRepairArea != null ">DEGRA_REPAIR_AREA = #{degraRepairArea},</if>
+            <if test="forestTendArea != null ">FOREST_TEND_AREA = #{forestTendArea},</if>
+            <if test="yearendAfforestArea != null ">YEAREND_AFFOREST_AREA = #{yearendAfforestArea},</if>
+            <if test="manageAreaTotal != null ">MANAGE_AREA_TOTAL = #{manageAreaTotal},</if>
+            <if test="nationalForest != null ">NATIONAL_FOREST = #{nationalForest},</if>
+            <if test="nationalPublicForest != null ">NATIONAL_PUBLIC_FOREST = #{nationalPublicForest},</if>
+            <if test="localPublicForest != null ">LOCAL_PUBLIC_FOREST = #{localPublicForest},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteEvalTianbaoConstructionById" parameterType="Long">
+        delete from eval_tianbao_construction where ID = #{id}
+    </delete>
+
+    <delete id="deleteEvalTianbaoConstructionByIds" parameterType="String">
+        delete from eval_tianbao_construction where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

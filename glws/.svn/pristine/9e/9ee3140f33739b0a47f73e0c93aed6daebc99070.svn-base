@@ -1,0 +1,125 @@
+package com.sinosoft.web.controller.extinterface;
+
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.gis.EntCoordSyncJob;
+import com.sinosoft.extinterface.domain.APointInterface;
+import com.sinosoft.extinterface.service.IAPointInterfaceService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * author  lhf
+ * date  2020/8/27 15:36
+ * version 1.0
+ */
+@Controller
+@RequestMapping("/extinterface/station")
+public class StationController extends BaseController {
+    private String prefix = "extinterface/station";
+
+    @Autowired
+    private IAPointInterfaceService aPointInterfaceService;
+
+    @GetMapping
+    public String MobileDeviceData(){
+        return  prefix+"/station";
+    }
+
+    /**
+     * 查询【请填写功能名称】列表
+     */
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(APointInterface aPointInterface,ModelMap modelMap)
+    {
+        startPage();
+        List<APointInterface> list = aPointInterfaceService.selectAPointInterfaceList(aPointInterface);
+        return getDataTable(list);
+    }
+
+
+    /**
+     * 新增【请填写功能名称】
+     */
+    @GetMapping("/add")
+    public String add(APointInterface aPointInterface,ModelMap modelMap)
+    {
+        aPointInterface.setName(EntCoordSyncJob.reverseGeocode(aPointInterface.getLon(), aPointInterface.getLat()));
+        modelMap.put("aPointInterface",aPointInterface);
+        return prefix + "/add";
+    }
+
+    /**
+     * 新增保存【请填写功能名称】
+     */
+
+    @Log(title = "【请填写功能名称】", businessType = BusinessType.INSERT)
+    @PostMapping("/addSave")
+    @ResponseBody
+    public AjaxResult addSave(APointInterface aPointInterface)
+    {
+        return toAjax(aPointInterfaceService.insertAPointInterface(aPointInterface));
+    }
+
+    /**
+     * 修改【请填写功能名称】
+     */
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        APointInterface aPointInterface = aPointInterfaceService.selectAPointInterfaceById(id);
+        mmap.put("aPointInterface", aPointInterface);
+        return prefix + "/edit";
+    }
+    /**
+     * 详情【请填写功能名称】
+     */
+    @GetMapping("/details/{id}")
+    public String details(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        APointInterface aPointInterface = aPointInterfaceService.selectAPointInterfaceById(id);
+        mmap.put("aPointInterface", aPointInterface);
+        return prefix + "/details";
+    }
+
+    /**
+     * 修改保存【请填写功能名称】
+     */
+
+    @Log(title = "【请填写功能名称】", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(APointInterface aPointInterface)
+    {
+        return toAjax(aPointInterfaceService.updateAPointInterface(aPointInterface));
+    }
+
+    /**
+     * 删除【请填写功能名称】
+     */
+    @RequiresPermissions("system:station:remove")
+    @Log(title = "【请填写功能名称】", businessType = BusinessType.DELETE)
+    @PostMapping( "/remove/{id}")
+    @ResponseBody
+    public AjaxResult remove(@PathVariable("id")String id)
+    {
+        return toAjax(aPointInterfaceService.deleteAPointInterfaceByIds(id));
+
+    }
+
+    @RequestMapping("/updataStatus")
+    @ResponseBody
+    public AjaxResult updataStatus(APointInterface aPointInterface)
+    {
+        return toAjax(aPointInterfaceService.updateAPointInterface(aPointInterface));
+    }
+}

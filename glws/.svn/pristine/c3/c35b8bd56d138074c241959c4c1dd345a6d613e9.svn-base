@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <th:block th:include="include :: header('终端气象站')"/>
+</head>
+<body class="gray-bg" onload="onLoad()">
+<div style="width: 100%;height: 100%">
+    <div id="map" style="width:100%;height: 100%"></div>
+    <form id="dept-form">
+        <input type="hidden" name="cityName" id="cityName"/>
+    </form>
+    <div id="tagDiv" class="select-table" style="position:fixed;height: 300px;bottom: 0px;width: 100%;padding: 12px;">
+        <table id="slsj"></table>
+    </div>
+    <div id="weatherDiv" class="select-table" style="position:fixed;height: 300px;bottom: 0px;width: 100%;padding: 12px;">
+        <div class="row">
+            <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeRealtime()">关闭</button>
+        </div>
+        <table id="realtime"></table>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal inmodal" id="myModal" align="center" tabindex="-1" role="dialog" aria-hidden="true">
+    <img id="img" name="img">
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript" src="http://api.tianditu.gov.cn/api?v=4.0&tk=3defde9e465f739e73513ce9e8595fe3"></script>
+<script th:src="@{/js/gis/glmaGis.js}"></script>
+<script th:src="@{/js/gis/gisComparison.js}"></script>
+<script th:inline="javascript">
+    var weatherStationPrefix = ctx + "extinterface/weatherStation";
+
+
+    function imgShow(id) {
+        $.ajax({
+            type: "post",
+            url: weatherStationPrefix + "/detail",
+            data: {
+                "id": id
+            },
+            success: function (msg) {
+                if (msg.imgUrl != null && msg.imgUrl != "") {
+                    $('#img').attr("src", msg.imgUrl);
+                } else {
+                    alert("图片无效");
+                }
+            }
+        });
+    }
+
+    function downLoad(id) {
+        window.location.href = weatherStationPrefix + "/download/" + id;
+    }
+
+    function audit(id) {
+        $.modal.confirm("确定审核通过吗？", function () {
+            $.operate.post(weatherStationPrefix + "/audit", {"id": id});
+        })
+    }
+
+    function auditAll() {
+        var ids = $("#remotesensing-table").bootstrapTable("getAllSelections")
+        if (ids.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确定要审核通过" + ids.length + "条数据吗?", function () {
+            var data = "0";
+            for (var i = 0; i < ids.length; i++) {
+                data += "," + ids[i].id
+            }
+            $.operate.post(weatherStationPrefix + "/auditAll", {"ids": data});
+        });
+    }
+
+    function unaudit(id) {
+        $.modal.confirm("确定取消审核吗？", function () {
+            $.operate.post(weatherStationPrefix + "/unaudit", {"id": id});
+        })
+    }
+
+    function auditshp(id) {
+        $.modal.confirm("确定审核通过吗？", function () {
+            $.operate.post(aaaa + "/auditShp", {"id": id});
+        })
+    }
+
+    function unauditshp(id) {
+        $.modal.confirm("确定取消审核吗？", function () {
+            $.operate.post(aaaa + "/unauditShp", {"id": id});
+        })
+    }
+    function closeRealtime() {
+        $("#tagDiv").show();
+        $("#weatherDiv").hide();
+
+        
+    }
+    function auditAllshp() {
+        var ids = $("#slsj").bootstrapTable("getAllSelections")
+        if (ids.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确定要审核通过" + ids.length + "条数据吗?", function () {
+            var data = "0";
+            for (var i = 0; i < ids.length; i++) {
+                data += "," + ids[i].shpFileId
+            }
+            $.operate.post(aaaa + "/auditAllShp", {"ids": data});
+        });
+    }
+
+    function gisRemove() {
+        if (vectorDrawing != null) {
+            map.removeLayer(vectorDrawing);
+        }
+    }
+
+    function show(url) {
+        if (vectorDrawing != null) {
+            map.removeLayer(vectorDrawing);
+        }
+        $.post(remotesensingPrefix + "/gisShow", {url: url},
+            function (res) {
+                gisShow(res);
+            }
+        )
+    }
+
+    function gisShow(data) {
+
+        var datashp = [];
+        for (var i = 0; i < data.length; i++) {
+            var dataShpArray = [];
+            var dataWipeOffArray = [];
+            var dataList = data[i];
+            if (dataList.shpList != null) {
+                var dataShpValue = dataList.shpList[0];
+                for (var n = 0; n < dataShpValue.length; n++) {
+                    var array = [];
+                    var datas = dataShpValue[n].split(" ");
+                    array.push(datas[0].substring(0, 8), datas[1].substring(0, 8));
+                    dataShpArray.push(array);
+                }
+                if (dataShpArray.length > 0) {
+                    datashp.push(dataShpArray);
+                }
+            }
+            if (dataList.wipeOffList != '[]' && dataList.wipeOffList != '') {
+                var dataShpwipeOffValue = dataList.wipeOffList[0];
+                for (var n = 0; n > dataShpwipeOffValue.length; n++) {
+                    var array = [];
+                    var datas = dataShpwipeOffValue[n].split(" ");
+                    array.push(datas[0].substring(0, 8), datas[1].substring(0, 8));
+                    dataShpArray.push(array);
+                }
+                if (dataWipeOffArray.length > 0) {
+                    datashp.push(dataWipeOffArray);
+                }
+            }
+        }
+        console.log(datashp)
+        var polygon = new ol.Feature({
+            geometry: new ol.geom.Polygon(datashp)
+        });
+        polygon.setStyle(new ol.style.Style({
+            //填充色
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.5)'
+            }),
+            //边线颜色
+            stroke: new ol.style.Stroke({
+                color: 'red',
+                width: 2
+            }),
+            //形状
+            image: new ol.style.Circle({
+                radius: 1,
+                fill: new ol.style.Fill({
+                    color: 'red'
+                })
+            })
+        }));
+        //实例化一个矢量图层Vector作为绘制层
+        var source = new ol.source.Vector({
+            features: [polygon]
+        });
+        //创建一个图层
+        vectorDrawing = new ol.layer.Vector({
+            source: source
+        });
+        //将绘制层添加到地图容器中
+        map.addLayer(vectorDrawing);
+    }
+
+    var map, vectorDrawing;
+
+    function onLoad() {
+        load();
+        var tiled = new ol.layer.Tile({
+            source: new ol.source.TileWMS({
+                url: gisUrl + urlLayer,
+                params: {
+                    FORMAT: 'image/png',
+                    VERSION: '1.1.1',
+                    tiled: true,
+                    exceptions: 'application/vnd.ogc.se_inimage',
+                    LAYERS: 'gis:Export_Output'
+                }
+            })
+        });
+        map.addLayer(tiled);
+        map.on('click', function (evt) {
+            $.get(weatherStationPrefix + "/getAddress?lonLat=" + evt.coordinate, function (res) {
+                $("#cityName").val(res);
+                $("#tagDiv").hide()
+                $("#weatherDiv").show()
+                getTodayWeather();
+                $.table.search('dept-form', 'realtime');
+
+            })
+        })
+    }
+
+    function getTodayWeather() {
+        var aaaoptions = {
+            id: "realtime",
+            toolbar: "shptoolbar",
+            url: weatherStationPrefix + "/getTodayWeather/?cityName=北京",
+            modalName: "shp文件",
+            pageSize: 5,
+            pageList: [5, 10, 20, 50, 100],//分页步进值
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            columns: [{
+                checkbox: true,
+                formatter: function (value, row, index) {
+                    if (row.status == '1') {
+                        return {
+                            disabled: true//设置是否可用
+                        };
+                    }
+                }
+            },
+                {
+                    field: 'index',
+                    title: 'ID',
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                },
+                // {
+                //     field:'shpFileId',
+                //     title:"ID",
+                //     visible: false
+                // },
+                {
+                    field: 'city',
+                    title: '城市名称'
+                },
+                {
+                    field: 'weather',
+                    title: '天气'
+                },
+                {
+                    field: 'temp2',
+                    title: '最高温度',
+                    // visible:false
+                },
+                {
+                    field: 'temp1',
+                    title: '最低温度',
+                }
+
+            ]
+        };
+        $.table.init(aaaoptions);
+
+    }
+
+    $(function () {
+        $("#tagDiv").show();
+        $("#weatherDiv").hide();
+        var aaaoptions = {
+            id: "slsj",
+            toolbar: "shptoolbar",
+            url: weatherStationPrefix + "/list/",
+            modalName: "shp文件",
+            pageSize: 5,
+            pageList: [5, 10, 20, 50, 100],//分页步进值
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            columns: [{
+                checkbox: true,
+                formatter: function (value, row, index) {
+                    if (row.status == '1') {
+                        return {
+                            disabled: true//设置是否可用
+                        };
+                    }
+                }
+            },
+                {
+                    field: 'index',
+                    title: 'ID',
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                },
+                {
+                    field: 'siteCode',
+                    title: "站点编码",
+                    class:true,
+                    formatter: function (value, row, index) {
+                        let ht = "<div onclick=locationCenter('"+row.longitude + "','" + row.latitude + "')>";
+                        return ht+row.siteCode +"</div>";
+                    }
+                },
+                {
+                    field: 'siteName',
+                    title: "站点名称",
+                    class:true,
+                    formatter: function (value, row, index) {
+                        let ht = "<div onclick=locationCenter('"+row.longitude + "','" + row.latitude + "')>";
+                        return ht+row.siteName +"</div>";
+                    }
+                },
+                {
+                    field: 'city',
+                    title: '城市名称'
+                },
+                {
+                    field: 'weather',
+                    title: '天气'
+                },
+                {
+                    field: 'maxTemperature',
+                    title: '最高温度'
+                    // visible:false
+                },
+                {
+                    field: 'minTemperature',
+                    title: '最低温度'
+                },
+                {
+                    field: 'longitude',
+                    title: '经度'
+                },
+                {
+                    field: 'latitude',
+                    title: '纬度'
+                }
+
+            ]
+        };
+        $.table.init(aaaoptions);
+
+    });
+
+</script>
+
+</body>
+</html>

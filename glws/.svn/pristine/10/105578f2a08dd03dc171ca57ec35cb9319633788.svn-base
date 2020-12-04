@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原病害草知识库信息列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <p class="select-title">复杂条件查询</p>
+
+            <form id="formId">
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>分词搜索</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="grid_options.html#">
+                                        <i class="fa fa-wrench"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-user">
+                                        <li><a href="grid_options.html#">选项1</a>
+                                        </li>
+                                        <li><a href="grid_options.html#">选项2</a>
+                                        </li>
+                                    </ul>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <div class="select-list">
+                                            <ul>
+                                                <li>
+                                                    <p style="width: 80px">包含以下任意一个关键词：</p>
+                                                    <input type="text" name="userId"/>
+                                                </li>
+                                                <li>
+                                                    <p style="width: 80px">包含以下全部关键词：</p>
+                                                    <input type="text" name="orderNo"/>
+                                                </li>
+                                                <li>
+                                                    <p style="width: 80px">不包含以下关键词：</p>
+                                                    <input type="text" name="userId"/>
+
+                                                    <!--
+                                                                                    <input type="text" class="time-input" placeholder="日期"/>
+                                                    -->
+                                                </li>
+                                                <li>
+                                                    <p style="width: 80px">完整不拆分的关键词：</p>
+                                                    <input type="text" name="userId"/>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>知识库条件查询</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="grid_options.html#">
+                                        <i class="fa fa-wrench"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-user">
+                                        <li><a href="grid_options.html#">选项1</a>
+                                        </li>
+                                        <li><a href="grid_options.html#">选项2</a>
+                                        </li>
+                                    </ul>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <div class="select-list">
+                                            <ul>
+
+                                                <li class="select-selectpicker">
+                                                    <p style="width: 80px">中文名：</p>
+                                                    <input type="text" name="middleName"/>
+
+                                                </li>
+                                                <li>
+                                                    <p style="width: 80px">拉丁名：</p>
+                                                    <input type="text" name="latinName"/>
+
+                                                </li>
+                                                <li>
+                                                    <p>状态：</p>
+                                                    <select name="status">
+                                                        <option value="">所有</option>
+                                                    </select>
+                                                </li>
+                                                <li>
+                                                    <p style="width: 80px">分布：</p>
+                                                    <select>
+                                                        <option value="">所有</option>
+                                                        <option value="0">内蒙古</option>
+                                                        <option value="1">新疆</option>
+                                                        <option value="2">山西</option>
+                                                    </select>
+                                                </li>
+                                                <li>
+                                                </li>
+
+                                                <li class="select-time">
+                                                    <p style="width: 80px">时间段查询：</p>
+                                                    <input type="text" class="time-input" placeholder="开始时间"/>
+                                                    <span>-</span>
+                                                    <input type="text" class="time-input" placeholder="结束时间"/>
+                                                </li>
+
+
+
+                                                <li>
+                                                    <a class="btn btn-primary btn-rounded btn-sm m50" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('complex-form')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:knowledge:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+
+    var prefix = ctx + "system/knowledgeBase";
+
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "草原病害草知识库信息",
+            showSearch:false,
+            showRefresh:false,
+            showColumns:false,
+            showToggle:false,
+            showExport:false,
+
+            columns: [
+                {
+                    field : 'id',
+                    title : '修改人',
+                    visible: false
+                },
+                {
+                    field : 'code',
+                    title : '编码'
+                },
+                {
+                    field : 'middleName',
+                    title : '中文名'
+                },
+                {
+                    field : 'latinName',
+                    title : '病原拉丁名',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+
+                },
+                {
+                    field : 'byName',
+                    title : '病原中名'
+                },
+                {
+                    field : 'byForm',
+                    title : '病原形态',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+                {
+                    field : 'subgate',
+                    title : '亚门'
+                },
+                {
+                    field : 'genus',
+                    title : '属'
+                },
+                {
+                    field : 'host',
+                    title : '寄生',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+                {
+                    field : 'distribution',
+                    title : '分布'
+                },
+
+                {field : '病原形态图',title : '病原形态图',formatter: function(value, row, index) {
+                        if($.common.isNotEmpty(row.byMorphology)){
+                            var url="";
+                            if(ctx=='/'){
+                                url=row.byMorphology;
+                            }else{
+                                url=ctx+row.byMorphology;
+                            }
+                            return $.table.imageView(url);
+                        }else{
+                            return "-";
+                        }
+                    }
+                },
+                {field : '症状图',title : '症状图',formatter: function(value, row, index) {
+                        if($.common.isNotEmpty(row.symptomMap)){
+                            var url="";
+                            if(ctx=='/'){
+                                url=row.symptomMap;
+                            }else{
+                                url=ctx+row.symptomMap;
+                            }
+                            return $.table.imageView(url);
+                        }else{
+                            return "-";
+                        }
+                    }
+                },
+                {
+                    field : 'status',
+                    title : '状态'
+                },
+            ]
+        };
+        $.table.init(options);
+    });
+
+
+
+    /* -详情展开 */
+    function authUser(id) {
+        var url = prefix + '/detail/' + id;
+        $.modal.open("详情展开", url);
+    }
+
+
+
+    //表格超出宽度鼠标悬停显示td内容
+    function paramsMatter(value,row,index, field) {
+        var span=document.createElement('span');
+        span.setAttribute('title',value);
+        span.innerHTML = value;
+        return span.outerHTML;
+    }
+    //td宽度以及内容超过宽度隐藏
+    function formatTableUnit(value, row, index) {
+        return {
+            css: {
+                "white-space": 'nowrap',
+                "text-overflow": 'ellipsis',
+                "overflow": 'hidden',
+                "max-width":"150px"
+            }
+        }
+    }
+
+</script>
+</body>
+</html>

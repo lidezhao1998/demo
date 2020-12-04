@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增地面调查数据')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+    <style type="text/css">
+        .tg-0lax{
+            text-align: center;
+            vertical-align: middle;
+        }
+        table{
+            background-color:white;
+            margin-left:35px;
+        }
+
+        .col-sm-4{
+            color:#333;
+        }
+        .form-group1{
+            margin-left:80px;
+        }
+        .col-sm-pt{
+        width: 95%;
+        }
+    </style>
+</head>
+<body class="white-bg">
+
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal" id="form-survey-add">
+            <h4 class="form-header h4">样地基本信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">样地编号：</label>
+                <div class="col-sm-8">
+                    <input name="sampleNumber" class="form-control" type="text">
+                </div>
+            </div>
+                </div>
+                    <div class="col-sm-6">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">省级名称：</label>
+                <div class="col-sm-8">
+                    <input name="provincialLevelName" class="form-control" type="text" required>
+                </div>
+            </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">地级名称：</label>
+                <div class="col-sm-8">
+                    <input name="cityLevelName" class="form-control" type="text">
+                </div>
+            </div>
+                </div>
+                    <div class="col-sm-6">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">县级名称：</label>
+                <div class="col-sm-8">
+                    <input name="countyLevelName" class="form-control" type="text">
+                </div>
+            </div>
+                    </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">调查时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="surveyTime" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+
+                    </div>
+                </div>
+            </div>
+                </div>
+
+                <div class="col-sm-6" >
+                    <div class="form-group" >
+                        <label class="col-sm-3 control-label">调查人：</label>
+                        <div class="col-sm-8" style="display: inline-block">
+                            <input name="name" class="form-control" type="text" required ><span>*</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+    </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">土壤类型：</label>
+                <div class="col-sm-8">
+                    <select name="soilType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                </div>
+            </div>
+                </div>
+                    <div class="col-sm-6">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">草地类型：</label>
+                <div class="col-sm-8">
+                    <select name="grasslandType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                </div>
+            </div>
+                    </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">植被覆盖度：</label>
+                <div class="col-sm-8">
+                    <input name="vegetationCoverage" class="form-control" type="text">
+                </div>
+            </div>
+                </div>
+                    <div class="col-sm-6">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">地上生物量：</label>
+                <div class="col-sm-8">
+                    <input name="aboveGroundBiomass" class="form-control" type="text">
+                </div>
+            </div>
+            </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">天敌种类：</label>
+                <div class="col-sm-8">
+                    <select name="naturalEnemyType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+
+                </div>
+            </div>
+                </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">主要特征：</label>
+                            <div class="col-sm-8">
+                                <select name="mianBotanyType" class="form-control m-b">
+                                    <option value="">所有</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">经度：</label>
+                    <div class="col-sm-8">
+                        <input name="longitude" class="form-control" type="text">
+                    </div>
+                </div>
+                    </div>
+                   <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">纬度：</label>
+                    <div class="col-sm-8">
+                        <input name="latitude" class="form-control" type="text">
+                    </div>
+                </div>
+                   </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">地形：</label>
+                            <div class="col-sm-8">
+                                <select name="topographyType" class="form-control m-b">
+                                    <option value="">所有</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">坡位：</label>
+                            <div class="col-sm-8">
+                                <select name="slopePositionType" class="form-control m-b">
+                                    <option value="">所有</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">坡向：</label>
+                            <div class="col-sm-8">
+                                <select name="asceptType" class="form-control m-b">
+                                    <option value="">所有</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">坡度：</label>
+                            <div class="col-sm-8">
+                                <input name="fallingGradient" class="form-control" type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">高程：</label>
+                        <div class="col-sm-8">
+                            <input name="elevation" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">地表特征：</label>
+                            <div class="col-sm-8">
+                                <select name="surfaceFeaturesType" class="form-control m-b">
+                                    <option value="">所有</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <h4 class="form-header h4">样地照片</h4>
+            <div class="row">
+                <div class="col-sm-pt">
+                        <div class="form-group1">
+                            <div class="file-loading">
+                                <input id="fileinput-demo-2" name="photoUrl" type="file" multiple>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <h4 class="form-header h4">取样信息</h4>
+                <table>
+                    <tr>
+                        <td valign="middle">
+                <table id="bootstrap-table" class="table table-hover">
+                    <tr>
+                        <td class="tg-0lax">
+                            取样面积类型
+                        </td>
+                        <td class="tg-0lax">
+                            有害生物种类
+                        </td>
+                        <td class="tg-0lax">
+                            具体种类
+                        </td>
+                        <td class="tg-0lax">
+                            测定数量
+                        </td>
+                        <td class="tg-0lax">
+                            换算标准密度
+                        </td>
+                        <td class="tg-0lax">
+                            照片
+                        </td>
+                        <td class="tg-0lax">
+                            操作
+                        </td>
+                        <td class="tg-0lax">
+                            <a class="btn btn-success" onclick="addTab2()" >
+                                <i class="fa fa-plus"></i> 添加
+                            </a>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td class="tg-lboi">
+                            <input name="cPlotList[0].samplingArea" class="form-control" type="text">
+                        </td>
+                        <td class="tg-lboi">
+                            <select name="cPlotList[0].harmfulSpeciesType" class="form-control ">
+                                <option value="">所有</option>
+                            </select>
+                        </td>
+                        <td class="tg-lboi">
+                            <input name="cPlotList[0].quantityDetermination" class="form-control" type="text">
+                        </td>
+                        <td class="tg-lboi">
+                            <input name="cPlotList[0].standardDensity" class="form-control" type="text">
+                        </td>
+                        <td class="tg-lboi">
+                            <input name="cPlotList[0].standardDensity" class="form-control" type="text">
+                        </td>
+                        <td class="tg-lboi">
+                            <div class="tg-lboi">
+                                <a class="btn btn-success" onclick="addTab1()" >
+                                    <i class="fa fa-plus"></i> 上传
+                                </a>
+                            </div>
+                        </td>
+
+                    </tr>
+
+                </table>
+                </table>
+        </form>
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandler()"  ><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandler()"  ><i class="fa fa-check"></i>提 交</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+
+        </div>
+</div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: jquery-steps-js" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: bootstrap-fileinput-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/survey";
+        $("#form-survey-add").validate({
+            focusCleanup: true
+        });
+
+        function addTab3(obj) {
+            $(obj).parent().parent().parent().remove();
+        }
+        function addTab2(){
+            var tableNode =	document.getElementById("bootstrap-table");
+            var trNodeList = tableNode.getElementsByTagName("tr");
+            //得到最后一行(tr)的所有td
+            var tdNodeList = trNodeList[trNodeList.length - 1].getElementsByTagName("td");
+            var td_input_name = tdNodeList[0].getElementsByTagName("input")[0].name;
+            var strIndex = td_input_name.indexOf("[");
+            var number = td_input_name.substring(strIndex + 1,strIndex+2);
+
+            var trNode = document.createElement("tr");
+            number++;
+            var year =$("#yea").val();
+            $("#bootstrap-table").append(" <tbody><tr >\n" +
+                "                        <td class=\"tg-lboi\">\n" +
+                "                            <input name=\"cPlotList["+number+"].samplingArea\" class=\"form-control\" type=\"text\">\n" +
+                "                        </td>\n" +
+                "                        <td class=\"tg-lboi\">\n" +
+                "                            <select name=\"cPlotList["+number+"].harmfulSpeciesType\" class=\"form-control \">\n" +
+                "                                <option value=\"\">所有</option>\n" +
+                "                            </select>\n" +
+                "                        </td>\n" +
+                "                        <td class=\"tg-lboi\">\n" +
+                "                            <input name=\"cPlotList["+number+"].quantityDetermination\" class=\"form-control\" type=\"text\">\n" +
+                "                        </td>\n" +
+                "                        <td class=\"tg-lboi\">\n" +
+                "                            <input name=\"cPlotList["+number+"].standardDensity\" class=\"form-control\" type=\"text\">\n" +
+                "                        </td>\n" +
+                "                        <td class=\"tg-lboi\">\n" +
+                "                            <input name=\"cPlotList["+number+"].standardDensity\" class=\"form-control\" type=\"text\">\n" +
+                "                        </td>\n" +
+                "                        <td class=\"tg-lboi\">\n" +
+                "                            <div class=\"tg-lboi\">\n" +
+                "                                <a class=\"btn btn-success\" onclick=\"addTab1()\" >\n" +
+                "                                    <i class=\"fa fa-plus\"></i> 上传\n" +
+                "                                </a>\n" +
+                "                            </div>\n" +
+                "                        </td>  <td class=\"tg-lboi\">\n" +
+                "                            <div class=\"tg-lboi\">\n" +
+                "                                <a class=\"btn btn-danger multiple \" onclick=\"addTab3(this)\" >\n" +
+                "                                    <i class=\"fa fa-remove\"></i> 删除\n" +
+                "                                </a>\n" +
+                "                            </div>\n" +
+                "                        </td>\n" +
+                "                    </tr></tbody>" )
+
+        }
+
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-survey-add').serialize());
+            }
+        }
+
+        function addTab1(){
+            $.modal.openFull("上传照片",prefix+"/upload");
+        }
+
+        $("input[name='surveyTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+//附件上传
+            $("#fileinput-demo-1").fileinput({
+                'theme': 'explorer-fas',
+                'uploadUrl': '#',
+                overwriteInitial: false,
+                initialPreviewAsData: true,
+                initialPreview: [
+                    "/img/profile.jpg"
+                ]
+            });
+            $("#fileinput-demo-2").fileinput({
+                'theme': 'explorer-fas',
+                'uploadUrl': '#',
+                overwriteInitial: false,
+                initialPreviewAsData: true,
+
+            });
+
+
+
+
+
+
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改退牧还草工程进度上报')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<style>
+    input{
+        width: 60%;
+        height: 20px;
+        border:1px solid #e5e6e7;
+        text-align:center;
+    }
+    .table tbody tr:first-child td{
+        font-size: 12px;
+        font-weight: bold;
+        background:#3CC4A9;
+        color: white;
+    }
+</style>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-report-detail" th:object="${tTaskReport}">
+        <input name="reportId" th:field="*{reportId}" type="hidden">
+        <input  id="resolveId" th:field="*{resolveId}" type="hidden">
+        <input  id="mapId" th:field="*{mapId}" type="hidden">
+        <div class="form-group">
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="ht()">
+                    <i class="fa fa-plus"></i> 查看绘图
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-12 search-collapse">
+            <div class="col-sm-8  pull-left" style="padding: 0px;">
+                <table class="table select-table table-striped" style="text-align:center;">
+                    <tbody>
+                    <tr>
+                        <td style="width: 130px;">围栏部分</td>
+                        <td>围栏合计</td>
+                        <td>禁牧建设</td>
+                        <td>休牧建设</td>
+                        <td>划区轮休</td>
+                        <td>石漠化治理</td>
+                        <!--<td>总合计</td>-->
+                    </tr>
+                    <tr>
+                        <td>建设规模(万亩)</td>
+                        <!--围栏合计-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" id="wlScale" name="wlScale" th:field="*{wlScale}" type="text" maxlength="8" min onchange="sum()">
+                            </div>
+                        </td>
+                        <!--禁牧建设-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="jmSize" id="jmSize" th:field="*{jmSize}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <!--休牧建设-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="xmSize" id="xmSize" th:field="*{xmSize}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <!--划区轮休-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="hqlxSize" id="hqlxSize" th:field="*{hqlxSize}" type="text" maxlength="8" min onchange="sum()">
+                            </div>
+                        </td>
+                        <!--石漠化治理-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="smhzlSize" id="smhzlSize" th:field="*{smhzlSize}" type="text" maxlength="8" min onchange="sum()">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>建设投资(万元)</td>
+                        <!--围栏合计-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="wlInvestment" id="wlInvestment" th:field="*{wlInvestment}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <!--禁牧建设-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="jmMoney" id="jmMoney" th:field="*{jmMoney}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <!--休牧建设-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="xmMoney" id="xmMoney" th:field="*{xmMoney}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <!--划区轮休-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="hqlxMoney" id="hqlxMoney" th:field="*{hqlxMoney}" type="text" maxlength="8" min
+                                >
+                            </div>
+                        </td>
+                        <!--石漠化治理-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="smhzlMoney" id="smhzlMoney" th:field="*{smhzlMoney}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table select-table table-striped" style="text-align:center;">
+                    <tbody>
+                    <tr>
+                        <td style="width: 130px;">其他部分</td>
+                        <td>退化草原改良</td>
+                        <td>人工种草地</td>
+                        <td>含饲棚圈</td>
+                        <td>黑土滩</td>
+                        <td>毒害草</td>
+                        <!--<td>总合计</td>-->
+                    </tr>
+                    <tr>
+                        <td>建设规模(万亩)</td>
+                        <!--退化草原改良-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="thcyglSize" id="thcyglSize" th:field="*{thcyglSize}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <!--人工种草地-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="rgscdSize" id="rgscdSize" th:field="*{rgscdSize}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <!--含饲棚圈-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="hspjSize" id="hspjSize" th:field="*{hspjSize}" type="text" maxlength="8" min onchange="sum()">
+                            </div>
+                        </td>
+                        <!--黑土滩-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="httSize" id="httSize" th:field="*{httSize}" type="text" maxlength="8" min onchange="sum()">
+                            </div>
+                        </td>
+                        <!--毒害草-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="dhcSize" id="dhcSize" th:field="*{dhcSize}" type="text" maxlength="8" min onchange="sum()">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>建设投资(万元)</td>
+                        <!--退化草原改良-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="thcyglMoney" id="thcyglMoney" th:field="*{thcyglMoney}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <!--人工种草地-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="rgscdMoney" id="rgscdMoney" th:field="*{rgscdMoney}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <!--含饲棚圈-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="hspjMoney" id="hspjMoney" th:field="*{hspjMoney}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <!--黑土滩-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="httMoney" id="httMoney" th:field="*{httMoney}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <!--毒害草-->
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="dhcMoney" id="dhcMoney" th:field="*{dhcMoney}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table table-striped " style="text-align: center;">
+                    <tbody>
+                    <tr>
+                        <td>其他部分</td>
+                        <td>地方资金</td>
+                        <td>中央资金</td>
+                        <td>资金合计</td>
+                    </tr>
+                    <tr>
+                        <td>单位(万元)</td>
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="dfMoney" id="dfMoney" th:field="*{dfMoney}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="zyMoney" id="zyMoney" th:field="*{zyMoney}" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-control-static" type="text" disabled="disabled"
+                                 style="font-size: 12px;">
+                                <input readonly="readonly" name="zdhj" id="zdhj" type="text" maxlength="8" min>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-4  pull-right">
+                <table class="table-striped " style="text-align: left;height: 145px;width: 360px;margin-top: 10px">
+                    <tr style="background-image: url('../../../img/ic_guhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                        <td style="font-size: 16px;padding-left: 45px;">
+                            <img src="../../../img/ic_gmhj.png" height="32" width="32"/>
+                            <span style="margin-left: 10px">规模总合计</span>
+                            <span id="zgmCount"  style="font-size: 22px;color: #6b87f9"></span>
+                            <span>万亩</span>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table-striped " style="text-align: left;height: 145px;width: 360px;margin-top: 10px">
+                    <tr style="background-image: url('../../../img/ic_tzhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                        <td style="font-size: 16px;padding-left: 45px;">
+                            <img src="../../../img/ic_tzhj.png" height="32" width="32"/>
+                            <span style="margin-left: 10px">投资总合计</span>
+                            <span id="zjeCount"  style="font-size: 22px;color: #fe7d51"></span>
+                            <span>万元</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    //求出全有的规模面积
+    function sum() {
+        var wlScale = $("#wlScale").val();
+        var jmSize = $("#jmSize").val();
+        var xmSize = $("#xmSize").val();
+        var hqlxSize = $("#hqlxSize").val();
+        var smhzlSize = $("#smhzlSize").val();
+        var thzyglSize = $("#thcyglSize").val();
+        var rgscdSize = $("#rgscdSize").val();
+        var hspjSize = $("#hspjSize").val();
+        var httSize = $("#httSize").val();
+        var dhcSize = $("#dhcSize").val();
+        let sum = (parseFloat(wlScale) + parseFloat(jmSize) + parseFloat(xmSize) + parseFloat(hqlxSize) + parseFloat(smhzlSize)
+            + parseFloat(thzyglSize) + parseFloat(rgscdSize) + parseFloat(hspjSize) + parseFloat(httSize) + parseFloat(dhcSize)).toFixed(2);
+        $("#zgmCount").text(sum);
+    }
+
+    //求出全有的投入金额
+    function summoney() {
+        var wlInvestment = $("#wlInvestment").val();
+        var jmMoney = $("#jmMoney").val();
+        var xmMoney = $("#xmMoney").val();
+        var hqlxMoney = $("#hqlxMoney").val();
+        var smhzlMoney = $("#smhzlMoney").val();
+        var thzyglMoney = $("#thcyglMoney").val();
+        var rgscdMoney = $("#rgscdMoney").val();
+        var hspjMoney = $("#hspjMoney").val();
+        var httMoney = $("#httMoney").val();
+        var dhcMoney = $("#dhcMoney").val();
+        let sum = (parseFloat(wlInvestment) + parseFloat(jmMoney) + parseFloat(xmMoney) + parseFloat(hqlxMoney) + parseFloat(smhzlMoney)
+            + parseFloat(thzyglMoney) + parseFloat(rgscdMoney) + parseFloat(hspjMoney) + parseFloat(httMoney) + parseFloat(dhcMoney)).toFixed(2);
+        $("#zjeCount").text(sum);
+    }
+
+    //求出全有的投入金额
+    function zysumMoney() {
+        var zyMoney = $("#zyMoney").val();
+        var dfMoney = $("#dfMoney").val();
+        $("#zdhj").val((parseFloat(zyMoney) + parseFloat(dfMoney)).toFixed(2));
+    }
+    sum();
+    summoney();
+    zysumMoney();
+
+    /*绘图弹框*/
+    function ht() {
+        var id = $("#mapId").val();
+        if(id == ''){
+            id = 0;
+        }
+        var prefix = ctx + "system/gisMap";
+        var  url = prefix + '/reportId/' + id;
+        $.modal.open("查看草地信息", url, 800, 600);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.integration.mapper.RemoteSensingMapper">
+    
+    <resultMap type="com.sinosoft.integration.domain.RemoteSensing" id="RemoteSensingResult">
+    	<id     property="id"      column="id"      />
+        <result property="item" column="item"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="generic" column="generic"/>
+        <result property="genericCode" column="generic_code"/>
+        <result property="sectionCode" column="section_code"/>
+        <result property="section" column="section"/>
+        <result property="status" column="status"/>
+        <result property="bundle" column="bundle"/>
+        <result property="bundleCode" column="bundle_code"/>
+        <result property="provinceName" column="province_name"/>
+        <result property="geomData" column="geom_data"/>
+        <!--<result property="createBy"      column="create_by"      />-->
+        <!--<result property="createTime"    column="create_time"    />-->
+        <!--<result property="updateBy"      column="update_by"      />-->
+        <!--<result property="updateTime"    column="update_time"    />-->
+    </resultMap>
+    
+    <sql id="selectRemoteSensingVo">
+           select id,
+           item_code,
+           item,
+           section_code,
+           section,
+           generic_code,
+           generic,
+           bundle_code,
+           bundle,status,
+           color,
+           province_name
+            from grassland_ecology
+    </sql>
+    
+    <!-- 查询条件 -->
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="id !=null">
+				and id = #{id}
+			</if>
+		</where>
+	</sql>
+
+    <insert id="insertShpFile" parameterType="com.sinosoft.integration.domain.RemoteSensing">
+        insert into grassland_ecology(
+        geom_data,
+        item_code,
+        item,
+        section_code,
+        section,
+        generic_code,
+        generic,
+        bundle_code,
+        bundle,
+        status,
+        color,
+        province_name,
+        area
+        )values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (
+            st_geomfromtext(#{item.geomData}),
+            #{item.itemCode},
+            #{item.item},
+            #{item.sectionCode},
+            #{item.section},
+            #{item.genericCode},
+            #{item.generic},
+            #{item.bundleCode},
+            #{item.bundle},
+            #{item.status},
+            #{item.color},
+            #{item.provinceName},
+            #{item.area}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectRemoteSensing" parameterType="RemoteSensing" resultMap="RemoteSensingResult">
+        <include refid="selectRemoteSensingVo"/>
+        <include refid="sqlwhereSearch"/>
+    </select>
+    
+    <select id="selectRemoteSensingList" parameterType="RemoteSensing" resultMap="RemoteSensingResult">
+        select
+        id,
+        item_code,
+        item,
+        section_code,
+        section,
+        generic_code,
+        generic,
+        bundle_code,
+        bundle,
+        status,
+        color,
+        province_name,
+        st_astext(ST_Centroid(geom_data)) as geom_data,
+        st_area(geography(geom_data))  area
+        from grassland_ecology
+        <where>
+            def_falg='1'
+			<if test="section != null and section != ''">
+                AND  section like concat('%', #{section}, '%')
+			</if>
+            <if test="item != null and item != ''">
+                AND  item like concat('%', #{item}, '%')
+            </if>
+            <if test="generic != null and generic != ''">
+                AND  generic like concat('%', #{generic}, '%')
+            </if>
+            <if test="bundle != null and bundle != ''">
+                AND  bundle like concat('%', #{bundle}, '%')
+            </if>
+         <if test="status != null and status.toString != '' and status.toString!='-1'">
+                        AND  status=#{status}
+         </if>
+
+		</where>
+    </select>
+    <select id="selectRemoteSensingById" parameterType="Long" resultType="com.sinosoft.integration.domain.RemoteSensing">
+        <include refid="selectRemoteSensingVo"/>
+        <where>
+            <if test="id != null and id != ''">
+                AND id =#{id}
+            </if>
+        </where>
+
+
+    </select>
+    <update id="updateRemoteSensing" parameterType="RemoteSensing">
+        update a_remote_sensing
+        <set>
+            <if test="name != null ">name=#{name},</if>
+            <if test="year!= null ">year=#{year},</if>
+            <if test="imgUrl!= null ">img_url=#{imgUrl},</if>
+            <if test="size!= null ">size=#{size},</if>
+            <if test="status!= null ">status=#{status}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+
+    <update id="updateRemoteSensingByIds" parameterType="Long">
+        update a_remote_sensing set status =1 where id in
+        <foreach collection="array" item="ids" open="("  separator=","  close=")">
+            #{ids}
+        </foreach>
+    </update>
+    <update id="examineRemoteSensing" parameterType="Long">
+       update grassland_ecology set status =1 where id=#{id}
+
+    </update>
+    <update id="unexamineRemoteSensing" parameterType="Long">
+       update grassland_ecology set status =0 where id=#{id}
+
+    </update>
+   <update id="defFalgRemoteSensing" parameterType="Long">
+       update grassland_ecology set def_falg ='1' where id=#{id}
+    </update>
+    <update id="saveEditRemoteSensing" parameterType="RemoteSensing">
+         update grassland_ecology
+          set
+            section =  #{section},
+            item =  #{item},
+            generic=#{generic},
+            color=#{color},
+            bundle=#{bundle}
+          where id=#{id}
+
+
+
+    </update>
+
+    <!--<delete id="deleteConfigByIds" parameterType="String">-->
+        <!--delete from sys_config where config_id in -->
+        <!--<foreach item="configId" collection="array" open="(" separator="," close=")">-->
+        	<!--#{configId}-->
+        <!--</foreach>-->
+    <!--</delete>-->
+    
+</mapper>

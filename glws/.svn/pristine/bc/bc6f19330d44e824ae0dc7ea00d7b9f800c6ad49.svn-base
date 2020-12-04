@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('各省草原生产力分析地图')" />
+</head>
+<body class="gray-bg">
+<div class="col-sm-12">
+    <div class="col-sm-10 search-collapse">
+        <div class="select-list">
+            <ul>
+                <li>
+                    年份：
+                    <select id="year" name="year">
+                        <option th:each="y : ${years}" th:text="${y}" th:value="${y}" th:selected="${year==y?'selected':'false'}" ></option>
+                    </select>
+                </li>
+                <li>
+                    <a id="search" name="search" class="btn btn-primary btn-rounded btn-sm">&nbsp;搜索</a>
+                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('recoveryquestion-form')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <div class="ibox-tools">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                    <i class="fa fa-wrench"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a th:href="@{/analyze/province}">折线图</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <div style="height:600px" id="echarts-map-chart"></div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script th:inline="javascript">
+    $(function () {
+        var provinces=[[${ppas}]];
+        var mapChart = echarts.init(document.getElementById("echarts-map-chart"));
+        var mapoption = {
+            title : {
+                text: '生产力',
+                subtext: '干草\/鲜草',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                x:'left',
+                data:['干草','鲜草']
+            },
+            dataRange: {
+                min: 0,
+                max: 25000,
+                x: 'left',
+                y: 'bottom',
+                text:['高','低'],           // 文本，默认为数值文本
+                calculable : true
+            },
+            toolbox: {
+                show: true,
+                orient : 'vertical',
+                x: 'right',
+                y: 'center',
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            roamController: {
+                show: true,
+                x: 'right',
+                mapTypeControl: {
+                    'china': true
+                }
+            },
+            series : [
+                {
+                    name: '干草',
+                    type: 'map',
+                    mapType: 'china',
+                    roam: false,
+                    itemStyle:{
+                        normal:{
+                            label:{show:true}
+                        },
+                        emphasis:{
+                            label:{show:true}
+                        }
+                    },
+                    data: (function () {
+                        var serie = [];
+                        for (var i = 0; i < provinces.length; i++) {
+                            var item = {
+                                name: provinces[i].province,
+                                value: provinces[i].dryWeight,
+                            }
+                            serie.push(item);
+                        }
+                        return serie;
+                    }())
+                },
+                {
+                    name: '鲜草',
+                    type: 'map',
+                    mapType: 'china',
+                    itemStyle:{
+                        normal:{label:{show:true}},
+                        emphasis:{label:{show:true}}
+                    },
+                    data: (function () {
+                        var wet = [];
+                        for (var j = 0; j < provinces.length; j++) {
+                            var item = {
+                                name: provinces[j].province,
+                                value: provinces[j].wetWeight
+                            }
+                            wet.push(item);
+                        }
+                        return wet;
+                    }())
+                }
+            ]
+        };
+        mapChart.setOption(mapoption);
+        $(window).resize(mapChart.resize);
+    });
+    var prefix = ctx + "analyze/province/map";
+    $('#search').click(function () {
+        var year=$('#year option:selected').val();
+        window.location.href=prefix+"?year="+year;
+    })
+</script>
+</body>
+</html>

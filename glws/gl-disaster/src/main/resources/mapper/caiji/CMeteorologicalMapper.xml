@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CMeteorologicalMapper">
+    
+    <resultMap type="CMeteorological" id="CMeteorologicalResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="airTemperature"    column="AIR_TEMPERATURE"    />
+        <result property="accumulatedTemperature"    column="ACCUMULATED_TEMPERATURE"    />
+        <result property="groundTemperature"    column="GROUND_TEMPERATURE"    />
+        <result property="precipitation"    column="PRECIPITATION"    />
+        <result property="naturalDisaster"    column="NATURAL_DISASTER"    />
+        <result property="windDirection"    column="WIND_DIRECTION"    />
+        <result property="status"    column="STATUS"    />
+        <result property="source"    column="SOURCE"    />
+        <result property="publishTime"    column="PUBLISH_TIME"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateBy"    column="UPDATE_BY"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+    </resultMap>
+
+    <sql id="selectCMeteorologicalVo">
+        select ID, CODE, ADDRESS, AIR_TEMPERATURE, ACCUMULATED_TEMPERATURE, GROUND_TEMPERATURE, PRECIPITATION, NATURAL_DISASTER, WIND_DIRECTION, STATUS, SOURCE, PUBLISH_TIME, REMARK, CREATE_TIME, UPDATE_BY, UPDATE_TIME from c_meteorological
+    </sql>
+
+    <select id="selectCMeteorologicalList" parameterType="CMeteorological" resultMap="CMeteorologicalResult">
+        <include refid="selectCMeteorologicalVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="address != null  and address != ''"> and ADDRESS = #{address}</if>
+            <if test="airTemperature != null "> and AIR_TEMPERATURE = #{airTemperature}</if>
+            <if test="accumulatedTemperature != null "> and ACCUMULATED_TEMPERATURE = #{accumulatedTemperature}</if>
+            <if test="groundTemperature != null "> and GROUND_TEMPERATURE = #{groundTemperature}</if>
+            <if test="precipitation != null  and precipitation != ''"> and PRECIPITATION = #{precipitation}</if>
+            <if test="naturalDisaster != null  and naturalDisaster != ''"> and NATURAL_DISASTER = #{naturalDisaster}</if>
+            <if test="windDirection != null  and windDirection != ''"> and WIND_DIRECTION = #{windDirection}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="source != null  and source != ''"> and SOURCE = #{source}</if>
+            <if test="publishTime != null "> and PUBLISH_TIME = #{publishTime}</if>
+            <if test="remark != null  and remark != ''"> and REMARK = #{remark}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="params != null">
+                <if test="params.beginCreateTime!=null and params.beginCreateTime!=''">
+                    and    PUBLISH_TIME &gt;=#{params.beginCreateTime}
+                </if>
+                <if test="params.endCreateTime!=null and params.endCreateTime!=''">
+                    and   PUBLISH_TIME &lt;=DATE_ADD(#{params.endCreateTime},INTERVAL 1 DAY)
+                </if>
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectCMeteorologicalById" parameterType="Long" resultMap="CMeteorologicalResult">
+        <include refid="selectCMeteorologicalVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertCMeteorological" parameterType="CMeteorological">
+        insert into c_meteorological
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="address != null  and address != ''">ADDRESS,</if>
+            <if test="airTemperature != null ">AIR_TEMPERATURE,</if>
+            <if test="accumulatedTemperature != null ">ACCUMULATED_TEMPERATURE,</if>
+            <if test="groundTemperature != null ">GROUND_TEMPERATURE,</if>
+            <if test="precipitation != null  and precipitation != ''">PRECIPITATION,</if>
+            <if test="naturalDisaster != null  and naturalDisaster != ''">NATURAL_DISASTER,</if>
+            <if test="windDirection != null  and windDirection != ''">WIND_DIRECTION,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="source != null  and source != ''">SOURCE,</if>
+            <if test="publishTime != null ">PUBLISH_TIME,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="airTemperature != null ">#{airTemperature},</if>
+            <if test="accumulatedTemperature != null ">#{accumulatedTemperature},</if>
+            <if test="groundTemperature != null ">#{groundTemperature},</if>
+            <if test="precipitation != null  and precipitation != ''">#{precipitation},</if>
+            <if test="naturalDisaster != null  and naturalDisaster != ''">#{naturalDisaster},</if>
+            <if test="windDirection != null  and windDirection != ''">#{windDirection},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="source != null  and source != ''">#{source},</if>
+            <if test="publishTime != null ">#{publishTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCMeteorological" parameterType="CMeteorological">
+        update c_meteorological
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="address != null  and address != ''">ADDRESS = #{address},</if>
+            <if test="airTemperature != null ">AIR_TEMPERATURE = #{airTemperature},</if>
+            <if test="accumulatedTemperature != null ">ACCUMULATED_TEMPERATURE = #{accumulatedTemperature},</if>
+            <if test="groundTemperature != null ">GROUND_TEMPERATURE = #{groundTemperature},</if>
+            <if test="precipitation != null  and precipitation != ''">PRECIPITATION = #{precipitation},</if>
+            <if test="naturalDisaster != null  and naturalDisaster != ''">NATURAL_DISASTER = #{naturalDisaster},</if>
+            <if test="windDirection != null  and windDirection != ''">WIND_DIRECTION = #{windDirection},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="source != null  and source != ''">SOURCE = #{source},</if>
+            <if test="publishTime != null ">PUBLISH_TIME = #{publishTime},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY = #{updateBy},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCMeteorologicalById" parameterType="Long">
+        delete from c_meteorological where ID = #{id}
+    </delete>
+
+    <delete id="deleteCMeteorologicalByIds" parameterType="String">
+        delete from c_meteorological where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

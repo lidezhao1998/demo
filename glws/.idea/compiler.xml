@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="glws-admin" />
+        <module name="gl-disaster" />
+        <module name="glws-generator" />
+        <module name="glws-framework" />
+        <module name="glws-common" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="gl-disaster" target="1.8" />
+      <module name="glma-admin" target="1.8" />
+      <module name="glma-system" target="1.8" />
+      <module name="glws" target="1.8" />
+      <module name="glws-admin" target="1.8" />
+      <module name="glws-common" target="1.8" />
+      <module name="glws-framework" target="1.8" />
+      <module name="glws-generator" target="1.8" />
+      <module name="glws-system" target="1.8" />
+      <module name="sinosoft-admin" target="1.8" />
+      <module name="sinosoft-system" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.integration.mapper.NormalInspectionMapper">
+    
+    <resultMap type="NormalInspection" id="NormalInspectionResult">
+    	<id     property="id"      column="id"      />
+        <result property="surveyUser"    column="survey_user"/>
+        <result property="surveyTime"     column="survey_time"/>
+        <result property="eastLongitude"   column="east_longitude"/>
+        <result property="northrrnLatitude"    column="northrrn_latitude"/>
+        <result property="altitude"    column="altitude"/>
+        <result property="area"    column="area"/>
+        <result property="sampleNumber"    column="sample_number"/>
+        <result property="sampleArea"    column="sample_area"/>
+        <result property="vegetaionCoverage"    column="vegetaion_coverage"/>
+        <result property="grassAveHeight"    column="grass_ave_height"/>
+        <result property="litterCondition"    column="litter_condition"/>
+        <result property="plantSpecies"    column="plant_species"/>
+        <result property="plantMain"    column="plant_main"/>
+        <result property="poisGrassNum"    column="pois_grass_num"/>
+        <result property="mainPoisgrassName"    column="main_poisgrass_name"/>
+        <result property="freshWeight"    column="fresh_weight"/>
+        <result property="edibleFreshWeight"    column="edible_fresh_weight"/>
+        <result property="dryWeight"    column="dry_weight"/>
+        <result property="edibleDryWeight"    column="edible_dry_weight"/>
+        <result property="shrubsAndVegetation"    column="shrubs_and_vegetation"/>
+        <result property="grasslandClass"    column="grassland_class"/>
+        <result property="grasslandType"    column="grassland_type"/>
+        <result property="terrainOriginal"    column="terrain_original"/>
+        <result property="landGeological"    column="land_geological"/>
+        <result property="aspect"    column="aspect"/>
+        <result property="slopePosition"    column="slope_position"/>
+        <result property="litterCondition2"    column="litter_condition2"/>
+        <result property="sievedSandSituation"    column="sieved_sand_situation"/>
+        <result property="surfaceErosion"    column="surface_erosion"/>
+        <result property="erosionReasons"    column="erosion_reasons"/>
+        <result property="salineSpot"    column="saline_spot"/>
+        <result property="proportionArea"    column="proportion_area"/>
+        <result property="seasonalWater"    column="seasonal_water"/>
+        <result property="amountRprecipitation"    column="amount_rprecipitation"/>
+        <result property="usePattern"    column="use_pattern"/>
+        <result property="useCondition"    column="use_condition"/>
+        <result property="evaluate"    column="evaluate"/>
+        <result property="comprehensiveAssessment"    column="comprehensive_assessment"/>
+        <result property="photoName"    column="photo_name"/>
+        <result property="photoUrl"    column="photo_url"/>
+        <result property="photoRealName"    column="photo_real_name"/>
+        <result property="createBy"      column="create_by"/>
+        <result property="createTime"    column="create_time"/>
+        <result property="updateBy"      column="update_by"/>
+        <result property="updateTime"    column="update_time"/>
+        <result property="status"    column="status"    />
+    </resultMap>
+    
+    <sql id="selectNormalInspectionVo">
+        SELECT
+                id,
+                survey_time,
+                survey_user,
+                east_longitude,
+                northrrn_latitude,
+                altitude,
+                area,
+                sample_number,
+                sample_area,
+                vegetaion_coverage,
+                grass_ave_height,
+                litter_condition,
+                plant_species,
+                plant_main,
+                pois_grass_num,
+                main_poisgrass_name,
+                fresh_weight,
+                edible_fresh_weight,
+                dry_weight,
+                edible_dry_weight,
+                shrubs_and_vegetation,
+                grassland_class,
+                grassland_type,
+                terrain_original,
+                land_geological,
+                aspect,
+                slope_position,
+                litter_condition2,
+                sieved_sand_situation,
+                surface_erosion,
+                erosion_reasons,
+                saline_spot,
+                proportion_area,
+                seasonal_water,
+                amount_rprecipitation,
+                use_pattern,
+                use_condition,
+                evaluate,
+                comprehensive_assessment,
+                photo_name,
+                photo_url,
+                photo_real_name,
+                remark,
+                create_time,
+                create_by,
+                update_time,
+                update_by,
+                status
+                FROM
+                a_normal_inspection
+    </sql>
+    
+    <!-- 查询条件 -->
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="id !=null">
+				and id = #{id}
+			</if>
+		</where>
+	</sql>
+    
+    <select id="selectNormalInspection" parameterType="NormalInspection" resultMap="NormalInspectionResult">
+        <include refid="selectNormalInspectionVo"/>
+        <include refid="sqlwhereSearch"/>
+    </select>
+    <select id="selectNormalInspectionList" parameterType="NormalInspection" resultMap="NormalInspectionResult">
+        <include refid="selectNormalInspectionVo"/>
+        <where>
+			<if test="id != null and id != ''">
+				AND id =#{id}
+			</if>
+            <if test="surveyUser != null and surveyUser != ''">
+                AND survey_user =#{surveyUser}
+            </if>
+            <if test="area != null and area != ''">
+                AND area =#{area}
+            </if>
+            <if test="status != null and status.toString != '' and status.toString!='-1'">
+                AND status = #{status}
+            </if>
+            <if test="surveyTime != null and surveyTime != ''">
+                and date_format(survey_time,'%y%m%d') = date_format(#{params.surveyTime},'%y%m%d')
+            </if>
+		</where>
+    </select>
+
+    <insert id="insertNormalInspection" parameterType="NormalInspection">
+        insert into a_normal_inspection (
+        <if test="surveyUser!= null ">survey_user,</if>
+        <if test="surveyTime != null ">survey_time,</if>
+        <if test="eastLongitude != null ">east_longitude,</if>
+        <if test="northrrnLatitude!= null ">northrrn_latitude,</if>
+        <if test="altitude!= null ">altitude,</if>
+        <if test="area!= null ">area,</if>
+        <if test="sampleNumber!= null ">sample_number,</if>
+        <if test="sampleArea!= null ">sample_area,</if>
+        <if test="vegetaionCoverage!= null ">vegetaion_coverage,</if>
+        <if test="grassAveHeight!= null ">grass_ave_height,</if>
+        <if test="litterCondition!= null ">litter_condition,</if>
+        <if test="plantSpecies!= null ">plant_species,</if>
+        <if test="plantMain!= null ">plant_main,</if>
+        <if test="poisGrassNum!= null ">pois_grass_num,</if>
+        <if test="mainPoisgrassName!= null ">main_poisgrass_name,</if>
+        <if test="freshWeight!= null ">fresh_weight,</if>
+        <if test="edibleFreshWeight!= null ">edible_fresh_weight,</if>
+        <if test="dryWeight!= null ">dry_weight,</if>
+        <if test="edibleDryWeight!= null ">edible_dry_weight,</if>
+        <if test="shrubsAndVegetation!= null ">shrubs_and_vegetation,</if>
+        <if test="grasslandClass!= null ">grassland_class,</if>
+        <if test="grasslandType!= null ">grassland_type,</if>
+        <if test="terrainOriginal!= null ">terrain_original,</if>
+        <if test="landGeological!= null ">land_geological,</if>
+        <if test="aspect!= null ">aspect,</if>
+        <if test="slopePosition!= null ">slope_position,</if>
+        <if test="litterCondition2!= null ">litter_condition2,</if>
+        <if test="sievedSandSituation!= null ">sieved_sand_situation,</if>
+        <if test="surfaceErosion!= null ">surface_erosion,</if>
+        <if test="erosionReasons!= null ">erosion_reasons,</if>
+        <if test="salineSpot!= null ">saline_spot,</if>
+        <if test="proportionArea!= null ">proportion_area,</if>
+        <if test="seasonalWater!= null ">seasonal_water,</if>
+        <if test="amountRprecipitation!= null ">amount_rprecipitation,</if>
+        <if test="usePattern!= null ">use_pattern,</if>
+        <if test="useCondition!= null ">use_condition,</if>
+        <if test="evaluate!= null ">evaluate,</if>
+        <if test="comprehensiveAssessment!= null ">comprehensive_assessment,</if>
+        <if test="photoName!= null ">photo_name,</if>
+        <if test="photoUrl!= null ">photo_url,</if>
+        <if test="photoRealName!= null ">photo_real_name,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="status!= null ">status,</if>
+        create_time
+        )values(
+        <if test="surveyUser!= null ">#{surveyUser},</if>
+        <if test="surveyTime != null ">#{surveyTime},</if>
+        <if test="eastLongitude != null ">#{eastLongitude},</if>
+        <if test="northrrnLatitude!= null ">#{northrrnLatitude},</if>
+        <if test="altitude!= null ">#{altitude},</if>
+        <if test="area!= null ">#{area},</if>
+        <if test="sampleNumber!= null ">#{sampleNumber},</if>
+        <if test="sampleArea!= null ">#{sampleArea},</if>
+        <if test="vegetaionCoverage!= null ">#{vegetaionCoverage},</if>
+        <if test="grassAveHeight!= null ">#{grassAveHeight},</if>
+        <if test="litterCondition!= null ">#{litterCondition},</if>
+        <if test="plantSpecies!= null ">#{plantSpecies},</if>
+        <if test="plantMain!= null ">#{plantMain},</if>
+        <if test="poisGrassNum!= null ">#{poisGrassNum},</if>
+        <if test="mainPoisgrassName!= null ">#{mainPoisgrassName},</if>
+        <if test="freshWeight!= null ">#{freshWeight},</if>
+        <if test="edibleFreshWeight!= null ">#{edibleFreshWeight},</if>
+        <if test="dryWeight!= null ">#{dryWeight},</if>
+        <if test="edibleDryWeight!= null ">#{edibleDryWeight},</if>
+        <if test="shrubsAndVegetation!= null ">#{shrubsAndVegetation},</if>
+        <if test="grasslandClass!= null ">#{grasslandClass},</if>
+        <if test="grasslandType!= null ">#{grasslandType},</if>
+        <if test="terrainOriginal!= null ">#{terrainOriginal},</if>
+        <if test="landGeological!= null ">#{landGeological},</if>
+        <if test="aspect!= null ">#{aspect},</if>
+        <if test="slopePosition!= null ">#{slopePosition},</if>
+        <if test="litterCondition2!= null ">#{litterCondition2},</if>
+        <if test="sievedSandSituation!= null ">#{sievedSandSituation},</if>
+        <if test="surfaceErosion!= null ">#{surfaceErosion},</if>
+        <if test="erosionReasons!= null ">#{erosionReasons},</if>
+        <if test="salineSpot!= null ">#{salineSpot},</if>
+        <if test="proportionArea!= null ">#{proportionArea},</if>
+        <if test="seasonalWater!= null ">#{seasonalWater},</if>
+        <if test="amountRprecipitation!= null ">#{amountRprecipitation},</if>
+        <if test="usePattern!= null ">#{usePattern},</if>
+        <if test="useCondition!= null ">#{useCondition},</if>
+        <if test="evaluate!= null ">#{evaluate},</if>
+        <if test="comprehensiveAssessment!= null ">#{comprehensiveAssessment},</if>
+        <if test="photoName!= null ">#{photoName},</if>
+        <if test="photoUrl!= null ">#{photoUrl},</if>
+        <if test="photoRealName!= null ">#{photoRealName},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="status!= null ">#{status},</if>
+        sysdate()
+        )
+    </insert>
+
+
+    <update id="updateNormalInspection" parameterType="NormalInspection">
+        update a_normal_inspection
+        <set>
+            <if test="surveyUser!= null ">survey_user=#{surveyUser},</if>
+            <if test="surveyTime != null ">survey_time=#{surveyTime},</if>
+            <if test="eastLongitude != null ">east_longitude=#{eastLongitude},</if>
+            <if test="northrrnLatitude!= null ">northrrn_latitude=#{northrrnLatitude},</if>
+            <if test="altitude!= null ">altitude=#{altitude},</if>
+            <if test="area!= null ">area=#{area},</if>
+            <if test="sampleNumber!= null ">sample_number=#{sampleNumber},</if>
+            <if test="sampleArea!= null ">sample_area=#{sampleArea},</if>
+            <if test="vegetaionCoverage!= null ">vegetaion_coverage=#{vegetaionCoverage},</if>
+            <if test="grassAveHeight!= null ">grass_ave_height=#{grassAveHeight},</if>
+            <if test="litterCondition!= null ">litter_condition=#{litterCondition},</if>
+            <if test="plantSpecies!= null ">plant_species=#{plantSpecies},</if>
+            <if test="plantMain!= null ">plant_main=#{plantMain},</if>
+            <if test="poisGrassNum!= null ">pois_grass_num=#{poisGrassNum},</if>
+            <if test="mainPoisgrassName!= null ">main_poisgrass_name=#{mainPoisgrassName},</if>
+            <if test="freshWeight!= null ">fresh_weight=#{freshWeight},</if>
+            <if test="edibleFreshWeight!= null ">edible_fresh_weight=#{edibleFreshWeight},</if>
+            <if test="dryWeight!= null ">dry_weight=#{dryWeight},</if>
+            <if test="edibleDryWeight!= null ">edible_dry_weight=#{edibleDryWeight},</if>
+            <if test="shrubsAndVegetation!= null ">shrubs_and_vegetation=#{shrubsAndVegetation},</if>
+            <if test="grasslandClass!= null ">grassland_class=#{grasslandClass},</if>
+            <if test="grasslandType!= null ">grassland_type=#{grasslandType},</if>
+            <if test="terrainOriginal!= null ">terrain_original=#{terrainOriginal},</if>
+            <if test="landGeological!= null ">land_geological=#{landGeological},</if>
+            <if test="aspect!= null ">aspect=#{aspect},</if>
+            <if test="slopePosition!= null ">slope_position=#{slopePosition},</if>
+            <if test="litterCondition2!= null ">litter_condition2=#{litterCondition2},</if>
+            <if test="sievedSandSituation!= null ">sieved_sand_situation=#{sievedSandSituation},</if>
+            <if test="surfaceErosion!= null ">surface_erosion=#{surfaceErosion},</if>
+            <if test="erosionReasons!= null ">erosion_reasons=#{erosionReasons},</if>
+            <if test="salineSpot!= null ">saline_spot=#{salineSpot},</if>
+            <if test="proportionArea!= null ">proportion_area=#{proportionArea},</if>
+            <if test="seasonalWater!= null ">seasonal_water=#{seasonalWater},</if>
+            <if test="amountRprecipitation!= null ">amount_rprecipitation=#{amountRprecipitation},</if>
+            <if test="usePattern!= null ">use_pattern=#{usePattern},</if>
+            <if test="useCondition!= null ">use_condition=#{useCondition},</if>
+            <if test="evaluate!= null ">evaluate=#{evaluate},</if>
+            <if test="comprehensiveAssessment!= null ">comprehensive_assessment=#{comprehensiveAssessment},</if>
+            <if test="photoName!= null ">photo_name=#{photoName},</if>
+            <if test="photoUrl!= null ">photo_url=#{photoUrl},</if>
+            <if test="photoRealName!= null ">photo_real_name=#{photoRealName},</if>
+            <if test="status!= null ">status=#{status},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <delete id="deleteNormalInspectionByIds" parameterType="String">
+        delete from a_normal_inspection where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+        	#{id}
+        </foreach>
+    </delete>
+
+    <update id="updateStatusByIds">
+        update a_normal_inspection set status =1 where id in
+        <foreach collection="array" item="ids" open="("  separator=","  close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+
+</mapper>

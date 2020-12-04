@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原鼠害发生与防治情况列表')" />
+    <style>
+        .btn-large-dim{
+            width: auto;
+        }
+        button.dim{
+            margin-right:40px;
+            margin-left: 90px;
+        }
+        .btn-large-dim{
+            height:60px;
+            font-size:25px;
+        }
+        .wrapper-content{
+            padding: 20px 20px 0px 20px;
+        }
+    </style>
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-striped table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: whitesmoke;
+        height: 55px;
+    }
+
+    /*按钮背景色*/
+    .btn-success{
+
+        background-color:rgba(48,146,62, 0.9);
+
+    }
+</style>
+<body class="gray-bg">
+<div class="row wrapper wrapper-content animated fadeInRight" >
+
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 style="align-content: center">请选择填报类型</h5>
+
+            </div>
+            <div class="ibox-content">
+                <h3 class="font-bold">类型</h3>
+
+
+
+
+                <button class="btn btn-info  dim btn-large-dim" type="button" onclick="add1()"><i class="fa fa-paste">鼠害1防治</i>
+
+                </button>
+
+
+
+                <button class="btn btn-info  dim btn-large-dim" type="button" onclick="add2()"><i class="fa fa-paste">虫害防治</i>
+                </button>
+
+
+                <button class="btn btn-info  dim btn-large-dim" type="button" onclick="add3()"><i class="fa fa-paste">农药使用</i>
+                </button>
+
+
+                <button class="btn btn-info  dim btn-large-dim" type="button" onclick="add4()"><i class="fa fa-paste">防治年报</i>
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>编号：</p>
+                                <input type="text" name="number"/>
+                            </li>
+                            <li>
+                                <p>市：</p>
+                                <input type="text" name="city"/>
+                            </li>
+                            <li>
+                                <p>县：</p>
+                                <input type="text" name="county"/>
+                            </li>
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <div class="select-list">
+                    <ul>
+
+                    <!--    <li>
+                            <p style="width:115px">请选择填报类型：</p>
+                        <select name="type" th:with="type=${@dict.getType('')}" id="type">
+                            <option value="1">草原鼠害发生与防治</option>
+                            <option value="2">草原虫害发生与防治</option>
+                            <option value="3">草原虫害防治农药使用</option>
+                            <option value="4">发生防治年报</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                        </li>
+                        <li>
+                        <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:sczj:add">
+                            <i class="fa fa-plus"></i> 添加
+                        </a>
+                        </li>-->
+                        <li>
+                            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:sczjj:edit">
+                                <i class="fa fa-edit"></i> 修改
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:sczjj:remove">
+                                <i class="fa fa-remove"></i> 删除
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:sczjj:export">
+                                <i class="fa fa-download"></i> 导出
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+
+
+
+
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('caiji:list:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('caiji:list:remove')}]];
+        　　　　　　　　　　　　　//获取选中项的值
+        var prefix = ctx + "system/sczjj";
+        var modalNames="草原鼠害发生与防治添加页面";
+        var prefixcre = ctx + "system/sczjj/add";
+        var type=1;
+        $("#type").change(function(){
+            var typedoc = $("#type option:selected");　　　　//获取选中项
+
+             type = typedoc.val();
+            if(type==1){
+                modalNames="草原鼠害发生与防治添加页面";
+
+                prefixcre = ctx + "system/sczjj/add";
+            }else if (type==2){
+                modalNames="草原虫害发生与防治添加页面";
+                prefixcre=ctx + "system/chfz/add";
+            }
+            else if (type==3){
+
+                modalNames="草原鼠虫害防治农药使用添加页面";
+                prefixcre=ctx + "system/scny/add";
+            }
+            else if (type==4){
+                modalNames="发生防治年报添加页面";
+                prefixcre=ctx + "system/fznb/add";
+            }
+            alert(prefixcre);
+        });
+        function add1(){
+            alert("111");
+            $.modal.openTab("草原鼠害发生与防治添加页面",ctx + "caiji/sczj/add");
+        }
+        function add2(){
+            $.modal.openTab("草原虫害发生与防治添加页面",ctx + "caiji/chfz/add");
+        }
+        function add3(){
+            $.modal.openTab("草原鼠虫害防治农药使用添加页面",ctx + "caiji/scny/add");
+        }
+        function add4(){
+            $.modal.openTab("发生防治年报添加页面",ctx + "caiji/fznb/add");
+        }
+        function add(){
+            $.modal.open(modalNames,prefixcre);
+        }
+        $(function() {
+
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefixcre + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: modalNames,
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '表id',
+                    visible: false
+                },
+                {
+                    field : 'number',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '编号'
+                },
+                {
+                    field : 'week',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '周'
+                },
+                {
+                    field : 'city',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '市'
+                },
+                {
+                    field : 'county',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '县'
+                },
+                    {
+                        field : 'type',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '类型'
+                    },
+                {
+                    field : 'creatTime',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '创建时间'
+                },
+                {
+                    field : 'status',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '状态'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

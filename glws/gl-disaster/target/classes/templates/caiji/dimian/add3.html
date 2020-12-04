@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增地面调查数据')"/>
+    <th:block th:include="include :: select2-css"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: jquery-steps-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+
+    <style type="text/css">
+        .form-group1 {
+            margin-left: 40px;
+        }
+
+        .tg-0lax {
+            text-align: center;
+            vertical-align: middle;
+            color: #333;
+        }
+
+        table {
+            background-color: white;
+        }
+
+        .col-sm-3 {
+            color: #333;
+        }
+
+        .col-sm-pt {
+            width: 95%;
+        }
+
+        .file-preview {
+            height: 300px;
+            overflow: auto;
+        }
+
+
+
+        .juzhong {
+            margin: 0 auto; /* 居中 这个是必须的，，其它的属性非必须 */
+            text-align: center; /* 文字等内容居中 */
+        }
+
+        .wizard > .content {
+            min-height: 450px;
+        }
+        .quyangAdd{
+            margin-bottom: 10px;
+        }
+       .quyangtable{
+           height: 250px;
+           overflow: auto;
+           float: left;
+       }
+        .select-list li p{
+
+            width: auto;
+        }
+        .btn1 {
+            display: inline-block;
+            margin-left: -30px;
+            padding: 4px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            touch-action: manipulation;
+            cursor: pointer;
+            user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+        }
+
+
+        /*修改表头颜色*/
+        .table-striped table thead{
+            background-color:rgba(48,146,62, 0.9);
+            color: whitesmoke;
+            height: 55px;
+        }
+    </style>
+</head>
+<body class="white-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <form class="form-horizontal " id="form-survey-add">
+                        <input id="photoUrl" name="photoUrl" type="text" hidden>
+                        <input id="mapId" name="mapId" type="text" hidden>
+
+                        <h1 style="color:rgba(48,146,62, 0.9)">样地基本信息</h1>
+                        <fieldset>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group" style="text-align: center;">
+                                        <label class="col-sm-3 control-label">样地编号：</label>
+                                        <div class="col-sm-8" style="display: inline-block">
+                                            <input id="codeId" name="codeId" class="form-control" type="text">
+
+                                        </div>
+
+                                            <a class="btn1 btn-success btn-rounded"  th:onclick="bianhao()">选择</a>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                     <div class="form-group">
+                                         <label class="col-sm-3 control-label">省级名称：</label>
+                                         <div class="col-sm-8">
+                                            <!-- < select name="provincialLevelName" class="form-control noselect2 selectpicker" th:with="type=${@dict.getType('sys_province')}" >
+                                             <option value="">请选择</option>
+                                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}">
+                                             </option>
+                                             </select>-->
+                                             <select id="addrProvince" style="width: 370px;height: 34px;border:1px solid #e5e6e7" name="provincialLevelName" onchange="getCities()"></select>
+                                         </div>
+                                     </div>
+
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                 <div class="col-sm-6">
+                             <div class="form-group">
+                                 <label class="col-sm-3 control-label">地级名称：</label>
+                                 <div class="col-sm-8">
+                                     <select
+                                             id="addrCity" name="cityLevelName" style="width: 370px;height: 34px;border:1px solid #e5e6e7" onchange="getAreas()">         </select>                         </div>
+                             </div>
+                                 </div>
+
+                                <div class="col-sm-6">
+                             <div class="form-group">
+                                 <label class="col-sm-3 control-label">县级名称：</label>
+                                 <div class="col-sm-8">
+                                     <select id="addrArea" name="countyLevelName" style="width: 370px;height: 34px;border:1px solid #e5e6e7" >
+                                     </select>                                 </div>
+                             </div>
+
+                                     </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">绘图：</label>
+                                        <div class="col-sm-8">
+                                            <a class="btn btn-success" onclick="ht()" >
+                                                <i class="fa fa-plus"></i> 样地绘图
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">地表特征：</label>
+                                        <div class="col-sm-8">
+                                            <select name="surfaceFeaturesType"
+                                                    class="form-control noselect2 selectpicker"
+                                                    data-none-selected-text="请选择" multiple
+                                                    th:with="type=${@dict.getType('di_surface_features')}">
+                                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                                        th:value="${dict.dictValue}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">调查时间：</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input name="surveyTime" type="text" class="form-control"
+                                                       id="laydate-demo-3" placeholder="yyyy-MM-dd HH:mm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">调查人：</label>
+                                        <div class="col-sm-8">
+                                            <input name="name" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">土壤类型：</label>
+                                        <div class="col-sm-8">
+                                            <select name="soilType" class="form-control noselect2 selectpicker"
+                                                    th:with="type=${@dict.getType('di_soil')}">
+                                                <option value="">请选择</option>
+                                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                                        th:value="${dict.dictValue}">
+                                                </option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">草地类型：</label>
+                                        <div class="col-sm-8">
+                                            <select name="grasslandType" class="form-control noselect2 selectpicker"
+                                                    th:with="type=${@dict.getType('di_grassland')}">
+                                                <option value="">请选择</option>
+                                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                                        th:value="${dict.dictValue}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">植被覆盖度：</label>
+                                        <div class="col-sm-8">
+                                            <input name="vegetationCoverage" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">地上生物量：</label>
+                                        <div class="col-sm-8">
+                                            <input name="aboveGroundBiomass" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">天敌种类：</label>
+                                        <div class="col-sm-8">
+                                            <select name="naturalEnemyType" class="form-control noselect2 selectpicker"
+                                                    data-none-selected-text="请选择" multiple
+                                                    th:with="type=${@dict.getType('di_natural_enemy')}">
+                                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                                        th:value="${dict.dictValue}">
+                                                </option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">主要植物：</label>
+                                        <div class="col-sm-8">
+
+                                            <select name="mianBotanyType" class="form-control noselect2 selectpicker"
+                                                    data-none-selected-text="请选择" multiple
+                                                    th:with="type=${@dict.getType('di_mian_botany')}">
+                                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                                        th:value="${dict.dictValue}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">地表特征：</label>
+                                        <div class="col-sm-8">
+                                            <select name="surfaceFeaturesType"
+                                                    class="form-control noselect2 selectpicker"
+                                                    data-none-selected-text="请选择" multiple
+                                                    th:with="type=${@dict.getType('di_surface_features')}">
+                                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                                        th:value="${dict.dictValue}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-11">
+                                    <div class="form-group1" style="color: red">
+                                        注：编号规则（S：鼠、虫、病、毒害草首字母，YYYY：年份；XXXXXX：县级行政代码；A：A-Z，调查分组组别；0001：组内顺序号）
+
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <h1>样地位置信息</h1>
+                        <fieldset>
+                            <div class="row">
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">经度：</label>
+                                        <div class="col-sm-8">
+                                            <input name="longitude" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">纬度：</label>
+                                        <div class="col-sm-8">
+                                            <input name="latitude" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">高程：</label>
+                                        <div class="col-sm-8">
+                                            <input name="elevation" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">地形：</label>
+                                        <div class="col-sm-8">
+                                            <input name="topographyType" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">坡位：</label>
+                                        <div class="col-sm-8">
+                                            <input name="slopePositionType" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">坡向：</label>
+                                        <div class="col-sm-8">
+                                            <input name="asceptType" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">坡度：</label>
+                                        <div class="col-sm-8">
+                                            <input name="fallingGradient" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <!--<div  style="padding-left: 255px;">
+                                        <a class="btn btn-success" onclick="ht()" >
+                                            <i class="fa fa-plus"></i> 添加绘图
+                                        </a>
+                                </div>-->
+                            </div>
+
+
+                            <!--<div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="btn-group-sm" id="toolbar" role="group">
+                                        <a class="btn btn-success" onclick="bjht()" >
+                                            <i class="fa fa-plus"></i> 编辑绘图
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                              </div>-->
+                        </fieldset>
+
+                        <h1>样地照片</h1>
+                        <fieldset>
+                            <div class="col-sm-pt">
+                                <div class="form-group1">
+                                    <label class="font-noraml">照片：</label>
+                                    <div class="file-loading">
+                                        <input id="fileinput-demo-2" name="photo" type="file" multiple>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-11">
+                                        <div class="form-group1" style="color: red">
+                                            注：上传图片格式'jpg', 'gif', 'png','bmp','jpeg';<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 单次最多上传图片数量10个;<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 单个图片限制大小10MB。
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <h1>取样信息</h1>
+                        <fieldset>
+                            <div class="col-sm-12 search-collapse quyangAdd" >
+                                <form id="formId">
+                                    <div class="select-list">
+                                        <ul>
+                                            <li>
+                                                <p class="Addtitle">请选择取样生物种类：</p>
+                                                <select id="Addtitle" name="cPlotList[0].harmfulSpeciesType"
+                                                        th:with="type=${@dict.getType('di_qu_Biological_species')}">
+                                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                                            th:value="${dict.dictValue}">
+                                                    </option>
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-success" onclick="addTabQuy()"><i class="fa fa-plus"></i> 添加</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="quyangtable">
+
+                                <div >
+                                    <table id="bootstrap-table" class="table table-hover" >
+                                        <tr>
+                                            <td class="tg-0lax" style="width: 146.67px; height: 53.33px"  >
+
+                                                取样编号
+                                            </td>
+                                            <td class="tg-0lax" style="width: 146.67px; height: 53.33px"  >
+
+                                                取样面积类型
+                                            </td>
+                                            <td class="tg-0lax" style="width: 146.67px; height: 53.33px"  >
+
+                                                有害生物种类
+                                            </td>
+                                            <td class="tg-0lax"  style="width: 146.67px; height: 53.33px" >
+
+                                                具体种类
+                                            </td>
+                                            <td class="tg-0lax"  style="width: 146.67px; height: 53.33px">
+                                                测定数量
+                                            </td>
+                                            <td class="tg-0lax" style="width: 146.67px; height: 53.33px" >
+                                                换算标准密度
+                                            </td>
+                                            <td class="tg-0lax"  style="width: 146.67px; height: 53.33px">
+                                                取样时间
+                                            </td>
+                                            <td class="tg-0lax"  style="width: 146.67px; height: 53.33px">
+                                                照片
+                                            </td>
+                                            <td class="tg-0lax"  style="width: 146.67px; height: 53.33px" >
+                                                操作
+                                            </td>
+
+                                            <!--<td class="tg-0lax">
+                                                <a class="btn btn-success" onclick="addTab2()">
+                                                    <i class="fa fa-plus"></i> 添加
+                                                </a>
+                                            </td>-->
+                                        </tr>
+
+
+                                       <!-- <tr class="shunum">
+
+                                            <td class="tg-lboi">
+                                                <input name="cPlotList[0].samplingArea" class="form-control"
+                                                       type="text">
+                                            </td>
+                                            <td class="tg-lboi">
+                                                <select name="cPlotList[0].harmfulSpeciesType"
+                                                        class="form-control noselect2 selectpicker"
+                                                        th:with="type=${@dict.getType('di_qu_Biological_species')}">
+                                                    <option value="">请选择</option>
+                                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                                            th:value="${dict.dictValue}">
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td class="tg-lboi">
+                                                <input name="cPlotList[0].quantityDetermination" class="form-control"
+                                                       type="text">
+                                            </td>
+                                            <td class="tg-lboi">
+                                                <input name="cPlotList[0].standardDensity" class="form-control"
+                                                       type="text">
+                                            </td>
+                                            <td class="tg-lboi">
+                                                <input name="cPlotList[0].standardDensity" class="form-control"
+                                                       type="text">
+                                            </td>
+                                            <td class="tg-lboi">
+
+                                                <input name="cPlotList[0].samplingTime" type="text" class="form-control laydate-demo-31"
+                                                       placeholder="yyyy-MM-dd HH:mm">
+                                            </td>
+                                            <td class="tg-lboi">
+                                                <div class="tg-lboi">
+                                                    <a class="btn btn-success" onclick=addTab1("cPlotList0photo")>
+                                                        <i class="fa fa-plus"></i> 上传
+                                                        <input id="cPlotList0photo" name="cPlotList[0].photo"
+                                                               class="form-control" type="hidden">
+                                                    </a>
+                                                </div>
+                                            </td>
+
+                                            <td class="tg-lboi">
+                                                <div class="tg-lboi">
+                                                    <a class="btn btn-danger multiple" onclick="addTab3(this)"><i
+                                                            class="fa fa-remove"></i> 删除</a>
+                                                </div>
+                                            </td>
+                                        </tr>-->
+
+
+
+                                    </table>
+                                </div >
+                            </div>
+                        </fieldset>
+                    </form>
+                    <!--<div class="col-sm-offset-5 col-sm-10">
+                        <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandler()"  ><i class="fa fa-check"></i>保 存</button>&nbsp;
+                        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+
+                    </div>-->
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: jquery-steps-js"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+
+
+<script type="text/javascript">
+
+    var prefix = ctx + "system/survey";
+
+    var prefix2 = ctx + "system/plot";
+
+
+
+
+
+
+
+
+
+    //省市区三级联动
+    $(function(){
+        getProvinces();
+        var op1 = document.createElement("option");
+        op1.value = -1;
+        op1.text ="----- 所在市 -------";
+        document.getElementById("addrCity").appendChild(op1);
+        var op2 = document.createElement("option");
+        op2.value = -1;
+        op2.text = "----- 所在区 -------";
+        document.getElementById("addrArea").appendChild(op2);
+        var op3 = document.createElement("option");
+
+    });
+</script>
+<script type="text/javascript">
+    // ===== 加载省列表 =====
+    function getProvinces() {
+        //  var url = "<%=basePath%>dict/getProvinces";
+        var url=ctx+"system/publish/getProvinces";
+        $.ajax({
+            "url": url,
+            "type": "GET",
+            "dataType": "json",
+            "success": function(data) {
+                //alert(JSON.stringify(data))
+                var op = document.createElement("option");
+                op.value = -1;
+                op.text = "----- 所在省 -------";
+                document.getElementById("addrProvince").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrProvince").appendChild(op);
+                }
+            }
+        });
+        getCities();
+    }
+    // ===== 加载市列表 =====
+    function getCities() {
+        $("#addrCity").empty();
+        $("#addrArea").empty();
+        var url=ctx+"system/publish/getCities";
+        var data = "provinceCode=" + $("#addrProvince").val();
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function(data) {
+                var op = document.createElement("option");
+                op.value = -1;
+                op.text ="----- 所在市 -------";
+                document.getElementById("addrCity").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrCity").appendChild(op);
+                }
+            }
+        });
+        getAreas();
+        var op2 = document.createElement("option");
+        op2.value = -1;
+        op2.text = "----- 所在区 -------";
+        document.getElementById("addrArea").appendChild(op2);
+    }
+    // ===== 加载区列表 =====
+    function getAreas() {
+        $("#addrArea").empty();
+        $("#addrdz").empty();
+        //var url = "<%=basePath%>dict/getAreas";
+        var url=ctx+"system/publish/getAreas";
+        var data = "cityCode=" + $("#addrCity").val();
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function(data) {
+                var op = document.createElement("option");
+                op.value = -1;
+                op.text = "----- 所在区 -------";
+                document.getElementById("addrArea").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrArea").appendChild(op);
+                }
+            }
+        });
+
+    }
+
+
+    $("#form-survey-add").validate({
+        focusCleanup: true
+
+    });
+
+    function addTab3(obj) {
+        /*if ($(".shunum").size() > 1) {
+            $(obj).parent().parent().parent().remove();
+        } else {
+            alert("最少保留一行，不能删除");
+        }*/
+        $(obj).parent().parent().parent().remove();
+
+    }
+
+    function addTab2( ) {
+        var number=0;
+        var tableNode = document.getElementById("bootstrap-table");
+        var trNodeList = tableNode.getElementsByTagName("tr");
+        //得到最后一行(tr)的所有td
+        if(trNodeList.length==1){
+            number=0;
+        }else{
+        var tdNodeList = trNodeList[trNodeList.length - 1].getElementsByTagName("td");
+        var td_input_name = tdNodeList[0].getElementsByTagName("input")[0].name;
+        var strIndex = td_input_name.indexOf("[");
+         number = td_input_name.substring(strIndex + 1, strIndex + 2);
+
+        //var trNode = document.createElement("tr");
+            number++;
+        }
+
+        var year = $("#yea").val();
+        $.ajax({
+            "url": prefix + "/dict?dict=di_qu_Biological_species",
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                /!*   console.log(JSON.stringify(data));*!/
+                var opt = "";
+                if (data.msg == "操作成功") {
+                    var dictDatalist = data.dictData;
+                    for (var i in dictDatalist) {
+                        opt = opt + "<option value=" + dictDatalist[i].dictValue + ">" + dictDatalist[i].dictLabel + "</option>\n";
+
+                    }
+
+
+                }
+
+                $("#bootstrap-table").append(" <tbody><tr class=\"shunum\">\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <input name=\"cPlotList[" + number + "].samplingNumber\" class=\"form-control\" type=\"text\">\n" +
+                    "                        </td>\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <input name=\"cPlotList[" + number + "].samplingArea\" class=\"form-control\" type=\"text\">\n" +
+                    "                        </td>\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <select name=\"cPlotList[" + number + "].harmfulSpeciesType\" class=\"form-control\">\n" +
+                    "                                <option value=\"\">请选择</option>\n" + opt +
+                    "                            </select>\n" +
+                    "                        </td>\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <input name=\"cPlotList[" + number + "].detailedType\" class=\"form-control\" type=\"text\">\n" +
+                    "                        </td>\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <input name=\"cPlotList[" + number + "].quantityDetermination\" class=\"form-control\" type=\"text\">\n" +
+                    "                        </td>\n" +
+
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <input name=\"cPlotList[" + number + "].standardDensity\" class=\"form-control\" type=\"text\">\n" +
+                    "                        </td>\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <input name=\"cPlotList[" + number + "].samplingTime\" class=\"form-control laydate-demo-32\" type=\"text\"  placeholder=\"yyyy-MM-dd HH:mm\">\n" +
+                    "                        </td>\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <div class=\"tg-lboi\">\n" +
+                    "                                <a class=\"btn btn-success\" onclick=addTab1(\"cPlotList" + number + "photo\")>\n" +
+                    "                                    <i class=\"fa fa-plus\"></i> 上传\n" +
+                    "                            <input id=\"cPlotList[" + number + "]photo\" name=\"cPlotList[" + number + "].photo\" class=\"form-control\" type=\"hidden\">\n" +
+                    "                                </a>\n" +
+                    "                            </div>\n" +
+                    "                        </td>  <td class=\"tg-lboi\">\n" +
+                    "                            <div class=\"tg-lboi\">\n" +
+                    "                                <a class=\"btn btn-danger multiple \" onclick=\"addTab3(this)\" >\n" +
+                    "                                    <i class=\"fa fa-remove\"></i> 删除\n" +
+                    "                                </a>\n" +
+                    "                            </div>\n" +
+                    "                        </td>\n" +
+                    "                    </tr></tbody>")
+
+
+            }
+        });
+    }
+
+
+    function submitHandler() {
+        let gis_id = sessionStorage.getItem("gis_id");
+        $("#mapId").val(gis_id);
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-survey-add').serialize());
+            sessionStorage.setItem("gis_id","");
+
+        }
+    }
+
+    function addTab1(val) {
+        var id = $("#" + val).val();
+        $.modal.openFull("上传取样照片", prefix + "/quuploadedit?idx=" + val + "&idp=" + id,
+            shadeClose = false)
+    }
+
+
+    $(document).ready(function () {
+
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            laydate.render({
+                elem: '#laydate-demo-1'
+            });
+
+            laydate.render({
+                elem: '#laydate-demo-2',
+                type: 'date'
+            });
+
+            laydate.render({
+                elem: '#laydate-demo-3',
+                type: 'datetime',
+                format: 'yyyy-MM-dd HH:mm',
+                trigger: 'click'
+            });
+            laydate.render({
+                elem: '.laydate-demo-31',
+                type: 'datetime',
+                format: 'yyyy-MM-dd HH:mm',
+                trigger: 'click'
+            });
+            laydate.render({
+                elem: '#laydate-demo-4',
+                range: true
+            });
+
+            var startDate = laydate.render({
+                elem: '#laydate-startTime',
+                max: $('#laydate-endTime').val(),
+                theme: 'molv',
+                trigger: 'click',
+                done: function (value, date) {
+                    // 结束时间大于开始时间
+                    if (value !== '') {
+                        endDate.config.min.year = date.year;
+                        endDate.config.min.month = date.month - 1;
+                        endDate.config.min.date = date.date;
+                    } else {
+                        endDate.config.min.year = '';
+                        endDate.config.min.month = '';
+                        endDate.config.min.date = '';
+                    }
+                }
+            });
+
+            var endDate = laydate.render({
+                elem: '#laydate-endTime',
+                min: $('#laydate-startTime').val(),
+                theme: 'molv',
+                trigger: 'click',
+                done: function (value, date) {
+                    // 开始时间小于结束时间
+                    if (value !== '') {
+                        startDate.config.max.year = date.year;
+                        startDate.config.max.month = date.month - 1;
+                        startDate.config.max.date = date.date;
+                    } else {
+                        startDate.config.max.year = '';
+                        startDate.config.max.month = '';
+                        startDate.config.max.date = '';
+                    }
+                }
+            });
+        });
+
+
+        $("#form-survey-add").steps({
+            bodyTag: "fieldset",
+            onStepChanging: function (event, currentIndex, newIndex) {
+                if (currentIndex > newIndex) {
+                    return true
+                }
+                if (newIndex === 3 && Number($("#age").val()) < 18) {
+                    return false
+                }
+                var form = $(this);
+                if (currentIndex < newIndex) {
+                    $(".body:eq(" + newIndex + ") label.error", form).remove();
+                    $(".body:eq(" + newIndex + ") .error", form).removeClass("error")
+                }
+                form.validate().settings.ignore = ":disabled,:hidden";
+                return form.valid()
+            },
+            onStepChanged: function (event, currentIndex, priorIndex) {
+                if (currentIndex === 2 && Number($("#age").val()) >= 18) {
+                    $(this).steps("next")
+                }
+                if (currentIndex === 2 && priorIndex === 3) {
+                    $(this).steps("previous")
+                }
+            },
+            onFinishing: function (event, currentIndex) {
+                let gis_id = sessionStorage.getItem("gis_id");
+                $("#mapId").val(gis_id);
+
+                /* $.ajax({
+                     type: 'POST',
+                     url: prefix + "/add",//发送请求
+                     data: $('#form-survey-add').serialize(),
+                     dataType : "html",
+                     success: function(result) {
+                         var htmlCont = result;//返回的结果页面
+                         layer.open({
+                             type: 1,//弹出框类型
+                             title: '传播层级用户详情',
+                             shadeClose: false, //点击遮罩关闭层
+                             area : ['60%' , '90%'],
+                             shift:1,
+                             content: htmlCont,//将结果页面放入layer弹出层中
+                             success: function(layero, index){
+
+                             }
+                         });
+                     }
+                 });*/
+                /*var form = $(this);
+                form.validate().settings.ignore = ":disabled";
+                if ($.validate.form()) {
+                    $.operate.save(prefix + "/addque", $('#form-survey-add').serialize());
+                }
+                return form.valid()*/
+                layer.open({
+                    type: 2,
+                    shadeClose: false,
+                    title: "地面调查确认页面", //不显示标题
+                    area: ['1250px', '600px'],
+                    offset: ['10px', '120px'],
+                    content: prefix + "/addque?" + $('#form-survey-add').serialize(), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                    /*cancel: function () {
+                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', {time: 5000, icon: 6});
+                    }*/
+                });
+
+            },
+            onFinished: function (event, currentIndex) {
+                // alert(2222);
+                var form = $(this);
+                form.submit()
+            }
+        }).validate({
+            errorPlacement: function (error, element) {
+                element.before(error)
+            }, rules: {confirm: {equalTo: "#password"}}
+        })
+
+//附件上传
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '#',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            initialPreview: [
+                "/img/profile.jpg"
+            ]
+        });
+        /*  var preList = new Array();
+          var listImage = selectItem.FImage.split(",");
+          var listFUrl = selectItem.FUrl;
+          var previewJson = preList;
+          var initPreviewConfig = new Array();*/
+        var obj = document.getElementById("photoUrl");//储存图图片id
+        var ids = [];
+        var initialPreview = [];
+        var initialPreviewConfig = [];
+        $("#fileinput-demo-2").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': prefix + '/upload',
+            overwriteInitial: false,
+            uploadIcon: "<i class=\"glyphicon glyphicon-upload\"></i>",
+            initialPreviewAsData: true,
+            uploadAsync: true,
+            showCancel: false,
+            allowedFileExtensions: ['jpg', 'gif', 'png', 'bmp', 'jpeg'],//指出带有哪些后缀名的文件才是被接受上传的
+            previewFileIcon: '',//当文件无法被预览时出现在缩略图中的图标，默认是
+            maxFileCount: 10,
+            layoutTemplates: {
+                actionUpload: ""
+            },
+            deleteExtraData: {
+                files: "111111111"
+            },
+            initialPreview: initialPreview,
+            initialPreviewConfig: initialPreviewConfig,
+
+
+        }).on('filebatchuploaderror', function (event, data, msg) {
+            alert("上传失败");
+        }).on("filepredelete", function (event, key, jax, data) {
+            return !confirm("确定删除？");
+        }).on('filedeleted', function (event, key) {
+            removearry(ids, key)
+            alert("删除成功");
+
+            obj.value = ids;
+        });
+        $(".kv-file-remove").click(function () {
+
+            // alert("target"+JSON.stringify( $(this).target));
+        });
+        /*$('#fileinput-demo-2').on('filepredelete', function(event,data,jax,key) {
+             alert("key"+JSON.stringify(key));
+             alert("data"+JSON.stringify(data));
+             alert("jax"+JSON.stringify(jax));
+             alert("event"+JSON.stringify(event));
+             console.log('Key = ' + key);
+
+         });*/
+
+
+        $("#fileinput-demo-2").on("fileuploaded", function (event, data, previewId, index) {
+            //alert("data"+JSON.stringify(data));
+            initialPreview.push(data.response.initialPreview)
+            var obj = {
+                caption: data.response.filename,
+                size: data.response.size,
+                url: prefix + '/delete',
+                key: data.response.id,
+            }
+            //alert(JSON.stringify(obj));
+            initialPreviewConfig.push(obj);
+            //alert(JSON.stringify(initialPreview));
+            if (ids.length == 0) {
+                ids = data.response.id;
+            } else {
+                ids = ids + "," + data.response.id;
+                var idsarry = ids.split(",");
+                ids = evlabc(idsarry);
+            }
+            //alert("ids"+ids);
+            $("#photoUrl").val(ids);
+            // alert("obj"+$("#photoUrl").val())
+            $('#fileinput-demo-2').fileinput('destroy');
+            $("#fileinput-demo-2").fileinput({
+                'theme': 'explorer-fas',
+                'uploadUrl': prefix + '/upload',
+                overwriteInitial: false,
+                uploadIcon: "<i class=\"glyphicon glyphicon-upload\"></i>",
+                initialPreviewAsData: true,
+                uploadAsync: true,
+                showCancel: false,
+                allowedFileExtensions: ['jpg', 'gif', 'png', 'bmp', 'jpeg'],//指出带有哪些后缀名的文件才是被接受上传的
+                previewFileIcon: '',//当文件无法被预览时出现在缩略图中的图标，默认是
+                maxFileCount: 10,
+                layoutTemplates: {
+                    actionUpload: ""
+                },
+                deleteExtraData: {
+                    files: "111111111"
+                },
+                initialPreview: initialPreview,
+                initialPreviewConfig: initialPreviewConfig,
+
+
+            })
+            $('#fileinput-demo-2').fileinput('enable');
+
+        });
+
+        function dianji() {
+            //  alert(initialPreview);
+            // alert(JSON.stringify(initialPreviewConfig));
+            // alert($("#photoUrl").val());
+        }
+
+        //数组排序方法
+        function evlabc(a) { //排序大小
+            var i = j = t = 0;
+            for (i = 0; i < a.length; i++) {
+                for (j = 0; j < a.length; j++) {
+                    if (a[i] < a[j]) {// 相邻元素两两对比
+                        t = a[i];
+                        a[i] = a[j];
+                        a[j] = t;
+                    }
+                }
+            }
+            return a;
+        }
+
+        //取值在数组中的下标
+        function indexOfArry(arry, val) {
+            for (var i = 0; i < arry.length; i++) {
+                if (arry[i] == val) return i;
+            }
+            return -1;
+        };
+
+        //删除数组中固定的值
+        function removearry(arry, val) {
+            var index = indexOfArry(arry, val);
+            if (index > -1) {
+                arry.splice(index, 1);
+            }
+        };
+
+
+    });
+
+    /*function addTabQuy() {
+        var  type=$('#Addtitle option:selected') .val();
+        var url="";
+        var title="";
+        if(type==001){
+            //害虫
+             url = prefix + '/addPest';
+            title="新增害虫信息";
+           // $.modal.open("新增害虫信息", url);
+
+            // $.modal.msgError("请选择添加取样生物类型");
+        }else if(type==002){
+            //害鼠
+             url = prefix + '/addVermin';
+            title="新增害鼠信息";
+            //$.modal.open("新增害鼠信息", url);
+            // $.modal.msgError("请选择添加取样生物类型");
+        }else if(type==003){
+            //病害
+             url = prefix + '/addDisease';
+            title="新增病害信息";
+            //$.modal.open("新增病害信息", url);
+            // $.modal.msgError("请选择添加取样生物类型");
+        }else if(type==004){
+            //毒害草
+             url = prefix + '/addWeed';
+            title="新增毒害草信息";
+           // $.modal.open("新增毒害草信息", url);
+            // $.modal.msgError("请选择添加取样生物类型");
+        }
+        layer.open({
+            type: 2,
+            area: ["900px", '500px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: title,
+            content: url,
+            btn: ['确定', '关闭'],
+            yes: function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                var code = iframeWin.contentWindow.chuanzhi();
+                if (code == false) {
+
+                } else {
+                    addTab5(code);
+
+                    layer.close(index);
+                }
+
+            },
+            cancel: function (index) {
+                return true;
+            }
+        });
+
+    }*/
+    //取样修改
+    function addTabQuy() {
+        var  type=$('#Addtitle option:selected') .val();
+        var  typetext=$('#Addtitle option:selected') .text();
+        var samplingArea=$('#samplingArea option:selected').val();
+        var samplingAreatext=$('#samplingArea option:selected').text();
+        var url="";
+        var title="";
+        if(type==001){
+            //害虫
+            url = prefix + '/addPest';
+            title="新增害虫信息";
+
+            // $.modal.open("新增害虫信息", url);
+
+            // $.modal.msgError("请选择添加取样生物类型");
+        }else if(type==002){
+            //害鼠
+            url = prefix + '/addVermin';
+            title="新增害鼠信息";
+            //$.modal.open("新增害鼠信息", url);
+            // $.modal.msgError("请选择添加取样生物类型");
+        }else if(type==003){
+            //病害
+            url = prefix + '/addDisease';
+            title="新增病害信息";
+            //$.modal.open("新增病害信息", url);
+            // $.modal.msgError("请选择添加取样生物类型");
+        }else if(type==004){
+            //毒害草
+            url = prefix + '/addWeed';
+            title="新增毒害草信息";
+            // $.modal.open("新增毒害草信息", url);
+            // $.modal.msgError("请选择添加取样生物类型");
+        }
+        layer.open({
+            type: 2,
+            area: ["900px", '500px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: title,
+            content: url,
+            btn: ['确定', '关闭'],
+            yes: function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                var code = iframeWin.contentWindow.chuanzhi();
+                if (code == false) {
+
+                } else {
+                    addTab5(code,type,typetext,samplingArea,samplingAreatext);
+
+                    layer.close(index);
+                }
+
+            },
+            cancel: function (index) {
+                return true;
+            }
+        });
+
+    }
+
+    function eidt( nums,text,type) {
+        var url="";
+        var title="";
+        var dome=$("#cPlotList555").val();
+        if(type==001){
+            //害虫
+            alert(dome);
+           // url = prefix + '/editc';
+            title="新增害虫信息";
+            // $.modal.open("新增害虫信息", url);
+
+            // $.modal.msgError("请选择添加取样生物类型");
+        }else if(type==002){
+            //害鼠
+            url = prefix + '/edits';
+            title="新增害鼠信息";
+            //$.modal.open("新增害鼠信息", url);
+            // $.modal.msgError("请选择添加取样生物类型");
+        }else if(type==003){
+            //病害
+            url = prefix + '/editb';
+            title="新增病害信息";
+            //$.modal.open("新增病害信息", url);
+            // $.modal.msgError("请选择添加取样生物类型");
+        }else if(type==004){
+            //毒害草
+            url = prefix + '/editd';
+            title="新增毒害草信息";
+            // $.modal.open("新增毒害草信息", url);
+            // $.modal.msgError("请选择添加取样生物类型");
+        }
+        layer.open({
+            type: 2,
+            area: ["900px", '500px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: title,
+            data:code,
+            content: url,
+            btn: ['确定', '关闭'],
+            yes: function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                var code = iframeWin.contentWindow.chuanzhi();
+                if (code == false) {
+
+                } else {
+                    addTab5(code,type,typetext,samplingArea,samplingAreatext);
+
+                    layer.close(index);
+                }
+
+            },
+            cancel: function (index) {
+                return true;
+            }
+        });
+
+    }
+
+
+
+
+    //取样信息父页面赋值添加
+    function addTab5( obj,type,typetext,samplingArea,samplingAreatext) {
+        var number=0;
+        var tableNode = document.getElementById("bootstrap-table");
+        var trNodeList = tableNode.getElementsByTagName("tr");
+        //得到最后一行(tr)的所有td
+        if(trNodeList.length==1){
+            number=0;
+        }else{
+            var tdNodeList = trNodeList[trNodeList.length - 1].getElementsByTagName("td");
+            var td_input_name = tdNodeList[0].getElementsByTagName("input")[0].name;
+            var strIndex = td_input_name.indexOf("[");
+            number = td_input_name.substring(strIndex + 1, strIndex + 2);
+
+            //var trNode = document.createElement("tr");
+            number++;
+        }
+
+      
+                $("#bootstrap-table").append(" <tbody><tr class=\"shunum\">\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                          <input name=\"cPlotList[" + number + "].samplingNumber\" class=\"form-control\" value=\""+obj.samplingNumber+"\" type=\"text\" style='width: 100px' disabled >\n" +
+                    "                        </td>\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                          <input name=\"cPlotList[" + number + "].samplingArea\" class=\"form-control\" value=\""+obj.samplingAreatext+"\" type=\"text\" style='width: 200px'  disabled >\n" +
+                    "                        </td>\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                         <input name=\"cPlotList[" + number + "].harmfulSpeciesType\" class=\"form-control\" value=\""+type+"\" type=\"hidden\"  disabled>\n" +
+                    "                         <input  class=\"form-control\" value=\""+typetext+"\" type=\"text\" style='width: 90px' disabled>\n" +
+                    "                        </td>\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <input name=\"cPlotList[" + number + "].detailedType\" value=\""+obj.detailedType+"\" class=\"form-control\" type=\"text\" style='width: 100px' disabled>\n" +
+                    "                        </td>\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <input name=\"cPlotList[" + number + "].quantityDetermination\"  value=\""+obj.quantityDetermination+"\" class=\"form-control\" style='width: 110px' type=\"text\" disabled>\n" +
+                    "                        </td>\n" +
+
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <input name=\"cPlotList[" + number + "].standardDensity\" value=\""+obj.standardDensity+"\" class=\"form-control\" type=\"text\" style='width: 110px' disabled></div>\n" +
+                    "                        </td>\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <input name=\"cPlotList[" + number + "].samplingTime\" value=\""+obj.samplingTime+"\" class=\"form-control laydate-demo-32\" style='width: 110px' type=\"text\"  placeholder=\"yyyy-MM-dd HH:mm\" disabled>\n" +
+                    "                        </td>\n" +
+                    "                        <td class=\"tg-lboi\">\n" +
+                    "                            <div class=\"tg-lboi\">\n" +
+                    "                                <a class=\"btn btn-success\" onclick=addTab1(\"cPlotList" + number + "photo\")  style='width: 100px'>\n" +
+                    "                                    <i class=\"fa fa-plus\"></i> 上传\n" +
+                    "                            <input id=\"cPlotList[" + number + "]photo\" name=\"cPlotList[" + number + "].photo\" class=\"form-control\" type=\"hidden\">\n" +
+                    "                                </a>\n" +
+                    "                            </div>\n" +
+                    "                        </td>  <td class=\"tg-lboi\">\n" +
+                    "                            <div class=\"tg-lboi\">\n" +
+                    "                                <a class=\"btn btn-success \" onclick=\"eidt(\'"+number+"\',\'"+objstring+"\',\'"+type+"\')\" style='width: 100px' >\n" +
+                    "                                    <i class=\"fa fa-plus\" ></i> 修改\n " +
+                    "                                </a>\n" +
+                    "                            <input name=\"cPlotList555\" value=\""+obj+"\" class=\"form-control\" type=\"hidden\" style='width: 110px' ></div>\n" +
+                    "                                <a class=\"btn btn-danger multiple \" onclick=\"addTab3(this)\" style='margin-top: 5px;width: 100px' >\n" +
+                    "                                    <i class=\"fa fa-remove\"></i> 删除\n" +
+                    "                                </a>\n" +
+                    "                            </div>\n" +
+                    "                        </td>\n" +
+                    "                    </tr></tbody>")
+
+
+    }
+
+   /* function bianhao() {
+        layer.open({
+            type: 2,
+            area: ["900px", '500px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "样地编号选择",
+            content: prefix + "/code",
+            btn: ['确定', '关闭'],
+            yes: function (index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                var code = iframeWin.contentWindow.chuanzhi();
+                if (code == false) {
+
+                } else {
+                    $("#codeId").val(code);
+                    layer.close(index);
+                }
+
+            },
+            cancel: function (index) {
+                return true;
+            }
+        });
+
+    }
+*/
+
+    /*$(function() {
+
+        var prefix = ctx + "/system/survey";
+
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            detailUrl: prefix + "/detail/{id}",
+            exportUrl: prefix + "/export",
+            pageList:[2,4,6,8],//分页步进值
+            pageSize: 2,
+            id:"bootstrap-table3",
+            showRefresh:true,
+            queryParams: {
+                groundId: cPlotId,
+            },
+         /!*   showColumns:false,*!/
+            showToggle:false,
+            showExport:false,
+            showSearch:false,
+            modalName: "取样数据",
+            columns: [
+                {
+                    field: 'id',
+                    title: '序号',
+                    width:5 ,
+                    align: 'center',
+                    valign: 'middle',
+                    switchable:false,
+                    formatter:function(value,row,index){
+                        //return index+1; //序号正序排序从1开始
+                        var pageSize=$('#bootstrap-table3').bootstrapTable('getOptions').pageSize;//通过表的#id 可以得到每页多少条
+                        var pageNumber=$('#bootstrap-table3').bootstrapTable('getOptions').pageNumber;//通过表的#id 可以得到当前第几页
+                        return pageSize * (pageNumber - 1) + index + 1;    //返回每条的序号： 每页条数 * （当前页 - 1 ）+ 序号
+                    }
+                },
+                {
+                    field : 'samplingNumber',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '编号'
+                },
+
+                {
+                    field : 'harmfulSpeciesType',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '有害生物种类'
+                },
+
+                {
+                    field : 'detailedType',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '具体种类'
+                },
+                {
+                    field : 'samplingArea',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '取样面积'
+                },
+                {
+                    field : 'quantityDetermination',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '测定数量'
+                },
+                {
+                    field : 'standardDensity',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '换算标准密度'
+                },
+                {
+
+                    field : 'samplingTime',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '取样时间'
+                },
+                {
+                    field : 'photo',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '照片'
+                },{
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-info btn-xs ' +  + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.groundId + '\')"><i class="fa fa-search"></i>查看</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });*/
+
+
+    $(function() {
+        var prefix1 = ctx + "system/plot";
+
+        var options = {
+
+            id:"bootstrap-table3",
+            url: prefix1 + "/list",
+            createUrl: prefix1 + "/add",
+            detailUrl: prefix1 + "/detail/{id}",
+            pageList:[3,6,9,12],//分页步进值
+            pageSize: 3,
+            showRefresh:false,
+            showColumns:false,
+            showToggle:false,
+            showSearch:false,
+
+            modalName: "取样数据",
+            columns: [
+                /*{
+                    field: 'id',
+                    title: '序号',
+                    width:5 ,
+                    align: 'center',
+                    valign: 'middle',
+                    switchable:false,
+                    formatter:function(value,row,index){
+                        //return index+1; //序号正序排序从1开始
+                        var pageSize=$('#bootstrap-table3').bootstrapTable('getOptions').pageSize;//通过表的#id 可以得到每页多少条
+                        var pageNumber=$('#bootstrap-table3').bootstrapTable('getOptions').pageNumber;//通过表的#id 可以得到当前第几页
+                        return pageSize * (pageNumber - 1) + index + 1;    //返回每条的序号： 每页条数 * （当前页 - 1 ）+ 序号
+                    }
+                },*/
+                {
+                    field : 'samplingNumber',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '取样编号'
+                },
+                {
+                    field : 'samplingArea',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '取样面积类型'
+                },
+                {
+                    field : 'harmfulSpeciesType',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '有害生物种类'
+                },
+                {
+                    field : 'detailedType',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '具体种类'
+                },
+                {
+                    field : 'quantityDetermination',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '测定数量'
+                },
+                {
+                    field : 'photo',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '照片'
+                },
+                {
+                    field : 'status',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '状态',
+                    formatter: function (value, row, index) {
+                        return statusTool(row);
+                    }
+                },
+
+                /* {
+                     title: '操作',
+                     align: 'center',
+                     valign: 'middle',
+                     formatter: function(value, row, index) {
+                         var actions = [];
+                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>&nbsp');
+
+                         return actions.join('');
+                     }
+                 }*/
+            ]
+        };
+        $.table.init(options);
+    });
+
+    function statusTool(row) {
+        if (row.status=='0') {
+            return '<p>已添加</p> ';
+        }
+    }
+
+
+    /*添加绘图弹框*/
+    /*function ht() {
+       // var id = $("#resolveId").val();
+        var prefix = ctx + "system/gisMap";
+        var url = prefix + '/getListCaoYuanGisMap/' + id;
+        $.modal.open("新建绘图", url, '880', '650');
+
+    }*/
+
+    function ht() {
+        var addrArea = $("#addrArea").val();
+        var addrCity = $("#addrCity").val();
+        var prefix = ctx + "system/gisMap";
+        var url = prefix + '/getListCaoYuanGisMap/'+addrArea+'/'+addrCity;
+        $.modal.openTwo("新建绘图", url, '800', '600');
+
+    }
+
+
+    function bjht() {
+        var prefix = ctx + "system/gisMap";
+        var url = prefix + '/getbjListCaoYuanGisMap';
+        $.modal.open("编辑绘图", url, '880', '650');
+
+    }
+
+</script>
+
+</body>
+</html>

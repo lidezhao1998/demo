@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改草原鼠虫害知识库信息')"/>
+    <th:block th:include="include :: jasny-bootstrap-css"/>
+    <th:block th:include="include :: cropbox-css"/>
+
+    <link rel="stylesheet" href="//res.layui.com/layui/dist/css/layui.css" media="all">
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-knowledge-edit" th:object="${cRatpestKnowledge}">
+        <input name="id" th:field="*{id}" type="hidden">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 基本信息</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">成长信息</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">生态环境信息</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-4" aria-expanded="false">分布信息</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-5" aria-expanded="false">预测模型算法信息</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-6" aria-expanded="false">图片专区</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">编码：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.code}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">中名：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.middleName}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">别名：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.alias}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">俗名：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.commonName}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">目：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.category}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">科：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.families}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">属：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.genus}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">近缘种：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.relatedSpecie}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">成虫形态特征：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.features}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">头部：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.head}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">胸部：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.chest}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">翅：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.wing}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">足：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.foot}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">腹部：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.abdomen}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">生殖器：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.genitals}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div id="tab-2" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">一龄：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.oneAge}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">二龄：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.twoAge}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">三龄：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.threeAge}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">四龄：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.foreAge}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">五龄：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.fiveAge}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">六龄：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.sixAge}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">蛹的形态：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.pupaMorphology}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">生物学：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.biology}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">生活史：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.lifeHistory}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">世代数：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.generationNumber}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">越冬虫态及场所：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.winteringPlace}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">发育历期：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.developmentalStage}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="tab-3" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">植物群落描述：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.planDecription}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">天敌：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.naturalEnemy}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">气候：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.climate}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">气候带：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.climaticZone}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">水分条件：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.moistureCondition}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">温度：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.temperature}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">卵发育起点的温度：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.eggTemperature}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">卵发育起点土壤含水量：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.eggWater}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">产卵地识别：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.ovipositionRecognition}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">土壤特征：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.soilCharacteristics}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">地面覆盖状况：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.groundCoverage}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">土壤紧实度：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.soilCompactness}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">pH值：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.phValue}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">盐分：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.salinity}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">含水量：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.waterContent}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">扩散与传播：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.spread}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">产卵地：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.spawningGround}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">刺激：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.stimulate}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">寄生植物：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.hostPlant}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">草原类型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.grasslandType}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">危害程度：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.damageDegree}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">三龄前摄食量：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.threeIntake}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">三龄至成虫前摄食量：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.threeBigIntake}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">成虫期摄食量：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.adultFoodIntake}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">成虫期摄食量：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.foodRation}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">三龄前损失量：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.threeLoss}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">灾害程度预测及损失估计模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.zhcdycModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">防治指标：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.controlIndex}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">经济阈值：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.economicThreshold}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">生态阈值：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.ecologicalThreshold}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">经济生态阈值：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.economicEcologicalThreshold}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">防治方法_转至防治方法子表：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.fzffTable}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">化学防治方法概述：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.hxfzSetUp}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">生物防治方法概述：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.swfzSetUp}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">生态治理方法概述：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.stzlSetUp}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">物理防治方法概述：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.wlfzSetUp}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="tab-4" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">国外行政分布：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.gwDistribution}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">国内行政分布：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.gnDistribution}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">迁飞的定义：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.definitionRelocation}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">迁飞主导因素：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.migrationFactors}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">迁飞能力：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.migrationAbility}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">迁移：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.transfer}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">迁移的定义：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.migrationDefinition}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">迁移主导因素：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.transferFactors}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">自然扩散：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.naturalDiffusion}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">食物：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.food}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">迁移能力：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.migrationPower}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">传播途径：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.spreadChannel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div id="tab-5" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">三龄至成虫前损失量：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.threeBigLoss}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">成虫期损失量：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.bigLoss}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">历史数据回归模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.historicalModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">发生期预测模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.occurrenceModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">发育进度预测法模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.developmentModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">发育历期预测法模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.calendarModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">虫态分级预测法模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.ctfjycfModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">平均发育进度预测法模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.pjfyjdycfModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">卵巢发育分级预测法模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.lcfyfjycfModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">期距预测模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.qjycModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">有效积温预测模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.yxjwycModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">各虫态有效积温与发育速度基本模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.gctyxjwModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">物候期预测模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.whqycModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">相关统计预测：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.xgtjyc}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">发生量预测模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.fslycModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">有效基数预测法：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.yxjsycf}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">气候图预测法：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.qhtycf}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">积温_土壤含水量预测孵化可能性模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.jwtrhslModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">地面植被_气象因子预测迁移扩散几率模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.dmzbqxyzModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">经验指数预测法：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.jyzsycf}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">形态指标预测法：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.xtzbycf}" class="form-control-static"
+                                                     type="text" disabled="disabled"></div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">迁飞害虫预测模型：</label>
+                                            <div class="col-sm-8">
+                                                <div th:text="${cRatpestKnowledge.qfhcycModel}"
+                                                     class="form-control-static" type="text" disabled="disabled"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="tab-6" class="tab-pane ">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">成虫模式图：</label>
+                                            <div class="col-sm-8">
+                                                <img th:src="(${cRatpestKnowledge.adultPattern} == '') ? @{/img/profile.jpg} : @{${cRatpestKnowledge.adultPattern}}"
+                                                     style="width: 100px; height: 60px;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">各龄期模式图及照片：</label>
+                                            <div class="col-sm-8">
+                                                <img th:src="(${cRatpestKnowledge.sixPhotos} == '') ? @{/img/profile.jpg} : @{${cRatpestKnowledge.sixPhotos}}"
+                                                     style="width: 100px; height: 60px;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">蛹的模式图及照片：</label>
+                                            <div class="col-sm-8">
+                                                <img th:src="(${cRatpestKnowledge.pupaPhotos} == '') ? @{/img/profile.jpg} : @{${cRatpestKnowledge.pupaPhotos}}"
+                                                     style="width: 100px; height: 60px;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">危害照片：</label>
+                                            <div class="col-sm-8">
+                                                <img th:src="(${cRatpestKnowledge.hazardPhotos} == '') ? @{/img/profile.jpg} : @{${cRatpestKnowledge.hazardPhotos}}"
+                                                     style="width: 100px; height: 60px;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">全国图：</label>
+                                            <div class="col-sm-8">
+                                                <img th:src="(${cRatpestKnowledge.nationalMap} == '') ? @{/img/profile.jpg} : @{${cRatpestKnowledge.nationalMap}}"
+                                                     style="width: 100px; height: 60px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">分省图：</label>
+                                            <div class="col-sm-8">
+                                                <img th:src="(${cRatpestKnowledge.provincialMap} == '') ? @{/img/profile.jpg} : @{${cRatpestKnowledge.provincialMap}}"
+                                                     style="width: 100px; height: 60px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭
+        </button>
+
+    </div>
+
+</div>
+<th:block th:include="include :: footer"/>
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>
+<script type="text/javascript">
+    var prefix = ctx + "system/Ratpestknowledge";
+    $("#form-knowledge-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-knowledge-edit').serialize());
+        }
+    }
+</script>
+</body>
+</html>

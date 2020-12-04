@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增shp文件')" />
+</head>
+<body id="div" class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m"  id="form-shpFile-add" enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">文件地址：</label>
+            <div class="col-xs-offset-1">
+                <input type="file" id="file" name="files" multiple="multiple"/>
+                <!-- -->
+                <font color="red" class="pull-left mt10">
+                    提示：仅允许导入.shp格式文件！
+                </font>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">图层颜色：</label>
+            <div class="col-sm-8">
+                <div class="jumbotron">
+
+                    选择的颜色：<span id="color"></span>
+                    <input id="colorpicker" type="color" style="width: 20px;
+			height: 20px;
+			border: 1px solid #fff;
+			border-radius: 4px;
+			background-color:#fff;
+			text-indent: 20px;;" value="" readonly/>
+                </div>
+                <input class="form-control" type="hidden" name="shpColor" id="shpColor">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<link href="/ajax/libs/bootstrap-colorpicker/css/bootstrap-colorpicker.css" type="text/css" rel="stylesheet">
+<script src="/ajax/libs/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script>
+    $(function () {
+        // 基本实例化:
+        $('#colorpicker').colorpicker();
+
+        // Example using an event, to change the color of the .jumbotron background:
+        $('#colorpicker').on('change', function (event) {
+            $('#colorpicker').css('background-color', event.color.toString()).val('');
+            $("#color").text(event.color.toString());
+            $("#shpColor").val();
+            $("#shpColor").val(event.color.toString());		});
+    });
+</script>
+<script type="text/javascript">
+    var prefix = ctx + "extinterface/landsurvey";
+    $("#form-shpFile-add").validate({
+        onkeyup: false,
+        rules:{
+            shpFileName:{
+                remote: {
+                    url: prefix + "/checkShpFileNameUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "parentId": function() {
+                            return $("input[name='parentId']").val();
+                        },
+                        "name" : function() {
+                            return $.common.trim($("#shpFileName").val());
+                        }
+                    },
+                    dataFilter: function(data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+            },
+            orderNum:{
+                digits:true
+            },
+        },
+        messages: {
+            "shpFileName": {
+                remote: "文件已经存在"
+            }
+        },
+        focusCleanup: true
+    });
+    function removeDiv() {
+
+    }
+    function submitHandler() {
+        var formData = new FormData();
+        for (var i = 0; i < $("#file")[0].files.length; i++) {
+            formData.append("files",$("#file")[0].files[i]);
+        }
+        formData.append("color",$("#colorpicker").val());
+        $.ajax({
+            url:prefix + "/add", /*接口域名地址*/
+            type:'post',
+            data: formData,
+            async: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+                $.modal.disable();
+            },
+
+            success:function(res){
+                $.modal.closeLoading();
+                if (res.code == web_status.SUCCESS) {
+                    $.modal.msgSuccess(res.msg);
+                    $.table.refresh();
+                } else if (res.code == web_status.SUCCESS) {
+                    $.modal.msgSuccess(res.msg);
+                    $.treeTable.refresh();
+                } else if (res.code == web_status.WARNING) {
+                    $.modal.alertWarning(res.msg)
+                }  else {
+                    $.modal.alertError(res.msg);
+                }
+
+                $.modal.close()
+            }
+        })
+
+        //
+        // if ($.validate.form()) {
+        //     $.operate.save(prefix + "/add", formData);
+        // }
+    }
+
+    /*部门管理-新增-选择父部门树*/
+    function selectDeptTree() {
+        var options = {
+            title: '文件选择',
+            width: "380",
+            url: prefix + "/selectShpFileTree/" + $("#treeId").val(),
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero){
+        var body = layer.getChildFrame('body', index);
+        $("#treeId").val(body.find('#treeId').val());
+        $("#treeName").val(body.find('#treeName').val());
+        layer.close(index);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('草原鼠害发生与防治情况编辑页面')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-sczj-edit" th:object="${cTaskSczj}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">编号：</label>
+                        <div class="col-sm-8">
+                            <input name="number" th:field="*{number}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">年度：</label>
+                        <div class="col-sm-8">
+                            <input name="year" th:field="*{year}" class="form-control" type="text" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">周：</label>
+                        <div class="col-sm-8">
+                            <input name="week" th:field="*{week}" class="form-control" type="text" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">省：</label>
+                        <div class="col-sm-8">
+                            <input name="province" th:field="*{province}" class="form-control" type="text" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">市：</label>
+                        <div class="col-sm-8">
+                            <input name="city" th:field="*{city}" class="form-control" type="text" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">县：</label>
+                        <div class="col-sm-8">
+                            <input name="county" th:field="*{county}" class="form-control" type="text" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">类型：</label>
+                        <div class="col-sm-8">
+                            <select name="type" class="form-control m-b" disabled>
+                                <option value="">草原鼠害发生与防治</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">危害总面积：</label>
+                        <div class="col-sm-8">
+                            <input name="harmTotalarea" th:field="*{harmTotalarea}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">其中工程区危害面积：</label>
+                        <div class="col-sm-8">
+                            <input name="engineeringhazard" th:field="*{engineeringhazard}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">严重危害总面积：</label>
+                        <div class="col-sm-8">
+                            <input name="seriousArea" th:field="*{seriousArea}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">其中区工程区严重危害面积：</label>
+                        <div class="col-sm-8">
+                            <input name="engineeringSeriousArea" th:field="*{engineeringSeriousArea}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">化学防治：</label>
+                        <div class="col-sm-8">
+                            <input name="chemistryControl" th:field="*{chemistryControl}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">C型肉毒素：</label>
+                        <div class="col-sm-8">
+                            <input name="cBotulinumtoxin" th:field="*{cBotulinumtoxin}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">D型肉毒素：</label>
+                        <div class="col-sm-8">
+                            <input name="dBotulinumtoxin" th:field="*{dBotulinumtoxin}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">雷公藤：</label>
+                        <div class="col-sm-8">
+                            <input name="tripterygium" th:field="*{tripterygium}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">莪术醇：</label>
+                        <div class="col-sm-8">
+                            <input name="curcumae" th:field="*{curcumae}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">招鹰控鼠：</label>
+                        <div class="col-sm-8">
+                            <input name="hawkMouse" th:field="*{hawkMouse}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">野化狐狸控鼠：</label>
+                        <div class="col-sm-8">
+                            <input name="foxRat" th:field="*{foxRat}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">物理防治：</label>
+                        <div class="col-sm-8">
+                            <input name="physicalControl" th:field="*{physicalControl}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">防治面积：</label>
+                        <div class="col-sm-8">
+                            <input name="defensiveArea" th:field="*{defensiveArea}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">控制面积：</label>
+                        <div class="col-sm-8">
+                            <input name="controlarea" th:field="*{controlarea}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">招鹰灭鼠：</label>
+                        <div class="col-sm-8">
+                            <input name="hawkDeratization" th:field="*{hawkDeratization}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">野化狐狸灭鼠：</label>
+                        <div class="col-sm-8">
+                            <input name="rodentControl" th:field="*{rodentControl}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">技术人员(人/天)：</label>
+                        <div class="col-sm-8">
+                            <input name="artisan" th:field="*{artisan}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">出工(人/天)：</label>
+                        <div class="col-sm-8">
+                            <input name="work" th:field="*{work}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">飞机(架/次)：</label>
+                        <div class="col-sm-8">
+                            <input name="plane" th:field="*{plane}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">防治器械(台/套/天)：</label>
+                        <div class="col-sm-8">
+                            <input name="controlApparatus" th:field="*{controlApparatus}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">车辆(辆/天)：</label>
+                        <div class="col-sm-8">
+                            <input name="car" th:field="*{car}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">合计（万亩）：</label>
+                        <div class="col-sm-8">
+                            <input name="total" th:field="*{total}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">备注：</label>
+                        <div class="col-sm-8">
+                            <input name="remarks" th:field="*{remarks}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">状态：</label>
+                        <div class="col-sm-8">
+                            <div class="radio-box">
+                                <input type="radio" name="status" value="">
+                                <label th:for="status" th:text="未知"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+        </form>
+        <div class="button-p" style="margin-left: 70%">
+            <button type="button" class="btn btn-w-m btn-primary" onclick="saveup()" >提 交</button>
+            <button type="button" class="btn btn-w-m btn-primary" onclick="save()" >保 存</button>
+            <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "caiji/sczj";
+        $("#form-sczj-edit").validate({
+            focusCleanup: true
+        });
+
+        function save() {
+            if ($.validate.form()) {
+                $.modal.confirm("确认要点击确定吗?", function () {
+                    saveTab(prefix + "/edit", $('#form-sczj-edit').serialize());
+                });
+            }
+        }
+        function saveTab(url, data, callback) {
+            var config = {
+                url: url,
+                type: "post",
+                dataType: "json",
+                data: data,
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                },
+                success: function(result) {
+                    if (typeof callback == "function" ) {
+                        callback(result);
+                    }
+                    if (result.code == web_status.SUCCESS) {
+                        confirmdemo(result.msg,function() {
+                            reload();
+                        });
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                }
+            };
+            $.ajax(config)
+        }
+        function saveup(){
+            if ($.validate.form()) {
+                $.modal.confirm("确认要点击确定吗?", function () {
+                    saveModal(prefix + "/edit1", $('#form-sczj-edit').serialize());
+                });
+            }
+        }
+
+        function confirmdemo(content, callBack) {
+            layer.confirm(content, {
+                icon: 3,
+                title: "系统提示",
+                btn: ['确认']
+            },  function (index) {
+                layer.close(index);
+
+                callBack(true);
+
+            });
+        };
+
+        // 保存信息 弹出提示框
+        function saveModal(url, data, callback) {
+            var config = {
+                url: url,
+                type: "post",
+                dataType: "json",
+                data: data,
+                success: function(result) {
+                    if (typeof callback == "function" ) {
+                        callback(result);
+                    }
+                    if (result.code == web_status.SUCCESS) {
+                        confirmdemo(result.msg,function() {
+                            reload();
+                        });
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+
+                }
+            };
+            $.ajax(config)
+        }
+        function reload () {
+            parent.location.reload();
+        }
+
+        $("input[name='creatTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

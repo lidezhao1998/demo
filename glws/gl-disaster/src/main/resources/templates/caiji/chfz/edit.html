@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改草原虫害发生与防治情况编辑页面')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-chfz-edit" th:object="${cTaskChfz}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <input name="weekTime" id="weekTime" th:field="*{weekTime}" type="hidden">
+
+            <h2 class="col-sm-12" style="text-align: center;font-weight: bold ">
+                虫害发生与防治信息
+            </h2>
+            <h4 class="form-header h4">基本信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">编号：</label>
+                        <div class="col-sm-8">
+                            <input name="number" th:field="*{number}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>年-周：</label>
+                        <div class="col-sm-8">
+                            <input name="week" id="week" class="form-control"  th:field="*{week}"  type="text" required>
+                            <input name="weekOld" id="weekOld" class="form-control"  style="background-color:transparent;margin-top: -34px;" onchange="getWeek(this.value)"  type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- <div class="col-sm-6">
+                 <div class="form-group">
+                     <label class="col-sm-3 control-label">省：</label>
+                     <div class="col-sm-8">
+                         <input name="province" th:field="*{province}" class="form-control" type="text" required>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-sm-6">
+                 <div class="form-group">
+                     <label class="col-sm-3 control-label">市：</label>
+                     <div class="col-sm-8">
+                         <input name="city" th:field="*{city}" class="form-control" type="text" required>
+                     </div>
+                 </div>
+             </div>
+             <div class="col-sm-6">
+                 <div class="form-group">
+                     <label class="col-sm-3 control-label">县区：</label>
+                     <div class="col-sm-8">
+                         <input name="county" th:field="*{county}" class="form-control" type="text" required>
+                     </div>
+                 </div>
+             </div>
+         </div>-->
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">危害总面积：</label>
+                        <div class="col-sm-8">
+                            <input name="harmTotalarea" th:field="*{harmTotalarea}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">严重危害总面积：</label>
+                        <div class="col-sm-8">
+                            <input name="seriousArea" th:field="*{seriousArea}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工程区危害面积：</label>
+                        <div class="col-sm-8">
+                            <input name="engineeringhazard" th:field="*{engineeringhazard}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工程区严重危害面积：</label>
+                        <div class="col-sm-8">
+                            <input name="engineeringSeriousArea" th:field="*{engineeringSeriousArea}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--  <div class="row">
+
+                  <div class="col-sm-6">
+                      <div class="form-group">
+                          <label class="col-sm-3 control-label">合计：</label>
+                          <div class="col-sm-8">
+                              <input name="totalPrevention" th:field="*{totalPrevention}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                          </div>
+                      </div>
+                  </div>
+              </div>-->
+                <!-- <div class="row">
+
+                     <div class="col-sm-6">
+                         <div class="form-group">
+                             <label class="col-sm-3 control-label">小计：</label>
+                             <div class="col-sm-8">
+                                 <input name="subtotal" th:field="*{subtotal}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                             </div>
+                         </div>
+                     </div>
+            </div>-->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">化学防治：</label>
+                        <div class="col-sm-8">
+                            <input name="chemistryControl" th:field="*{chemistryControl}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">招募椋鸟：</label>
+                        <div class="col-sm-8">
+                            <input name="attractStarlings" th:field="*{attractStarlings}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">牧鸡：</label>
+                        <div class="col-sm-8">
+                            <input name="pastureChicken" th:field="*{pastureChicken}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">牧鸭：</label>
+                        <div class="col-sm-8">
+                            <input name="pastureDuck" th:field="*{pastureDuck}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">苦参碱：</label>
+                        <div class="col-sm-8">
+                            <input name="matrine" th:field="*{matrine}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">烟碱：</label>
+                        <div class="col-sm-8">
+                            <input name="nicotine" th:field="*{nicotine}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">绿僵菌：</label>
+                        <div class="col-sm-8">
+                            <input name="greenMuscardineFungus" th:field="*{greenMuscardineFungus}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">印楝素：</label>
+                        <div class="col-sm-8">
+                            <input name="azadirachtin" th:field="*{azadirachtin}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">阿维菌素：</label>
+                        <div class="col-sm-8">
+                            <input name="avermectin" th:field="*{avermectin}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">短稳杆菌：</label>
+                        <div class="col-sm-8">
+                            <input name="empedobacterBrevis" th:field="*{empedobacterBrevis}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">蛇床子素：</label>
+                        <div class="col-sm-8">
+                            <input name="osthole" th:field="*{osthole}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">阿维苏：</label>
+                        <div class="col-sm-8">
+                            <input name="weiSu" th:field="*{weiSu}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">微孢子虫：</label>
+                        <div class="col-sm-8">
+                            <input name="enterocytozoonBieneusi" th:field="*{enterocytozoonBieneusi}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">管理技术干部(人/天)：</label>
+                        <div class="col-sm-8">
+                            <input name="expatriateManagers" th:field="*{expatriateManagers}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">出工(人/天)：</label>
+                        <div class="col-sm-8">
+                            <input name="work" th:field="*{work}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">飞机(架/次)：</label>
+                        <div class="col-sm-8">
+                            <input name="plane" th:field="*{plane}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">大型喷雾器(台/套/天)：</label>
+                        <div class="col-sm-8">
+                            <input name="bigSprayer" th:field="*{bigSprayer}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">中小型喷雾器(台/套/天)：</label>
+                        <div class="col-sm-8">
+                            <input name="smallSprayer" th:field="*{smallSprayer}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">车辆(辆/天)：</label>
+                        <div class="col-sm-8">
+                            <input name="car" th:field="*{car}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">牧鸡(万只)：</label>
+                        <div class="col-sm-8">
+                            <input name="pastureChickenNum" th:field="*{pastureChickenNum}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">牧鸭(万只)：</label>
+                        <div class="col-sm-8">
+                            <input name="pastureDuckNum" th:field="*{pastureDuckNum}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">椋鸟巢(立方米)：</label>
+                        <div class="col-sm-8">
+                            <input name="starlingNest" th:field="*{starlingNest}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+                <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">备注：</label>
+                        <div class="col-sm-8">
+                            <textarea name="remarks" th:field="*{remarks}" class="form-control" type="text"></textarea>
+                        </div>
+                    </div>
+                </div>
+                </div>
+        </form>
+        <div class="button-s" style="margin-left: 70%">
+<!--
+            <button type="button" class="btn btn-w-m btn-primary" onclick="saveup()" >提 交</button>
+-->
+            <button type="button" class="btn btn-w-m btn-primary" onclick="save()" >保 存</button>
+            <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+
+        var prefix = ctx + "caiji/chfz";
+        $("#form-chfz-edit").validate({
+            focusCleanup: true
+        });
+
+        /*function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-chfz-edit').serialize());
+            }
+        }
+*/
+        $("input[name='creatTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        function getWeek(dateString){
+
+            var date = new Date(dateString);
+            $("#weekTime").val(dateString);
+
+            var newDate=new Date(date.getFullYear(), 0, 1);
+            var day=date.getDay();
+            var year = date.getFullYear();
+            if(day==0) day=7;
+            var newday=newDate.getDay();
+            if(newday==0) newday=7;
+            d = Math.round((date.getTime() - newDate.getTime()+(newday-day)*(24*60*60*1000)) / 86400000);
+            var week = Math.ceil(d /7);
+            document.getElementById("week").value = year+"-"+week;
+            $("#weekOld").val("");
+        }
+        //初始化默认填报周数
+        $(function(){
+            var dateString = [[${cTaskChfz.weekTime}]];
+            // var dateString=$("#week").val();
+            var date = new Date(dateString);
+            var newDate=new Date(date.getFullYear(), 0, 1);
+            var day=date.getDay();
+            var year = date.getFullYear();
+            if(day==0) day=7;
+            var newday=newDate.getDay();
+            if(newday==0) newday=7;
+            d = Math.round((date.getTime() - newDate.getTime()+(newday-day)*(24*60*60*1000)) / 86400000);
+            var week = Math.ceil(d /7);
+            document.getElementById("week").value = year+"-"+week;
+            $("#weekOld").val("");
+        })
+        $("input[name='weekOld']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+
+        function save() {
+            if ($.validate.form()) {
+                $.modal.confirm("确认要点击确定吗?", function () {
+                    saveTab(prefix + "/edit", $('#form-chfz-edit').serialize());
+                });
+            }
+        }
+        function saveTab(url, data, callback) {
+            var config = {
+                url: url,
+                type: "post",
+                dataType: "json",
+                data: data,
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                },
+                success: function(result) {
+                    if (typeof callback == "function" ) {
+                        callback(result);
+                    }
+                    if (result.code == web_status.SUCCESS) {
+                        confirmdemo(result.msg,function() {
+                            reload();
+                        });
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                }
+            };
+            $.ajax(config)
+        }
+        function saveup(){
+            if ($.validate.form()) {
+                $.modal.confirm("确认要点击确定吗?", function () {
+                    saveModal(prefix + "/edit1", $('#form-chfz-edit').serialize());
+                });
+            }
+        }
+
+
+        function confirmdemo(content, callBack) {
+            layer.confirm(content, {
+                icon: 3,
+                title: "系统提示",
+                btn: ['确认']
+            },  function (index) {
+                layer.close(index);
+
+                callBack(true);
+
+            });
+        };
+
+        // 保存信息 弹出提示框
+        function saveModal(url, data, callback) {
+            var config = {
+                url: url,
+                type: "post",
+                dataType: "json",
+                data: data,
+                success: function(result) {
+                    if (typeof callback == "function" ) {
+                        callback(result);
+                    }
+                    if (result.code == web_status.SUCCESS) {
+                        confirmdemo(result.msg,function() {
+                            reload();
+                        });
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+
+                }
+            };
+            $.ajax(config)
+        }
+        function reload () {
+            parent.location.reload();
+        }
+    </script>
+    <script th:inline="javascript">
+        //省市区三级联动
+        $(function () {
+            getProvinces();
+            var op1 = document.createElement("option");
+            op1.value = -1;
+            op1.text = "----- 所在市 -------";
+            document.getElementById("addrCity").appendChild(op1);
+            var op2 = document.createElement("option");
+            op2.value = -1;
+            op2.text = "----- 所在区 -------";
+            document.getElementById("addrArea").appendChild(op2);
+            var op3 = document.createElement("option");
+
+        });
+        // ===== 加载省列表 =====
+        var cityLevelName = [[${cTaskChfz.city}]];
+        var countyLevelName = [[${cTaskChfz.county}]];
+
+        function getProvinces() {
+            //  var url = "<%=basePath%>dict/getProvinces";
+            var url=ctx+"caiji/survey/getProvinces";
+            $.ajax({
+                "url": url,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("addrProvince").appendChild(op);
+                    }
+                    getCities();
+                }
+            });
+        }
+        // ===== 加载市列表 =====
+        function getCities() {
+            $("#addrCity").empty();
+            $("#addrArea").empty();
+            var url=ctx+"caiji/survey/getCities";
+            var data = "provinceCode=" + $("#addrProvince").val();
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+                    var op = document.createElement("option");
+                    op.value = "";
+                    op.text ="----- 所在市 -------";
+                    document.getElementById("addrCity").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("addrCity").appendChild(op);
+                    }
+                    if (cityLevelName != null && cityLevelName != "") {
+                        $("#addrCity option[value='" + cityLevelName + "']").attr('selected', 'selected');
+                    }
+                    getAreas();
+                }
+            });
+        }
+
+        // ===== 加载区列表 =====
+        function getAreas() {
+            $("#addrArea").empty();
+            $("#addrdz").empty();
+            //var url = "<%=basePath%>dict/getAreas";
+            var url=ctx+"caiji/survey/getAreas";
+            var data = "cityCode=" + $("#addrCity").val();
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+                    var op = document.createElement("option");
+                    op.value = "";
+                    op.text = "----- 所在区 -------";
+                    document.getElementById("addrArea").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("addrArea").appendChild(op);
+                    }
+                    if (countyLevelName != null && countyLevelName != "") {
+                        $("#addrArea option[value='" + countyLevelName + "']").attr('selected', 'selected');
+                    }
+                }
+            });
+
+        }
+
+    </script>
+</body>
+</html>

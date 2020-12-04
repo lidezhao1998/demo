@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.system.mapper.CResourceMapper">
+
+    <resultMap type="com.sinosoft.system.domain.CResource" id="CResourceResult">
+        <result property="id"    column="ID"    />
+        <result property="name"    column="NAME"    />
+        <result property="filename"    column="FILENAME"    />
+        <result property="size"    column="SIZE"    />
+        <result property="url"    column="URL"    />
+        <result property="fileurl"    column="FILEURL"    />
+        <result property="type"    column="TYPE"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="createUser"    column="CREATE_USER"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectCResourceVo">
+        select ID, NAME, FILENAME, SIZE, URL, FILEURL, TYPE, REMARK, CREATE_TIME, CREATE_USER, update_date, update_by from c_resource
+    </sql>
+
+    <select id="selectCResourceList" parameterType="com.sinosoft.system.domain.CResource" resultMap="CResourceResult">
+        <include refid="selectCResourceVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="filename != null  and filename != ''"> and FILENAME like concat('%', #{filename}, '%')</if>
+            <if test="size != null "> and SIZE = #{size}</if>
+            <if test="url != null  and url != ''"> and URL = #{url}</if>
+            <if test="fileurl != null  and fileurl != ''"> and FILEURL = #{fileurl}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="remark != null  and remark != ''"> and REMARK = #{remark}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="createUser != null  and createUser != ''"> and CREATE_USER = #{createUser}</if>
+            <if test="updateDate != null "> and update_date = #{updateDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectCResourceById" parameterType="Long" resultMap="CResourceResult">
+        <include refid="selectCResourceVo"/>
+        where ID = #{id}
+    </select>
+    <select id="selectCResourcePothoUrl" resultType="java.lang.String">
+        SELECT FILEURL FROM c_resource WHERE ID=#{id}
+    </select>
+
+    <insert id="insertCResource" parameterType="com.sinosoft.system.domain.CResource" useGeneratedKeys="true" keyProperty="id">
+        insert into c_resource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="filename != null  and filename != ''">FILENAME,</if>
+            <if test="size != null ">SIZE,</if>
+            <if test="url != null  and url != ''">URL,</if>
+            <if test="fileurl != null  and fileurl != ''">FILEURL,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="createUser != null  and createUser != ''">CREATE_USER,</if>
+            <if test="updateDate != null ">update_date,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="filename != null  and filename != ''">#{filename},</if>
+            <if test="size != null ">#{size},</if>
+            <if test="url != null  and url != ''">#{url},</if>
+            <if test="fileurl != null  and fileurl != ''">#{fileurl},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="updateDate != null ">#{updateDate},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCResource" parameterType="com.sinosoft.system.domain.CResource">
+        update c_resource
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="filename != null  and filename != ''">FILENAME = #{filename},</if>
+            <if test="size != null ">SIZE = #{size},</if>
+            <if test="url != null  and url != ''">URL = #{url},</if>
+            <if test="fileurl != null  and fileurl != ''">FILEURL = #{fileurl},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="createUser != null  and createUser != ''">CREATE_USER = #{createUser},</if>
+            <if test="updateDate != null ">update_date = #{updateDate},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCResourceById" parameterType="Long">
+        delete from c_resource where ID = #{id}
+    </delete>
+
+    <delete id="deleteCResourceByIds" parameterType="String">
+        delete from c_resource where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

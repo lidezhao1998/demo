@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增科技成果信息')"/>
+    <th:block th:include="include :: select2-css"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: jquery-steps-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+    <th:block th:include="include :: jasny-bootstrap-css"/>
+</head>
+<style>
+    .required:after {
+        position: absolute;
+        top: 3px;
+        right: 0px;
+        display: inline-block;
+        font-size: 28px;
+        color: #d2322d;
+        content: '*';
+    }
+</style>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-technology-add" enctype="multipart/form-data">
+        <input id="fileUrl" name="fileUrl" type="text" hidden>
+        <div class="row">
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>成果名称：</label>
+                    <div class="col-sm-8">
+                        <input name="name" id="name" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>所属技术领域：</label>
+                    <div class="col-sm-8">
+                        <input name="technicalField" id="technicalField" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>提交人：</label>
+                    <div class="col-sm-8">
+                        <input name="sumbitter" id="sumbitter" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>Email：</label>
+                    <div class="col-sm-8">
+                        <input id="email" name="email" class="form-control email" type="text" maxlength="50"
+                               placeholder="请输入邮箱" required>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>地址：</label>
+                    <div class="col-sm-8">
+                        <input name="address" id="address" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>联系方式：</label>
+                    <div class="col-sm-8">
+                        <input id="phone" name="phone" placeholder="请输入手机号码" class="form-control" type="text"
+                               maxlength="11" required>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">邮政编码：</label>
+                    <div class="col-sm-8">
+                        <input name="fax" id="fax" th:onchange="ischeck()" class="form-control" type="text"
+                               maxlength="6">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">创建时间：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input id="creatTime" name="creatTime" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">研发方式：</label>
+                    <div class="col-sm-8">
+                        <input name="rdmethods" id="rdmethods" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">合作方式：</label>
+                    <div class="col-sm-8">
+                        <input name="cooperationMethod" id="cooperationMethod" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">成果应用情况：</label>
+                    <div class="col-sm-8">
+                        <input name="resultsApplication" id="resultsApplication" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">实施成果转化需求：</label>
+                    <div class="col-sm-8">
+                        <input name="demand" id="demand" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">成果应用行业：</label>
+                    <div class="col-sm-8">
+                        <input name="industry" id="industry" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">获奖类别：</label>
+                    <div class="col-sm-8">
+                        <input name="awardCategory" id="awardCategory" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">获奖级别：</label>
+                    <div class="col-sm-8">
+                        <input name="awardLevel" id="awardLevel" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">技术成熟度：</label>
+                    <div class="col-sm-8">
+                        <input name="technologyMaturity" id="technologyMaturity" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">填报时间：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input id="inputTime" name="inputTime" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label is-required">附件：</label>
+                    <div class="col-sm-8">
+                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                            <div class="form-control" data-trigger="fileinput"><i
+                                    class="glyphicon glyphicon-file fileinput-exists"></i> <span
+                                    class="fileinput-filename"></span></div>
+                            <span class="input-group-addon btn btn-white btn-file"><span
+                                    class="fileinput-new">选择文件</span><span class="fileinput-exists">更改</span><input
+                                    id="file" type="file" onchange="checkFileType()"></span>
+                            <a href="#" class="input-group-addon btn btn-white fileinput-exists"
+                               data-dismiss="fileinput">清除</a>
+                        </div>
+                        <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 注：上传文件格式'doc', 'xls', 'png','jpg','pdf'</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <!--    <div class="button-b" style="margin-left: 35%" id="button-set">-->
+    <!--        <button type="button" class="btn btn-w-m btn-primary" onclick="saveup()" id="saveup">保存并上报</button>-->
+    <!--        <button type="button" class="btn btn-w-m btn-primary" onclick="save()" id="save">保 存</button>-->
+    <!--        <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()">关 闭</button>-->
+    <!--    </div>-->
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: jquery-steps-js"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<th:block th:include="include :: jasny-bootstrap-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "achievements/technology";
+
+    $("input[name='creatTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true,
+        startDate: new Date(),
+        initialDate: new Date()
+    });
+    $("#creatTime").datetimepicker("setDate", new Date());
+
+    $("input[name='inputTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true,
+        startDate: new Date(),
+        initialDate: new Date()
+    });
+    $("#inputTime").datetimepicker("setDate", new Date());
+
+    $("#form-technology-add").validate({
+
+        onkeyup: false,
+        rules: {
+            email: {
+                email: true,
+
+            },
+            phone: {
+                isPhone: true,
+
+            },
+            PostalCode: {
+                PostalCode: true,
+            }
+        },
+        focusCleanup: true
+    });
+
+    /**********验证邮政编码的有效性***********/
+
+    /*  function ischeck(){
+          var postcode = document.getElementById("fax").value;
+          if (postcode != "") {   //邮政编码判断
+              var pattern = /^[0-9]{6}$/;
+              flag = pattern.test(postcode);
+              if (!flag) {
+                  alert("非法的邮政编码！")
+                  document.getElementById("postcode").focus();
+                  return false;
+              }
+          }
+      }
+*/
+    // $(document).ready(function () {
+    //     $("#fileinput-demo-1").fileinput({
+    //         'theme': 'explorer-fas',
+    //         'uploadUrl': '#',
+    //         overwriteInitial: false,
+    //         initialPreviewAsData: true,
+    //         initialPreview: [
+    //             ""
+    //         ]
+    //     });
+    // });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            layer.confirm("是否现在上报。", {
+                btn: ['上报', '保存'],
+                title: "上报提示",
+                btn1: function (index) {
+                    console.log("上报");
+                    layer.close(index);
+                    add(1);//提交
+                },
+                btn2: function () {
+                    console.log("保存");
+                    add(0);//保存
+                }
+            });
+        }
+    }
+
+
+    function add(status) {
+        var id = $("input[name='id']").val();
+        var name = $("input[name='name']").val();
+        var technicalField = $("input[name='technicalField']").val();
+        var sumbitter = $("input[name='sumbitter']").val();
+        var email = $("input[name='email']").val();
+        var address = $("input[name='address']").val();
+        var phone = $("input[name='phone']").val();
+        var fax = $("input[name='fax']").val();
+        var creatTime = $("input[name='creatTime']").val();
+        var rdmethods = $("input[name='rdmethods']").val();
+        var cooperationMethod = $("input[name='cooperationMethod']").val();
+        var resultsApplication = $("input[name='resultsApplication']").val();
+        var demand = $("input[name='demand']").val();
+        var industry = $("input[name='industry']").val();
+        var awardCategory = $("input[name='awardCategory']").val();
+        var awardLevel = $("input[name='awardLevel']").val();
+        var technologyMaturity = $("input[name='technologyMaturity']").val();
+        var inputTime = $("input[name='inputTime']").val();
+
+        var file = $("#file")[0].files[0];
+        var formData = new FormData();
+        formData.append("file",file);
+
+
+        formData.append("name", name);
+        formData.append("technicalField", technicalField);
+        formData.append("sumbitter", sumbitter);
+        formData.append("email", email);
+        formData.append("address", address);
+        formData.append("phone", phone);
+        formData.append("fax", fax);
+        formData.append("creatTime", creatTime);
+        formData.append("rdmethods", rdmethods);
+        formData.append("cooperationMethod", cooperationMethod);
+        formData.append("resultsApplication", resultsApplication);
+        formData.append("demand", demand);
+        formData.append("industry", industry);
+        formData.append("awardCategory", awardCategory);
+        formData.append("awardLevel", awardLevel);
+        formData.append("technologyMaturity", technologyMaturity);
+        formData.append("inputTime", inputTime);
+
+        formData.append("status", status);
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: prefix + "/add",
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            error: function (request) {
+                $.modal.alertError("系统错误");
+            },
+            success: function (data) {
+                $.operate.successCallback(data);
+            }
+        });
+    }
+
+    function checkFileType() {
+        var file = $("input[id='file']").val();
+        var flag = false;
+        if (file == '') {
+            $.modal.msgWarning("请选择上传文件。");
+        } else {
+            if ($.common.endWith(file, '.pdf')) {
+                flag = true
+            } else if ($.common.endWith(file, '.png')) {
+                flag = true
+            } else if ($.common.endWith(file, '.doc')) {
+                flag = true
+            } else if ($.common.endWith(file, '.jpg')) {
+                flag = true
+            } else if ($.common.endWith(file, '.xls')) {
+                flag = true
+            }
+            if (!flag) {
+                $.modal.msgWarning("请选择正确的文件格式。");
+                $("input[id='file']").val("");
+            }
+        }
+    }
+
+    // function save() {
+    //     if ($.validate.form()) {
+    //         $.modal.confirm("确认要点击确定吗?", function () {
+    //             saveTab(prefix + "/add", $('#form-technology-add').serialize());
+    //         });
+    //     }
+    // }
+    //
+    // function saveTab(url, data, callback) {
+    //     var config = {
+    //         url: url,
+    //         type: "post",
+    //         dataType: "json",
+    //         data: data,
+    //         beforeSend: function () {
+    //             $.modal.loading("正在处理中，请稍后...");
+    //         },
+    //         success: function (result) {
+    //             if (typeof callback == "function") {
+    //                 callback(result);
+    //             }
+    //             if (result.code == web_status.SUCCESS) {
+    //                 confirmdemo(result.msg, function () {
+    //                     reload();
+    //                 });
+    //             } else if (result.code == web_status.WARNING) {
+    //                 $.modal.alertWarning(result.msg)
+    //             } else {
+    //                 $.modal.alertError(result.msg);
+    //             }
+    //             $.modal.closeLoading();
+    //         }
+    //     };
+    //     $.ajax(config)
+    // }
+
+    // function saveup() {
+    //     if ($.validate.form()) {
+    //         $.modal.confirm("确认要点击确定吗?", function () {
+    //             saveModal(prefix + "/add1", $('#form-technology-add').serialize());
+    //         });
+    //     }
+    // }
+
+
+    // function confirmdemo(content, callBack) {
+    //     layer.confirm(content, {
+    //         icon: 3,
+    //         title: "系统提示",
+    //         btn: ['确认']
+    //     }, function (index) {
+    //         layer.close(index);
+    //
+    //         callBack(true);
+    //
+    //     });
+    // };
+
+    // 保存信息 弹出提示框
+    // function saveModal(url, data, callback) {
+    //     var config = {
+    //         url: url,
+    //         type: "post",
+    //         dataType: "json",
+    //         data: data,
+    //         success: function (result) {
+    //             if (typeof callback == "function") {
+    //                 callback(result);
+    //             }
+    //             if (result.code == web_status.SUCCESS) {
+    //                 confirmdemo(result.msg, function () {
+    //                     reload();
+    //                 });
+    //             } else if (result.code == web_status.WARNING) {
+    //                 $.modal.alertWarning(result.msg)
+    //             } else {
+    //                 $.modal.alertError(result.msg);
+    //             }
+    //             $.modal.closeLoading();
+    //
+    //         }
+    //     };
+    //     $.ajax(config)
+    // }
+
+    // function reload() {
+    //     parent.location.reload();
+    // }
+
+    //附件上传
+    // var obj = document.getElementById("fileUrl");//储存图图片id
+    // var ids = [];
+    // var initialPreview = [];
+    // var initialPreviewConfig = [];
+    // $("#fileinput-demo-2").fileinput({
+    //     'theme': 'explorer-fas',
+    //     'uploadUrl': prefix + '/upload',
+    //     deleteUrl: prefix + "/delete",
+    //     overwriteInitial: false,
+    //     uploadIcon: "<i class=\"glyphicon glyphicon-upload\"></i>",
+    //     initialPreviewAsData: true,
+    //     uploadAsync: true,
+    //     showCancel: false,
+    //     allowedFileExtensions: ['jpg', 'pdf', 'png', 'doc', 'xls'],
+    //     previewFileIcon: '',//当文件无法被预览时出现在缩略图中的图标，默认是
+    //     maxFileCount: 10,
+    //     layoutTemplates: {
+    //         actionUpload: ""
+    //     },
+    //     deleteExtraData: {
+    //         files: "111111111"
+    //     },
+    //     initialPreview: initialPreview,
+    //     initialPreviewConfig: initialPreviewConfig,
+    //
+    //
+    // }).on('filebatchuploaderror', function (event, data, msg) {
+    //     alert("上传失败");
+    // }).on("filepredelete", function (event, key, jax, data) {
+    //     return !confirm("确定删除？");
+    // }).on('filedeleted', function (event, key) {
+    // debugger
+    //     //ids 存储的id key删除图片id
+    //     //删除图片
+    //     removearry(ids, key)
+    //     //删除图片路径
+    //     removearryUrl(initialPreview, initialPreviewConfig, key)
+    //     alert("删除成功");
+    //
+    //     obj.value = ids;
+    // });
+    //
+    // function saveYiQy() {
+    //     if ($.validate.form('form-survey-add')) {
+    //         let gis_id = sessionStorage.getItem("gis_id");
+    //         $.modal.confirm("确认保存吗?", function () {
+    //             var formData = new FormData(document.getElementById("form-survey-add"));
+    //             var files1 = $("#fileinput-demo-2").get(0).files;
+    //             for (var i = 0; i < files1.length; i++) {
+    //                 formData.append("file", document.getElementById("fileinput-demo-2").files[i]);
+    //             }
+    //             var url = prefix + "/addY";
+    //             $.ajax({
+    //                 url: url,
+    //                 type: 'post',
+    //                 cache: false,
+    //                 data: formData,
+    //                 dataType: 'json',
+    //                 contentType: false,
+    //                 processData: false,
+    //                 success: function (result) {
+    //                     //$.operate.successCallback(result);
+    //                     $.modal.parentTab("新增取样信息", prefix2 + "/addY/" + result.groundId);
+    //                 }
+    //             });
+    //
+    //         });
+    //
+    //
+    //     }
+    // }
+    //
+    // $("#fileinput-demo-2").on("fileuploaded", function (event, data, previewId, index) {
+    //     //alert("data"+JSON.stringify(data));
+    //     initialPreview.push(data.response.initialPreview)
+    //     var obj = {
+    //         caption: data.response.filename,
+    //         size: data.response.size,
+    //         url: prefix + '/delete',
+    //         key: data.response.id,
+    //     }
+    //     initialPreviewConfig.push(obj);
+    //     ids = [];
+    //     for (var i = 0; i < initialPreviewConfig.length; i++) {
+    //         ids.push(initialPreviewConfig[i].key)
+    //     }
+    //     $("#fileUrl").val(ids);
+    //     $('#fileinput-demo-2').fileinput('destroy');
+    //     $("#fileinput-demo-2").fileinput({
+    //         'theme': 'explorer-fas',
+    //         'uploadUrl': prefix + '/upload',
+    //         overwriteInitial: false,
+    //         uploadIcon: "<i class=\"glyphicon glyphicon-upload\"></i>",
+    //         initialPreviewAsData: true,
+    //         uploadAsync: true,
+    //         showCancel: false,
+    //         allowedFileExtensions: ['jpg', 'pdf', 'png', 'doc', 'xls'],
+    //         previewFileIcon: '',//当文件无法被预览时出现在缩略图中的图标，默认是
+    //         maxFileCount: 10,
+    //         layoutTemplates: {
+    //             actionUpload: ""
+    //         },
+    //         deleteExtraData: {
+    //             files: "111111111"
+    //         },
+    //         initialPreview: initialPreview,
+    //         initialPreviewConfig: initialPreviewConfig,
+    //
+    //
+    //     })
+    //     $('#fileinput-demo-2').fileinput('enable');
+    //
+    // });
+
+    // function removearryUrl(arry1, arry2, val) {
+    //     var index = indexOfArry1(arry2, val);
+    //     if (index > -1) {
+    //         arry1.splice(index, 1);
+    //         arry2.splice(index, 1);
+    //     }
+    // };
+    //
+    // //删除数组中固定的值
+    // function removearry(arry, val) {
+    //     var index = indexOfArry(arry, val);
+    //     if (index > -1) {
+    //         arry.splice(index, 1);
+    //     }
+    // };
+</script>
+</body>
+</html>

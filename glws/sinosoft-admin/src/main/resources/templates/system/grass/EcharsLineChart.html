@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('人工种草分省报表')" />
+</head>
+<body class="gray-bg">
+<div class="col-sm-18 select-table">
+<!--    <div class="col-sm-12 search-collapse">-->
+<!--        <form id="formId">-->
+<!--            <div class="select-list">-->
+<!--                <ul>-->
+<!--                    <li>-->
+<!--                        <select name="province" th:with="type=${@dict.getType('sys_province')}">-->
+<!--                            <option value="">请选择任务省份</option>-->
+<!--                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
+<!--                        </select>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <button class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</button>-->
+<!--                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+    <div class="col-sm-12 select-table">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>图形列表</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="echarts" id="echarts-line-chart"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+
+<script th:inline="javascript">
+    var prefix = ctx + "system/grass";
+
+
+
+
+    $(function () {
+        var year= [[${year}]];
+        var provinceRows=[];
+        var newYear=[];
+        var seriesDate=[];
+        var seriesDateYear=[];
+        var provinc= [[${province}]];
+
+        var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+        $.ajax({
+            type : "post",
+            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url : prefix + "/getOptionHistogram",    //请求发送到dataActiont处
+            data : {year:year,provinc:provinc},
+            dataType : "json",        //返回数据形式为json
+            success : function(result) {
+                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                if (result) {
+                    newYear=result.yearCols;
+                    provinceRows=result.provinceRows;
+                    for(var i=0;i<result.datas.length;i++){
+                        seriesDateYear=[];
+                        for(var j=0;j<result.yearCols.length;j++){
+                            var da =result.datas[i];
+                            seriesDateYear.push(da[newYear[j]]);
+                        };
+                       var item ={
+                        name:result.datas[i].province,
+                           type:'line',
+                           stack:result.datas[i].province,
+                           data:seriesDateYear
+                    };
+                        seriesDate.push(item);
+                       }
+                    lineChart.hideLoading();    //隐藏加载动画
+                    lineChart.setOption({        //加载数据图表
+                        title : {
+                            text: '人工种草分省报表'
+                        },
+                        tooltip: {
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                        legend: {
+                            width:"50%",
+                            data:provinceRows,
+                        },
+                        calculable : true,
+                        xAxis: {
+                            boundaryGap : false,
+                            data: newYear
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: seriesDate});
+                    window.onresize = lineChart.resize;
+
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                lineChart.hideLoading();
+            }
+        });
+
+    });
+
+
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

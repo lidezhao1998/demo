@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改【毒害草知识库信息')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-knowledge-edit" th:object="${cPoisonKnowledge}">
+            <input name="id" th:field="*{id}" type="hidden">
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">中文名：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.chineseName}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">学名：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.scientificName}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">别名：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.alias}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">俗名：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.commonName}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">科_亚科：</label>
+                        <div class="col-sm-8">
+
+                            <div   th:text="${cPoisonKnowledge.divisionSubfamily}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">属_亚属：</label>
+                        <div class="col-sm-8">
+
+                            <div   th:text="${cPoisonKnowledge.genusSubgenus}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">形态特征：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.morphologicalCharacter}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">形态图名称：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.morphologyName}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">生态图名称：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.ecologicalMapName}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">分布_国内：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.distributionDomestic}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">分布_国外：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.distributionAbroad}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">生境：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.habitat}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">分布图名称：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.distributionmapName}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">有毒部位：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.toxicParts}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">有毒成分：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.toxicIngredients}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">危害动物：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.harmfulAnimals}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">危害：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.harm}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">中毒机理：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.poisoningMechanism}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">中毒症状：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.poisoningSymptoms}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">诊断：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.diagnosis}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">防治方法：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cPoisonKnowledge.controlMethods}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/poisonknowledge";
+        $("#form-knowledge-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-knowledge-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

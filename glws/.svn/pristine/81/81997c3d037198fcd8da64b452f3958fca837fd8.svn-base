@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('查询退牧还草工程任务列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <p>年份：</p>
+                            <input type="year" name="year" style="text-align: center" class="layui-layer-input" placeholder="所有" id="test2"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-bordered">
+            <a class="btn btn-primary btn-rounded btn-sm" style="margin-top: 10px;position: absolute;"
+               onclick="addAsset()"><i class="fa fa-plus"></i> 添加</a>
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:report:view')}]];
+    var addFlag = [[${@permission.hasPermi('system:report:add')}]];
+    var prefix = ctx + "system/report";
+
+    function addAsset() {
+        $.modal.openTab( "上报添加", $.operate.addUrl());
+    }
+
+    $(function () {
+        var options = {
+            url: prefix + "/listReport",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/again/{id}",
+            detailUrl: prefix + "/detail/{id}",
+            striped: true,
+            bordered: true,
+            pagination: false,
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            columns: [
+                {
+                    field: 'index',
+                    title: '序号',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                },
+                {
+                    title: '任务年份',
+                    field: 'year',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'wlmjCount',
+                    title: '围栏规模合计(万亩)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+
+                    field: 'qtmjCount',
+                    title: '其他规模合计(万亩)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'zgmCount',
+                    title: '总规模(万亩)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    title: '上报时间',
+                    field: 'updateTime',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'status',
+                    title: '任务状态',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    },
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        if (row.status == 0) {
+                            actions.push('<a class="Change state btn btn-primary btn-xs" onclick="openDetail(\'' + row.reportId + '\')"><i class="fa fa-edit"></i>查看</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + '" href="javascript:void(0)" onclick="removeReport(\'' + row.reportId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        } else if (row.status == 1) {
+                            actions.push('<a class="Change state btn btn-primary btn-xs" onclick="openDetail(\'' + row.reportId + '\')"><i class="fa fa-edit"></i>查看</a> ');
+                        } else if (row.status == 2) {
+                            actions.push('<a class="btn btn-warning btn-xs" onclick="editDetail(\'' + row.reportId + '\')"><i class="fa fa-search"></i>编辑</a>');
+                            actions.push('<a class="Change state btn btn-primary btn-xs" onclick="changeReport(\'' + row.reportId + '\',0)"><i class="fa fa-edit"></i>重报</a> ');
+                        }
+                        return actions.join('');
+                    }
+                },
+
+            ]
+        };
+        $.table.init(options);
+    });
+
+    /* 上报状态显示 */
+    function statusTools(row) {
+        if (row.status == '0') {
+            return '<p>未审核</p> ';
+        } else if (row.status == '1') {
+            return '<p>通过</p> ';
+        } else if (row.status == '2') {
+            return '<p>驳回</p> ';
+        }
+    }
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+    /*绘图弹框*/
+    function ht() {
+        var publishId = 1;
+        var url = prefix + '/ht/' + publishId;
+        $.modal.open("绘图界面", url);
+    }
+
+    /* 重报 */
+    function changeReport(id, one) {
+        $.modal.confirm("确定要重报吗?", function () {
+            $.post(prefix + "/change", {id: id, change: one}, function () {
+                $.modal.alertSuccess('操作成功');
+                location.reload();
+            })
+        })
+    }
+
+    /* -删除信息 */
+    function removeReport(reportId) {
+        $.modal.confirm("确定要删除上报信息吗?", function () {
+            $.operate.post(prefix + "/remove", {reportId: reportId}, function () {
+                $.modal.alertSuccess('操作成功');
+                location.reload();
+            });
+        })
+    }
+
+    function openDetail(id) {
+        let url = prefix + "/detail/" + id;
+        $.modal.openFul("查看详情",url)
+    }
+
+    function editDetail(id) {
+        let url = prefix + "/again/" + id;
+        $.modal.openFul("详情编辑",url)
+    }
+</script>
+</body>
+</html>

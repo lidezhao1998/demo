@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改科技成果信息')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-technology-edit" th:object="${cTaskTechnology}">
+        <input name="id" th:field="*{id}" type="hidden">
+        <div class="row">
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>成果名称：</label>
+                    <div class="col-sm-8">
+                        <input name="name" th:field="*{name}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>所属技术领域：</label>
+                    <div class="col-sm-8">
+                        <input name="technicalField" th:field="*{technicalField}" class="form-control" type="text"
+                               required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>提交人：</label>
+                    <div class="col-sm-8">
+                        <input name="sumbitter" th:field="*{sumbitter}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>Email：</label>
+                    <div class="col-sm-8">
+                        <input name="email" th:field="*{email}" id="email" class="form-control" type="email" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>地址：</label>
+                    <div class="col-sm-8">
+                        <input name="address" th:field="*{address}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>联系方式：</label>
+                    <div class="col-sm-8">
+                        <input name="phone" th:field="*{phone}" placeholder="请输入手机号码" class="form-control"
+                               maxlength="11" id="phone" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">邮政编码：</label>
+                    <div class="col-sm-8">
+                        <input name="fax" th:field="*{fax}" maxlength="6" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">技术成熟度：</label>
+                    <div class="col-sm-8">
+                        <input name="technologyMaturity" th:field="*{technologyMaturity}" class="form-control"
+                               type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">研发方式：</label>
+                    <div class="col-sm-8">
+                        <input name="rdmethods" th:field="*{rdmethods}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">合作方式：</label>
+                    <div class="col-sm-8">
+                        <input name="cooperationMethod" th:field="*{cooperationMethod}" class="form-control" type="text"
+                               required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">成果应用情况：</label>
+                    <div class="col-sm-8">
+                        <input name="resultsApplication" th:field="*{resultsApplication}" class="form-control"
+                               type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">实施成果转化需求：</label>
+                    <div class="col-sm-8">
+                        <input name="demand" th:field="*{demand}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">成果应用行业：</label>
+                    <div class="col-sm-8">
+                        <input name="industry" th:field="*{industry}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">获奖类别：</label>
+                    <div class="col-sm-8">
+                        <input name="awardCategory" th:field="*{awardCategory}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--<div class="col-sm-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">上报时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="reportTime" th:value="${#dates.format(cTaskTechnology.reportTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">填报时间：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input name="inputTime" th:value="${#dates.format(cTaskTechnology.inputTime, 'yyyy-MM-dd')}"
+                                   class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">获奖级别：</label>
+                    <div class="col-sm-8">
+                        <input name="awardLevel" th:field="*{awardLevel}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="font-noraml">文件上传</label>
+                <div class="file-loading">
+                    <input class="file" type="file" multiple data-min-file-count="1" data-theme="fas">
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <div class="button-b" style="margin-left: 70%;margin-top: 10%" id="button-set">
+        <button type="button" class="btn btn-w-m btn-primary" onclick="saveup()" id="saveup">保存并上报</button>
+        <button type="button" class="btn btn-w-m btn-primary" onclick="save()" id="save">保 存</button>
+        <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()">关 闭</button>
+
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/technology";
+    $("#form-technology-edit").validate({
+        focusCleanup: true,
+        rules: {
+            email: {
+                isEmail: true,
+            },
+            phone: {
+                isPhone: true,
+
+            }
+        }
+
+    });
+
+    $(document).ready(function () {
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '#',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            initialPreview: [
+                ""
+            ]
+        });
+    });
+
+
+    function save() {
+        if ($.validate.form()) {
+            $.modal.confirm("确认要点击确定吗?", function () {
+                saveTab(prefix + "/edit", $('#form-technology-edit').serialize());
+            });
+        }
+    }
+
+    function saveTab(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+            },
+            success: function (result) {
+                if (typeof callback == "function") {
+                    callback(result);
+                }
+                if (result.code == web_status.SUCCESS) {
+                    confirmdemo(result.msg, function () {
+                        reload();
+                    });
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            }
+        };
+        $.ajax(config)
+    }
+
+    $("input[name='inputTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    function confirmdemo(content, callBack) {
+        layer.confirm(content, {
+            icon: 3,
+            title: "系统提示",
+            btn: ['确认']
+        }, function (index) {
+            layer.close(index);
+
+            callBack(true);
+
+        });
+    };
+
+    function reload() {
+        parent.location.reload();
+    }
+
+    function saveup() {
+        if ($.validate.form()) {
+            $.modal.confirm("确认要点击确定吗?", function () {
+                saveModal(prefix + "/edit1", $('#form-technology-edit').serialize());
+            });
+        }
+    }
+
+    // 保存信息 弹出提示框
+    function saveModal(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            success: function (result) {
+                if (typeof callback == "function") {
+                    callback(result);
+                }
+                if (result.code == web_status.SUCCESS) {
+                    confirmdemo(result.msg, function () {
+                        reload();
+                    });
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+
+            }
+        };
+        $.ajax(config)
+    }
+
+</script>
+</body>
+</html>

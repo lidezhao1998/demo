@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原虫害发生与防治情况列表')"/>
+</head>
+<body class="gray-bg">
+<style>
+    /*修改表头颜色*/
+    .table-bordered table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: white;
+    }
+</style>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input type="hidden" id="provinceHidden"/>
+                <input type="hidden" id="cityHidden"/>
+                <div class="select-list">
+                    <ul>
+
+                        <li>
+                            <div id="city">
+                                <span>市：</span>
+                                <select
+                                        id="addrCity" name="city" onchange="getAreas(this.value)"
+                                        style="width: 150px;height:30px; ">
+                                </select>
+                            </div>
+                        </li>
+                        <li>
+                            <div id="area">
+                                <input id="valuearea" type="hidden"/>
+                                <em class="i-bit"></em><span>县/区：</span>
+                                <select id="addrArea" name="county"
+                                        style="width: 150px;height:30px; ">
+                                </select>
+                            </div>
+                        </li>
+                       <!-- <li class="select-time">
+                            <p>年度：</p>
+                            <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                        </li>-->
+                        <!--<li>-->
+                        <!--<label class="col-sm-3 control-label" style="margin-top: 7px;width: 75px;margin-right: -23px;">县/区：</label>-->
+                        <!--<div class="col-sm-8">-->
+                        <!--<select id="addrArea" name="countyLevelName"-->
+                        <!--style="width: 130px;height: 34px;border:1px solid #e5e6e7"-->
+                        <!--onchange="getlngLat()" required="required">-->
+                        <!--</select>-->
+                        <!--</div>-->
+                        <!--</li>-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+<!--        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="Echars()" >
+                <i class="fa fa-download"></i> 图表展示
+            </a>
+        </div>-->
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var prefix = ctx + "zaihai/chfztj";
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+    $(function () {
+        var options = {
+            url: prefix + "/list2",
+            exportUrl: prefix + "/export",
+            modalName: "草原虫害发生与防治情况",
+            /*detailView: false,*/
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            queryParams:{"province":[[${province}]],"city":[[${city}]]},
+
+            /*            onExpandRow: function (index, row, $detail) {
+                            initChildTable(index, row, $detail);
+                        },*/
+            pagination: false,
+            showExport: true,
+            Icons: 'glyphicon-export',
+
+
+            exportOptions: {
+                ignoreColumn: [0, 0],  //忽略某一列的索引
+                fileName: '草原虫害发生与防治情况表',  //文件名称设置
+                worksheetName: '草原虫害发生与防治',  //表格工作区名称
+                tableName: '草原虫害发生与防治情况表',
+                excelstyles: ['background-color', 'color', 'font-size', 'font-weight', 'border-top']
+            },
+
+            columns: [[
+                  /*{
+                      rowspan: 3,s
+                      colspan: 1,
+                      field : 'number',
+                      title : '编号',
+                      align: 'center',
+                      valign: 'middle'
+                  },*/
+                {
+                    rowspan: 3,
+                    colspan: 1,
+                    field: 'year',
+                    title: '年度',
+                    align: 'center',
+                    valign: 'middle',
+
+                },
+                {
+                    rowspan: 3,
+                    colspan: 1,
+                    field: 'province',
+                    title: '所属省',
+                    align: 'center',
+                    valign: 'middle',
+                    visible: false
+                },
+                 {
+                     rowspan: 3,
+                     colspan: 1,
+                     field : 'city',
+                     title : '所属市',
+                     align: 'center',
+                     valign: 'middle',
+                     visible: false
+                 },
+                 {
+                     rowspan: 3,
+                     colspan: 1,
+                     field : 'county',
+                     title : '所属县',
+                     align: 'center',
+                     valign: 'middle'
+                 },
+                {
+                    rowspan: 1,
+                    colspan: 2,
+                    title: '危害情况(万亩)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 15,
+                    title: '当年防治面积(万亩)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 9,
+                    title: '防治投入',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 3,
+                    colspan: 1,
+                    field: 'remarks',
+                    title: '备注',
+                    align: 'center',
+                    valign: 'middle'
+                }
+            ], [
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'harmTotalarea',
+                    title: '危害总面<br>积',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'engineeringhazard',
+                    title: '工程区危<br>害面积',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 13,
+                    title: '生物防治面积(万亩)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'chemistryControl',
+                    title: '化学防治',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'totalPrevention',
+                    title: '合计',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'expatriateManagers',
+                    title: '管理技术<br>干部（人/天）',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'work',
+                    title: '出工（人/天）',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'plane',
+                    title: '飞机（架/次）',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'bigSprayer',
+                    title: '大型喷雾<br>器（台/套/天）',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'smallSprayer',
+                    title: '中小型喷<br>雾器（台/套/天）',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'car',
+                    title: '车辆（辆/天）',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'pastureChickenNum',
+                    title: '牧鸡（万只）',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'pastureDuckNum',
+                    title: '牧鸭（万只）',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 2,
+                    colspan: 1,
+                    field: 'starlingNest',
+                    title: '椋鸟巢（立方米）',
+                    align: 'center',
+                    valign: 'middle'
+                }
+            ], [
+
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'subtotal',
+                    title: '小计',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'attractStarlings',
+                    title: '招募椋鸟',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'pastureChicken',
+                    title: '牧鸡',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'pastureDuck',
+                    title: '牧鸭',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'matrine',
+                    title: '苦参碱',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'nicotine',
+                    title: '烟碱',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'greenMuscardineFungus',
+                    title: '绿僵菌',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'azadirachtin',
+                    title: '印楝素',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'avermectin',
+                    title: '阿维菌素',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'empedobacterBrevis',
+                    title: '短稳杆菌',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'osthole',
+                    title: '蛇床子素',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'weiSu',
+                    title: '阿维苏',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field: 'enterocytozoonBieneusi',
+                    title: '微孢子虫',
+                    align: 'center',
+                    valign: 'middle'
+                },
+            ]],
+
+        };
+        $.table.init(options);
+    });
+    $(function () {
+        var code = [[${code}]];
+        var roleName = [[${roleName}]];
+        if (roleName == 'gj') {
+            getCities(code);
+
+        } else if (roleName == 'sj') {
+            $("#city").hide();
+            getAreas(code);
+
+        }
+
+
+    });
+
+
+    // ===== 加载市列表 =====
+    function getCities(value) {
+
+        $("#addrCity").empty();
+        $("#addrArea").empty();
+        var url = ctx + "caiji/survey/getCities";
+        var data = "provinceCode=" + value;
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = '';
+                op.text = "----- 请选择市 -------";
+                document.getElementById("addrCity").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictLabel;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrCity").appendChild(op);
+                }
+            }
+        });
+        // var op2 = document.createElement("option");
+        // op2.value = '';
+        // document.getElementById("addrArea").appendChild(op2);
+    }
+
+    // ===== 加载区列表 =====
+    function getAreas(value) {
+        var roleName = [[${roleName}]];
+        if (roleName == 'sj') {
+            var url = ctx + "caiji/survey/getAreas";
+
+        } else {
+            var url = ctx + "caiji/survey/getAreasLable";
+
+        }
+        $("#addrArea").empty();
+        //var url = "<%=basePath%>dict/getAreas";
+        var data = "cityCode=" + value;
+
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = '';
+                op.text = "----- 请选择县/区 -------";
+                document.getElementById("addrArea").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictLabel;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrArea").appendChild(op);
+                }
+            }
+        });
+
+    }
+
+    function Echars() {
+        var url = prefix + '/Echars';
+        $.modal.openFull("虫害发生防治情况统计图", url);
+    }
+</script>
+</body>
+</html>

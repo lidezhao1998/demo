@@ -1,0 +1,507 @@
+package com.ruoyi.zaihai.ReserveManagement.controller;
+
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysRole;
+import com.ruoyi.zaihai.ReserveManagement.domain.*;
+import com.ruoyi.zaihai.ReserveManagement.mapper.KManufactorMapper;
+import com.ruoyi.zaihai.ReserveManagement.service.IKInstockService;
+import com.ruoyi.zaihai.ReserveManagement.service.IKMaterialTypeService;
+import com.ruoyi.zaihai.ReserveManagement.service.IKStockService;
+import com.ruoyi.zaihai.ReserveManagement.service.IReserveService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * 入库Controller
+ *
+ * @author ruoyi
+ * @date 2020-06-16
+ */
+@Controller
+@RequestMapping("/reserves/instock")
+public class KInstockController extends BaseController {
+    private String prefix = "ReserveManagement/instock";
+
+    @Autowired
+    private IKMaterialTypeService kMaterialTypeService;
+
+    @Autowired
+    private IKInstockService kInstockService;
+
+    @Autowired
+    private IKStockService kStockService;
+
+    @Autowired
+    private KManufactorMapper kManufactorMapper;
+
+    @Autowired
+    private IReserveService reserveService;
+
+
+    @RequiresPermissions("reserves:instock:view")
+    @GetMapping()
+    public String instock() {
+        return prefix + "/instock";
+    }
+
+    /**
+     * 查询入库列表
+     */
+    @RequiresPermissions("reserves:instock:list")
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(KInstock kInstock) {
+        startPage();
+
+        //查询登录人的用户信息(登录名)
+        String operName = ShiroUtils.getSysUser().getLoginName();
+
+        //获取登录用户的部门
+        String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+
+        //获取角色
+        List<SysRole> roles = ShiroUtils.getSysUser().getRoles();
+        if(roles.size()==0){
+            List<KInstock> list = kInstockService.selectKInstockList(kInstock);
+            return getDataTable(list);
+        }else{
+            for (int i = 0; i < roles.size(); i++) {
+                SysRole sysRole = roles.get(i);
+                String roleName = sysRole.getRoleName();
+                if (roleName.equals("国家级")) {
+                    List<KInstock> list = kInstockService.selectKInstockList(kInstock);
+                    return getDataTable(list);
+
+                } else if (roleName.equals("省级")) {
+                    kInstock.setAddress(deptName);
+                    List<KInstock> list = kInstockService.selectKInstockList(kInstock);
+                    return getDataTable(list);
+
+                }else{
+
+                    List<KInstock> list = kInstockService.selectKInstockList(kInstock);
+                    return getDataTable(list);
+                }
+            }
+        }
+        return null;
+
+    }
+
+    /**
+     * 导出入库列表
+     */
+    @RequiresPermissions("reserves:instock:export")
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(KInstock kInstock) {
+        List<KInstock> list = kInstockService.selectKInstockList(kInstock);
+        ExcelUtil<KInstock> util = new ExcelUtil<KInstock>(KInstock.class);
+        return util.exportExcel(list, "instock");
+    }
+
+    /**
+     * 新增入库
+     */
+    @GetMapping("/add")
+    public String add() {
+        return prefix + "/add";
+    }
+
+    /**
+     * 新增保存入库
+     */
+    @RequiresPermissions("reserves:instock:add")
+    @Log(title = "入库", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(KInstock kInstock) {
+        double ckCount;
+        long ReserveId=0;
+        String name="";
+        KStock kStock = null;
+        List<KStock> list = kStockService.selectKStockList(kStock);
+        for (int i = 0; i < list.size(); i++) {
+            KStock stock = list.get(i);
+            if (kInstock.getName().equals(stock.getName())) {
+                name=stock.getName();
+            }
+        }
+        if (list.size() == 0) {
+            //获取登录用户的部门
+            String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+            kInstock.setAddress(deptName);
+            Reserve reserve = null;
+            //查出对应的储备库id
+            List<Reserve> list1 = reserveService.selectReserveList(reserve);
+            for (int i = 0; i < list1.size(); i++) {
+                Reserve reserve1 = list1.get(i);
+                if (reserve1.getAddress().equals(deptName)) {
+                    kInstock.setReserveId(reserve1.getId());
+                    ReserveId=reserve1.getId();
+                }
+            }
+            //添加储备库id至库存表中
+            kInstock.setReserveId(ReserveId);
+
+            //添加入库数据到库存表
+            kStockService.insertKInstock(kInstock);
+        } else if (name.equals(kInstock.getName())){
+            //获取登录用户的部门
+            String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+            kInstock.setAddress(deptName);
+            Reserve reserve = null;
+            //查出对应的储备库id
+            List<Reserve> list1 = reserveService.selectReserveList(reserve);
+            for (int i = 0; i < list1.size(); i++) {
+                Reserve reserve1 = list1.get(i);
+                if (reserve1.getAddress().equals(deptName)) {
+                    kInstock.setReserveId(reserve1.getId());
+                }
+            }
+            for (int i = 0; i < list.size(); i++) {
+                KStock stock = list.get(i);
+                if (kInstock.getName().equals(stock.getName())) {
+                    ckCount = kInstock.getGoodsNumber() + stock.getInventory();
+                    stock.setInventory(ckCount);
+                    //修改库存数量
+                    kStockService.updateKInstock(stock);
+                }
+            }
+        } else {
+            //获取登录用户的部门
+            String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+            kInstock.setAddress(deptName);
+            Reserve reserve = null;
+            //查出对应的储备库id
+            List<Reserve> list1 = reserveService.selectReserveList(reserve);
+            for (int i = 0; i < list1.size(); i++) {
+                Reserve reserve1 = list1.get(i);
+                if (reserve1.getAddress().equals(deptName)) {
+                    kInstock.setReserveId(reserve1.getId());
+                    ReserveId=reserve1.getId();
+                }
+            }
+            //添加储备库id至库存表
+            kInstock.setReserveId(ReserveId);
+            //添加入库数据到库存表
+            kStockService.insertKInstock(kInstock);
+        }
+
+        kInstock.setStatus("2");
+        return toAjax(kInstockService.insertKInstock(kInstock));
+    }
+
+    /**
+     * 修改入库
+     */
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+        KInstock kInstock = kInstockService.selectKInstockById(id);
+        mmap.put("kInstock", kInstock);
+        return prefix + "/edit";
+    }
+
+    /**
+     * 修改保存入库
+     */
+    @RequiresPermissions("reserves:instock:edit")
+    @Log(title = "入库", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(KInstock kInstock) {
+        return toAjax(kInstockService.updateKInstock(kInstock));
+    }
+
+    /**
+     * 删除入库
+     */
+    @RequiresPermissions("reserves:instock:remove")
+    @Log(title = "入库", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids) {
+        return toAjax(kInstockService.deleteKInstockByIds(ids));
+    }
+
+
+    /**
+     * 确认入库操作
+     */
+    @Log(title = "确认入库操作", businessType = BusinessType.UPDATE)
+    @PostMapping("/cancel")
+    @ResponseBody
+    public AjaxResult updateInstock(long instockId) {
+        //根据id查询出对应的入库数据啊
+        KInstock kInstock = kInstockService.selectKInstockById(instockId);
+
+        double ckCount;
+        KStock kStock = null;
+        String name="";
+
+        List<KStock> list = kStockService.selectKStockList(kStock);
+        for (int i = 0; i < list.size(); i++) {
+            KStock stock = list.get(i);
+            if (kInstock.getName().equals(stock.getName())) {
+                name=stock.getName();
+            }
+
+        }
+
+
+        if (list.size() == 0) {
+            //获取登录用户的部门
+            String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+            kInstock.setAddress(deptName);
+            Reserve reserve = null;
+            //查出对应的储备库id
+            List<Reserve> list1 = reserveService.selectReserveList(reserve);
+            for (int i = 0; i < list1.size(); i++) {
+                Reserve reserve1 = list1.get(i);
+                if (reserve1.getAddress().equals(deptName)) {
+                    kInstock.setReserveId(reserve1.getId());
+                }
+            }
+            //添加入库数据到库存表
+            kStockService.insertKInstock(kInstock);
+        } else if (list.size() != 0) {
+            //获取登录用户的部门
+            String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+            kInstock.setAddress(deptName);
+            Reserve reserve = null;
+            //查出对应的储备库id
+            List<Reserve> list1 = reserveService.selectReserveList(reserve);
+            for (int i = 0; i < list1.size(); i++) {
+                Reserve reserve1 = list1.get(i);
+                if (reserve1.getAddress().equals(deptName)) {
+                    kInstock.setReserveId(reserve1.getId());
+                }
+            }
+            for (int i = 0; i < list.size(); i++) {
+                KStock stock = list.get(i);
+                if (kInstock.getName().equals(stock.getName())) {
+                    ckCount =stock.getInventory() + kInstock.getGoodsNumber();
+                    stock.setInventory(ckCount);
+                    kStockService.updateKInstock(stock);
+                }
+            }
+
+        } else {
+            //获取登录用户的部门
+            String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+            kInstock.setAddress(deptName);
+            Reserve reserve = null;
+            //查出对应的储备库id
+            List<Reserve> list1 = reserveService.selectReserveList(reserve);
+            for (int i = 0; i < list1.size(); i++) {
+                Reserve reserve1 = list1.get(i);
+                if (reserve1.getAddress().equals(deptName)) {
+                    kInstock.setReserveId(reserve1.getId());
+                }
+            }
+            //添加入库数据到库存表
+            kStockService.insertKInstock(kInstock);
+        }
+        kInstock.setStatus("2");
+
+        //判断状态为待出库
+        return toAjax(kInstockService.updateInstock(instockId));
+    }
+
+
+    /**
+     * 查看库详细信息
+     */
+    @RequiresPermissions("reserves:instock:detail")
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long id, ModelMap mmap, KInstock kInstock) {
+        KInstock kInstockLook = kInstockService.selectKInstockById(id);
+        mmap.put("kInstock", kInstockLook);
+
+        return prefix + "/look";
+    }
+
+    /**
+     * 确认入库详细信息
+     */
+    @RequiresPermissions("reserves:instock:report")
+    @GetMapping("/report/{id}")
+    public String report(@PathVariable("id") Long id, ModelMap mmap, KInstock kInstock) {
+        KInstock kInstockLook = kInstockService.selectKInstockById(id);
+        mmap.put("kInstock", kInstockLook);
+
+        return prefix + "/report";
+    }
+
+    /**
+     * 三级联动类型
+     */
+
+    @GetMapping("/getType")
+    @ResponseBody
+    public List<KMaterialType> getType(ModelMap mmap) {
+        List<KMaterialType> list = kMaterialTypeService.selectDictTypeAll();
+        return list;
+    }
+
+    /**
+     * 三级联动物资名称
+     */
+
+    @GetMapping("/getGoods")
+    @ResponseBody
+    public List<KManufactor> getCities(ModelMap mmap, String provinceCode) {
+        List<KManufactor> list = kManufactorMapper.getGoods(provinceCode);
+        return list;
+    }
+
+    /**
+     * 三级联动数量
+     */
+
+    @GetMapping("/getNumber")
+    @ResponseBody
+    public KStock getNumber(ModelMap mmap, String provinceCode) {
+        KStock kStock = kStockService.getNumber(provinceCode);
+        if(kStock!=null){
+            mmap.put("kStock",kStock.getInventory());
+            return kStock;
+
+        }else{
+            KStock kStock1=new KStock();
+            kStock1.setStatus("404");
+            return kStock1;
+        }
+    }
+
+
+    /**
+     * 保存出库操作不进入库存
+     */
+    @RequiresPermissions("reserves:instock:add")
+    @Log(title = "保存出库", businessType = BusinessType.INSERT)
+    @PostMapping("/Saveck")
+    @ResponseBody
+    public AjaxResult Saveck(KInstock kInstock) {
+        //获取登录用户的部门
+        String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+        kInstock.setAddress(deptName);
+        kInstock.setStatus("3");
+
+        return toAjax(kInstockService.insertKInstock(kInstock));
+
+    }
+
+    /**
+     * 保存入库操作不进入库存
+     */
+    @RequiresPermissions("reserves:instock:add")
+    @Log(title = "保存入库", businessType = BusinessType.INSERT)
+    @PostMapping("/addrk")
+    @ResponseBody
+    public AjaxResult addrk(KInstock kInstock) {
+        //获取登录用户的部门
+        String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+        kInstock.setAddress(deptName);
+        kInstock.setStatus("1");
+
+        return toAjax(kInstockService.insertKInstock(kInstock));
+
+    }
+
+
+
+
+    /**
+     * 直接出库操作
+     */
+    @RequiresPermissions("reserves:instock:add")
+    @Log(title = "出库", businessType = BusinessType.INSERT)
+    @PostMapping("/addck")
+    @ResponseBody
+    public AjaxResult addCkSave(KInstock kInstock) {
+        double ckCount;
+        KStock kStock = null;
+        String name="";
+
+        List<KStock> list = kStockService.selectKStockList(kStock);
+        for (int i = 0; i < list.size(); i++) {
+            KStock stock = list.get(i);
+            if (kInstock.getName().equals(stock.getName())) {
+                name=stock.getName();
+            }
+
+        }
+
+
+        if (list.size() == 0) {
+            //获取登录用户的部门
+            String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+            kInstock.setAddress(deptName);
+            Reserve reserve = null;
+            //查出对应的储备库id
+            List<Reserve> list1 = reserveService.selectReserveList(reserve);
+            for (int i = 0; i < list1.size(); i++) {
+                Reserve reserve1 = list1.get(i);
+                if (reserve1.getAddress().equals(deptName)) {
+                    kInstock.setReserveId(reserve1.getId());
+                }
+            }
+            //添加入库数据到库存表
+            kStockService.insertKInstock(kInstock);
+        } else if (list.size() != 0) {
+            //获取登录用户的部门
+            String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+            kInstock.setAddress(deptName);
+            Reserve reserve = null;
+            //查出对应的储备库id
+            List<Reserve> list1 = reserveService.selectReserveList(reserve);
+            for (int i = 0; i < list1.size(); i++) {
+                Reserve reserve1 = list1.get(i);
+                if (reserve1.getAddress().equals(deptName)) {
+                    kInstock.setReserveId(reserve1.getId());
+                }
+            }
+            for (int i = 0; i < list.size(); i++) {
+                KStock stock = list.get(i);
+                if (kInstock.getName().equals(stock.getName())) {
+                    ckCount =stock.getInventory() - kInstock.getGoodsNumber();
+                    stock.setInventory(ckCount);
+                    kStockService.updateKInstock(stock);
+                }
+            }
+
+        } else {
+            //获取登录用户的部门
+            String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+            kInstock.setAddress(deptName);
+            Reserve reserve = null;
+            //查出对应的储备库id
+            List<Reserve> list1 = reserveService.selectReserveList(reserve);
+            for (int i = 0; i < list1.size(); i++) {
+                Reserve reserve1 = list1.get(i);
+                if (reserve1.getAddress().equals(deptName)) {
+                    kInstock.setReserveId(reserve1.getId());
+                }
+            }
+            //添加入库数据到库存表
+            kStockService.insertKInstock(kInstock);
+        }
+        kInstock.setStatus("4");
+        return toAjax(kInstockService.insertKInstock(kInstock));
+    }
+
+
+
+}

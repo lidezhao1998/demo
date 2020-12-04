@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <title>草原监测数据分析子系统</title>
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <link th:href="@{favicon.ico}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/video-js.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/jquery.contextMenu.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/animate.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link th:href="@{/css/skins.css}" rel="stylesheet"/>
+    <link th:href="@{/ruoyi/css/ry-ui.css?v=4.1.0}" rel="stylesheet"/>
+</head>
+<!--覆盖框架自带样式-->
+<style>
+    /*菜单栏 鼠标悬浮*/
+    .theme-dark .navbar-default .nav>li>a:hover, .theme-dark .navbar-default .nav>li>a:focus {
+        background: #037573;
+    }
+    /*二级菜单栏 点击失焦后*/
+    .skin-blue .navbar-default .nav>li.selected>a, .skin-blue .navbar-default .nav>li.selected>a:focus {
+        background: #30923E;
+        color: rgb(255, 255, 255);
+    }
+    /*菜单栏 文字颜色*/
+    .nav>li>a {
+        color: rgb(255, 255, 255);
+    }
+    /*二级菜单背景色*/
+    .theme-dark .nav>li.active {
+        background: #30923E;
+        border-left:0px;
+    }
+    /*缩进后 悬浮菜单背景色*/
+    .fixed-sidebar.mini-navbar .nav li:hover>.nav-second-level {
+        background: #50c2c1;
+    }
+    /*头像*/
+    .navbar-right > .user-menu .user-image {
+        float: left;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-right: 8px;
+        margin-top: -3px;
+    }
+    /*头像位置大小*/
+    .nav.navbar-right>li>a {
+        color: #fff;
+        font-size: 16px;
+        height: 70px;
+        padding: 24px 25px;
+    }
+    .navbar-top-links li:last-child {
+        margin-right: 32px;
+    }
+    /*菜单 顶部距离*/
+    .nav-second-level li:last-child {
+        margin-bottom: 0px;
+    }
+    /*二级菜单高度 左边距*/
+    .nav-second-level li a {
+          padding: 14px 20px 14px 25px;
+          padding-left: 52px;
+      }
+    /*缩进后 悬浮菜单标题背景色*/
+    .fixed-sidebar.mini-navbar .nav li:hover>a> span.nav-label {
+        background:#FFF;
+    }
+
+    /*三级菜单高度 左边距*/
+    .nav-third-level li a {
+        padding: 14px 20px 16px 25px;
+        padding-left: 68px;
+    }
+</style>
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow: hidden">
+<!--页面 头部-->
+<div class="row">
+    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0px; background-size: 100%; height: 76px; z-index:1111;background-image: url(../img/ic_banner_bg.png);">
+        <span style="line-height: 70px;font-size: 22px;color: #FFFFFF;margin-left: 80px;">草原监测数据分析子系统</span>
+        <ul class="nav navbar-top-links navbar-right welcome-message">
+            <li class="dropdown user-menu">
+                <a href="javascript:void(0)" class="dropdown-toggle" data-hover="dropdown">
+                    <img th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}"
+                         class="user-image">
+                    <span class="hidden-xs">[[${user.userName}]]</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="mt5">
+                        <a th:href="@{/system/user/profile}" class="menuItem">
+                            <i class="fa fa-user"></i> 个人中心</a>
+                    </li>
+                    <li>
+                        <a onclick="resetPwd()">
+                            <i class="fa fa-key"></i> 修改密码</a>
+                    </li>
+                    <li>
+                        <a onclick="switchSkin()">
+                            <i class="fa fa-dashboard"></i> 切换主题</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a th:href="@{logout}">
+                            <i class="fa fa-sign-out"></i> 退出登录</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>
+<!-- 页面 下部 -->
+<div id="wrapper">
+    <!--左侧导航开始-->
+    <nav class="navbar-default navbar-static-side" role="navigation" style="background-image: url('../img/ic_daohang_bg.png')">
+        <div class="nav-close">
+            <i class="fa fa-times-circle"></i>
+        </div>
+        <div class="sidebar-collapse" style="width:280px; height: 100%;">
+            <ul class="nav" id="side-menu">
+                <li th:each="menu : ${menus}">
+                    <a th:class="@{${menu.url != '' && menu.url != '#'} ? ${menu.target}}"
+                       th:href="@{${menu.url == ''} ? |#| : ${menu.url}}">
+                        <i class="fa fa-bar-chart-o" th:class="${menu.icon}"></i>
+                        <span class="nav-label" th:text="${menu.menuName}">一级菜单</span>
+                        <span th:class="${menu.url == '' || menu.url == '#'} ? |fa arrow|"></span>
+                    </a>
+                    <ul class="nav nav-second-level collapse">
+                        <li th:each="cmenu : ${menu.children}">
+                            <a th:if="${#lists.isEmpty(cmenu.children)}"
+                               th:class="${cmenu.target == ''} ? |menuItem| : ${cmenu.target}"
+                               th:utext="${cmenu.menuName}" th:href="@{${cmenu.url}}">二级菜单</a>
+                            <a th:if="${not #lists.isEmpty(cmenu.children)}" href="#">[[${cmenu.menuName}]]<span
+                                    class="fa arrow"></span></a>
+                            <ul th:if="${not #lists.isEmpty(cmenu.children)}" class="nav nav-third-level">
+                                <li th:each="emenu : ${cmenu.children}"><a
+                                        th:class="${emenu.target == ''} ? |menuItem| : ${emenu.target}"
+                                        th:text="${emenu.menuName}" th:href="@{${emenu.url}}">三级菜单</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="navbar-header" style="position: fixed;bottom: 0px;">
+                <a class="navbar-minimalize minimalize-styl-2" style="color:#FFF;" href="#" title="收起菜单">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <!--左侧导航结束-->
+
+    <!--右侧部分开始-->
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+
+        <div class="row content-tabs">
+            <button class="roll-nav roll-left tabLeft">
+                <i class="fa fa-backward"></i>
+            </button>
+            <nav class="page-tabs menuTabs">
+                <div class="page-tabs-content">
+                    <a href="javascript:" class="active menuTab" data-id="/system/main">首页</a>
+                </div>
+            </nav>
+            <button class="roll-nav roll-right tabRight">
+                <i class="fa fa-forward"></i>
+            </button>
+            <a href="javascript:void(0);" class="roll-nav roll-right tabReload"><i class="fa fa-refresh"></i> 刷新</a>
+        </div>
+
+        <a id="ax_close_max" class="ax_close_max" href="#" title="关闭全屏"> <i class="fa fa-times-circle-o"></i> </a>
+        <div class="row mainContent" id="content-main">
+            <iframe class="RuoYi_iframe" name="iframe0" width="100%" height="100%" data-id="/system/main"
+                    th:src="@{/system/main}" th:if="${roleName != '区级'}" frameborder="0" seamless></iframe>
+            <iframe class="RuoYi_iframe" name="iframe0" width="100%" height="100%" data-id="/system/main"
+                    th:src="@{/system/report}" th:if="${roleName == '区级'}" frameborder="0" seamless></iframe>
+        </div>
+        <div class="footer">
+            <div class="pull-right"></div>
+        </div>
+    </div>
+    <!--右侧部分结束-->
+</div>
+<!-- 全局js -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/js/jquery.contextMenu.min.js}"></script>
+<script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
+<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+<script th:src="@{/ruoyi/js/ry-ui.js?v=4.1.0}"></script>
+<script th:src="@{/ruoyi/js/common.js?v=4.1.0}"></script>
+<script th:src="@{/ruoyi/index.js}"></script>
+<script th:src="@{/ajax/libs/fullscreen/jquery.fullscreen.js}"></script>
+<script th:inline="javascript">
+    var ctx = [[@{/}]];;
+    var skin = storage.get("skin");
+    // 本地主题优先，未设置取系统配置
+    if ($.common.isNotEmpty(skin)) {
+        $("body").addClass(skin.split('|')[0]);
+        $("body").addClass(skin.split('|')[1]);
+    } else {
+        var sideTheme = [[${@config.getKey('sys.index.sideTheme')}]];
+        var skinName = [[${@config.getKey('sys.index.skinName')}]];
+        $("body").addClass(sideTheme);
+        $("body").addClass(skinName);
+    }
+
+    /* 用户管理-重置密码 */
+    function resetPwd() {
+        var url = ctx + 'system/user/profile/resetPwd';
+        $.modal.open("重置密码", url, '770', '380');
+    }
+
+    /* 切换主题 */
+    function switchSkin() {
+        layer.open({
+            type: 2,
+            shadeClose: true,
+            title: "切换主题",
+            area: ["530px", "386px"],
+            content: [ctx + "system/switchSkin", 'no']
+        })
+    }
+
+    // 排除非左侧菜单链接
+    var excludesUrl = ["/system/user/profile"];
+
+    $(function () {
+        var hash = location.hash;
+        if (hash !== '') {
+            var url = hash.substring(1, hash.length);
+            $('a[href$="' + decodeURI(url) + '"]').click();
+            if ($.inArray(url, excludesUrl)) {
+                $('a[href$="' + url + '"]').parent("li").addClass("selected").parents("li").addClass("active").end().parents("ul").addClass("in");
+            }
+        }
+    });
+</script>
+</body>
+</html>

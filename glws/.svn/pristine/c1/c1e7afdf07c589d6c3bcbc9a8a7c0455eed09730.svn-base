@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增草原鼠害发生与防治情况')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-sczj-add">
+            <h4 class="form-header h4">选择时间</h4>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">编号：</label>
+                <div class="col-sm-8">
+                    <input name="number" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">周：</label>
+                <div class="col-sm-8">
+                    <input name="week" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">市：</label>
+                <div class="col-sm-8">
+                    <input name="city" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">县：</label>
+                <div class="col-sm-8">
+                    <input name="county" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">危害总面积：</label>
+                <div class="col-sm-8">
+                    <input name="harmTotalarea" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">其中工程区危害面积：</label>
+                <div class="col-sm-8">
+                    <input name="engineeringhazard" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">严重危害总面积：</label>
+                <div class="col-sm-8">
+                    <input name="seriousArea" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">其中区工程区严重危害面积：</label>
+                <div class="col-sm-8">
+                    <input name="engineeringSeriousArea" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">化学防治：</label>
+                <div class="col-sm-8">
+                    <input name="chemistryControl" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">C型肉毒素：</label>
+                <div class="col-sm-8">
+                    <input name="cBotulinumtoxin" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">D型肉毒素：</label>
+                <div class="col-sm-8">
+                    <input name="dBotulinumtoxin" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">雷公藤：</label>
+                <div class="col-sm-8">
+                    <input name="tripterygium" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">莪术醇：</label>
+                <div class="col-sm-8">
+                    <input name="curcumae" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">招鹰控鼠：</label>
+                <div class="col-sm-8">
+                    <input name="hawkMouse" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">野化狐狸控鼠：</label>
+                <div class="col-sm-8">
+                    <input name="foxRat" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">物理防治：</label>
+                <div class="col-sm-8">
+                    <input name="physicalControl" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">防治面积：</label>
+                <div class="col-sm-8">
+                    <input name="defensiveArea" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">控制面积：</label>
+                <div class="col-sm-8">
+                    <input name="controlarea" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">招鹰灭鼠：</label>
+                <div class="col-sm-8">
+                    <input name="hawkDeratization" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">野化狐狸灭鼠：</label>
+                <div class="col-sm-8">
+                    <input name="rodentControl" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">技术人员(人/天)：</label>
+                <div class="col-sm-8">
+                    <input name="artisan" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">出工(人/天)：</label>
+                <div class="col-sm-8">
+                    <input name="work" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">飞机(架/次)：</label>
+                <div class="col-sm-8">
+                    <input name="plane" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">防治器械：</label>
+                <div class="col-sm-8">
+                    <input name="controlApparatus" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">车辆(辆/天)：</label>
+                <div class="col-sm-8">
+                    <input name="car" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合计：</label>
+                <div class="col-sm-8">
+                    <input name="total" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input name="remarks" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">创建时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="creatTime" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="status" value="">
+                        <label th:for="status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/sczj";
+        $("#form-sczj-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-sczj-add').serialize());
+            }
+        }
+
+        $("input[name='creatTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

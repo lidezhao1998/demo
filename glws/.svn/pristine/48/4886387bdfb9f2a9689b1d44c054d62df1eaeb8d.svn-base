@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('监测数据列表')" />
+	<link th:href="@{/css/gis.css}" rel="stylesheet"/>
+</head>
+<body  onload="onLoad()">
+<div class="col-sm-12">
+<div class="row">
+	<div class="col-sm-12">
+		<div class="tabs-container">
+			<ul class="nav nav-tabs">
+				<li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">物候调查</a>
+				</li>
+				<li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">常规监测</a>
+				</li>
+				<li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">非工程样地</a>
+				</li>
+			</ul>
+			<div class="tab-content" style="height: 100%;">
+
+				<div id="tab-1" class="tab-pane active" >
+					<div id="map" style="height: 350px">
+						<div class="header-r" style="margin-top: -2px;height: 25px;">
+							<div class="header-r-bg" style="margin-top: 0px">
+								<strong></strong><a href="javascript:;" style="font-size: 16px;color:red" id="gisZoom"></a></strong>
+								<a href="javascript:;" id="comparison" onclick="comparison()">比对</a>
+								<a href="javascript:;" id="ranging" onclick="measurementGis('LineString')">测距</a>
+								<a href="javascript:;" id="measuringSurface" onclick="measurementGis('Polygon')">测面</a>
+								<a href="javascript:;" id="markPoint" onclick="drawGis('Point','tab')">标记点</a>
+								<a href="javascript:;" id="markingSurface" onclick="drawGis('Polygon','tab')">标记面</a>
+								<a href="javascript:;" id="markedList">标记列表</a>
+								<a href="javascript:;" id="pointSerch" onclick="pointQuery()">点查</a>
+								<a href="javascript:;" id="locationShow">定位</a>
+								<a href="javascript:;" id="conditionQuery">条件查询</a>
+								<div class="conditionQuery_sel" style="display: none">
+									<div class="triangle"></div>
+									<a href="javascript:;" id="business">业务查询</a>
+									<a href="javascript:;" id="special">专题查询</a>
+								</div>
+							</div>
+						</div>
+						<div id="menu">
+							<input type="button" id="off"/>
+						</div>
+						<div id="menu3" style="left: 45px;margin-top: -6px;bottom: auto">
+							<input id="type3" value="全国" onclick="updateCity()"readonly>
+						</div>
+						<div class="layer_tree_show" style="left: 52px;">
+							<div style="height: 85px" class="layer_tree_show_map"></div>
+						</div>
+						<div class="layer_tree_hide" style="top: 75px">
+							<i class="fa fa-chevron-left"></i>
+						</div>
+						<div class="west" style="top: 75px">
+							<div class="box box-main">
+								<div class="ui-layout-content" style="height: 420px">
+									<div id="businessLayer" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+									<div id="thematicLayer" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+								</div>
+							</div>
+						</div>
+						<div id="dist_positioning">
+							<p id="title_zq"><span>地区定位</span> <span onclick="cityDivDoneById('dist_positioning')"
+																	 style="float: right;margin: 0 10px;cursor: pointer;">关闭</span>
+							</p>
+							<div id="zqdw"><p class="content_ul" style="color: #13c6ae;">全国</p></div>
+							<ul class="zq_ul"></ul>
+						</div>
+						<div id="shpTitle" class="col-sm-12 select-table table-striped">
+							<table id="bootstrap-table">
+							</table>
+						</div>
+						<!--定位-->
+						<div class="coordinatePositioning">
+							<li class="clear li-dw selected" style="display: block;">
+								<span class="zs-left icon icon-dw"></span>
+								<div class="zs-left module" style="display: block;">
+
+									<div class="ori-module-content module-content" style="display: block;padding-left: 50px;">
+										<table class="jwd tabls" style="display: table;">
+											<tbody>
+											<tr>
+												<td class="text">经度：</td>
+												<td class="input"><input id="decimalLon" value="" class="form-control sea-input" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"  placeholder="例:11.1"></td>
+											</tr>
+											<tr>
+												<td class="text">纬度：</td>
+												<td class="input"><input id="decimalLat" value="" class="form-control sea-input" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"  placeholder="例:23.1"></td>
+											</tr>
+											</tbody>
+										</table>
+										<div class="dw-box" style="margin-top: 15px;">
+											<button type="button" class="btn btn-primary" id="positioning_btn">定位</button>
+											<button type="button" class="btn btn-danger" id="closePositioning">关闭</button>
+										</div>
+									</div>
+								</div>
+							</li>
+							<div id="mouse-position">
+							</div>
+						</div>
+					</div>
+					<div id="map-left" style="display: none">
+						<div class="layer_tree_show">
+							<div style="height: 85px" class="layer_tree_show_map_left"></div>
+						</div>
+						<div class="layer_tree_hide_left">
+							<i class="fa fa-chevron-left"></i>
+						</div>
+						<div class="west-left">
+							<div class="box box-main">
+								<div class="ui-layout-content" style="height: 420px">
+									<div id="businessLayer_left" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+									<div id="thematicLayer_left" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="map-right" style="display: none">
+						<div class="header-r">
+							<div class="header-r-bg">
+								<a href="javascript:;" id="gisQuit" onclick="gisQuit()">退出</a>
+							</div>
+						</div>
+						<div class="layer_tree_show">
+							<div style="height: 85px" class="layer_tree_show_map_right"></div>
+						</div>
+						<div class="layer_tree_hide_right">
+							<i class="fa fa-chevron-left"></i>
+						</div>
+						<div class="west-right">
+							<div class="box box-main">
+								<div class="ui-layout-content" style="height: 420px">
+									<div id="businessLayer_right" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+									<div id="thematicLayer_right" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body" style="padding: 5px">
+
+						<div class="container-div">
+							<div class="row">
+								<div class="col-sm-12 search-collapse">
+									<form id="recoveryquestion-form">
+										<div class="select-list">
+											<ul>
+												<li>
+													调查人：<input type="text" name="surveyUser"/>
+												</li>
+												<li>
+													牧草种类：<input type="text" name="grasslandClass"/>
+												</li>
+												<li>
+
+													状态：
+													<select name="status" id="status">
+														<option value="-1">所有</option>
+														<option value="0">未审核</option>
+														<option value="1">已审核</option>
+													</select>
+												</li>
+												<!--<li class="select-time">-->
+													<!--<label>返青期开始时间： </label>-->
+													<!--<input type="text" class="time-input" id="greenDate" placeholder="开始时间" name="params[greenDate]"/>-->
+												<!--</li>-->
+												<li>
+													<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('recoveryquestion-form','recoveryquestion-table')"><i class="fa fa-search"></i>&nbsp;搜索</a>
+													<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('recoveryquestion-form','recoveryquestion-table')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+												</li>
+											</ul>
+										</div>
+									</form>
+								</div>
+
+								<div class="btn-group-sm" id="recoveryquestion_toolbar" role="group">
+									<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="integration:recoveryquestion:add">
+										<i class="fa fa-plus"></i> 新增
+									</a>
+									<!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="integration:recoveryquestion:edit">-->
+										<!--<i class="fa fa-edit"></i> 修改-->
+									<!--</a>-->
+									<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="integration:recoveryquestion:remove">
+										<i class="fa fa-remove"></i> 批量删除
+									</a>
+									<a class="btn btn-warning multiple disabled" onclick="auditAll()" shiro:hasPermission="integration:recoveryquestion:edit">
+										<i class="fa fa-download"></i> 批量审核
+									</a>
+									<!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="integration:recoveryquestion:export">-->
+										<!--<i class="fa fa-download"></i> 导出-->
+									<!--</a>-->
+								</div>
+								<div class="col-sm-12 select-table table-striped">
+									<table id="recoveryquestion-table"></table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="tab-2" class="tab-pane">
+					<div class="panel-body">
+						<div class="container-div">
+							<div class="row">
+								<div class="col-sm-12 search-collapse" style="margin-top: 5px">
+									<form id="normalInspection-form">
+										<div class="select-list">
+											<ul>
+												<li>
+													调查人：<input type="text" name="surveyUser"/>
+												</li>
+												<li>
+													区域：<input type="text" name="area"/>
+												</li>
+
+												<!--<li class="select-time">-->
+													<!--<label>调查时间： </label>-->
+													<!--<input type="text" class="time-input" id="surveyTime" placeholder="开始时间" name="params[surveyTime]"/>-->
+												<!--</li>-->
+												<li>
+													<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('normalInspection-form','normalInspection-table')"><i class="fa fa-search"></i>&nbsp;搜索</a>
+													<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('normalInspection-form','normalInspection-table')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+												</li>
+											</ul>
+										</div>
+									</form>
+								</div>
+
+								<div class="btn-group-sm" id="normalInspection_toolbar" role="group">
+									<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="integration:normalinspection:add">
+										<i class="fa fa-plus"></i> 新增
+									</a>
+									<!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="integration:normalinspection:edit">-->
+										<!--<i class="fa fa-edit"></i> 修改-->
+									<!--</a>-->
+									<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="integration:normalinspection:remove">
+										<i class="fa fa-remove"></i> 批量删除
+									</a>
+									<!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="integration:recoveryquestion:export">-->
+										<!--<i class="fa fa-download"></i> 导出-->
+									<!--</a>-->
+									<a class="btn btn-warning multiple disabled" onclick="auditAllnormalInspection()" shiro:hasPermission="integration:normalinspection:edit">
+										<i class="fa fa-download"></i> 批量审核
+									</a>
+								</div>
+								<div class="col-sm-12 select-table table-striped">
+									<table id="normalInspection-table"></table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="tab-3" class="tab-pane">
+					<div class="panel-body">
+						<div class="container-div">
+							<div class="row">
+								<div class="col-sm-12 search-collapse" style="margin-top: 5px">
+									<form id="nprojectSampleData-form">
+										<div class="select-list">
+											<ul>
+												<li>
+													调查地区：<input type="text" name="surveyArea"/>
+												</li>
+												<li>
+													草地类：<input type="text" name="grasslandClass"/>
+												</li>
+
+												<!--<li class="select-time">-->
+													<!--<label>创建时间： </label>-->
+													<!--<input type="text" class="time-input" id="greenDate" placeholder="开始时间" name="params[greenDate]"/>-->
+												<!--</li>-->
+												<li>
+													<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('nprojectSampleData-form','nprojectSampleData-table')"><i class="fa fa-search"></i>&nbsp;搜索</a>
+													<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('nprojectSampleData-form','nprojectSampleData-table')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+												</li>
+											</ul>
+										</div>
+									</form>
+								</div>
+
+								<div class="btn-group-sm" id="nprojectSampleData_toolbar" role="group">
+									<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="integration:nprojectsampledata:add">
+										<i class="fa fa-plus"></i> 新增
+									</a>
+									<!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="integration:nprojectsampledata:edit">-->
+										<!--<i class="fa fa-edit"></i> 修改-->
+									<!--</a>-->
+									<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="integration:nprojectsampledata:remove">
+										<i class="fa fa-remove"></i> 批量删除
+									</a>
+									<!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="integration:recoveryquestion:export">-->
+										<!--<i class="fa fa-download"></i> 导出-->
+									<!--</a>-->
+									<a class="btn btn-warning multiple disabled" onclick="auditAllnprojectSampleData()" shiro:hasPermission="integration:nprojectsampledata:edit">
+										<i class="fa fa-download"></i> 批量审核
+									</a>
+								</div>
+								<div class="col-sm-12 select-table table-striped">
+									<table id="nprojectSampleData-table"></table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	<th:block th:include="include :: footer"/>
+	<th:block th:include="include :: ztree-js"/>
+	<th:block th:include="include :: ztree-css"/>
+	<script th:src="@{/js/gis/glmaGis.js}"></script>
+	<script th:src="@{/js/gis/gisComparison.js}"></script>
+</body>
+
+    <script th:inline="javascript">
+
+
+
+        var recoveryquestionEditFlag = [[${@permission.hasPermi('integration:recoveryquestion:edit')}]];
+        var recoveryquestionRemoveFlag = [[${@permission.hasPermi('integration:recoveryquestion:remove')}]];
+        var recoveryquestionPrefix = ctx + "integration/recoveryQuestion";
+
+        var normalInspectionEditFlag = [[${@permission.hasPermi('integration:normalinspection:edit')}]];
+        var normalInspectionRemoveFlag = [[${@permission.hasPermi('ntegration:normalinspection:remove')}]];
+        var normalInspectionDetailFlag = [[${@permission.hasPermi('ntegration:normalinspection:detail')}]];
+        var normalInspectionPrefix = ctx + "integration/normalInspection";
+
+
+        var nprojectSampleDataEditFlag = [[${@permission.hasPermi('integration:nprojectsampledata:edit')}]];
+        var nprojectSampleDataRemoveFlag = [[${@permission.hasPermi('integration:nprojectsampledata:remove')}]];
+        var nprojectSampleDataPrefix = ctx + "integration/nprojectSampleData";
+
+
+        $(function() {
+
+            //对应的函数进行判断；
+
+
+            var recoveryquestionoptions = {
+                id: "recoveryquestion-table",
+                toolbar: "recoveryquestion_toolbar",
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+                url: recoveryquestionPrefix + "/list",
+                createUrl: recoveryquestionPrefix + "/add",
+                updateUrl: recoveryquestionPrefix + "/edit/{id}",
+                removeUrl: recoveryquestionPrefix + "/remove",
+                exportUrl: recoveryquestionPrefix + "/export",
+                sortName: "id",
+                sortOrder: "asc",
+                pageSize:3,
+                onClickRow: onClickRow,
+                modalName: "物候期数据",
+                columns: [{
+                    checkbox: true,
+                    formatter:  function (value, row, index) {
+                        if (row.status == 1){
+                            return {
+                                disabled : true//设置是否可用
+                            };
+                        }
+                    }
+                },{
+                    field : 'id',
+                    title : 'ID'
+                },
+                    {
+                        field: 'surveyUser',
+                        title: '调查人',
+                        formatter: function (value, row, index) {
+                            return $.table.tooltip(value);
+                        }
+                    },
+                    {
+                        field: 'eastLongitude',
+                        title: '东经',
+                        formatter: function (value, row, index) {
+                            return $.table.tooltip(value);
+                        }
+                    },
+                    {
+                        field: 'northrrnLatitude',
+                        title: '北纬'
+                    },
+                    {
+                        field: 'altitude',
+                        title: '海拔'
+                    },
+                    {
+                        field: 'grasslandClass',
+                        title: '草地类'
+                    },
+                    {
+                        field: 'greenDate',
+                        title: '物候日期',
+						formatter: function(value){
+                            return changeDateFormat(value);
+						}
+                    },
+                    {
+                        field: 'phenology',
+                        title: '物候类型',
+                        formatter: function(value){
+                            if(value==1){
+                                return "返青期";
+							}
+                            if(value==3){
+                                return "枯黄期";
+                            }
+                        }
+                    },
+                    {
+                        field: 'status',
+                        title: '状态',
+                        formatter: function (value, row, index) {
+                            if(value==1){
+                                return "已审核";
+                            }else{
+                                return "未审核";
+                            }
+                        }
+                    },
+                    {
+                        title: '操作',
+                        align: 'center',
+                        formatter: function (value, row, index) {
+                            var actions = [];
+                            if(row.status!=1){
+                                actions.push('<a class="btn btn-success btn-xs ' + recoveryquestionEditFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs ' + recoveryquestionRemoveFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                                actions.push('<a class="btn btn-warning btn-xs ' + recoveryquestionRemoveFlag + '" href="javascript:void(0)" onclick="audit(\'' + row.id + '\')"><i class="fa fa-edit"></i>审核</a>');
+                            }else{
+                                actions.push('<a class="btn btn-warning btn-xs ' + recoveryquestionRemoveFlag + '" href="javascript:void(0)" onclick="unaudit(\'' + row.id + '\')"><i class="fa fa-edit"></i>取消审核</a>');
+                            }
+                            return actions.join('');
+                        }
+                    }]
+            };
+
+            $.table.init(recoveryquestionoptions);
+		});
+        //修改——转换日期格式(时间戳转换为datetime格式)
+        function changeDateFormat(cellval) {
+            if (cellval != null) {
+                var date = new Date(cellval);
+                var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                return date.getFullYear() + "-" + month + "-" + currentDate;
+            }
+        }
+        $(function() {
+            var normalInspectionoptions = {
+                id: "normalInspection-table",
+                toolbar: "normalInspection_toolbar",
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+                url: normalInspectionPrefix + "/list",
+                detailUrl: normalInspectionPrefix + "/detail/{id}",
+                createUrl: normalInspectionPrefix + "/add",
+                updateUrl: normalInspectionPrefix + "/edit/{id}",
+                removeUrl: normalInspectionPrefix + "/remove",
+                exportUrl: normalInspectionPrefix + "/export",
+                sortName: "id",
+                sortOrder: "desc",
+                modalName: "常规监测",
+                columns: [{
+                    checkbox: true,
+                    formatter:  function (value, row, index) {
+                        if (row.status == 1){
+                            return {
+                                disabled : true//设置是否可用
+                            };
+                        }
+                    }
+
+                },{
+                    field : 'id',
+                    title : 'ID'
+                },
+                    {
+                        field: 'surveyUser',
+                        title: '调查人',
+                        formatter: function (value, row, index) {
+                            return $.table.tooltip(value);
+                        }
+                    },
+                    {
+                        field: 'surveyTime',
+                        title: '调查时间',
+                        formatter: function (value, row, index) {
+                            return $.table.tooltip(value);
+                        }
+                    },
+                    {
+                        field: 'eastLongitude',
+                        title: '东经'
+                    },
+                    {
+                        field: 'northrrnLatitude',
+                        title: '北纬'
+                    },
+                    {
+                        field: 'altitude',
+                        title: '海拔'
+                    },
+                    {
+                        field: 'area',
+                        title: '区域'
+                    },
+                    {
+                        field: 'sampleNumber',
+                        title: '样方编号'
+                    },
+                    {
+                        field: 'status',
+                        title: '状态',
+                        formatter: function (value, row, index) {
+                            if(value==1){
+                                return "已审核";
+                            }else{
+                                return "未审核";
+                            }
+                        }
+                    },
+                    {
+                        title: '操作',
+                        align: 'center',
+                        formatter: function (value, row, index) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-warning btn-xs ' + normalInspectionDetailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>GIS查看</a>');
+                            if(row.status!=1){
+                                actions.push('<a class="btn btn-success btn-xs ' + normalInspectionEditFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs ' + normalInspectionRemoveFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                                actions.push('<a class="btn btn-warning btn-xs ' + normalInspectionEditFlag + '" href="javascript:void(0)" onclick="auditnormalInspection(\'' + row.id + '\')"><i class="fa fa-search"></i>审核</a>');
+                            }else{
+                                actions.push('<a class="btn btn-warning btn-xs ' + normalInspectionEditFlag + '" href="javascript:void(0)" onclick="unauditnormalInspection(\'' + row.id + '\')"><i class="fa fa-search"></i>取消审核</a>');
+                            }
+                            return actions.join('');
+                        }
+                    }]
+            };
+            $.table.init(normalInspectionoptions);
+        });
+
+
+        $(function() {
+            var nprojectSampleDataoptions = {
+                id:"nprojectSampleData-table",
+                toolbar:"nprojectSampleData_toolbar",
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+                pageSize:5,
+                url: nprojectSampleDataPrefix + "/list",
+                createUrl: nprojectSampleDataPrefix + "/add",
+                updateUrl: nprojectSampleDataPrefix + "/edit/{id}",
+                removeUrl: nprojectSampleDataPrefix + "/remove",
+                exportUrl: nprojectSampleDataPrefix + "/export",
+                sortName: "id",
+                sortOrder: "desc",
+                modalName: "非工程样地数据表",
+                columns: [{
+                    checkbox: true,
+                    formatter:  function (value, row, index) {
+                        if (row.status == 1){
+                            return {
+                                disabled : true//设置是否可用
+                            };
+                        }
+                    }
+                },{
+                    field : 'id',
+                    title : 'ID'
+                },
+                    {
+                        field: 'surveyArea',
+                        title: '调查地区',
+                        formatter: function(value, row, index) {
+                            return $.table.tooltip(value);
+                        }
+                    },
+                    {
+                        field: 'surveyTime',
+                        title: '调查时间',
+                        formatter: function(value, row, index) {
+                            return $.table.tooltip(value);
+                        }
+                    },
+                    {
+                        field: 'sampleNumber',
+                        title: '样地编号'
+                    },
+                    {
+                        field: 'shrubTallPlants',
+                        title: '灌木或高大草木'
+                    },
+                    {
+                        field: 'grasslandClass',
+                        title: '草地类'
+                    },
+                    {
+                        field: 'grasslandType',
+                        title: '草地型'
+                    },
+                    {
+                        field: 'status',
+                        title: '状态',
+                        formatter: function (value, row, index) {
+                            if(value==1){
+                                return "已审核";
+                            }else{
+                                return "未审核";
+                            }
+                        }
+                    },
+                    {
+                        title: '操作',
+                        align: 'center',
+                        formatter: function(value, row, index) {
+                            var actions = [];
+
+                            if(row.status!=1){
+                                actions.push('<a class="btn btn-success btn-xs ' + nprojectSampleDataEditFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs ' + nprojectSampleDataRemoveFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                                actions.push('<a class="btn btn-warning btn-xs ' + nprojectSampleDataEditFlag + '" href="javascript:void(0)" onclick="auditnprojectSampleData(\'' + row.id + '\')"><i class="fa fa-search"></i>审核</a>');
+                            }else{
+                                actions.push('<a class="btn btn-warning btn-xs ' + nprojectSampleDataEditFlag + '" href="javascript:void(0)" onclick="unauditnprojectSampleData(\'' + row.id + '\')"><i class="fa fa-search"></i>取消审核</a>');
+                            }
+                            return actions.join('');
+                        }
+                    }]
+            };
+            $.table.init(nprojectSampleDataoptions);
+        });
+
+
+        function audit(id) {
+            $.modal.confirm("确定审核通过吗？", function() {
+                $.operate.post(recoveryquestionPrefix + "/audit", {"id": id });
+            })
+        }
+        function auditAll() {
+            var ids=$("#recoveryquestion-table").bootstrapTable("getAllSelections")
+            if (ids.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.confirm("确定要审核通过" + ids.length + "条数据吗?", function() {
+                var data="0";
+                for(var i=0;i<ids.length;i++){
+                    data+=","+ids[i].id
+                }
+                $.operate.post(recoveryquestionPrefix + "/auditAll",{"ids":data});
+            });
+        }
+        function unaudit(id) {
+            $.modal.confirm("确定取消审核吗？", function() {
+                $.operate.post(recoveryquestionPrefix + "/unaudit", {"id": id });
+            })
+        }
+
+        function onClickRow(row){
+            locationCenter(row.eastLongitude,row.northrrnLatitude);
+        }
+
+        function auditnormalInspection(id) {
+            $.modal.confirm("确定审核通过吗？", function() {
+                $.operate.post(normalInspectionPrefix + "/audit", {"id": id });
+            })
+        }
+        function auditAllnormalInspection() {
+            var ids=$("#normalInspection-table").bootstrapTable("getAllSelections")
+            if (ids.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.confirm("确定要审核通过" + ids.length + "条数据吗?", function() {
+                var data="0";
+                for(var i=0;i<ids.length;i++){
+                    data+=","+ids[i].id
+                }
+                $.operate.post(normalInspectionPrefix + "/auditAll",{"ids":data});
+            });
+        }
+        function unauditnormalInspection(id) {
+            $.modal.confirm("确定取消审核吗？", function() {
+                $.operate.post(normalInspectionPrefix + "/unaudit", {"id": id });
+            })
+        }
+
+
+
+        function auditnprojectSampleData(id) {
+            $.modal.confirm("确定审核通过吗？", function() {
+                $.operate.post(nprojectSampleDataPrefix + "/audit", {"id": id });
+            })
+        }
+        function auditAllnprojectSampleData() {
+            var ids=$("#nprojectSampleData-table").bootstrapTable("getAllSelections")
+            if (ids.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.confirm("确定要审核通过" + ids.length + "条数据吗?", function() {
+                var data="0";
+                for(var i=0;i<ids.length;i++){
+                    data+=","+ids[i].id
+                }
+                $.operate.post(nprojectSampleDataPrefix + "/auditAll",{"ids":data});
+            });
+        }
+        function unauditnprojectSampleData(id) {
+            $.modal.confirm("确定取消审核吗？", function() {
+                $.operate.post(nprojectSampleDataPrefix + "/unaudit", {"id": id });
+            })
+        }
+
+
+    </script>
+
+</html>

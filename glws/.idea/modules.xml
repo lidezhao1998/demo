@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/gl-disaster/gl-disaster.iml" filepath="$PROJECT_DIR$/gl-disaster/gl-disaster.iml" />
+      <module fileurl="file://$PROJECT_DIR$/glws.iml" filepath="$PROJECT_DIR$/glws.iml" />
+      <module fileurl="file://$PROJECT_DIR$/glws-admin/glws-admin.iml" filepath="$PROJECT_DIR$/glws-admin/glws-admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/glws-common/glws-common.iml" filepath="$PROJECT_DIR$/glws-common/glws-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/glws-framework/glws-framework.iml" filepath="$PROJECT_DIR$/glws-framework/glws-framework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/glws-generator/glws-generator.iml" filepath="$PROJECT_DIR$/glws-generator/glws-generator.iml" />
+    </modules>
+  </component>
+</project>

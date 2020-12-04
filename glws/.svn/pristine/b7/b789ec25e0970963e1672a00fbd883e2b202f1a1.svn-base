@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ModelManagementMapper">
+    
+    <resultMap type="ModelManagement" id="ModelManagementResult">
+        <result property="modelId"    column="MODEL_ID"    />
+        <result property="tq"    column="TQ"    />
+        <result property="p"    column="P"    />
+        <result property="r"    column="R"    />
+        <result property="et"    column="ET"    />
+        <result property="a"    column="A"    />
+        <result property="type"    column="TYPE"    />
+        <result property="typeNum"    column="TYPE_NUM"    />
+    </resultMap>
+
+    <sql id="selectModelManagementVo">
+        select MODEL_ID, TQ, P, R, ET, A, TYPE, TYPE_NUM from model_management
+    </sql>
+
+    <select id="selectModelManagementList" parameterType="ModelManagement" resultMap="ModelManagementResult">
+        <include refid="selectModelManagementVo"/>
+        <where>  
+            <if test="tq != null "> and TQ = #{tq}</if>
+            <if test="p != null "> and P = #{p}</if>
+            <if test="r != null "> and R = #{r}</if>
+            <if test="et != null "> and ET = #{et}</if>
+            <if test="a != null "> and A = #{a}</if>
+            <if test="type != null "> and TYPE = #{type}</if>
+            <if test="typeNum != null "> and TYPE_NUM = #{typeNum}</if>
+        </where>
+    </select>
+    
+    <select id="selectModelManagementById" parameterType="Long" resultMap="ModelManagementResult">
+        <include refid="selectModelManagementVo"/>
+        where MODEL_ID = #{modelId}
+    </select>
+        
+    <insert id="insertModelManagement" parameterType="ModelManagement" useGeneratedKeys="true" keyProperty="modelId">
+        insert into model_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tq != null ">TQ,</if>
+            <if test="p != null ">P,</if>
+            <if test="r != null ">R,</if>
+            <if test="et != null ">ET,</if>
+            <if test="a != null ">A,</if>
+            <if test="type != null ">TYPE,</if>
+            <if test="typeNum != null ">TYPE_NUM,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tq != null ">#{tq},</if>
+            <if test="p != null ">#{p},</if>
+            <if test="r != null ">#{r},</if>
+            <if test="et != null ">#{et},</if>
+            <if test="a != null ">#{a},</if>
+            <if test="type != null ">#{type},</if>
+            <if test="typeNum != null ">#{typeNum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateModelManagement" parameterType="ModelManagement">
+        update model_management
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tq != null ">TQ = #{tq},</if>
+            <if test="p != null ">P = #{p},</if>
+            <if test="r != null ">R = #{r},</if>
+            <if test="et != null ">ET = #{et},</if>
+            <if test="a != null ">A = #{a},</if>
+            <if test="type != null ">TYPE = #{type},</if>
+            <if test="typeNum != null ">TYPE_NUM = #{typeNum},</if>
+        </trim>
+        where MODEL_ID = #{modelId}
+    </update>
+
+    <delete id="deleteModelManagementById" parameterType="Long">
+        delete from model_management where MODEL_ID = #{modelId}
+    </delete>
+
+    <delete id="deleteModelManagementByIds" parameterType="String">
+        delete from model_management where MODEL_ID in 
+        <foreach item="modelId" collection="array" open="(" separator="," close=")">
+            #{modelId}
+        </foreach>
+    </delete>
+    
+</mapper>

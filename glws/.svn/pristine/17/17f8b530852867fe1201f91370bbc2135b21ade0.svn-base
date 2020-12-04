@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改退牧还草工程任务发布')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-publish-publishOne" th:object="${tTaskPublish}">
+        <input name="publishId" th:field="*{publishId}" type="hidden">
+        <table class="table table-striped " style="text-align: center;">
+            <tr>
+                <td style="font-size: 13px;padding: 5px 5px;">年份</td>
+                <td></td>
+                <td style="font-size: 13px;padding: 5px 5px;">省份</td>
+            </tr>
+            <tr>
+                <td style="padding: 5px 5px;"><input name="year" th:field="*{year}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+                <td></td>
+                <td style="padding: 5px 5px;"><input name="province" th:field="*{province}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+            </tr>
+            <tr>
+                <td style="font-size: 13px;padding: 5px 5px;">类型</td>
+                <td style="font-size: 13px;padding: 5px 5px;">建设规模（万亩）</td>
+                <td style="font-size: 13px;padding: 5px 5px;">建设投资（万元）</td>
+            </tr>
+            <tr>
+                <td style="font-size: 13px;padding: 5px 5px;">围栏合计</td>
+                <td style="padding: 5px 5px;"><input name="wlScale" th:field="*{wlScale}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+                <td style="padding: 5px 5px;"><input name="wlInvestment" th:field="*{wlInvestment}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+            </tr>
+            <tr>
+                <td style="font-size: 13px;padding: 5px 5px;">退化草原改良</td>
+                <td style="padding: 5px 5px;"><input name="thzyglSize" th:field="*{thzyglSize}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+                <td style="padding: 5px 5px;"><input name="thzyglMoney" th:field="*{thzyglMoney}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+            </tr>
+            <tr>
+                <td style="font-size: 13px;padding: 5px 5px;">人工种草地</td>
+                <td style="padding: 5px 5px;"><input name="rgscdSize" th:field="*{rgscdSize}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+                <td style="padding: 5px 5px;"><input name="rgscdMoney" th:field="*{rgscdMoney}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+            </tr>
+            <tr>
+                <td style="font-size: 13px;padding: 5px 5px;">含饲棚围</td>
+                <td style="padding: 5px 5px;"><input name="hspjSize" th:field="*{hspjSize}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+                <td style="padding: 5px 5px;"><input name="hspjMoney" th:field="*{hspjMoney}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+            </tr>
+            <tr>
+                <td style="font-size: 13px;padding: 5px 5px;">黑土滩</td>
+                <td style="padding: 5px 5px;"><input name="httSize" th:field="*{httSize}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+                <td style="padding: 5px 5px;"><input name="httMoney" th:field="*{httMoney}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+            </tr>
+            <tr>
+                <td style="font-size: 13px;padding: 5px 5px;">毒害草</td>
+                <td style="padding: 5px 5px;"><input name="dhcSize" th:field="*{dhcSize}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+                <td style="padding: 5px 5px;"><input name="dhcMoney" th:field="*{dhcMoney}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="font-size: 13px;padding: 5px 5px;">中央资金</td>
+                <td style="font-size: 13px;padding: 5px 5px;">地方资金</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding: 5px 5px;"><input name="zyMoney" th:field="*{zyMoney}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+                <td style="padding: 5px 5px;"><input name="dfMoney" th:field="*{dfMoney}"
+                                                     style="width: 60%;height: 20px;border:0px;text-align:center"
+                                                     type="text" readonly="readonly"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script src="layer/layer.js"></script>
+<script src="layer/extend/layer.ext.js"></script>
+<script type="text/javascript">
+    var prefix = ctx + "system/publish";
+
+    function submitHandler() {
+        $.operate.save(prefix + "/publishOne", $('#form-publish-publishOne').serialize()), function (data) {
+            //location.href = prefix;
+            //$.modal.close();
+            /*parent.location.closeWindow();
+            parent.parent.location.reload();*/
+            location.reload();
+        }
+    }
+
+    $("#form-publish-publishOne").validate({
+        focusCleanup: true
+    });
+
+</script>
+</body>
+</html>

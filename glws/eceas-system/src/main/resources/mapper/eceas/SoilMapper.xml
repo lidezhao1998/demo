@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SoilMapper">
+    
+    <resultMap type="Soil" id="SoilResult">
+        <result property="soilId"    column="SOIL_ID"    />
+        <result property="standArea"    column="STAND_AREA"    />
+        <result property="woodlandSoil"    column="WOODLAND_SOIL"    />
+        <result property="woodlandNotsoil"    column="WOODLAND_NOTSOIL"    />
+        <result property="soilDensity"    column="SOIL_DENSITY"    />
+        <result property="soilNitrogenContent"    column="SOIL_NITROGEN_CONTENT"    />
+        <result property="soilPhosphorusContent"    column="SOIL_PHOSPHORUS_CONTENT"    />
+        <result property="potassiumContentSoil"    column="POTASSIUM_CONTENT_SOIL"    />
+        <result property="soilOrganicMatter"    column="SOIL_ORGANIC_MATTER"    />
+        <result property="soilConsolidation"    column="SOIL_CONSOLIDATION"    />
+        <result property="soilConsolidationValue"    column="SOIL_CONSOLIDATION_VALUE"    />
+        <result property="maintainingNitrogen"    column="MAINTAINING_NITROGEN"    />
+        <result property="maintainingPhosphorus"    column="MAINTAINING_PHOSPHORUS"    />
+        <result property="maintainingPotassium"    column="MAINTAINING_POTASSIUM"    />
+        <result property="organicQuality"    column="ORGANIC_QUALITY"    />
+        <result property="protectFertilizerValue"    column="PROTECT_FERTILIZER_VALUE"    />
+    </resultMap>
+
+    <sql id="selectSoilVo">
+        select SOIL_ID, STAND_AREA, WOODLAND_SOIL, WOODLAND_NOTSOIL, SOIL_DENSITY, SOIL_NITROGEN_CONTENT, SOIL_PHOSPHORUS_CONTENT, POTASSIUM_CONTENT_SOIL, SOIL_ORGANIC_MATTER, SOIL_CONSOLIDATION, SOIL_CONSOLIDATION_VALUE, MAINTAINING_NITROGEN, MAINTAINING_PHOSPHORUS, MAINTAINING_POTASSIUM, ORGANIC_QUALITY, PROTECT_FERTILIZER_VALUE from soil
+    </sql>
+
+    <select id="selectSoilList" parameterType="Soil" resultMap="SoilResult">
+        <include refid="selectSoilVo"/>
+        <where>  
+            <if test="standArea != null "> and STAND_AREA = #{standArea}</if>
+            <if test="woodlandSoil != null "> and WOODLAND_SOIL = #{woodlandSoil}</if>
+            <if test="woodlandNotsoil != null "> and WOODLAND_NOTSOIL = #{woodlandNotsoil}</if>
+            <if test="soilDensity != null "> and SOIL_DENSITY = #{soilDensity}</if>
+            <if test="soilNitrogenContent != null "> and SOIL_NITROGEN_CONTENT = #{soilNitrogenContent}</if>
+            <if test="soilPhosphorusContent != null "> and SOIL_PHOSPHORUS_CONTENT = #{soilPhosphorusContent}</if>
+            <if test="potassiumContentSoil != null "> and POTASSIUM_CONTENT_SOIL = #{potassiumContentSoil}</if>
+            <if test="soilOrganicMatter != null "> and SOIL_ORGANIC_MATTER = #{soilOrganicMatter}</if>
+            <if test="soilConsolidation != null "> and SOIL_CONSOLIDATION = #{soilConsolidation}</if>
+            <if test="soilConsolidationValue != null "> and SOIL_CONSOLIDATION_VALUE = #{soilConsolidationValue}</if>
+            <if test="maintainingNitrogen != null "> and MAINTAINING_NITROGEN = #{maintainingNitrogen}</if>
+            <if test="maintainingPhosphorus != null "> and MAINTAINING_PHOSPHORUS = #{maintainingPhosphorus}</if>
+            <if test="maintainingPotassium != null "> and MAINTAINING_POTASSIUM = #{maintainingPotassium}</if>
+            <if test="organicQuality != null "> and ORGANIC_QUALITY = #{organicQuality}</if>
+            <if test="protectFertilizerValue != null "> and PROTECT_FERTILIZER_VALUE = #{protectFertilizerValue}</if>
+        </where>
+    </select>
+    
+    <select id="selectSoilById" parameterType="Long" resultMap="SoilResult">
+        <include refid="selectSoilVo"/>
+        where SOIL_ID = #{soilId}
+    </select>
+        
+    <insert id="insertSoil" parameterType="Soil" useGeneratedKeys="true" keyProperty="soilId">
+        insert into soil
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="standArea != null ">STAND_AREA,</if>
+            <if test="woodlandSoil != null ">WOODLAND_SOIL,</if>
+            <if test="woodlandNotsoil != null ">WOODLAND_NOTSOIL,</if>
+            <if test="soilDensity != null ">SOIL_DENSITY,</if>
+            <if test="soilNitrogenContent != null ">SOIL_NITROGEN_CONTENT,</if>
+            <if test="soilPhosphorusContent != null ">SOIL_PHOSPHORUS_CONTENT,</if>
+            <if test="potassiumContentSoil != null ">POTASSIUM_CONTENT_SOIL,</if>
+            <if test="soilOrganicMatter != null ">SOIL_ORGANIC_MATTER,</if>
+            <if test="soilConsolidation != null ">SOIL_CONSOLIDATION,</if>
+            <if test="soilConsolidationValue != null ">SOIL_CONSOLIDATION_VALUE,</if>
+            <if test="maintainingNitrogen != null ">MAINTAINING_NITROGEN,</if>
+            <if test="maintainingPhosphorus != null ">MAINTAINING_PHOSPHORUS,</if>
+            <if test="maintainingPotassium != null ">MAINTAINING_POTASSIUM,</if>
+            <if test="organicQuality != null ">ORGANIC_QUALITY,</if>
+            <if test="protectFertilizerValue != null ">PROTECT_FERTILIZER_VALUE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="standArea != null ">#{standArea},</if>
+            <if test="woodlandSoil != null ">#{woodlandSoil},</if>
+            <if test="woodlandNotsoil != null ">#{woodlandNotsoil},</if>
+            <if test="soilDensity != null ">#{soilDensity},</if>
+            <if test="soilNitrogenContent != null ">#{soilNitrogenContent},</if>
+            <if test="soilPhosphorusContent != null ">#{soilPhosphorusContent},</if>
+            <if test="potassiumContentSoil != null ">#{potassiumContentSoil},</if>
+            <if test="soilOrganicMatter != null ">#{soilOrganicMatter},</if>
+            <if test="soilConsolidation != null ">#{soilConsolidation},</if>
+            <if test="soilConsolidationValue != null ">#{soilConsolidationValue},</if>
+            <if test="maintainingNitrogen != null ">#{maintainingNitrogen},</if>
+            <if test="maintainingPhosphorus != null ">#{maintainingPhosphorus},</if>
+            <if test="maintainingPotassium != null ">#{maintainingPotassium},</if>
+            <if test="organicQuality != null ">#{organicQuality},</if>
+            <if test="protectFertilizerValue != null ">#{protectFertilizerValue},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSoil" parameterType="Soil">
+        update soil
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="standArea != null ">STAND_AREA = #{standArea},</if>
+            <if test="woodlandSoil != null ">WOODLAND_SOIL = #{woodlandSoil},</if>
+            <if test="woodlandNotsoil != null ">WOODLAND_NOTSOIL = #{woodlandNotsoil},</if>
+            <if test="soilDensity != null ">SOIL_DENSITY = #{soilDensity},</if>
+            <if test="soilNitrogenContent != null ">SOIL_NITROGEN_CONTENT = #{soilNitrogenContent},</if>
+            <if test="soilPhosphorusContent != null ">SOIL_PHOSPHORUS_CONTENT = #{soilPhosphorusContent},</if>
+            <if test="potassiumContentSoil != null ">POTASSIUM_CONTENT_SOIL = #{potassiumContentSoil},</if>
+            <if test="soilOrganicMatter != null ">SOIL_ORGANIC_MATTER = #{soilOrganicMatter},</if>
+            <if test="soilConsolidation != null ">SOIL_CONSOLIDATION = #{soilConsolidation},</if>
+            <if test="soilConsolidationValue != null ">SOIL_CONSOLIDATION_VALUE = #{soilConsolidationValue},</if>
+            <if test="maintainingNitrogen != null ">MAINTAINING_NITROGEN = #{maintainingNitrogen},</if>
+            <if test="maintainingPhosphorus != null ">MAINTAINING_PHOSPHORUS = #{maintainingPhosphorus},</if>
+            <if test="maintainingPotassium != null ">MAINTAINING_POTASSIUM = #{maintainingPotassium},</if>
+            <if test="organicQuality != null ">ORGANIC_QUALITY = #{organicQuality},</if>
+            <if test="protectFertilizerValue != null ">PROTECT_FERTILIZER_VALUE = #{protectFertilizerValue},</if>
+        </trim>
+        where SOIL_ID = #{soilId}
+    </update>
+
+    <delete id="deleteSoilById" parameterType="Long">
+        delete from soil where SOIL_ID = #{soilId}
+    </delete>
+
+    <delete id="deleteSoilByIds" parameterType="String">
+        delete from soil where SOIL_ID in 
+        <foreach item="soilId" collection="array" open="(" separator="," close=")">
+            #{soilId}
+        </foreach>
+    </delete>
+    
+</mapper>

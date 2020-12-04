@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改鼠害知识库信息')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: jasny-bootstrap-css" />
+
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-knowledge-edit" th:object="${cRatKnowledge}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">中文名称：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.chineseName}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">拼音：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.pinyin}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">拼音简写：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.pinyinjx}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">代码：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.code}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">旧代码：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.oldCode}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">拉丁名称：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.latinName}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">别名：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.alias}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">等级：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.grade}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">国标名称：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.gbName}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">国标代码：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.gbCode}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">危害部位：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.hazardousParts}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">危害症状：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.harmfulSymptoms}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">发病环境：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.pathogenicEnvironment}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">寄生植物：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.parasiticPlants}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">调查方法：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.surveyMethods}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">流行时间：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.fashionTime}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           <!-- <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">调查方法：</label>
+                        <div class="col-sm-8">
+                            <input name="surveyMethods" th:field="*{surveyMethods}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">流行时间：</label>
+                        <div class="col-sm-8">
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input name="fashionTime" th:value="${#dates.format(cRatKnowledge.fashionTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">侵染循环：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.loop}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">分布特点：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.distribution}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">国内分布：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.domesticDistribution}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">国外分布：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.distributionAbroad}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">区域类型：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.areaType}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">检疫措施：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.quarantineMeasures}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">防治措施：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.preventiveMeasures}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">检疫措施：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${cRatKnowledge.quarantineMeasures}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">图片：</label>
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <input id="delespan" name="adultPattern" th:field="*{picture}" type="hidden">
+                        <div class="fileinput-new thumbnail" style="width: 120px; height: 80px;">
+                            <img id="test" th:src="(${cRatKnowledge.picture} == '') ? null : @{${cRatKnowledge.picture}}">
+                        </div>
+
+                        <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: jasny-bootstrap-js" />
+
+    <script type="text/javascript">
+        var prefix = ctx + "system/knowledge";
+        $("#form-knowledge-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-knowledge-edit').serialize());
+            }
+        }
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.modal.confirm("确认要修改信息吗？", function() {
+
+                    //alert($('#sixPhotos').val())
+                    // alert($('#form-knowledge-add').serialize())
+                    uploadFile();
+
+                    //$.operate.save(prefix + "/add", $('#form-knowledge-add').serialize());
+                })
+            }
+        }
+        //图片上传功能
+        function uploadFile() {
+            var url = ctx + "system/mouseknowledge/edit";
+
+            var formData = new FormData(document.getElementById("form-knowledge-edit"));
+
+            if ($("#picture").val().length <= 0) {
+                           // alert("没图1片")
+            }else if($("#picture")[0].files[0] ==null && $("#picture").val() !=null){
+
+                          //  alert("有原始图片，没有做修改")
+
+            }else{
+
+                           // alert("修改后的图片")
+                formData.append('file', $("#picture")[0].files[0]);
+
+            }
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                cache: false,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(result) {
+                    $.operate.successCallback(result);
+                }
+            });
+
+        }
+
+        //本地上传的图片删除，去掉图片的id即可
+        function delespan(){
+            var id=$("#id").val();
+            var type="picture";
+            var url = ctx + "system/mouseknowledge/delPothon";
+            $.ajax({
+                url: url,
+                type: 'post',
+                cache: false,
+                dataType:'json',
+                data: {id:id,type:type},
+                success: function(obj) {
+                    if(obj == '200'){
+                        $('#test').remove();
+                        $("#delespan").val(null);
+                       layer.alert("删除成功")
+
+
+                    }else {
+                        layer.alert("删除失败");
+                        return false;
+                    }
+                }
+            });
+        }
+
+
+        $("input[name='fashionTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

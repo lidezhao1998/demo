@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.ReserveManagement.mapper.KManufactorMapper">
+    
+    <resultMap type="KManufactor" id="KManufactorResult">
+        <result property="materialId"    column="MATERIAL_ID"    />
+        <result property="materialTypeId"    column="MATERIAL_TYPE_ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="materialName"    column="MATERIAL_NAME"    />
+        <result property="materialType"    column="MATERIAL_TYPE"    />
+        <result property="manufactor"    column="MANUFACTOR"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateBy"    column="UPDATE_BY"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+    </resultMap>
+
+    <sql id="selectKManufactorVo">
+        select MATERIAL_ID, MATERIAL_TYPE_ID, CODE, MATERIAL_NAME,MATERIAL_TYPE, MANUFACTOR, REMARK, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME from k_manufactor
+    </sql>
+
+    <select id="selectKManufactorList" parameterType="KManufactor" resultMap="KManufactorResult">
+        <include refid="selectKManufactorVo"/>
+        <where>  
+            <if test="materialTypeId != null "> and MATERIAL_TYPE_ID = #{materialTypeId}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="materialName != null  and materialName != ''"> and MATERIAL_NAME like concat('%', #{materialName}, '%')</if>
+            <if test="materialType != null  and materialType != ''"> and MATERIAL_TYPE = #{materialType}</if>
+            <if test="remark != null  and remark != ''"> and REMARK = #{remark}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectKManufactorById" parameterType="Long" resultMap="KManufactorResult">
+        <include refid="selectKManufactorVo"/>
+        where MATERIAL_ID = #{materialId}
+    </select>
+        
+    <insert id="insertKManufactor" parameterType="KManufactor" useGeneratedKeys="true" keyProperty="materialId">
+        insert into k_manufactor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="materialTypeId != null ">MATERIAL_TYPE_ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="materialName != null  and materialName != ''">MATERIAL_NAME,</if>
+            <if test="materialType != null  and materialType != ''">MATERIAL_TYPE,</if>
+
+            <if test="manufactor != null  and manufactor != ''">MANUFACTOR,</if>
+
+            <if test="remark != null  and remark != ''">REMARK,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="materialTypeId != null ">#{materialTypeId},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="materialName != null  and materialName != ''">#{materialName},</if>
+            <if test="materialType != null  and materialType != ''">#{materialType},</if>
+            <if test="manufactor != null  and manufactor != ''">#{manufactor},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKManufactor" parameterType="KManufactor">
+        update k_manufactor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="materialTypeId != null ">MATERIAL_TYPE_ID = #{materialTypeId},</if>
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="materialName != null  and materialName != ''">MATERIAL_NAME = #{materialName},</if>
+            <if test="materialType != null  and materialType != ''">MATERIAL_TYPE=#{materialType},</if>
+
+            <if test="manufactor != null  and manufactor != ''">MANUFACTOR = #{manufactor},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY = #{updateBy},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+        </trim>
+        where MATERIAL_ID = #{materialId}
+    </update>
+
+    <delete id="deleteKManufactorById" parameterType="Long">
+        delete from k_manufactor where MATERIAL_ID = #{materialId}
+    </delete>
+
+    <delete id="deleteKManufactorByIds" parameterType="String">
+        delete from k_manufactor where MATERIAL_ID in 
+        <foreach item="materialId" collection="array" open="(" separator="," close=")">
+            #{materialId}
+        </foreach>
+    </delete>
+
+
+    <select id="getGoods" parameterType="String" resultMap="KManufactorResult">
+        <include refid="selectKManufactorVo"/>
+        where MATERIAL_TYPE = #{provinceCode}
+    </select>
+</mapper>

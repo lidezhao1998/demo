@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>加载天地图</title>
+    <th:block th:include="include :: header('地图')"/>
+    <link th:href="@{/css/gis.css}" rel="stylesheet"/>
+</head>
+<body onLoad="onLoad()">
+<div class="ui-layout-center">
+    <div class="col-sm-12 search-collapse" id="savaInput">
+        <input type="hidden" name="spotinfos" id="spotinfos" value=""><!--保存坐标信息-->
+    </div>
+    <div class="container-div">
+        <div class="row">
+            <div id="map">
+                <div id="layerControl" class="layerControl">
+                    <ul id="layerTree" class="layerTree"></ul>
+                </div>
+                <div class="header-r">
+                    <div class="header-r-bg">
+                        <a href="javascript:;" style="font-size: 16px;color:red" id="gisZoom"></a></strong>
+                        <a href="javascript:;" id="comparison" onclick="comparison()">比对</a>
+                        <a href="javascript:;" id="ranging" onclick="measurementGis('LineString')">测距</a>
+                        <a href="javascript:;" id="measuringSurface" onclick="measurementGis('Polygon')">测面</a>
+                        <a href="javascript:;" id="markPoint" onclick="drawGis('Point','tab')">标记点</a>
+                        <a href="javascript:;" id="markingSurface" onclick="drawGis('Polygon','tab')">标记面</a>
+                        <a href="javascript:;" id="markedList">标记列表</a>
+                        <a href="javascript:;" id="pointSerch" onclick="pointQuery()">点查</a>
+                        <a href="javascript:;" id="locationShow">定位</a>
+                        <a href="javascript:;" id="conditionQuery">条件查询</a>
+                        <div class="conditionQuery_sel" style="display: none">
+                            <div class="triangle"></div>
+                            <a href="javascript:;" id="business">业务查询</a>
+                            <a href="javascript:;" id="special">专题查询</a>
+                        </div>
+                    </div>
+                </div>
+                <div id="menu">
+                    <input type="button" id="off"/>
+                </div>
+                <div id="menu3">
+                    <input id="type3" value="全国" onclick="updateCity()"readonly>
+                </div>
+                <div class="layer_tree_show">
+                    <div class="layer_tree_show_map"></div>
+                </div>
+                <div class="layer_tree_hide">
+                    <i class="fa fa-chevron-left"></i>
+                </div>
+                <div class="west">
+                    <div class="box box-main">
+                        <div class="ui-layout-content" style="height: 420px">
+                            <div id="businessLayer" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                            <div id="thematicLayer" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="dist_positioning">
+                    <p id="title_zq"><span>地区定位</span> <span onclick="cityDivDoneById('dist_positioning')"
+                                                             style="float: right;margin: 0 10px;cursor: pointer;">关闭</span>
+                    </p>
+                    <div id="zqdw"><p class="content_ul" style="color: #13c6ae;">全国</p></div>
+                    <ul class="zq_ul"></ul>
+                </div>
+                <div id="shpTitle" class="col-sm-12 select-table table-striped">
+                    <table id="bootstrap-table">
+                    </table>
+                </div>
+                <!--定位-->
+                <div class="coordinatePositioning">
+                    <li class="clear li-dw selected" style="display: block;">
+                        <span class="zs-left icon icon-dw"></span>
+                        <div class="zs-left module" style="display: block;">
+
+                            <div class="ori-module-content module-content" style="display: block;padding-left: 50px;">
+                                <table class="jwd tabls" style="display: table;">
+                                                 <tr>
+                                        <td class="text">经度：</td>
+                                        <td class="input"><input id="decimalLon" value="" class="form-control sea-input" placeholder="例:11.1" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" ></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text">纬度：</td>
+                                        <td class="input"><input id="decimalLat" value="" class="form-control sea-input" placeholder="例:23.1" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" ></td>
+                                    </tr>
+                                </table>
+                                <div class="dw-box" style="margin-top: 15px;">
+                                    <button type="button" class="btn btn-primary" id="positioning_btn">定位</button>
+                                    <button type="button" class="btn btn-danger" id="closePositioning">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </div>
+            </div>
+            <div id="map-left" style="display: none">
+                <div class="layer_tree_show">
+                    <div class="layer_tree_show_map_left"></div>
+                </div>
+                <div class="layer_tree_hide_left">
+                    <i class="fa fa-chevron-left"></i>
+                </div>
+                <div class="west-left">
+                    <div class="box box-main">
+                        <div class="ui-layout-content" style="height: 420px">
+                            <div id="businessLayer_left" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                            <div id="thematicLayer_left" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="map-right" style="display: none">
+                <div class="header-r">
+                    <div class="header-r-bg">
+                        <a href="javascript:;" id="gisQuit" onclick="gisQuit()">退出</a>
+                    </div>
+                </div>
+                <div class="layer_tree_show">
+                    <div class="layer_tree_show_map_right"></div>
+                </div>
+                <div class="layer_tree_hide_right">
+                    <i class="fa fa-chevron-left"></i>
+                </div>
+                <div class="west-right">
+                    <div class="box box-main">
+                        <div class="ui-layout-content" style="height: 420px">
+                            <div id="businessLayer_right" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                            <div id="thematicLayer_right" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="mouse-position">
+    </div>
+</div>
+<div class="reportList">
+    <!--专题列表-->
+    <div class="col-sm-12 select-table table-bordered" id="reportDiv" style="height: 370px;overflow: auto;">
+        <form id="reportForm">
+            <div class="row">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <p>专题选择:</p>
+                                    <select name="project_type" th:with="type=${@dict.getGisFeatures()}">
+                                        <option th:each="dict : ${type}" th:text="${dict.name}" th:value="${dict.id}" th:fild="*{project_type}"></option>
+                                    </select>
+                            </li>
+                            <li>
+                                省份：
+                                <select id="province" name="province" th:with="type=${@dict.getType('sys_province')}">
+                                    <option value="">--全国--</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                &nbsp;市级：
+                                <select id="city" name="city">
+                                    <option value="">--请选择--</option>
+                                </select>
+                            </li>
+                            <li>
+                                &nbsp;区级：
+                                <select id="area" name="address">
+                                    <option value="">--请选择--</option>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>
+                <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeReportList()">关闭</button>
+                <a class="btn btn-warning btn-rounded btn-sm" onclick='$.form.reset("reportForm","reportTable")' style="float: right;margin-right: 10px;"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                <a class="btn btn-primary btn-rounded btn-sm" onclick='$.table.search("reportForm","reportTable")' style="float: right;margin-right: 10px;"><i class="fa fa-search"></i>&nbsp;搜索</a>
+            </div>
+        </form>
+        <table id="reportTable"></table>
+    </div>
+    <!--业务列表-->
+    <div class="col-sm-12 select-table table-bordered" id="businessDiv" style="height: 350px;overflow: auto;">
+        <form id="businessForm">
+            <div class="row">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                        <p>地区：</p>
+                            <select name="province_name" th:with="type=${@dict.getProvince()}">
+                                <option value="">--请选择--</option>
+                                <option th:each="gresslandEcology : ${type}" th:text="${gresslandEcology.province_name}" th:value="${gresslandEcology.province_name}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            目：
+                            <select id="section" name="section" onchange="sectionOncheng()">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </li>
+                        <li>
+                            科：
+                            <select id="generic" name="generic" onchange="bundleOncheng()">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </li>
+                        <li>
+                            从：
+                            <select id="bundle" name="bundle">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeReportList()">关闭</button>
+                <a class="btn btn-warning btn-rounded btn-sm" onclick='$.form.reset("businessForm","businessTable")' style="float: right;margin-right: 10px;"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                <a class="btn btn-primary btn-rounded btn-sm" onclick='$.table.search("businessForm")' style="float: right;margin-right: 10px;"><i class="fa fa-search"></i>&nbsp;搜索</a>
+            </div>
+        </form>
+        <table id="businessTable"></table>
+    </div>
+    <!--标记列表-->
+    <div class="col-sm-12 select-table table-bordered" id="tagDiv" style="height: 350px;overflow: auto;">
+        <div class="row">
+            <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeReportList()">关闭</button>
+        </div>
+        <table id="tagTable"></table>
+    </div>
+</div>
+</div>
+</body>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-css"/>
+<th:block th:include="include :: ztree-css"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var gisLonLat=[[${lngLat}]];
+</script>
+<script th:src="@{/js/gis/sinosoftGis.js}"></script>
+<script th:src="@{/js/gis/gisComparison.js}"></script>
+<script th:inline="javascript">
+    /* 限定登录用户专题查询选择条件 */
+    let user = [[${user}]];
+    if(user != ''){
+        if(user == '省级'){
+            let provinceName = [[${provinceName}]];
+            let provinceCode = [[${provinceCode}]];
+            let pro_ht = '<option value='+ provinceCode +'>'+ provinceName +'</option>';
+            $("#province").html(pro_ht);
+            $("#city").empty();
+            getCitiess(provinceCode);
+        }else if(user == '市级'){
+            let provinceName = [[${provinceName}]];
+            let provinceCode = [[${provinceCode}]];
+            let cityName = [[${cityName}]];
+            let cityCode = [[${cityCode}]];
+            let pro_ht = '<option value='+ provinceCode +'>'+ provinceName +'</option>';
+            $("#province").html(pro_ht);
+            let city_ht = '<option value='+ cityCode +'>'+ cityName +'</option>';
+            $("#city").html(city_ht);
+            $("#area").empty();
+            getAreass(cityCode);
+        }
+    }
+</script>
+</html>

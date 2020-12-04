@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('鼠虫害危害情况')"/>
+    <style>
+        body {
+            position: relative;
+            background-color: #000000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        ul, li {
+            list-style: none;
+        }
+
+        .clear:after {
+            display: block;
+            content: "";
+            clear: both;
+        }
+
+        #mainleft, #mainright {
+            float: left;
+            height: 75%;
+            margin-top: -60px;
+        }
+
+        #mainleft {
+            width: 23%;
+        }
+
+        #mapchart {
+            width: 100%;
+            height: 100%;
+        }
+
+        /*悬浮框*/
+        #plan {
+            margin: 10px;
+            background-color: #011C31;
+            border-top: 1px solid #27BFC4;
+            border-left: 1px solid #27BFC4;
+            font-size: 12px;
+            color: #fff;
+            width: 200px;
+        }
+
+        #plan li {
+            height: 20px;
+            padding-left: 10px;
+            border-bottom: 1px solid #27BFC4;
+
+        }
+
+        #plan li:first-child {
+            font-size: 14px;
+            height: 22px;
+        }
+
+        #plan li:first-child img {
+            width: 10px;
+            display: inline-block;
+            margin: 4px 4px 0 -4px;
+        }
+
+        #plan li span {
+            display: inline-block;
+        }
+
+        #plan li span:first-child {
+            width: 70px;
+        }
+
+        #plan li span:nth-child(2) {
+            width: 60px;
+        }
+
+        #plan li span:nth-child(3) {
+            width: 50px;
+        }
+
+        /*排行榜*/
+        #mainright {
+            width: 22%;
+        }
+
+        #mainright {
+            padding: 10px;
+        }
+
+        #rank {
+            background-color: rgba(119, 119, 119, .3);
+            width: 98%;
+            height: 94%;
+            color: white;
+            position: relative;
+        }
+
+        #rank li p {
+            float: left;
+        }
+
+        /*四个角*/
+        #rank > li.corner > p {
+            width: 16px;
+            height: 16px;
+        }
+
+        #rank > li:first-child > p:first-child {
+            float: left;
+            border-top: 1px solid #27BFC4;
+            border-left: 1px solid #27BFC4;
+        }
+
+        #rank > li:first-child > p:last-child {
+            float: right;
+            border-top: 1px solid #27BFC4;
+            border-right: 1px solid #27BFC4;
+        }
+
+        #rank > li.corner:last-child {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #rank > li:last-child > p:first-child {
+            float: left;
+            border-bottom: 1px solid #27BFC4;
+            border-left: 1px solid #27BFC4;
+        }
+
+        #rank > li:last-child > p:last-child {
+            float: right;
+            border-bottom: 1px solid #27BFC4;
+            border-right: 1px solid #27BFC4;
+        }
+
+        /*排行榜主体*/
+        #rank > li.thead {
+            margin-bottom: 8px;
+        }
+
+        #rank > li.tobdy:hover {
+            background-color: rgba(255, 255, 255, .2);
+        }
+
+        #rank > li.tobdy {
+            height: 9.3%;
+            padding-top: 10px;
+        }
+
+        #rank > li.tobdy > p:first-child {
+            width: 20%;
+        }
+
+        #rank > li.tobdy > p:first-child span {
+            display: block;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            background-color: #27BFC4;
+            margin: auto;
+        }
+
+        #rank > li.tobdy > p:nth-child(2) {
+            width: 25%;
+        }
+
+        /*进度条区域*/
+        #rank > li.tobdy > div {
+            float: left;
+            width: 51%;
+            height: 100%;
+        }
+
+        #rank > li.tobdy > div > ul li:first-child {
+            float: left;
+        }
+
+        #rank > li.tobdy > div > ul li:last-child {
+            float: right;
+        }
+
+        #rank p.prog-bg, #rank p.prog-on {
+            height: 4px;
+            border-radius: 4px;
+        }
+
+        #rank p.prog-bg {
+            width: 100%;
+            margin-top: 4px;
+            background-color: rgba(119, 119, 119, .5);
+        }
+
+        #rank p.prog-on {
+            background-color: #95BA2E;
+            margin-top: -4px;
+        }
+    </style>
+    <script src="../js/map/province/shanxi.js"></script>
+    <script src="../js/map/province/Convert_Pinyin.js"></script>
+    <script src="../ajax/report/echarts/dark.js"></script>
+
+
+</head>
+
+<body class="gray-bg" style="background-color: whitesmoke">
+
+<div class="row">
+    <div class="col-sm-6" id="hiddenMap">
+        <div style="height:1200px;margin-right:200px" class="echarts" id="echarts-map-chart"></div>
+    </div>
+
+
+    <div class="col-sm-6" id="hidden">
+        <div style="height:630px;margin-right:200px" class="echarts" id="echarts-chart"></div>
+    </div>
+
+
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script type="text/javascript">
+
+    var prefix = ctx + "zaihai/sczjtj";
+
+    /*地图统计*/
+    $(function () {
+        document.getElementById("hidden").style.display = "none";//显示
+
+        $("#hid").attr("style", "display:none;");
+
+        var dataList = []
+        var dataList2 = []
+        var dataList3 = []
+
+
+        //后端获取json数据
+        //请求地图数据
+        $.ajax({
+            url: prefix + "/getRequestCount",    //请求发送到dataActiont处
+            type: 'post',
+            dataType: 'json',
+            success: function (data) {
+
+                if (data.success) {
+                    dataList = data.dataList;
+                    dataList2 = data.engineeringhazardList;
+                    dataList3 = data.seriousAreaList;
+
+                    var mapChart = echarts.init(document.getElementById("echarts-map-chart"),'dark');
+                    // echart图表自适应
+                    window.addEventListener("resize", function () {
+                        mapChart.resize();
+                    });
+
+                    var mapoption = {
+                        visualMap: {
+                            show: true,
+                            min: 0, // 指定 visualMapContinuous 组件的允许的最小值。'min' 必须用户指定。[visualMap.min, visualMax.max] 形成了视觉映射的『定义域』。
+                            max: 1000, // 指定 visualMapContinuous 组件的允许的最大值
+                            text: ['High', 'Low'], // 两端的文本，如 ['High', 'Low'] 如例子：http://www.echartsjs.com/gallery/editor.html?c=doc-example/map-visualMap-continuous-text&edit=1&reset=1
+                            realtime: false, // 拖拽时，是否实时更新。
+                            calculable: false, // 是否显示拖拽用的手柄（手柄能拖拽调整选中范围）。
+                            hoverLink: false, // 打开 hoverLink 功能时，鼠标悬浮到 visualMap 组件上时，鼠标位置对应的数值 在 图表中对应的图形元素，会高亮。
+                            inRange: {
+                                // inRange (object)定义 在选中范围中 的视觉元素。（用户可以和 visualMap 组件交互，用鼠标或触摸选择范围）1、symbol: 图元的图形类别。2、symbolSize: 图元的大小。3、color: 图元的颜色。4、colorAlpha: 图元的颜色的透明度。5、opacity: 图元以及其附属物（如文字标签）的透明度。6、
+                                color: ['#0494e1', '#004098']
+                            },
+                        },
+
+                        title: {
+                            text: '草原鼠虫害预警',
+                            subtext: '',
+                            x: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: function (params) {
+                                alert(1)
+                                alert(params)
+                                if(params.value){
+                                    return params.seriesName + '<br/>' + params.name + ' : ' + params.value;
+                                }else{
+                                    return params.seriesName + '<br/>' + params.name + ' : ' + '0';
+                                }
+
+                            }
+
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            x: 'left',
+                            data: ['鼠害危害面积', '虫害危害面积'],
+                            selected: {
+                                '鼠害危害面积': false,
+
+                            },
+                            formatter: function (params) {
+                                if (params.indexOf('\n') == -1) {
+                                    return params;
+                                } else {
+                                    return '{white|' + params.split('\n')[0] + '}\n' + params.split('\n')[1];
+                                }
+                            },
+                            textStyle: {
+                                rich: {
+                                    white: {
+                                        color: "#fff",
+                                        fontSize: 12,
+                                        padding: [6, 0, 0, 0]
+                                    }
+                                }
+                            }
+                        },
+                        dataRange: {
+                            /*                            orient: 'horizontal',*/
+                            min: 0,
+                            max: 250000,
+                            x: 'left',
+                            y: 'bottom',
+                            text: ['高', '低'],           // 文本，默认为数值文本
+                            calculable: true
+                            /*
+                                                        splitNumber: 0
+                            */
+                        },
+                        toolbox: {
+                            show: true,
+                            orient: 'vertical',
+                            x: 'right',
+                            y: 'center',
+                            feature: {
+                                mark: {show: true},
+/*
+                                dataView: {show: true, readOnly: false},
+*/
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        roamController: {
+                            show: true,
+                            x: 'right',
+                            mapTypeControl: {
+                                'china': true
+                            }
+                        },
+
+                        series: [
+
+                            {
+                                name: '鼠害危害面积',
+                                type: 'map',
+                                mapType: 'china',
+                                itemStyle: {
+                                    normal: {
+                                        label: {show: true}, color: 'blue', fontSize: 5,
+                                        areaStyle: {
+                                            color: 'blue',//默认的地图板块颜色
+                                        },
+                                        textStyle: {
+                                            fontSize: 5,
+                                            fontWeight: 'bold',
+                                            color: 'red'
+                                        }
+                                    },//默认是否显示省份名称
+
+                                    emphasis: {label: {show: true}},
+
+                                },
+
+                                data: dataList
+                            },
+                            {
+                                name: '虫害危害面积',
+                                type: 'map',
+                                mapType: 'china',
+                                itemStyle: {
+                                    normal: {label: {show: true}},
+                                    emphasis: {label: {show: true}},
+                                    areaStyle: {
+                                        color: 'red',//默认的地图板块颜色
+                                    },
+                                },
+                                data: dataList2
+                            },
+                        ]
+                    };
+                    mapChart.setOption(mapoption);//先渲染出空地图
+                    mapChart.on('dblclick', function (params) {
+                        document.getElementById("hidden").style.display = "none";//显示
+                        document.getElementById("hiddenMap").style.display = "";//显示
+
+                    });
+
+
+                    //点击回显
+                    mapChart.on('click', function (params) {
+                        document.getElementById("hidden").style.display = "";//显示
+                        document.getElementById("hiddenMap").style.display = "";//显示
+
+                        var province=params.name;
+                        showProvince(province);
+
+                    });
+                    $(window).resize(mapChart.resize);
+
+
+                } else {
+                    console.log("getRequestCount 加载失败")
+                }
+            },
+            error: function (jqXHR) {
+                alert("getRequestCount发生错误：" + jqXHR.status);
+                // }
+            }
+        });
+    });
+
+
+    //展示对应的省
+    function showProvince(province) {
+        var dataList = []
+        var dataList2 = []
+        var dataList3 = []
+        //将省份转化为拼音
+            var chinaName = province;
+            //获取全写拼音（调用js中方法）
+            var fullName = pinyin.getFullChars(chinaName);
+            //获取简写拼音（调用js中方法）
+            var easyName = pinyin.getCamelChars(chinaName);
+            //给两个文本框赋值
+
+        var pro=fullName.toLowerCase();
+
+        //初始化echarts
+        var myChart = echarts.init(document.getElementById("echarts-chart"),'dark');
+
+        loadBdScript('$' + pro + 'JS', '../js/map/province/' + pro + '.js', function () {
+
+            $.ajax({
+                url: prefix + "/getRequestCount",    //请求发送到dataActiont处
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+
+
+                        dataList = data.dataList;
+                        dataList2 = data.engineeringhazardList;
+                        dataList3 = data.seriousAreaList;
+
+                        // echart图表自适应
+                        window.addEventListener("resize", function () {
+                            myChart.resize();
+                        });
+
+            //关键是配置项
+            var option = {
+                title: {
+                    text: chinaName,
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+
+                },
+                legend: {
+                    orient: 'vertical',
+                    x: 'left',
+                    data: ['鼠害危害面积', '虫害危害面积'],
+                    selected: {
+                        '鼠害危害面积': false,
+
+                    },
+                    formatter: function (params) {
+                        if (params.indexOf('\n') == -1) {
+                            return params;
+                        } else {
+                            return '{white|' + params.split('\n')[0] + '}\n' + params.split('\n')[1];
+                        }
+                    },
+                    textStyle: {
+                        rich: {
+                            white: {
+                                color: "#fff",
+                                fontSize: 12,
+                                padding: [6, 0, 0, 0]
+                            }
+                        }
+                    }
+                },
+                dataRange: {
+                    /*                            orient: 'horizontal',*/
+                    min: 0,
+                    max: 250000,
+                    x: 'left',
+                    y: 'bottom',
+                    text: ['高', '低'],           // 文本，默认为数值文本
+                    calculable: true
+                    /*
+                                                splitNumber: 0
+                    */
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    x: 'right',
+                    y: 'center',
+                    feature: {
+                        mark: {show: true},
+/*
+                        dataView: {show: true, readOnly: false},
+*/
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+
+                roamController: {
+                    show: true,
+                    x: 'right',
+
+                },
+                series: [
+
+                    {
+                        name: '鼠害危害面积',
+                        type: 'map',
+                        mapType:province,
+                        itemStyle: {
+                            normal: {
+                                label: {show: true}, color: 'blue', fontSize: 5,
+                                areaStyle: {
+                                    color: 'blue',//默认的地图板块颜色
+                                },
+                                textStyle: {
+                                    fontSize: 5,
+                                    fontWeight: 'bold',
+                                    color: 'red'
+                                }
+                            },//默认是否显示省份名称
+
+                            emphasis: {label: {show: true}},
+
+                        },
+
+                        data: dataList
+                    },
+                    {
+                        name: '虫害危害面积',
+                        type: 'map',
+                        mapType: province,
+                        itemStyle: {
+                            normal: {label: {show: true}},
+                            emphasis: {label: {show: true}},
+                            areaStyle: {
+                                color: 'red',//默认的地图板块颜色
+                            },
+                        },
+                        data: dataList2
+                    },
+                ]
+              /*  series: [{
+                    name: '网点个数',
+                    //series[i]-map:系列列表。每个系列通过 type 决定自己的图表类型,此处是地图类型
+                    type: 'map',
+                    mapType: province,
+                    //地图区域的多边形 图形样式，有 normal 和 emphasis 两个状态
+                    itemStyle: {
+                        //normal 是图形在默认状态下的样式；
+                        normal: {
+                            show: true,
+                            areaColor: "#CECECE",
+                            borderColor: "#FCFCFC",
+                            borderWidth: "1"
+                        },
+                        //emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
+                        emphasis: {
+                            show: true,
+                            areaColor: "#C8A5DF",
+                        }
+                    },
+                    //图形上的文本标签，可用于说明图形的一些数据信息
+                    label: {
+                        normal: {
+                            show: true
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                }],*/
+
+            };
+                    myChart.on('dblclick', function () {
+                        document.getElementById("hidden").style.display = "nones";//显示
+                        document.getElementById("hiddenMap").style.display = "";//显示
+
+                    });
+            //使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+            $(window).resize(myChart.resize);
+                }
+        });
+
+        });
+    }
+
+    // 加载对应的JS
+    function loadBdScript(scriptId, url, callback) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        if (script.readyState) {  //IE
+            script.onreadystatechange = function () {
+                if (script.readyState === "loaded" || script.readyState === "complete") {
+                    script.onreadystatechange = null;
+                    callback();
+                }
+            };
+        } else {  // Others
+            script.onload = function () {
+                callback();
+            };
+        }
+        script.src = url;
+        script.id = scriptId;
+        document.getElementsByTagName("head")[0].appendChild(script);
+    };
+</script>
+</body>
+</html>

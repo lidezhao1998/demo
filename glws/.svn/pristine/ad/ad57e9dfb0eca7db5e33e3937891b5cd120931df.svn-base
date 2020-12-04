@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改草原病害草知识库信息')"/>
+    <th:block th:include="include :: jasny-bootstrap-css" />
+
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-knowledge-edit" th:object="${cDiseaseKnowledge}">
+        <input name="id" th:field="*{id}" type="hidden">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">中文名：</label>
+                    <div class="col-sm-8">
+                        <input name="middleName" th:field="*{middleName}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病原拉丁名：</label>
+                    <div class="col-sm-8">
+                        <input name="latinName" th:field="*{latinName}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病原中名：</label>
+                    <div class="col-sm-8">
+                        <input name="byName" th:field="*{byName}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病原形态：</label>
+                    <div class="col-sm-8">
+                        <input name="byForm" th:field="*{byForm}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">亚门：</label>
+                    <div class="col-sm-8">
+                        <input name="subgate" th:field="*{subgate}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">属：</label>
+                    <div class="col-sm-8">
+                        <input name="genus" th:field="*{genus}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">寄生：</label>
+                    <div class="col-sm-8">
+                        <input name="host" th:field="*{host}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">分布：</label>
+                    <div class="col-sm-8">
+                        <input name="distribution" th:field="*{distribution}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">危害部位：</label>
+                    <div class="col-sm-8">
+                        <input name="damageLocation" th:field="*{damageLocation}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">危害症状：</label>
+                    <div class="col-sm-8">
+                        <input name="whSymptom" th:field="*{whSymptom}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">症状：</label>
+                    <div class="col-sm-8">
+                        <input name="symptom" th:field="*{symptom}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病症：</label>
+                    <div class="col-sm-8">
+                        <input name="disease" th:field="*{disease}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">发生规律：</label>
+                    <div class="col-sm-8">
+                        <input name="law" th:field="*{law}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">防治方法：</label>
+                    <div class="col-sm-8">
+                        <input name="method" th:field="*{method}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病原形态图：</label>
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <div class="fileinput-new thumbnail" style="width: 120px; height: 80px;">
+                            <img  th:src="(${cDiseaseKnowledge.byMorphology} == '') ? null : @{${cDiseaseKnowledge.byMorphology}}">
+                        </div>
+                        <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                        <div>
+                            <span class="btn btn-white btn-file"><span class="fileinput-new">选择图片</span><span class="fileinput-exists">更改</span><input type="file" class="" name="file"  id="byMorphology" accept="image/*"/></span>
+                            <a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">症状图：</label>
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <div class="fileinput-new thumbnail" style="width: 120px; height: 80px;">
+                            <img  th:src="(${cDiseaseKnowledge.symptomMap} == '') ?null : @{${cDiseaseKnowledge.symptomMap}}">
+                        </div>
+                        <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                        <div>
+                            <span class="btn btn-white btn-file"><span class="fileinput-new">选择图片</span><span class="fileinput-exists">更改</span><input type="file" class="" name="file2"  id="symptomMap" accept="image/*"/></span>
+                            <a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: jasny-bootstrap-js" />
+<script type="text/javascript">
+    var prefix = ctx + "system/knowledge";
+    $("#form-knowledge-edit").validate({
+        focusCleanup: true
+    });
+    function submitHandler() {
+        if ($.validate.form()) {
+            uploadFile();
+            //$.operate.save(prefix + "/edit", $('#form-knowledge-edit').serialize());
+        }
+    }
+    //图片上传功能
+    function uploadFile() {
+        var url = ctx + "system/knowledge/edit";
+
+        var formData = new FormData(document.getElementById("form-knowledge-edit"));
+
+        /* if ($("#byMorphology").val().length <= 0) {
+             //formData.set('file', '000');
+
+             alert("没图片")
+         }else if($("#byMorphology")[0].files[0] ==null && $("#byMorphology").val() !=null){
+             alert("有原始图片，没有做修改")
+        }else{
+             alert("修改后的图片")
+             formData.append('file', $("#byMorphology")[0].files[0]);
+
+         }
+
+        if ($("#symptomMap").val().length <= 0) {
+
+            alert("没图片")
+        }else if($("#symptomMap")[0].files[0] ==null && $("#symptomMap").val() !=null){
+            alert("有原始图片，没有做修改")
+        }else{
+            alert("修改后的图片")
+            formData.append('file2', $("#symptomMap")[0].files[0]);
+
+        }*/
+
+        if ($("#byMorphology").val().length <= 0) {
+            alert("没图1片")
+        }else if($("#byMorphology")[0].files[0] ==null && $("#byMorphology").val() !=null){
+            alert("有原始图片，没有做修改")
+        }else{
+            alert("修改后的图片")
+            formData.append('file', $("#byMorphology")[0].files[0]);
+
+        }
+
+        if ($('#test2').val() ==null) {
+            alert(666)
+            //alert($("#symptomMap")[0].files[0])
+            //formData.append('file2', $("#symptomMap")[0].files[0]);
+
+        }else if($("#symptomMap")[0].files[0] ==null && $("#symptomMap").val() !=null){
+            alert("有原始图片，没有做修改")
+        }else{
+            alert("修改后的图片")
+            formData.append('file2', $("#symptomMap")[0].files[0]);
+
+        }
+
+        //alert(JSON.stringify(formData))
+        $.ajax({
+            url: url,
+            type: 'post',
+            cache: false,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(result) {
+                $.operate.successCallback(result);
+            }
+        });
+    }
+</script>
+</body>
+</html>

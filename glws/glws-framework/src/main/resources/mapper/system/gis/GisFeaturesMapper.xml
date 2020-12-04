@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.gis.GisFeaturesMapper">
+
+    <resultMap type="com.ruoyi.system.domain.gis.GisFeatures" id="GisFeatures">
+        <id property="id" column="id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="ancestors" column="ancestors"/>
+        <result property="name" column="name"/>
+        <result property="server_name" column="server_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="parentName" column="parent_name"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectShpFileVo">
+        select d.id,
+               d.parent_id,
+               d.ancestors,
+               d.name,
+               d.server_name,
+               d.order_num,
+               d.status,
+               d.del_flag,
+               d.create_by,
+               d.create_time
+        from t_gis_features d
+    </sql>
+
+    <select id="selectRoleShpFileTree" parameterType="Long" resultType="java.lang.String">
+        select concat(d.id, d.name) as name
+        from t_gis_features d
+                 left join sys_role_shpFile rd on d.id = rd.id
+        where d.del_flag = '0'
+          and rd.role_id = #{roleId}
+        order by d.parent_id, d.order_num
+    </select>
+
+    <select id="selectShpFileList" resultMap="GisFeatures">
+        <include refid="selectShpFileVo"/>
+        where d.del_flag = '0'
+        <if test="parentId != null and parentId != 0">
+            AND parent_id = #{parentId}
+        </if>
+        <if test="name != null and name != ''">
+            AND name like concat('%', #{name}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        order by d.parent_id, d.order_num
+    </select>
+
+
+    <select id="selectShpFileCount"  resultType="int">
+        select count(1) from t_gis_features
+        where del_flag = '0'
+        <if test="id != null and id != 0">and id = #{id}</if>
+        <if test="parentId != null and parentId != 0">and parent_id = #{parentId}</if>
+    </select>
+
+    <select id="checkShpFileNameUnique" resultMap="GisFeatures">
+        <include refid="selectShpFileVo"/>
+        where name=#{name} and parent_id = #{parentId}
+    </select>
+
+    <select id="selectShpFileById" parameterType="Long" resultMap="GisFeatures">
+        select d.id,
+               d.parent_id,
+               d.ancestors,
+               d.name,
+               d.server_name,
+               d.order_num,
+               d.status,
+               (select name from t_gis_features where id = d.parent_id) parent_name
+        from t_gis_features d
+        where d.id = #{id}
+    </select>
+
+    <select id="selectChildrenShpFileById" parameterType="Long" resultMap="GisFeatures">
+        select *
+        from t_gis_features
+        where find_in_set(#{id}, ancestors)
+    </select>
+    <select id="getShpByInShpId" resultMap="GisFeatures">
+        select id,
+               parent_id,
+               ancestors,
+               name,
+               server_name
+
+        from t_gis_features
+        where  del_flag = '0' and id in (${shpIds})
+    </select>
+    <select id="getListByType" resultMap="GisFeatures">
+        <include refid="selectShpFileVo"/>
+    </select>
+
+    <insert id="insertShpFile">
+        insert into t_gis_features(
+        <if test="id != null and id != 0">id,</if>
+        <if test="parentId != null and parentId != 0">parent_id,</if>
+        <if test="name != null and name != ''">name,</if>
+        <if test="server_name != null and server_name != ''">server_name,</if>
+        <if test="ancestors != null and ancestors != ''">ancestors,</if>
+        <if test="orderNum != null and orderNum != ''">order_num,</if>
+        <if test="status != null">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="id != null and id != 0">#{id},</if>
+        <if test="parentId != null and parentId != 0">#{parentId},</if>
+        <if test="name != null and name != ''">#{name},</if>
+        <if test="server_name != null and server_name != ''">#{server_name},</if>
+        <if test="ancestors != null and ancestors != ''">#{ancestors},</if>
+        <if test="orderNum != null and orderNum != ''">#{orderNum},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="updateShpFile">
+        update t_gis_features
+        <set>
+            <if test="parentId != null and parentId != 0">parent_id = #{parentId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="server_name != null and server_name != ''">server_name = #{server_name},</if>
+            <if test="ancestors != null and ancestors != ''">ancestors = #{ancestors},</if>
+            <if test="orderNum != null and orderNum != ''">order_num = #{orderNum},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateShpFileChildren" parameterType="java.util.List">
+        update t_gis_features set ancestors =
+        <foreach collection="shpFiles" item="item" index="index"
+                 separator=" " open="case id" close="end">
+            when #{item.id} then #{item.ancestors}
+        </foreach>
+        where id in
+        <foreach collection="shpFiles" item="item" index="index"
+                 separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <delete id="deleteShpFileById" >
+        delete from t_gis_features where id = #{id}
+    </delete>
+
+    <update id="updateShpFileStatus">
+        update t_gis_features
+        <set>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where id in (${ancestors})
+    </update>
+    <update id="updateStstus">
+        update t_gis_features set status = #{status} where id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.extinterface.mapper.APointInterfaceMapper">
+
+    <resultMap type="com.sinosoft.extinterface.domain.APointInterface" id="APointInterfaceResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="lon" column="lon"/>
+        <result property="lat" column="lat"/>
+        <result property="markColor" column="markColor"/>
+        <result property="status" column="status"/>
+        <result property="deviceType" column="device_type"/>
+    </resultMap>
+
+    <sql id="selectAPointInterfaceVo">
+        select id, name, lon, lat, markColor, status from a_point_interface
+    </sql>
+
+    <select id="selectAPointInterfaceList" parameterType="APointInterface" resultMap="APointInterfaceResult">
+        SELECT
+        p.id,
+        p. NAME,
+        p.lon,
+        p.lat,
+        p.markColor,
+        d.dict_label device_type,
+        p. STATUS
+        FROM
+        a_point_interface p
+        LEFT JOIN sys_dict_data d ON p.device_type = d.dict_code
+        <where>
+            1=1
+            <if test="name != null  and name != ''">and p.name like concat('%', #{name}, '%')</if>
+            <if test="status != null  and status != '' and status!='-1'.toString">and p.status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectAPointInterfaceById" parameterType="Long" resultMap="APointInterfaceResult">
+        <include refid="selectAPointInterfaceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertAPointInterface" parameterType="APointInterface">
+        insert into a_point_interface
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="lon != null ">lon,</if>
+            <if test="lat != null ">lat,</if>
+            <if test="markColor != null  and markColor != ''">markColor,</if>
+            <if test="status != null  and status != ''">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="lon != null ">#{lon},</if>
+            <if test="lat != null ">#{lat},</if>
+            <if test="markColor != null  and markColor != ''">#{markColor},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+        </trim>
+    </insert>
+
+    <update id="updateAPointInterface" parameterType="APointInterface">
+        update a_point_interface
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="lon != null ">lon = #{lon},</if>
+            <if test="lat != null ">lat = #{lat},</if>
+            <if test="markColor != null  and markColor != ''">markColor = #{markColor},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <delete id="deleteAPointInterfaceById" parameterType="Long">
+        delete from a_point_interface where id = #{id}
+    </delete>
+
+    <delete id="deleteAPointInterfaceByIds" parameterType="String">
+        delete from a_point_interface where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

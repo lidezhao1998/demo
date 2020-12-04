@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.gis.EologicalAttributesMapper">
+    <resultMap type="com.ruoyi.system.domain.gis.EologicalAttributes" id="EologicalAttributes">
+        <id property="id" column="id"/>
+        <result property="goal" column="goal"/>
+        <result property="goalCode" column="goal_code"/>
+        <result property="familie" column="familie"/>
+        <result property="familieCode" column="familie_code"/>
+        <result property="subordinate" column="subordinate"/>
+        <result property="subordinateCode" column="subordinate_code"/>
+        <result property="follow" column="follow"/>
+        <result property="followCode" column="follow_code"/>
+    </resultMap>
+
+    <select id="getEologicalCoefficient" resultType="com.ruoyi.system.domain.gis.EologicalAttributes">
+       select id,goal_code goalCode from t_ecological_attributes
+    </select>
+    <select id="getAttributeName" resultType="com.ruoyi.system.domain.gis.EologicalAttributes">
+        SELECT goal,familie,subordinate,follow FROM t_ecological_attributes where id=#{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改草原病害草知识库信息')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-knowledge-edit" th:object="${cDiseaseKnowledge}">
+        <input name="id" th:field="*{id}" type="hidden">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">中文名：</label>
+                    <div class="col-sm-8">
+
+                        <div   th:text="${cDiseaseKnowledge.middleName}" class="form-control-static" type="text" disabled="disabled"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病原拉丁名：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.latinName}" class="form-control-static" type="text" disabled="disabled"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病原中名：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.byName}" class="form-control-static" type="text" disabled="disabled"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病原形态：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.byForm}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">亚门：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.subgate}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">属：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.genus}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">寄生：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.host}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">分布：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.distribution}" class="form-control-static" type="text" disabled="disabled"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">危害部位：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.damageLocation}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">危害症状：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.whSymptom}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">症状：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.symptom}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病症：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.disease}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">发生规律：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.law}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">防治方法：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${cDiseaseKnowledge.method}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病原形态图：</label>
+                    <div class="col-sm-8">
+                        <img  th:src="(${cDiseaseKnowledge.byMorphology} == '') ? @{/img/profile.jpg} : @{${cDiseaseKnowledge.byMorphology}}" style="width: 100px; height: 60px;">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">症状图：</label>
+                    <div class="col-sm-8">
+                        <img  th:src="(${cDiseaseKnowledge.symptomMap} == '') ? @{/img/profile.jpg} : @{${cDiseaseKnowledge.symptomMap}}" style="width: 100px; height: 60px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+
+    </div>
+
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('地面调查数据列表')" />
+    <th:block th:include="include :: jquery-steps-css" />
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-striped table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: whitesmoke;
+        height: 55px;
+    }
+
+    /*按钮背景色*/
+    .btn-success{
+
+        background-color:rgba(48,146,62, 0.9);
+
+    }
+
+</style>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <p>样地编号：</p>
+                            <input type="text" name="codeId"/>
+                        </li>
+                        <li>
+                        <em class="i-bit"></em><span>省份：</span>
+                        <select id="addrProvince" name="provincialLevelName" onchange="getCities()"
+                                style="width: 200px;height:30px; "></select> 市： <select
+                            id="addrCity" name="cityLevelName" onchange="getAreas()"
+                            style="width: 200px;height:30px; ">
+                    </select> 区/县： <select id="addrArea" name="countyLevelName" onchange="getadddz()"
+                                           style="width: 200px;height:30px; ">
+                    </select>
+                        <span id="recvId"></span>
+
+                        </li>
+                                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="btn-group-sm" id="toolbar" role="group">
+                                    <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="caiji:survey:add">
+                                        <i class="fa fa-plus"></i> 添加
+                                    </a>
+                                    <!-- <a class="btn btn-success" onclick="addTab()" shiro:hasPermission="system:survey:add">
+                                     <i class="fa fa-plus"></i> 添加
+                                 </a>
+
+                                     <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:survey:edit">
+                                         <i class="fa fa-edit"></i> 修改
+                                     </a>
+                                     <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:survey:remove">
+                                         <i class="fa fa-remove"></i> 删除
+                                     </a>
+                                     <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:survey:export">
+                                         <i class="fa fa-download"></i> 导出
+                                      </a>-->
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+        <!--<div class="col-sm-12 select-table table-striped">
+
+            <table id="bootstrap-table3"></table>
+        </div>-->
+
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var detailFlag = [[${@permission.hasPermi('caiji:survey:detail')}]];
+    var editFlag = [[${@permission.hasPermi('caiji:survey:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('caiji:survey:remove')}]];
+    var prefix = ctx + "caiji/survey";
+
+
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            detailUrl: prefix + "/detail/{id}",
+            exportUrl: prefix + "/export",
+            detailView: true,
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            onExpandRow: function (index, row, $detail) {
+                initChildTable(index, row, $detail);
+            },
+            modalName: "地面调查数据",
+            columns: [
+                {
+                    field : 'codeId',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '样地编号'
+                },
+                {
+                    field : 'provincialLevelName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '省级名称'
+                },
+                {
+                    field : 'cityLevelName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '地级名称'
+                },
+                {
+                    field : 'countyLevelName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '县级名称'
+                },
+              /*  {
+                    field : 'surveyTime',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '调查时间'
+                },*/
+                {
+                    field : 'createTime',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '创建时间'
+                },
+                {
+                    field : 'staute',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '状态',
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        if(row.staute=="草稿"){
+                            var actions = [];
+                            actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.groundId + '\')"><i class="fa fa-search"></i>详情</a>  ');
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.groundId + '\')"><i class="fa fa-edit"></i>编辑</a>  ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.groundId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            return actions.join('');
+                        }
+                        if(row.staute=="退回"){
+                            var actions = [];
+                            actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.groundId + '\')"><i class="fa fa-search"></i>详情</a>  ');
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.groundId + '\')"><i class="fa fa-edit"></i>编辑</a>  ');
+                            return actions.join('');
+                        }
+                        if(row.staute=="审核中"){
+                            var actions = [];
+                            actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.groundId + '\')"><i class="fa fa-search"></i>详情</a> ');
+                            return actions.join('');
+                        }
+                        if(row.staute=="审核完成"){
+                            var actions = [];
+                            actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.groundId + '\')"><i class="fa fa-search"></i>详情</a> ');
+                            return actions.join('');
+                        }
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /*关联样地信息列表*/
+    initChildTable = function (index, row, $detail) {
+        var groundId = row.groundId;
+        var cur_table = $detail.html('<div><table style="background:#E6E6FA" border="0" ></div></table>').find('table');
+        $(cur_table).bootstrapTable({
+            url: prefix + "/sonList",
+            method: 'post',
+            onExpandRow: function (index, row, $detail) {
+                initChildTable2(index, row, $detail);
+            },
+            sidePagination: "server",
+            contentType: "application/x-www-form-urlencoded",   // 编码类型
+            queryParams: {
+                groundId: groundId,
+            },
+            columns: [
+                {
+                    field : 'samplingNumber',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '取样编号'
+                },
+                {
+                    field : 'samplingArea',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '取样面积类型'
+                },
+                {
+                    field : 'harmfulSpeciesType',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '有害生物种类'
+                },
+                {
+                    field : 'detailedType',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '具体种类'
+                },
+                {
+                    field : 'quantityDetermination',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '测定数量'
+                },
+                {
+                    field : 'photo',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '照片'
+                },
+
+            ],
+
+        });
+    };
+
+
+    function addTab() {
+        $.modal.openTab("添加地面调查数据页面",prefix + "/add1");
+    }
+    function detail(id) {
+        $.modal.openTab("查看地面调查数据页面",prefix + "/detail/"+id);
+    }
+    function  edit(id){
+        $.modal.openTab("修改地面调查数据页面",prefix + "/edit/"+id);
+    }
+
+
+
+
+
+    var prefix2 = ctx + "caiji/plot";
+
+    //省市区三级联动
+    $(function () {
+        var prefix = ctx + "caiji/survey";
+
+        getProvinces();
+        var op1 = document.createElement("option");
+        op1.value = '';
+        document.getElementById("addrCity").appendChild(op1);
+        var op2 = document.createElement("option");
+        op2.value = '';
+        document.getElementById("addrArea").appendChild(op2);
+        var op3 = document.createElement("option");
+
+    });
+    function getProvinces() {
+        //  var url = "<%=basePath%>dict/getProvinces";
+        var url = ctx + "caiji/survey/getProvinces";
+        $.ajax({
+            "url": url,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                //alert(JSON.stringify(data))
+                var op = document.createElement("option");
+                op.value = '';
+                op.text = "----- 请选择 -------";
+                document.getElementById("addrProvince").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrProvince").appendChild(op);
+                }
+            }
+        });
+        getCities();
+    }
+
+    // ===== 加载市列表 =====
+    function getCities() {
+        $("#addrCity").empty();
+        $("#addrArea").empty();
+        var url = ctx + "caiji/survey/getCities";
+        var data = "provinceCode=" + $("#addrProvince").val();
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = '';
+                document.getElementById("addrCity").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrCity").appendChild(op);
+                }
+            }
+        });
+        getAreas();
+        var op2 = document.createElement("option");
+        op2.value = '';
+        document.getElementById("addrArea").appendChild(op2);
+    }
+
+    // ===== 加载区列表 =====
+    function getAreas() {
+        $("#addrArea").empty();
+        $("#addrdz").empty();
+        //var url = "<%=basePath%>dict/getAreas";
+        var url = ctx + "caiji/survey/getAreas";
+        var data = "cityCode=" + $("#addrCity").val();
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = '';
+                document.getElementById("addrArea").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrArea").appendChild(op);
+                }
+            }
+        });
+
+    }
+</script>
+</body>
+</html>

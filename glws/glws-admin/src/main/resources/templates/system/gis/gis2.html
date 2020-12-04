@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:include="include :: header('地图2')"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="天地图"/>
+    <style type="text/css">
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 2px;
+            font-family: "微软雅黑";
+        }
+
+        #map1_container, #map2_container, #map3_container, #map4_container {
+            width: 49.8%;
+            height: 48%;
+            float: left;
+            overflow: hidden;
+            margin: 0;
+        }
+        #option1, #option2, #option3, #option4{
+            width: 50%;
+            float: left;
+            overflow: hidden;
+            margin: 0;
+        }
+
+    </style>
+    <style type="text/css">
+        .tdt-label1{
+            height: 20px;
+        }
+    </style>
+    <th:block th:include="include :: footer"/>
+    <script type="text/javascript"
+            src="http://api.tianditu.gov.cn/api?v=4.0&tk=3defde9e465f739e73513ce9e8595fe3"></script>
+    <script>
+        var prefix = ctx + "system/gis";
+        var prefixGisMap = ctx + "system/gisMap";
+
+        //注：同一页面创建多个地图时必须为同一投影
+        var map;
+        var map2, zoom = 12;
+        var map3;
+        var map4;
+
+
+        function onLoad() {
+            var config = {
+                showLabel: true,
+                color: "blue", weight: 3, opacity: 0.5, fillColor: "red", fillOpacity: 0.5
+            };
+            onLoadMap1(config);
+            onLoadMap2(config);
+            onLoadMap3(config);
+            onLoadMap4(config);
+        }
+        function onLoadMap1(config) {
+            map = new T.Map('map1_container');
+            map.centerAndZoom(new T.LngLat(116.40769, 39.89945), zoom);
+            //允许鼠标双击放大地图
+            map.enableScrollWheelZoom();
+            //创建对象
+            var ctrl = new T.Control.MapType();
+            map.addControl(ctrl);
+            map.setMapType(TMAP_NORMAL_MAP );//默认卫星混合图
+            map.addEventListener("move", MapMoveend);
+            //创建标注工具对象
+            polygonTool = new T.PolygonTool(map, config);
+            lineTool = new T.PolylineTool(map, config);
+            //创建右键菜单对象
+            var menu = new T.ContextMenu({width: 140});
+            //添加右键菜单
+            var txtMenuItem = [
+                {
+                    text: '测距',
+                    callback: function () {
+                        lineTool.open();
+                    }
+                },
+                {
+                    text: '测面',
+                    callback: function () {
+                        polygonTool.open();
+                    }
+                },
+                {
+                    text: '清除图层',
+                    callback: function () {
+                        map.clearOverLays();
+                    }
+                },
+                {
+                    text: '获取此坐标',
+                    isDisable: false,
+                    callback: function (lnglat) {
+                        layer.msg("经度:" + lnglat.getLng() + ", 纬度: " + lnglat.getLat(), {icon: 6, time: 2000});
+                    }
+                }
+            ];
+            for (var i = 0; i < txtMenuItem.length; i++) {
+                //添加菜单项
+                var item = new T.MenuItem(txtMenuItem[i].text, txtMenuItem[i].callback);
+                //item.disable();
+                menu.addItem(item);
+                if (i == 1 || i == 3) {
+                    //添加分割线
+                    menu.addSeparator();
+                }
+            }
+            map.addContextMenu(menu);
+        }
+        function onLoadMap2(config) {
+            map2 = new T.Map('map2_container');
+            map2.centerAndZoom(new T.LngLat(116.40769, 39.89945), zoom);
+            //允许鼠标双击放大地图
+            map2.enableScrollWheelZoom();
+            //创建对象
+            var ctrl = new T.Control.MapType();
+            map2.addControl(ctrl);
+            map2.setMapType(TMAP_HYBRID_MAP);
+            //创建标注工具对象
+            polygonTool2 = new T.PolygonTool(map2, config);
+            lineTool2 = new T.PolylineTool(map2, config);
+            //创建右键菜单对象
+            var menu = new T.ContextMenu({width: 140});
+            //添加右键菜单
+            var txtMenuItem = [
+                {
+                    text: '测距',
+                    callback: function () {
+                        lineTool2.open();
+                    }
+                },
+                {
+                    text: '测面',
+                    callback: function () {
+                        polygonTool2.open();
+                    }
+                },
+                {
+                    text: '清除图层',
+                    callback: function () {
+                        map2.clearOverLays();
+                    }
+                },
+                {
+                    text: '获取此坐标',
+                    isDisable: false,
+                    callback: function (lnglat) {
+                        layer.msg("经度:" + lnglat.getLng() + ", 纬度: " + lnglat.getLat(), {icon: 6, time: 2000});
+                    }
+                }
+            ];
+            for (var i = 0; i < txtMenuItem.length; i++) {
+                //添加菜单项
+                var item = new T.MenuItem(txtMenuItem[i].text, txtMenuItem[i].callback);
+                //item.disable();
+                menu.addItem(item);
+                if (i == 1 || i == 3) {
+                    //添加分割线
+                    menu.addSeparator();
+                }
+            }
+            map2.addContextMenu(menu);
+        }
+        function onLoadMap3(config) {
+            map3 = new T.Map('map3_container');
+            map3.centerAndZoom(new T.LngLat(116.40769, 39.89945), zoom);
+            //允许鼠标双击放大地图
+            map3.enableScrollWheelZoom();
+            //创建对象
+            var ctrl = new T.Control.MapType();
+            map3.addControl(ctrl);
+            map3.setMapType(TMAP_TERRAIN_MAP);//默认卫星混合图
+            map.addEventListener("move", MapMoveend4);
+            //创建标注工具对象
+            polygonTool3 = new T.PolygonTool(map3, config);
+            lineTool3 = new T.PolylineTool(map3, config);
+            //创建右键菜单对象
+            var menu = new T.ContextMenu({width: 140});
+            //添加右键菜单
+            var txtMenuItem = [
+                {
+                    text: '测距',
+                    callback: function () {
+                        lineTool3.open();
+                    }
+                },
+                {
+                    text: '测面',
+                    callback: function () {
+                        polygonTool3.open();
+                    }
+                },
+                {
+                    text: '清除图层',
+                    callback: function () {
+                        map3.clearOverLays();
+                    }
+                },
+                {
+                    text: '获取此坐标',
+                    isDisable: false,
+                    callback: function (lnglat) {
+                        layer.msg("经度:" + lnglat.getLng() + ", 纬度: " + lnglat.getLat(), {icon: 6, time: 2000});
+                    }
+                }
+            ];
+            for (var i = 0; i < txtMenuItem.length; i++) {
+                //添加菜单项
+                var item = new T.MenuItem(txtMenuItem[i].text, txtMenuItem[i].callback);
+                //item.disable();
+                menu.addItem(item);
+                if (i == 1 || i == 3) {
+                    //添加分割线
+                    menu.addSeparator();
+                }
+            }
+            map3.addContextMenu(menu);
+        }
+        function onLoadMap4(config) {
+            map4 = new T.Map('map4_container');
+            map4.centerAndZoom(new T.LngLat(116.40769, 39.89945), zoom);
+            //允许鼠标双击放大地图
+            map4.enableScrollWheelZoom();
+            //创建对象
+            var ctrl = new T.Control.MapType();
+            map4.addControl(ctrl);
+            map4.setMapType(TMAP_TERRAIN_HYBRID_MAP);
+            map.addEventListener("move", MapMoveend3);
+            //创建标注工具对象
+            polygonTool4 = new T.PolygonTool(map4, config);
+            lineTool4 = new T.PolylineTool(map4, config);
+            //创建右键菜单对象
+            var menu = new T.ContextMenu({width: 140});
+            //添加右键菜单
+            var txtMenuItem = [
+                {
+                    text: '测距',
+                    callback: function () {
+                        lineTool4.open();
+                    }
+                },
+                {
+                    text: '测面',
+                    callback: function () {
+                        polygonTool4.open();
+                    }
+                },
+                {
+                    text: '清除图层',
+                    callback: function () {
+                        map4.clearOverLays();
+                    }
+                },
+                {
+                    text: '获取此坐标',
+                    isDisable: false,
+                    callback: function (lnglat) {
+                        layer.msg("经度:" + lnglat.getLng() + ", 纬度: " + lnglat.getLat(), {icon: 6, time: 2000});
+                    }
+                }
+            ];
+            for (var i = 0; i < txtMenuItem.length; i++) {
+                //添加菜单项
+                var item = new T.MenuItem(txtMenuItem[i].text, txtMenuItem[i].callback);
+                //item.disable();
+                menu.addItem(item);
+                if (i == 1 || i == 3) {
+                    //添加分割线
+                    menu.addSeparator();
+                }
+            }
+            map4.addContextMenu(menu);
+        }
+
+        function MapMoveend(e) {
+            map2.centerAndZoom(new T.LngLat(e.target.getCenter().getLng(), e.target.getCenter().getLat()), map.getZoom());
+        }
+        function MapMoveend3(e) {
+            map3.centerAndZoom(new T.LngLat(e.target.getCenter().getLng(),e.target.getCenter().getLat()),map.getZoom());
+        }
+        function MapMoveend4(e) {
+            map4.centerAndZoom(new T.LngLat(e.target.getCenter().getLng(),e.target.getCenter().getLat()),map.getZoom());
+        }
+        function option1(year) {
+            map.clearOverLays();
+            spotInfo(year,1)
+        }
+        function option2(year) {
+            map2.clearOverLays();
+            spotInfo(year,2)
+        }
+        function option3(year) {
+            map3.clearOverLays();
+            spotInfo(year,3)
+        }
+        function option4(year) {
+            map4.clearOverLays();
+            spotInfo(year,4)
+        }
+        //查询坐标向页面进行绘图
+        function spotInfo(year,mapType) {
+            $.ajax({
+                type: "get",
+                async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                url: prefixGisMap + "/getList?year="+year,    //请求发送到dataActiont处
+                dataType: "json",        //返回数据形式为json
+                success: function (result) {
+                    if (result.data != null || result.data.length > 0) {
+                        for (var i = 0; i < result.data.length; i++) {
+                            var type = result.data[i].type;
+                            var color = result.data[i].color;
+                            if (color == null || color == undefined)
+                                var id = result.data[i].id;
+                            var content = "<div>标题: " + result.data[i].name + "  <br>详情: " + result.data[i].remark + "" +
+                                "</div>";
+                            if (type == 1) {
+                                type1(result.data[i].coordinates, content,mapType);
+                            } else if (type == 2) {
+                                type2(result.data[i].coordinates, color, content, id,mapType);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function type1(data, content,type) {
+            var splitCoord = data.split(",");
+            var marker = new T.Marker(new T.LngLat(splitCoord[0], splitCoord[1]));
+            if(type==1){
+                map.centerAndZoom(new T.LngLat(splitCoord[0], splitCoord[1]), zoom);
+                map.addOverLay(marker);
+            }else if(type==2){
+                map2.centerAndZoom(new T.LngLat(splitCoord[0], splitCoord[1]), zoom);
+                map2.addOverLay(marker);
+            }else if(type==3){
+                map3.centerAndZoom(new T.LngLat(splitCoord[0], splitCoord[1]), zoom);
+                map3.addOverLay(marker);
+            }else if(type==4){
+                map4.centerAndZoom(new T.LngLat(splitCoord[0], splitCoord[1]), zoom);
+                map4.addOverLay(marker);
+            }
+            addClickHandler(content, marker,type);
+        }
+        function addClickHandler(content, marker,type) {
+            marker.addEventListener("click", function (e) {
+                    openInfo(content, e,type)
+                }
+            );
+        }
+
+        function openInfo(content, e,type) {
+            var point = e.lnglat;
+            marker = new T.Marker(point);// 创建标注
+            var markerInfoWin = new T.InfoWindow(content, {offset: new T.Point(0, -30)}); // 创建信息窗口对象
+            if(type==1){
+                map.addOverLay(marker); //开启信息窗口
+            }else{
+                map2.addOverLay(marker);
+            }
+        }
+
+        function type2(data, color, content, id,type) {
+            if(color == null || color == '')
+                color='red';
+            var pointss = [];
+            var coordinates = data.split(";");
+            for (var j = 0; j < coordinates.length - 1; j++) {
+                var zbs = coordinates[j].split(",");
+                pointss.push(new T.LngLat(zbs[0], zbs[1]));
+            }
+            var zb = coordinates[0].split(",");
+            polygon = new T.Polygon(pointss, {
+                color: color, weight: 2, opacity: 0.3, fillColor: color, fillOpacity: 0.3
+            });
+            polygon.addEventListener("mouseover", function () {
+                layer.msg("此区域为 : " + content, {icon: 6, time: 1000});
+            });
+            polygon.addEventListener("dblclick",
+                function (e) {
+                    overlay_style(e, id)
+                }
+            );
+            //向地图上添加面
+            if(type==1){
+                map.centerAndZoom(new T.LngLat(zb[0], zb[1]), zoom);
+                map.addOverLay(polygon);
+            }else if(type==2){
+                map2.centerAndZoom(new T.LngLat(zb[0], zb[1]), zoom);
+                map2.addOverLay(polygon);
+            }else if(type==3){
+                map3.centerAndZoom(new T.LngLat(zb[0], zb[1]), zoom);
+                map3.addOverLay(polygon);
+            }else if(type==4){
+                map4.centerAndZoom(new T.LngLat(zb[0], zb[1]), zoom);
+                map4.addOverLay(polygon);
+            }
+        }
+
+    </script>
+</head>
+<body class="gray-bg" onLoad="onLoad()">
+<div>
+    <select id="option1" onchange="option1(this.value)" class="form-control select2-multiple">
+        <option>请选择</option>
+        <option th:each="gisMap:${gisMapYearList}" th:value="${gisMap.year}" th:text="${gisMap.title}"></option>
+    </select>
+    <select id="option2" onchange="option2(this.value)" class="form-control select2-multiple">
+        <option>请选择</option>
+        <option th:each="gisMap:${gisMapYearList}" th:value="${gisMap.year}" th:text="${gisMap.title}"></option>
+    </select>
+</div>
+<div id="map1_container" style="float: left;margin-top:5px; "></div>
+<div id="map2_container" style="float: right;margin-top:5px; "></div>
+<div>
+    <select id="option3" onchange="option3(this.value)" class="form-control select2-multiple">
+        <option>请选择</option>
+        <option th:each="gisMap:${gisMapYearList}" th:value="${gisMap.year}" th:text="${gisMap.title}"></option>
+    </select>
+    <select id="option4" onchange="option4(this.value)" class="form-control select2-multiple">
+        <option>请选择</option>
+        <option th:each="gisMap:${gisMapYearList}" th:value="${gisMap.year}" th:text="${gisMap.title}"></option>
+    </select>
+</div>
+<div id="map3_container" style="float: left;margin-top:5px; "></div>
+<div id="map4_container" style="float: right;margin-top:5px; "></div>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改气象管理信息')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-meteorological-edit" th:object="${cMeteorological}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">编码：</label>
+                        <div class="col-sm-8">
+                            <input name="code" th:field="*{code}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地点：</label>
+                        <div class="col-sm-8">
+                            <input name="address" th:field="*{address}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">气温：</label>
+                        <div class="col-sm-8">
+                            <input name="airTemperature" th:field="*{airTemperature}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">积温：</label>
+                        <div class="col-sm-8">
+                            <input name="accumulatedTemperature" th:field="*{accumulatedTemperature}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地温：</label>
+                        <div class="col-sm-8">
+                            <input name="groundTemperature" th:field="*{groundTemperature}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">降水：</label>
+                        <div class="col-sm-8">
+                            <input name="precipitation" th:field="*{precipitation}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">自然灾害：</label>
+                        <div class="col-sm-8">
+                            <input name="naturalDisaster" th:field="*{naturalDisaster}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">风向：</label>
+                        <div class="col-sm-8">
+                            <input name="windDirection" th:field="*{windDirection}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">状态：</label>
+                        <div class="col-sm-8">
+                            <select name="status" class="form-control m-b" th:with="type=${@dict.getType('sys_cbk_status')}">
+                                <option value="">请选择</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{status}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">来源：</label>
+                        <div class="col-sm-8">
+                            <input name="source" th:field="*{source}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">发布时间：</label>
+                        <div class="col-sm-8">
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input name="publishTime" th:value="${#dates.format(cMeteorological.publishTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="button-s" style="margin-left: 70%">
+            <button type="button" class="btn btn-w-m btn-primary" onclick="saveup()" >提 交</button>
+            <button type="button" class="btn btn-w-m btn-primary" onclick="save()" >保 存</button>
+            <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+        </div>
+
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "caiji/meteorological";
+        $("#form-meteorological-edit").validate({
+            focusCleanup: true
+        });
+
+
+
+        $("input[name='publishTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        function save() {
+            if ($.validate.form()) {
+                $.modal.confirm("确认要点击确定吗?", function () {
+                    saveTab(prefix + "/edit", $('#form-meteorological-edit').serialize());
+                });
+            }
+        }
+        function saveTab(url, data, callback) {
+            var config = {
+                url: url,
+                type: "post",
+                dataType: "json",
+                data: data,
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                },
+                success: function(result) {
+                    if (typeof callback == "function" ) {
+                        callback(result);
+                    }
+                    if (result.code == web_status.SUCCESS) {
+                        confirmdemo(result.msg,function() {
+                            reload();
+                        });
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                }
+            };
+            $.ajax(config)
+        }
+        function saveup(){
+            if ($.validate.form()) {
+                $.modal.confirm("确认要点击确定吗?", function () {
+                    saveModal(prefix + "/edit", $('#form-meteorological-edit').serialize());
+                });
+            }
+        }
+
+        function confirmdemo(content, callBack) {
+            layer.confirm(content, {
+                icon: 3,
+                title: "系统提示",
+                btn: ['确认']
+            },  function (index) {
+                layer.close(index);
+
+                callBack(true);
+
+            });
+        };
+
+        // 保存信息 弹出提示框
+        function saveModal(url, data, callback) {
+            var config = {
+                url: url,
+                type: "post",
+                dataType: "json",
+                data: data,
+                success: function(result) {
+                    if (typeof callback == "function" ) {
+                        callback(result);
+                    }
+                    if (result.code == web_status.SUCCESS) {
+                        confirmdemo(result.msg,function() {
+                            reload();
+                        });
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+
+                }
+            };
+            $.ajax(config)
+        }
+        function reload () {
+            parent.location.reload();
+        }
+    </script>
+</body>
+</html>

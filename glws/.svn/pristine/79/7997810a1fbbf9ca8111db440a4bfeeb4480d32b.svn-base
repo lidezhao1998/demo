@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('退牧还草工程进度管理实施分析')"/>
+</head>
+<style>
+    .table-striped .table > thead > tr > th, .table-striped .table > tbody > tr > th {
+        border: 1px solid #fff;
+        border-top: 0px;
+    }
+
+    .table-striped table thead {
+        background-color: #50c2c1;
+        color: white;
+    }
+    .sel_p_c_a ul {
+        min-height: 60px;
+    }
+    .sel_p_c_a p {
+        margin: 0px;
+    }
+    .btn-success {
+        background-color: #50c2c1;
+        border-color: #50c2c1;
+        color: #FFFFFF;
+    }
+</style>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            年份：
+                            <input type="text" style="width: 70px;text-align: center;" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                            月份：
+                            <select id="concreteTime" name="concreteTime" style="width: 70px">
+                                <option value="">请选择</option>
+                                <option value="1">一月</option>
+                                <option value="2">二月</option>
+                                <option value="3">三月</option>
+                                <option value="4">四月</option>
+                                <option value="5">五月</option>
+                                <option value="6">六月</option>
+                                <option value="7">七月</option>
+                                <option value="8">八月</option>
+                                <option value="9">九月</option>
+                                <option value="10">十月</option>
+                                <option value="11">十一月</option>
+                                <option value="12">十二月</option>
+                            </select>
+                        </li>
+                        <li>
+                            省份：
+                            <select id="province" name="province" th:with="type=${@dict.getType('sys_province')}">
+                                <option value="">--全国--</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                            &nbsp;市级：
+                            <select id="city" name="city">
+                                <option value="">--请选择--</option>
+                            </select>
+                            &nbsp;区级：
+                            <select id="area" name="address">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="startSearch()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <!-- 选项卡 -->
+        <div class="col-sm-12 search-collapse">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 统计表</a>
+                    </li>
+                    <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">统计图</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="col-sm-12 select-table table-striped">
+                            <table id="bootstrap-table"></table>
+                        </div>
+                    </div>
+                    <div id="tab-2" class="tab-pane">
+                        <div class="ibox-content">
+                            <p>规模合计(万亩)</p>
+                            <div style="width: 1000px;height: 500px" id="echarts-pillar-chart-gm"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 选项卡end -->
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script th:inline="javascript">
+    /* 日期组件 */
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2',
+            type: 'year'
+        });
+    });
+
+    /* 省市区三级联动 */
+    // ===== 切换省份 =====
+    $("#province").change(function () {
+        let provinceCode = $('#province option:selected').val();
+        $("#city").empty();
+        $("#area").empty();
+        //获取所属市级
+        getCitiess(provinceCode);
+    });
+    // ===== 切换市级 =====
+    $("#city").change(function () {
+        let cityCode = $('#city option:selected').val();
+        $("#area").empty();
+        //获取区县级
+        getAreass(cityCode);
+    });
+
+    // ===== 加载市列表 =====
+    function getCitiess(provinceCode) {
+        var url = ctx + "system/analysisH/getCities";
+        $.ajax({
+            "url": url,
+            "data": {"provinceCode": provinceCode},
+            "type": "post",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = "";
+                op.text = "-- 请选择地址 --";
+                document.getElementById("city").appendChild(op);
+                let cityHtml = '';
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("city").appendChild(op);
+                    cityHtml += '<li dictCode="' + data[i].dictCode + '">' + data[i].dictLabel + '</li>';
+                }
+                $('#sel_city').html(cityHtml);
+            }
+        });
+        var op2 = document.createElement("option");
+        op2.value = "";
+        op2.text = "-- 请选择地址 --";
+        document.getElementById("area").appendChild(op2);
+        $('#sel_area').html('');
+    }
+
+    // ===== 加载区列表 =====
+    function getAreass(cityCode) {
+        var url = ctx + "system/analysisH/getAreas";
+        $.ajax({
+            "url": url,
+            "data": {"cityCode": cityCode},
+            "type": "post",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = "";
+                op.text = "-- 请选择地址 --";
+                document.getElementById("area").appendChild(op);
+                let areaHtml = '';
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("area").appendChild(op);
+                    areaHtml += '<li dictCode="' + data[i].dictCode + '">' + data[i].dictLabel + '</li>';
+                }
+                $('#sel_area').html(areaHtml);
+            }
+        });
+    }
+
+    /* 省市区三级联动end */
+
+    /*列表数据查询*/
+    var prefix = ctx + "system/analysisH";
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            pagination: true,
+            modalName: "退牧还草工程进度管理实施分析",
+            columns: [
+                [
+                    {
+                        field: 'index',
+                        title: '序号',
+                        rowspan: 2,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    },
+                    {
+                        title: '任务年份',
+                        field: 'year',
+                        rowspan: 2,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '月份',
+                        field: 'concreteTime',
+                        rowspan: 2,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '上报地区',
+                        field: 'address',
+                        rowspan: 2,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '围栏部分',
+                        rowspan: 1,
+                        colspan: 5,
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        title: '其他部分',
+                        rowspan: 1,
+                        colspan: 5,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'zgmCount',
+                        title: '规模合计' + '</br>' + '(万亩)',
+                        rowspan: 2,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                ],
+                [
+                    {
+                        field: 'wlScale', //围栏规模
+                        title: '围栏',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'jmSize', //禁牧规模
+                        title: '禁牧',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+
+                        field: 'xmSize',//休牧规模
+                        title: '休牧',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'hqlxSize',//划区轮休建设规模
+                        title: '划区轮休',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'smhzlSize',//石漠化治理建设规模
+                        title: '石漠化治理',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'thcyglSize', //退化草原改良建设规模
+                        title: '退化草原改良',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+
+                        field: 'rgscdSize',//人工种草地建设规模
+                        title: '人工种草地',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'hspjSize',//含饲棚圈建设规模
+                        title: '含饲棚圈',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'httSize',//黑土滩建设规模
+                        title: '黑土滩',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'dhcSize',//害草建设规模
+                        title: '害草建',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                ],
+            ]
+        };
+        $.table.init(options);
+    });
+
+    let user = [[${user}]];
+    if(user != ''){
+        if(user == '省级'){
+            let provinceName = [[${provinceName}]];
+            let provinceCode = [[${provinceCode}]];
+            let pro_ht = '<option value='+ provinceCode +'>'+ provinceName +'</option>';
+            $("#province").html(pro_ht);
+            $("#city").empty();
+            getCitiess(provinceCode);
+        }else if(user == '市级'){
+            let provinceName = [[${provinceName}]];
+            let provinceCode = [[${provinceCode}]];
+            let cityName = [[${cityName}]];
+            let cityCode = [[${cityCode}]];
+            let pro_ht = '<option value='+ provinceCode +'>'+ provinceName +'</option>';
+            $("#province").html(pro_ht);
+            let city_ht = '<option value='+ cityCode +'>'+ cityName +'</option>';
+            $("#city").html(city_ht);
+            $("#area").empty();
+            getAreass(cityCode);
+        }
+    }
+
+    //获取实施分析-横向统计图
+    function getAnalysisHHistogram() {
+        let year = $("#test2").val();
+        let province = $("#province").val();
+        let city = $("#city").val();
+        let address = $("#area").val();
+        let concreteTime = $("#concreteTime").val();
+        /* 横向统计图 */
+        var gmPillarChart = echarts.init(document.getElementById("echarts-pillar-chart-gm"));
+        $.ajax({
+            type : "post",
+            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url : prefix + "/analysisHHistogram",    //请求发送到dataActiont处
+            data : {year:year,province:province,city:city,address:address,concreteTime:concreteTime},
+            dataType : "json",        //返回数据形式为json
+            success : function(result) {
+                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                if (result) {
+                    console.log(result)
+                    let legendData = [];//头部
+                    let xAxisData = [];//横向-年份
+                    let seriesData = [];//数据
+                    let yearRows = [];//seriesData-name
+                    let gmSeriesDataList = [];
+                    for (var i = 0; i < result.length; i++) {
+                        let year = result[i].year;
+                        if(legendData.lastIndexOf(year) == -1) {
+                            legendData.push(year);
+                            gmSeriesDataList.push([]);
+                        }
+                    }
+
+                    for(var i=0;i<result.length;i++){
+                        let publish = result[i];
+                        let address = publish.address;
+                        if(xAxisData.lastIndexOf(address) == -1){
+                            xAxisData.push(address);
+                        }
+                    }
+
+                    for (var i = 0; i <xAxisData.length; i++) {
+                        var pro=xAxisData[i];
+                        for (var j = 0; j < legendData.length; j++) {
+                            //根据省份获取年份的数据列表
+                            for (var m=0;m<result.length;m++){
+                                if(legendData[j]==result[m].year && pro == result[m].address){
+                                    var zgmCount=(result[m].zgmCount);
+                                    gmSeriesDataList[j].push(zgmCount);
+                                }
+                            }
+                        }
+                    }
+                    function renderItem(params, api) {
+                        var xValue = api.value(0);
+                        var currentSeriesIndices = api.currentSeriesIndices();
+                        var barLayout = api.barLayout({
+                            barGap: '20%', barCategoryGap: '10%', count: currentSeriesIndices.length - 1
+                        });
+
+                        var points = [];
+                        for (var i = 0; i < currentSeriesIndices.length; i++) {
+                            var seriesIndex = currentSeriesIndices[i];
+                            if (seriesIndex !== params.seriesIndex) {
+                                var point = api.coord([xValue, api.value(seriesIndex)]);
+                                point[0] += barLayout[i - 1].offsetCenter;
+                                point[1] -= 20;
+                                points.push(point);
+                            }
+                        }
+                        var style = api.style({
+                            stroke: api.visual('color'),
+                            fill: null
+                        });
+
+                        return {
+                            type: 'polyline',
+                            shape: {
+                                points: points
+                            },
+                            style: style
+                        };
+                    }
+
+                    gmPillarChart.hideLoading();    //隐藏加载动画
+                    gmPillarChart.setOption({        //加载数据图表
+                        tooltip: {
+                            trigger: 'axis',
+                            confine: true
+                        },
+                        legend: {
+                            data: legendData
+                        },
+                        dataZoom: [{
+                            type: 'slider',
+                            start: 50,
+                            end: 70
+                        }, {
+                            type: 'inside',
+                            start: 50,
+                            end: 70
+                        }],
+                        xAxis: {
+                            data: xAxisData,
+                            axisTick:{
+                                alignWithLabel:true
+                            }
+                        },
+                        yAxis: {},
+                        series: [{
+                            type: 'custom',
+                            name: 'trend',
+                            renderItem: renderItem,
+                            itemStyle: {
+                                borderWidth: 2
+                            },
+                            data: [],
+                            z: 100
+                        }].concat(echarts.util.map(gmSeriesDataList, function (data, index) {
+                            console.log(data)
+                            return {
+                                type: 'bar',
+                                animation: false,
+                                name: legendData[index],
+                                itemStyle: {
+                                    opacity: 0.5
+                                },
+                                data: data
+                            };
+                        }))
+                    });
+                    window.onresize = gmPillarChart.resize;
+
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                gmPillarChart.hideLoading();
+            }
+        });
+    }
+
+    function startSearch(){
+        $.table.search();
+        getAnalysisHHistogram();
+    }
+    //获取柱状统计图
+    getAnalysisHHistogram();
+</script>
+</body>
+</html>

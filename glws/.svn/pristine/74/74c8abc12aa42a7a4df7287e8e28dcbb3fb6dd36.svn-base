@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原鼠害发生与防治情况列表管理页面')" />
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-striped table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: whitesmoke;
+        height: 55px;
+    }
+
+    /*按钮背景色*/
+    .btn-success{
+
+        background-color:rgba(48,146,62, 0.9);
+
+    }
+</style>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>编号：</p>
+                                <input type="text" name="number"/>
+                            </li>
+                            <li>
+                                <p>年度：</p>
+                                <input type="text" name="year"/>
+                            </li>
+                            <li>
+                                <p>周：</p>
+                                <input type="text" name="week"/>
+                            </li>
+                            <li>
+                                <p>省：</p>
+                                <input type="text" name="province"/>
+                            </li>
+                            <li>
+                                <p>市：</p>
+                                <input type="text" name="city"/>
+                            </li>
+                            <li>
+                                <p>县：</p>
+                                <input type="text" name="county"/>
+                            </li>
+                            <li>
+                                <p>类型：</p>
+                                <select name="type" th:with="type=${@dict.getType('')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>危害总面积：</p>
+                                <input type="text" name="harmTotalarea"/>
+                            </li>
+                            <li>
+                                <p>其中工程区危害面积：</p>
+                                <input type="text" name="engineeringhazard"/>
+                            </li>
+                            <li>
+                                <p>严重危害总面积：</p>
+                                <input type="text" name="seriousArea"/>
+                            </li>
+                            <li>
+                                <p>其中区工程区严重危害面积：</p>
+                                <input type="text" name="engineeringSeriousArea"/>
+                            </li>
+                            <li>
+                                <p>化学防治：</p>
+                                <input type="text" name="chemistryControl"/>
+                            </li>
+                            <li>
+                                <p>C型肉毒素：</p>
+                                <input type="text" name="cBotulinumtoxin"/>
+                            </li>
+                            <li>
+                                <p>D型肉毒素：</p>
+                                <input type="text" name="dBotulinumtoxin"/>
+                            </li>
+                            <li>
+                                <p>雷公藤：</p>
+                                <input type="text" name="tripterygium"/>
+                            </li>
+                            <li>
+                                <p>莪术醇：</p>
+                                <input type="text" name="curcumae"/>
+                            </li>
+                            <li>
+                                <p>招鹰控鼠：</p>
+                                <input type="text" name="hawkMouse"/>
+                            </li>
+                            <li>
+                                <p>野化狐狸控鼠：</p>
+                                <input type="text" name="foxRat"/>
+                            </li>
+                            <li>
+                                <p>物理防治：</p>
+                                <input type="text" name="physicalControl"/>
+                            </li>
+                            <li>
+                                <p>防治面积：</p>
+                                <input type="text" name="defensiveArea"/>
+                            </li>
+                            <li>
+                                <p>控制面积：</p>
+                                <input type="text" name="controlarea"/>
+                            </li>
+                            <li>
+                                <p>招鹰灭鼠：</p>
+                                <input type="text" name="hawkDeratization"/>
+                            </li>
+                            <li>
+                                <p>野化狐狸灭鼠：</p>
+                                <input type="text" name="rodentControl"/>
+                            </li>
+                            <li>
+                                <p>技术人员(人/天)：</p>
+                                <input type="text" name="artisan"/>
+                            </li>
+                            <li>
+                                <p>出工(人/天)：</p>
+                                <input type="text" name="work"/>
+                            </li>
+                            <li>
+                                <p>飞机(架/次)：</p>
+                                <input type="text" name="plane"/>
+                            </li>
+                            <li>
+                                <p>防治器械(台/套/天)：</p>
+                                <input type="text" name="controlApparatus"/>
+                            </li>
+                            <li>
+                                <p>车辆(辆/天)：</p>
+                                <input type="text" name="car"/>
+                            </li>
+                            <li>
+                                <p>合计：</p>
+                                <input type="text" name="total"/>
+                            </li>
+                            <li>
+                                <p>备注：</p>
+                                <input type="text" name="remarks"/>
+                            </li>
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="zaihai:sczj:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="zaihai:sczj:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="zaihai:sczj:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="zaihai:sczj:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('zaihai:sczj:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('zaihai:sczj:remove')}]];
+        var detailFlag = [[${@permission.hasPermi('caiji:sczj:detail')}]];
+        var prefix = ctx + "caiji/sczj";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                detailUrl: prefix + "/detail/{id}",
+                modalName: "草原鼠害发生与防治情况管理页面",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '表id',
+                    align: 'center',
+                    visible: false
+                },
+                {
+                    field : 'number',
+                    align: 'center',
+                    title : '编号'
+                },
+                {
+                    field : 'year',
+                    align: 'center',
+                    title : '年度'
+                },
+                {
+                    field : 'week',
+                    align: 'center',
+                    title : '周'
+                },
+                {
+                    field : 'province',
+                    align: 'center',
+                    title : '省'
+                },
+                {
+                    field : 'city',
+                    align: 'center',
+                    title : '市'
+                },
+                {
+                    field : 'county',
+                    align: 'center',
+                    title : '县'
+                },
+                {
+                    field : 'type',
+                    align: 'center',
+                    title : '类型'
+                },
+                {
+                    field : 'harmTotalarea',
+                    align: 'center',
+                    title : '危害总面积'
+                },
+                {
+                    field : 'engineeringhazard',
+                    align: 'center',
+                    title : '其中工程区危害面积'
+                },
+                {
+                    field : 'seriousArea',
+                    align: 'center',
+                    title : '严重危害总面积'
+                },
+                {
+                    field : 'engineeringSeriousArea',
+                    align: 'center',
+                    title : '其中区工程区严重危害面积'
+                },
+                {
+                    field : 'chemistryControl',
+                    align: 'center',
+                    title : '化学防治'
+                },
+                {
+                    field : 'cBotulinumtoxin',
+                    align: 'center',
+                    title : 'C型肉毒素'
+                },
+                {
+                    field : 'dBotulinumtoxin',
+                    align: 'center',
+                    title : 'D型肉毒素'
+                },
+                {
+                    field : 'tripterygium',
+                    align: 'center',
+                    title : '雷公藤'
+                },
+                {
+                    field : 'curcumae',
+                    align: 'center',
+                    title : '莪术醇'
+                },
+                {
+                    field : 'hawkMouse',
+                    align: 'center',
+                    title : '招鹰控鼠'
+                },
+                {
+                    field : 'foxRat',
+                    align: 'center',
+                    title : '野化狐狸控鼠'
+                },
+                {
+                    field : 'physicalControl',
+                    align: 'center',
+                    title : '物理防治'
+                },
+                {
+                    field : 'defensiveArea',
+                    align: 'center',
+                    title : '防治面积'
+                },
+                {
+                    field : 'controlarea',
+                    align: 'center',
+                    title : '控制面积'
+                },
+                {
+                    field : 'hawkDeratization',
+                    align: 'center',
+                    title : '招鹰灭鼠'
+                },
+                {
+                    field : 'rodentControl',
+                    align: 'center',
+                    title : '野化狐狸灭鼠'
+                },
+                {
+                    field : 'artisan',
+                    align: 'center',
+                    title : '技术人员(人/天)'
+                },
+                {
+                    field : 'work',
+                    align: 'center',
+                    title : '出工(人/天)'
+                },
+                {
+                    field : 'plane',
+                    align: 'center',
+                    title : '飞机(架/次)'
+                },
+                {
+                    field : 'controlApparatus',
+                    align: 'center',
+                    title : '防治器械(台/套/天)'
+                },
+                {
+                    field : 'car',
+                    align: 'center',
+                    title : '车辆(辆/天)'
+                },
+                {
+                    field : 'total',
+                    align: 'center',
+                    title : '合计'
+                },
+                {
+                    field : 'remarks',
+                    align: 'center',
+                    title : '备注'
+                },
+                {
+                    field : 'status',
+                    align: 'center',
+                    title : '状态'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        /* -详情展开 */
+        function detail(id) {
+            var url = prefix + '/detail/' + id;
+            $.modal.open("详情展开", url);
+        }
+    </script>
+</body>
+</html>

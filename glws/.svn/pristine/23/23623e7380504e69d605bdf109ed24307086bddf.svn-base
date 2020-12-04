@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('退牧还草工程资金汇总报表')" />
+</head>
+<body class="gray-bg">
+<div class="col-sm-18 select-table">
+<!--    <div class="col-sm-12 search-collapse">-->
+<!--        <form id="formId">-->
+<!--            <div class="select-list">-->
+<!--                <ul>-->
+<!--                    <li>-->
+<!--                        <select name="province" th:with="type=${@dict.getType('sys_province')}">-->
+<!--                            <option value="">请选择任务省份</option>-->
+<!--                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>-->
+<!--                        </select>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <button class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</button>-->
+<!--                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+    <div class="col-sm-12 select-table">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>图形列表</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="echarts" id="echarts-line-chart"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+
+<script th:inline="javascript">
+    var prefix = ctx + "system/summary";
+
+    $(function () {
+        var year= [[${year}]];
+        var jmSize=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var newYear=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var xmSize=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var hqlxSize=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var smhzlSize=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var thcyglSize=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var rgscdSize=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var hspjSize=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var httSize=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var dhcSize=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var ykcyzlSize=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var wlScale=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var province= [[${province}]];
+
+        var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+        $.ajax({
+            type : "post",
+            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url : prefix + "/getOptionHistogram",    //请求发送到dataActiont处
+            data : {province:province},
+            dataType : "json",        //返回数据形式为json
+            success : function(result) {
+                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                if (result) {
+
+                    for(var i=0;i<result.length;i++){
+                        newYear.push(result[i].year);
+                        jmSize.push(result[i].jmSize);
+                        xmSize.push(result[i].xmSize);
+                        hqlxSize.push(result[i].hqlxSize);
+                        smhzlSize.push(result[i].smhzlSize);
+                        thcyglSize.push(result[i].thcyglSize);
+                        rgscdSize.push(result[i].rgscdSize);
+                        hspjSize.push(result[i].hspjSize);
+                        httSize.push(result[i].httSize);
+                        dhcSize.push(result[i].dhcSize);
+                        ykcyzlSize.push(result[i].ykcyzlSize);
+                        wlScale.push(result[i].wlScale);
+                    }
+                    lineChart.hideLoading();    //隐藏加载动画
+                    lineChart.setOption({        //加载数据图表
+                        title : {
+                            text: '退牧还草工程资金汇总报表',
+                            left: '60%'
+                        },
+                        tooltip: {
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            width:"50%",
+                            data:['禁牧', '休牧', '划区轮牧', '石漠化治理', '围栏合计','退化草原改良', '人工种草地', '含饲棚圈', '黑土滩', '毒害草', '已垦草原治理']
+                        },
+                        grid: {
+                            left: '16%',
+                            right: '3%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        calculable : true,
+                        xAxis: {
+                            boundaryGap : false,
+                            data: newYear
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            name: '禁牧',
+                            type: 'line',
+                            stack: '禁牧',
+                            data: jmSize
+                        },
+                            {
+                                name: '休牧',
+                                type: 'line',
+                                stack: '休牧',
+                                data: xmSize
+                            },
+                            {
+                                name: '划区轮牧',
+                                type: 'line',
+                                stack: '划区轮牧',
+                                data: hqlxSize
+                            },
+                            {
+                                name: '石漠化治理',
+                                type: 'line',
+                                stack: '石漠化治理',
+                                data: smhzlSize
+                            },
+                            {
+                                name: '围栏合计',
+                                type: 'line',
+                                stack: '围栏合计',
+                                data: wlScale
+                            },
+                            {
+                                name: '退化草原改良',
+                                type: 'line',
+                                stack: '退化草原改良',
+                                data: thcyglSize
+                            },
+                            {
+                                name: '人工种草地',
+                                type: 'line',
+                                stack: '人工种草地',
+                                data: rgscdSize
+                            },
+                            {
+                                name: '含饲棚圈',
+                                type: 'line',
+                                stack: '含饲棚圈',
+                                data: hspjSize
+                            },
+                            {
+                                name: '黑土滩',
+                                type: 'line',
+                                stack: '黑土滩',
+                                data: httSize
+                            },
+                            {
+                                name: '毒害草',
+                                type: 'line',
+                                stack: '毒害草',
+                                data: dhcSize
+                            },
+                            {
+                                name: '已垦草原治理',
+                                type: 'line',
+                                stack: '已垦草原治理',
+                                data: ykcyzlSize
+                            }
+                        ]
+
+                    });
+                    window.onresize = lineChart.resize;
+
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                lineChart.hideLoading();
+            }
+        });
+
+    });
+
+
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

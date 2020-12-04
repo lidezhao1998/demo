@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('涵养水源列表')" />
+</head>
+<style>
+    .W100 .th-inner {
+        width:100px !important;
+    }
+    .W180 .th-inner {
+        width:180px !important;
+    }
+
+</style>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <p>年度：</p>
+                                <input type="text" name="annual" class="layui-layer-input" placeholder="请选择" id="annual"/>
+                            </li>
+                            <li>
+                                <p>地区：</p>
+                                <select name="area" th:with="type=${@dict.getType('sys_province')}">
+                                    <option value="">请选择地区</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <!--<li>
+                                <p>林分面积(单位：hm2)：</p>
+                                <input type="text" name="standArea"/>
+                            </li>
+                            <li>
+                                <p>年降水量(单位：mm)：</p>
+                                <input type="text" name="annulPrecipitation"/>
+                            </li>
+                            <li>
+                                <p>林分年蒸散量(单位：mm)：</p>
+                                <input type="text" name="evapotranspiration"/>
+                            </li>
+                            <li>
+                                <p>年涵养水源量(单位：m3）：</p>
+                                <input type="text" name="waterConservation"/>
+                            </li>
+                            <li>
+                                <p>林分调节水量价值(单位：元)：</p>
+                                <input type="text" name="annualWaterConservation"/>
+                            </li>
+                            <li>
+                                <p>林分净化水质价值(单位：元)：</p>
+                                <input type="text" name="waterQualityValue"/>
+                            </li>
+                            <li>
+                                <p>涵养水源总价值(单位：元)：</p>
+                                <input type="text" name="conserveWaterValue"/>
+                            </li>
+                            <li>
+                                <p>单位面积涵养水源价值(单位：元)：</p>
+                                <input type="text" name="unilConserveWaterValue"/>
+                            </li>-->
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="eceas:water:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="eceas:water:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="eceas:water:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="eceas:water:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('eceas:water:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('eceas:water:remove')}]];
+        var prefix = ctx + "eceas/water";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "涵养水源",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'conservationId', 
+                    title : '涵养水源ID',
+                    visible: false
+                },
+                {
+                    field : 'standArea', 
+                    title : '林分面积(单位：hm2)'
+                },
+                {
+                    field : 'annulPrecipitation', 
+                    title : '年降水量(单位：mm)'
+                },
+                {
+                    field : 'evapotranspiration', 
+                    title : '林分年蒸散量(单位：mm)'
+                },
+                {
+                    field : 'waterConservation', 
+                    title : '年涵养水源量(单位：m3）'
+                },
+                {
+                    field : 'annualWaterConservation', 
+                    title : '林分调节水量价值(单位：元)'
+                },
+                {
+                    field : 'waterQualityValue', 
+                    title : '林分净化水质价值(单位：元)'
+                },
+                {
+                    field : 'conserveWaterValue', 
+                    title : '涵养水源总价值(单位：元)'
+                },
+                {
+                    field : 'unilConserveWaterValue', 
+                    title : '单位面积涵养水源价值(单位：元)'
+                },
+                    {
+                        field : 'surfaceAnnualRunoff',
+                        title : '单位面积地表年径流量(单位：mm)'
+                    },
+                {
+                    title: '操作',
+                    class: 'W180',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.conservationId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.conservationId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('&nbsp;<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="eveal(\'' + row.id + '\')"><i class="fa fa-edit"></i>评价</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        /** 年度 */
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#annual',
+                type: 'year'
+            });
+        });
+    </script>
+</body>
+</html>

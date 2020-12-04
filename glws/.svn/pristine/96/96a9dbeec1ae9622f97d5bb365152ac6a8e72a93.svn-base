@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('退牧还草工程任务创建')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+
+</head>
+<style>
+    input{
+        width: 60%;
+        height: 20px;
+        border:1px solid #e5e6e7;
+        text-align:center;
+    }
+    .table tbody tr:first-child td{
+        font-size: 12px;
+        font-weight: bold;
+        background:#3CC4A9;
+        color: white;
+    }
+</style>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <div class="row">
+        <form id="form-publish-add" class="form-horizontal">
+            <div class="col-sm-12 search-collapse">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <p>年份：</p>
+                            <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                        </li>
+                        <li>
+                            省份：<select id="province" name="province" th:with="type=${@dict.getType('sys_province')}">
+                            <option value="">所有</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-12 search-collapse">
+                <div class="col-sm-12  pull-left" style="padding: 0px;">
+                    <table class="table select-table table-striped" style="text-align:center;">
+                        <tbody>
+                        <tr>
+                            <td style="width: 130px;">信息</td>
+                            <td>围栏合计</td>
+                            <td>退化草原改良</td>
+                            <td>人工种草地</td>
+                            <td>含饲棚圈</td>
+                            <td>黑土滩</td>
+                            <td>毒害草</td>
+                            <td>总合计</td>
+                        </tr>
+                        <tr>
+                            <td>建设规模(万亩)</td>
+                            <!--围栏合计-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input id="wlScale" name="wlScale" type="text" maxlength="8" min onchange="sum()"
+                                           onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <!--退化草原改良-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="thzyglSize" id="thzyglSize" type="text" maxlength="8" min
+                                           onchange="sum()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <!--人工种草地-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="rgscdSize" id="rgscdSize" type="text" maxlength="8" min
+                                           onchange="sum()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <!--含饲棚圈-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="hspjSize" id="hspjSize" type="text" maxlength="8" min onchange="sum()"
+                                           onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <!--黑土滩-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="httSize" id="httSize" type="text" maxlength="8" min onchange="sum()"
+                                           onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <!--毒害草-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="dhcSize" id="dhcSize" type="text" maxlength="8" min onchange="sum()"
+                                           onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <!--总合计-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="zmj" id="zmj" type="text" maxlength="8" min readonly="readonly">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>建设投资(万元)</td>
+                            <!--围栏合计-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="wlInvestment" id="wlInvestment" type="text" maxlength="8" min
+                                           onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <!--退化草原改良-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="thzyglMoney" id="thzyglMoney" type="text" maxlength="8" min
+                                           onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <!--人工种草地-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="rgscdMoney" id="rgscdMoney" type="text" maxlength="8" min
+                                           onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <!--含饲棚圈-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="hspjMoney" id="hspjMoney" type="text" maxlength="8" min
+                                           onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <!--黑土滩-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="httMoney" id="httMoney" type="text" maxlength="8" min
+                                           onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <!--毒害草-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="dhcMoney" id="dhcMoney" type="text" maxlength="8" min
+                                           onchange="summoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <!--总合计-->
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="zhj" id="zhj" type="text" maxlength="8" min readonly="readonly">
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped " style="text-align: center;">
+                        <tbody>
+                        <tr>
+                            <td>其他部分信息</td>
+                            <td>地方资金</td>
+                            <td>中央资金</td>
+                            <td>资金合计</td>
+                        </tr>
+                        <tr>
+                            <td>单位(万元)</td>
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="dfMoney" id="dfMoney" type="text" maxlength="8" min
+                                           onchange="zysumMoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="zyMoney" id="zyMoney" type="text" maxlength="8" min
+                                           onchange="zysumMoney()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-control-static" type="text" disabled="disabled"
+                                     style="font-size: 12px;">
+                                    <input name="zdhj" id="zdhj" type="text" maxlength="8" min readonly="readonly">
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-sm-offset-5 col-sm-10" style="margin-left: 35%;margin-top: 15px">
+                <button type="button" class="btn btn-primary" id="button-confirm">保存</button>
+                <button type="button" class="btn btn-sm btn-danger" onclick="resetPwd()"><i class="fa fa-reply-all"></i>发布</button>
+                <button type="button" class="btn btn-sm btn-danger" onclick="$.modal.close()"><i class="fa fa-reply-all"></i>关 闭</button>
+                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('form-publish-add', 'bootstrap-table1')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<script src="layer/layer.js"></script>
+<script src="layer/extend/layer.ext.js"></script>
+<script type="text/javascript">
+
+</script>
+<script type="text/javascript">
+
+    //求出全有的规模面积
+    function sum() {
+        var thzyglSize = $("#thzyglSize").val();
+        var rgscdSize = $("#rgscdSize").val();
+        var hspjSize = $("#hspjSize").val();
+        var httSize = $("#httSize").val();
+        var dhcSize = $("#dhcSize").val();
+        var wlScale = $("#wlScale").val();
+        //判断不为空
+        if (thzyglSize == '' && thzyglSize == 0) {
+            var thzyglSize = 0;
+        }
+        if (rgscdSize == '' && rgscdSize == 0) {
+            var rgscdSize = 0;
+        }
+        if (hspjSize == '' && hspjSize == 0) {
+            var hspjSize = 0;
+        }
+        if (httSize == '' && httSize == 0) {
+            var httSize = 0;
+        }
+        if (dhcSize == '' && dhcSize == 0) {
+            var dhcSize = 0;
+        }
+        if (wlScale == '' && wlScale == 0) {
+            var wlScale = 0;
+        }
+        zmj.value = (parseFloat(thzyglSize) + parseFloat(rgscdSize) + parseFloat(hspjSize) + parseFloat(httSize) + parseFloat(dhcSize) + parseFloat(wlScale)).toFixed(2);
+    }
+
+    //求出全有的投入金额
+    function summoney() {
+        var thzyglMoney = $("#thzyglMoney").val();
+        var rgscdMoney = $("#rgscdMoney").val();
+        var hspjMoney = $("#hspjMoney").val();
+        var httMoney = $("#httMoney").val();
+        var dhcMoney = $("#dhcMoney").val();
+        var wlInvestment = $("#wlInvestment").val();
+        //判断不为空
+        if (thzyglMoney == '') {
+            var thzyglMoney = 0;
+        }
+        if (rgscdMoney == '') {
+            var rgscdMoney = 0;
+        }
+        if (hspjMoney == '') {
+            var hspjMoney = 0;
+        }
+        if (httMoney == '') {
+            var httMoney = 0;
+        }
+        if (dhcMoney == '') {
+            var dhcMoney = 0;
+        }
+        if (wlInvestment == '') {
+            var wlInvestment = 0;
+        }
+        //相加
+        zhj.value = (parseFloat(thzyglMoney) + parseFloat(rgscdMoney) + parseFloat(hspjMoney) + parseFloat(httMoney) + parseFloat(dhcMoney) + parseFloat(wlInvestment)).toFixed(2);
+    }
+
+    //求出全有的投入金额
+    function zysumMoney() {
+        var zyMoney = $("#zyMoney").val();
+        var dfMoney = $("#dfMoney").val();
+        //判断不为空
+        if (zyMoney == '') {
+            var zyMoney = 0;
+        }
+        if (dfMoney == '') {
+            var dfMoney = 0;
+        }
+        //相加
+        zdhj.value = (parseFloat(zyMoney) + parseFloat(dfMoney)).toFixed(2);
+    }
+
+    /*校验form表单数据是否大于0*/
+    var prefix = ctx + "system/publish"
+    $("#form-publish-add").validate({
+        rules: {
+            onkeyup: false,
+            min: true,
+        },
+        errorPlacement:function(error,element) {
+            $.modal.alert('请输入不小于0的数字！');
+        },
+        focusCleanup: true
+    });
+
+    function save() {
+        $.post(prefix + "/addOne", $('#form-publish-add').serialize(), function (data) {
+            //data中是服务端返回的数据
+            //这里进行成功后的渲染。。。。。。
+        });
+        return false;//在这里返回false
+    }
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            if ($("#jmSize").val() == '' && $("#jmMoney").val() == '' && $("#xmSize").val() == '' && $("#xmMoney").val() == '' && $("#hqlxSize").val() == '' && $("#hqlxMoney").val() == '' && $("#smhzlSize").val() == '' && $("#smhzlMoney").val() == '' && $("#thzyglSize").val() == '' && $("#thzyglMoney").val() == '' && $("#rgscdSize").val() == '' && $("#rgscdMoney").val() == '' && $("#hspjSize").val() == '' && $("#hspjMoney").val() == '' && $("#httSize").val() == '' && $("#httMoney").val() == '' && $("#dhcSize").val() == '' && $("#dhcMoney").val() == '' && $("#zyMoney").val() == '' && $("#dfMoney").val() == '') {
+                $.modal.confirm("信息未填写成,请填写后提交", function () {
+                })
+            } else {
+                $.modal.confirm("确认提交发布信息", function () {
+                    $.operate.save(prefix + "/add", $('#form-publish-add').serialize());
+                })
+            }
+        }
+    }
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2',
+            type: 'year',
+            min: 'new Date()'
+        });
+    });
+
+    function resetPwd() {
+        if ($.validate.form()) {
+            if ($("#jmSize").val() == '' && $("#jmMoney").val() == '' && $("#xmSize").val() == '' && $("#xmMoney").val() == '' && $("#hqlxSize").val() == '' && $("#hqlxMoney").val() == '' && $("#smhzlSize").val() == '' && $("#smhzlMoney").val() == '' && $("#thzyglSize").val() == '' && $("#thzyglMoney").val() == '' && $("#rgscdSize").val() == '' && $("#rgscdMoney").val() == '' && $("#hspjSize").val() == '' && $("#hspjMoney").val() == '' && $("#httSize").val() == '' && $("#httMoney").val() == '' && $("#dhcSize").val() == '' && $("#dhcMoney").val() == '' && $("#zyMoney").val() == '' && $("#dfMoney").val() == '') {
+                $.modal.confirm("信息未填写成,请填写后提交", function () {})
+            } else if ($("#test2").val() == '') {
+                $.modal.confirm("年份未填写,请填写后提交", function () {})
+            } else if ($("#province").val() == '') {
+                $.modal.confirm("地区未填写,请填写后提交", function () {})
+            } else {
+                var a = $('#form-publish-add').serialize()
+                var url = ctx + 'system/publish/switchSkin?' + a;
+                $.modal.open("确认发布信息", url, '700', '400');
+            }
+        }
+    }
+
+    /* 保存 */
+    $("#button-confirm").click(function(){
+        if ($.validate.form()) {
+            if ($("#test2").val() == '') {
+                $.modal.confirm("年份未填写,请填写后提交", function () {})
+            } else if ($("#province").val() == '') {
+                $.modal.confirm("地区未填写,请填写后提交", function () {})
+            } else {
+                $.modal.confirm("确认要保存吗?", function() {
+                    $.post(prefix + "/saveOne", $('#form-publish-add').serialize(), function (data) {
+                        $.modal.close();
+                        parent.location.reload();
+                    });
+                    return false;
+                });
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

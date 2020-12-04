@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.workflow.mapper.FlowReadMapper">
+    
+    <resultMap type="FlowRead" id="FlowReadResult">
+        <result property="id"    column="ID"    />
+        <result property="title"    column="TITLE"    />
+        <result property="filetypeid"    column="FILETYPEID"    />
+        <result property="filetypename"    column="FILETYPENAME"    />
+        <result property="workflowid"    column="WORKFLOWID"    />
+        <result property="workflowname"    column="WORKFLOWNAME"    />
+        <result property="recordid"    column="RECORDID"    />
+        <result property="createTime"    column="CREATETIME"    />
+        <result property="userid"    column="USERID"    />
+        <result property="deptid"    column="DEPTID"    />
+        <result property="organiseid"    column="ORGANISEID"    />
+        <result property="readtime"    column="READTIME"    />
+        <result property="readflag"    column="READFLAG"    />
+        <result property="uniqueid"    column="UNIQUEID"    />
+        <result property="para"    column="PARA"    />
+        <result property="draftdept"    column="DRAFTDEPT"    />
+        <result property="draftuser"    column="DRAFTUSER"    />
+        <result property="stattag"    column="STATTAG"    />
+        <result property="handdoneurl"    column="HANDDONEURL"    />
+        <result property="docid"    column="DOCID"    />
+        <result property="formurl"    column="FORMURL"    />
+        <result property="sortid"    column="SORTID"    />
+        <result property="superfiletype"    column="SUPERFILETYPE"    />
+    </resultMap>
+
+    <sql id="selectFlowReadVo">
+        select t.ID, t.TITLE, t.FILETYPEID, t.FILETYPENAME, t.WORKFLOWID, t.WORKFLOWNAME, t.RECORDID, t.CREATETIME, t.USERID, t.DEPTID, ORGANISEID, t.READTIME, t.READFLAG, t.UNIQUEID, t.PARA, t.DRAFTDEPT,u.user_name as DRAFTUSER, t.STATTAG, t.HANDDONEURL, t.DOCID, t.FORMURL, t.SORTID, t.SUPERFILETYPE from flow_read t LEFT  JOIN sys_user u  ON  t.draftuser=u.user_id
+    </sql>
+
+    <select id="selectFlowReadList" parameterType="FlowRead" resultMap="FlowReadResult">
+        <include refid="selectFlowReadVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and t.TITLE = #{title}</if>
+            <if test="filetypeid != null  and filetypeid != ''"> and t.FILETYPEID = #{filetypeid}</if>
+            <if test="filetypename != null  and filetypename != ''"> and t.FILETYPENAME like concat('%', #{filetypename}, '%')</if>
+            <if test="workflowid != null  and workflowid != ''"> and t.WORKFLOWID = #{workflowid}</if>
+            <if test="workflowname != null  and workflowname != ''"> and t.WORKFLOWNAME like concat('%', #{workflowname}, '%')</if>
+            <if test="recordid != null  and recordid != ''"> and t.RECORDID = #{recordid}</if>
+            <if test="createTime != null "> and t.CREATETIME = #{createTime}</if>
+            <if test="userid != null  and userid != ''"> and t.USERID = #{userid}</if>
+            <if test="deptid != null  and deptid != ''"> and t.DEPTID = #{deptid}</if>
+            <if test="organiseid != null  and organiseid != ''"> and t.ORGANISEID = #{organiseid}</if>
+            <if test="readtime != null "> and t.READTIME = #{readtime}</if>
+            <if test="readflag != null  and readflag != ''"> and t.READFLAG = #{readflag}</if>
+            <if test="uniqueid != null  and uniqueid != ''"> and t.UNIQUEID = #{uniqueid}</if>
+            <if test="para != null  and para != ''"> and t.PARA = #{para}</if>
+            <if test="draftdept != null  and draftdept != ''"> and t.DRAFTDEPT = #{draftdept}</if>
+            <if test="draftuser != null  and draftuser != ''"> and t.DRAFTUSER = #{draftuser}</if>
+            <if test="stattag != null  and stattag != ''"> and t.STATTAG = #{stattag}</if>
+            <if test="handdoneurl != null  and handdoneurl != ''"> and t.HANDDONEURL = #{handdoneurl}</if>
+            <if test="docid != null  and docid != ''"> and t.DOCID = #{docid}</if>
+            <if test="formurl != null  and formurl != ''"> and t.FORMURL = #{formurl}</if>
+            <if test="sortid != null  and sortid != ''"> and t.SORTID = #{sortid}</if>
+            <if test="superfiletype != null  and superfiletype != ''"> and t.SUPERFILETYPE = #{superfiletype}</if>
+        </where>
+    </select>
+    
+    <select id="selectFlowReadById" parameterType="String" resultMap="FlowReadResult">
+        <include refid="selectFlowReadVo"/>
+        where t.ID = #{id}
+    </select>
+    <select id="selectFlowReadByIdRe" parameterType="String" resultMap="FlowReadResult">
+        <include refid="selectFlowReadVo"/>
+        where t.USERID = #{userid} order by readtime desc
+    </select>
+    <insert id="insertFlowRead" parameterType="FlowRead">
+        insert into flow_read
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="title != null  and title != ''">TITLE,</if>
+            <if test="filetypeid != null  and filetypeid != ''">FILETYPEID,</if>
+            <if test="filetypename != null  and filetypename != ''">FILETYPENAME,</if>
+            <if test="workflowid != null  and workflowid != ''">WORKFLOWID,</if>
+            <if test="workflowname != null  and workflowname != ''">WORKFLOWNAME,</if>
+            <if test="recordid != null  and recordid != ''">RECORDID,</if>
+            <if test="createTime != null ">CREATETIME,</if>
+            <if test="userid != null  and userid != ''">USERID,</if>
+            <if test="deptid != null  and deptid != ''">DEPTID,</if>
+            <if test="organiseid != null  and organiseid != ''">ORGANISEID,</if>
+            <if test="readtime != null ">READTIME,</if>
+            <if test="readflag != null  and readflag != ''">READFLAG,</if>
+            <if test="uniqueid != null  and uniqueid != ''">UNIQUEID,</if>
+            <if test="para != null  and para != ''">PARA,</if>
+            <if test="draftdept != null  and draftdept != ''">DRAFTDEPT,</if>
+            <if test="draftuser != null  and draftuser != ''">DRAFTUSER,</if>
+            <if test="stattag != null  and stattag != ''">STATTAG,</if>
+            <if test="handdoneurl != null  and handdoneurl != ''">HANDDONEURL,</if>
+            <if test="docid != null  and docid != ''">DOCID,</if>
+            <if test="formurl != null  and formurl != ''">FORMURL,</if>
+            <if test="sortid != null  and sortid != ''">SORTID,</if>
+            <if test="superfiletype != null  and superfiletype != ''">SUPERFILETYPE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="filetypeid != null  and filetypeid != ''">#{filetypeid},</if>
+            <if test="filetypename != null  and filetypename != ''">#{filetypename},</if>
+            <if test="workflowid != null  and workflowid != ''">#{workflowid},</if>
+            <if test="workflowname != null  and workflowname != ''">#{workflowname},</if>
+            <if test="recordid != null  and recordid != ''">#{recordid},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="userid != null  and userid != ''">#{userid},</if>
+            <if test="deptid != null  and deptid != ''">#{deptid},</if>
+            <if test="organiseid != null  and organiseid != ''">#{organiseid},</if>
+            <if test="readtime != null ">#{readtime},</if>
+            <if test="readflag != null  and readflag != ''">#{readflag},</if>
+            <if test="uniqueid != null  and uniqueid != ''">#{uniqueid},</if>
+            <if test="para != null  and para != ''">#{para},</if>
+            <if test="draftdept != null  and draftdept != ''">#{draftdept},</if>
+            <if test="draftuser != null  and draftuser != ''">#{draftuser},</if>
+            <if test="stattag != null  and stattag != ''">#{stattag},</if>
+            <if test="handdoneurl != null  and handdoneurl != ''">#{handdoneurl},</if>
+            <if test="docid != null  and docid != ''">#{docid},</if>
+            <if test="formurl != null  and formurl != ''">#{formurl},</if>
+            <if test="sortid != null  and sortid != ''">#{sortid},</if>
+            <if test="superfiletype != null  and superfiletype != ''">#{superfiletype},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFlowRead" parameterType="FlowRead">
+        update flow_read
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''">TITLE = #{title},</if>
+            <if test="filetypeid != null  and filetypeid != ''">FILETYPEID = #{filetypeid},</if>
+            <if test="filetypename != null  and filetypename != ''">FILETYPENAME = #{filetypename},</if>
+            <if test="workflowid != null  and workflowid != ''">WORKFLOWID = #{workflowid},</if>
+            <if test="workflowname != null  and workflowname != ''">WORKFLOWNAME = #{workflowname},</if>
+            <if test="recordid != null  and recordid != ''">RECORDID = #{recordid},</if>
+            <if test="createTime != null ">CREATETIME = #{createTime},</if>
+            <if test="userid != null  and userid != ''">USERID = #{userid},</if>
+            <if test="deptid != null  and deptid != ''">DEPTID = #{deptid},</if>
+            <if test="organiseid != null  and organiseid != ''">ORGANISEID = #{organiseid},</if>
+            <if test="readtime != null ">READTIME = #{readtime},</if>
+            <if test="readflag != null  and readflag != ''">READFLAG = #{readflag},</if>
+            <if test="uniqueid != null  and uniqueid != ''">UNIQUEID = #{uniqueid},</if>
+            <if test="para != null  and para != ''">PARA = #{para},</if>
+            <if test="draftdept != null  and draftdept != ''">DRAFTDEPT = #{draftdept},</if>
+            <if test="draftuser != null  and draftuser != ''">DRAFTUSER = #{draftuser},</if>
+            <if test="stattag != null  and stattag != ''">STATTAG = #{stattag},</if>
+            <if test="handdoneurl != null  and handdoneurl != ''">HANDDONEURL = #{handdoneurl},</if>
+            <if test="docid != null  and docid != ''">DOCID = #{docid},</if>
+            <if test="formurl != null  and formurl != ''">FORMURL = #{formurl},</if>
+            <if test="sortid != null  and sortid != ''">SORTID = #{sortid},</if>
+            <if test="superfiletype != null  and superfiletype != ''">SUPERFILETYPE = #{superfiletype},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteFlowReadById" parameterType="String">
+        delete from flow_read where ID = #{id}
+    </delete>
+
+    <delete id="deleteFlowReadByIds" parameterType="String">
+        delete from flow_read where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('遥感数据列表')"/>
+</head>
+<body class="gray-bg" onload="onLoad()">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="tabs-container">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">矢量数据</a>
+                </li>
+                <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">栅格数据</a>
+                </li>
+            </ul>
+            <div class="tab-content" style="width: 100%;height: 100%;">
+                <div id="tab-1" class="tab-pane active">
+
+                    <div class="panel-body">
+                        <div id="map" style="width:100%; height:400px;">
+                            <div id="gisRemove">
+                                <label onclick="gisRemove()" style="cursor: pointer;color: #30923E;">清除图层</label>
+                            </div>
+                        </div>
+                        <div class="container-div">
+
+                            <div class="row">
+                                <div class="col-sm-12 search-collapse">
+                                    <form id="dept-form">
+                                        <div class="select-list">
+                                            <ul>
+                                                <li>
+                                                    名称：<input type="text" name="shpFileName"/>
+                                                </li>
+                                                <li>
+                                                    状态：
+                                                    <select name="status" id="status">
+                                                        <option value="-1">所有</option>
+                                                        <option value="0">未审核</option>
+                                                        <option value="1">已审核</option>
+                                                    </select>
+                                                </li>
+                                                <li>
+                                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('dept-form','slsj')"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('dept-form','slsj')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="btn-group-sm" id="shptoolbar" role="group">
+                                    <!--<a class="btn btn-success" onclick="$.operate.add(100)" shiro:hasPermission="system:shpFile:add">-->
+                                        <!--<i class="fa fa-plus"></i> 新增-->
+                                    <!--</a>-->
+                                    <a class="btn btn-warning " onclick="auditAllshp()">
+                                        <i class="fa fa-download"></i> 批量审核
+                                    </a>
+                                </div>
+                                <div class="col-sm-12 select-table table-striped">
+                                    <table id="slsj"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-2" class="tab-pane">
+                    <div class="panel-body">
+                        <div class="container-div">
+                            <div class="row">
+                                <div class="col-sm-12 search-collapse">
+                                    <form id="remotesensing-form">
+                                        <div class="select-list">
+                                            <ul>
+                                                <li>
+                                                    名称：<input type="text" name="name"/>
+                                                </li>
+                                                <li>
+                                                    <a class="btn btn-primary btn-rounded btn-sm"
+                                                       onclick="$.table.search('remotesensing-form','remotesensing-table')"><i
+                                                            class="fa fa-search"></i>&nbsp;搜索</a>
+                                                    <a class="btn btn-warning btn-rounded btn-sm"
+                                                       onclick="$.form.reset('remotesensing-form','remotesensing-table')"><i
+                                                            class="fa fa-refresh"></i>&nbsp;重置</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="btn-group-sm" id="remotesensing_toolbar" role="group">
+                                    <!--<a class="btn btn-success" onclick="$.operate.add()"-->
+                                       <!--shiro:hasPermission="integration:remotesensing:add">-->
+                                        <!--<i class="fa fa-plus"></i> 新增-->
+                                    <!--</a>-->
+                                    <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"-->
+                                       <!--shiro:hasPermission="integration:remotesensing:remove">-->
+                                        <!--<i class="fa fa-remove"></i> 批量删除-->
+                                    <!--</a>-->
+                                    <a class="btn btn-warning multiple disabled" onclick="auditAll()" shiro:hasPermission="integration:recoveryquestion:edit">
+                                        <i class="fa fa-download"></i> 批量审核
+                                    </a>
+                                </div>
+                                <div class="col-sm-12 select-table table-striped">
+                                    <table id="remotesensing-table"></table>
+                                </div>
+                                <table id="businessTable"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="reportList">
+        <!--专题列表-->
+        <div class="col-sm-12 select-table table-bordered" id="reportDiv" style="height: 350px;overflow: auto;">
+            <form id="reportForm">
+                <div class="row">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <p>年份：</p>
+                                <input type="year" name="year" class="layui-layer-input" placeholder="所有" id="test2" style="margin-top: 0px;" readonly="readonly" />
+                            </li>
+                            <li>
+                                省份：
+                                <select id="province" name="province" th:with="type=${@dict.getType('sys_province')}">
+                                    <option value="">--全国--</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"></option>
+                                </select>
+                                &nbsp;市级：
+                                <select id="city" name="city">
+                                    <option value="">--请选择--</option>
+                                </select>
+                                &nbsp;区级：
+                                <select id="area" name="address">
+                                    <option value="">--请选择--</option>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeReportList()">关闭</button>
+                    <a class="btn btn-warning btn-rounded btn-sm" onclick='$.form.reset("reportForm","reportTable")' style="float: right;margin-right: 10px;"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                    <a class="btn btn-primary btn-rounded btn-sm" onclick='$.table.search("reportForm","reportTable")' style="float: right;margin-right: 10px;"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                </div>
+            </form>
+            <table id="reportTable"></table>
+        </div>
+        <!--业务列表-->
+        <div class="col-sm-12 select-table table-bordered" id="businessDiv" style="height: 350px;overflow: auto;">
+            <form id="businessForm">
+                <div class="row">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                地区：
+                                <select name="province_name" th:with="type=${@dict.getProvince()}">
+                                    <option value="">--请选择--</option>
+                                    <option th:each="gresslandEcology : ${type}" th:text="${gresslandEcology.province_name}" th:value="${gresslandEcology.province_name}"></option>
+                                </select>
+                                目：
+                                <select id="section" name="section" onchange="sectionOncheng()">
+                                    <option value="">--请选择--</option>
+                                </select>
+                                科：
+                                <select id="generic" name="generic" onchange="bundleOncheng()">
+                                    <option value="">--请选择--</option>
+                                </select>
+                                从：
+                                <select id="bundle" name="bundle">
+                                    <option value="">--请选择--</option>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeReportList()">关闭</button>
+                    <a class="btn btn-warning btn-rounded btn-sm" onclick='$.form.reset("businessForm","businessTable")' style="float: right;margin-right: 10px;"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                    <a class="btn btn-primary btn-rounded btn-sm" onclick='$.table.search("businessForm")' style="float: right;margin-right: 10px;"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                </div>
+            </form>
+            <table id="businessTable"></table>
+        </div>
+        <!--标记列表-->
+        <div class="col-sm-12 select-table table-bordered" id="tagDiv" style="height: 350px;overflow: auto;">
+            <div class="row">
+                <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeReportList()">关闭</button>
+            </div>
+            <table id="tagTable"></table>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="modal inmodal" id="myModal" align="center" tabindex="-1" role="dialog" aria-hidden="true">
+    <img id="img" name="img">
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript" src="http://api.tianditu.gov.cn/api?v=4.0&tk=3defde9e465f739e73513ce9e8595fe3"></script>
+<script th:inline="javascript">
+    var remotesensingEditFlag = [[${@permission.hasPermi('integration:remotesensing:edit')}]];
+    var remotesensingRemoveFlag = [[${@permission.hasPermi('integration:remotesensing:remove')}]];
+    var remotesensingDetailFlag = [[${@permission.hasPermi('ntegration:remotesensing:detail')}]];
+    var remotesensingPrefix = ctx + "integration/remoteSensing";
+
+    $(function () {
+        var recoveryquestionoptions = {
+            id: "remotesensing-table",
+            toolbar: "remotesensing_toolbar",
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            url: remotesensingPrefix + "/list",
+            createUrl: remotesensingPrefix + "/add",
+            updateUrl: remotesensingPrefix + "/edit/{id}",
+            removeUrl: remotesensingPrefix + "/remove",
+            exportUrl: remotesensingPrefix + "/export",
+            detailUrl: remotesensingPrefix + "/detail/{id}",
+            auditUrl: remotesensingPrefix + "/audit",
+            sortName: "id",
+            sortOrder: "desc",
+            modalName: "遥感数据",
+            columns: [{
+                checkbox: true,
+                formatter:  function (value, row, index) {
+                    if (row.status == 1){
+                        return {
+                            disabled : true//设置是否可用
+                        };
+                    }
+                }
+            }, {
+                field: 'id',
+                title: 'ID'
+            },
+                {
+                    field: 'name',
+                    title: '名称'
+                },
+                {
+                    field: 'year',
+                    title: '年份'
+                },
+                {
+                    field: 'size',
+                    title: '数据集大小'
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        if(value==1){
+                            return "已审核";
+                        }else{
+                            return "未审核";
+                        }
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + remotesensingDetailFlag + '" data-toggle="modal" data-target="#myModal" onclick="imgShow(' + row.id + ')"><i class="fa fa-search"></i>查看</a>')
+                        actions.push('<a class="btn btn-info btn-xs ' + remotesensingDetailFlag + '" data-toggle="modal" data-target="#myModal" onclick="downLoad(' + row.id + ')"><i class="fa fa-search"></i>下载</a>')
+                        if(row.status!=1){
+                            // actions.push('<a class="btn btn-danger btn-xs ' + remotesensingRemoveFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            actions.push('<a class="btn btn-warning btn-xs ' + remotesensingDetailFlag + '" href="javascript:void(0)" onclick="audit(\'' + row.id + '\')"><i class="fa fa-search"></i>审核</a>');
+                        }else{
+                            actions.push('<a class="btn btn-warning btn-xs ' + remotesensingDetailFlag + '" href="javascript:void(0)" onclick="unaudit(\'' + row.id + '\')"><i class="fa fa-search"></i>取消审核</a>');
+                        }
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(recoveryquestionoptions);
+
+    });
+
+
+    var aaaa = ctx + "integration/remoteSensing";
+    $(function () {
+        var aaaoptions = {
+            id: "slsj",
+            toolbar: "shptoolbar",
+            url: aaaa+"/shpList",
+            createUrl: aaaa + "/add/{id}",
+            updateUrl: aaaa + "/edit/{id}",
+            removeUrl: aaaa + "/remove/{id}",
+            modalName: "shp文件",
+            detailUrl: aaaa + "/detail/{id}",
+            pageSize:5,
+            pageList:[5,10,15,20],//分页步进值
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            columns: [{
+                checkbox: true,
+                formatter:  function (value, row, index) {
+                    if (row.status == '1'){
+                        return {
+                            disabled : true//设置是否可用
+                        };
+                    }
+                }
+            },
+                {
+                    field: 'index',
+                    title: 'ID',
+                    formatter: function (value, row, index) {
+                        return index + 1;
+                    }
+                },
+                {
+                    field:'shpFileId',
+                    title:"ID",
+                    visible: false
+                },
+                {
+                    field: 'shpFileName',
+                    title: 'shp文件名称'
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间'
+                },
+                {
+                    field: 'shpFilePath',
+                    title: '路径',
+                    visible:false
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        if(value=='1'){
+                            return "已审核";
+                        }else{
+                            return "未审核";
+                        }
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'left',
+                    formatter: function (value, row, index) {
+                        if (row.parentId != 0) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-info  btn-xs " href="javascript:void(0)" onclick="show(\'' + row.shpFilePath + '\')"><i class="fa fa-plus"></i>查看</a> ');
+                            // actions.push('<a class="btn btn-info  btn-xs " href="javascript:void(0)" onclick="$.operate.add(\'' + row.shpFileId + '\')"><i class="fa fa-plus"></i>新增</a> ');
+                            if(row.status!='1'){
+                                // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.shpFileId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                // actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.shpFileId + '\')"><i class="fa fa-trash"></i>删除</a>');
+                                actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="auditshp(\'' + row.shpFileId + '\')"><i class="fa fa-search"></i>审核</a>');
+                            }else{
+                                actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="unauditshp(\'' + row.shpFileId + '\')"><i class="fa fa-search"></i>取消审核</a>');
+                            }
+                            return actions.join('');
+                        } else {
+                            return "";
+                        }
+                    }
+                }]
+        };
+        $.table.init(aaaoptions);
+    });
+
+    function imgShow(id) {
+        $.ajax({
+            type: "post",
+            url: remotesensingPrefix + "/detail",
+            data: {
+                "id": id
+            },
+            success: function (msg) {
+                if (msg.imgUrl != null && msg.imgUrl != "") {
+                    $('#img').attr("src", msg.imgUrl);
+                } else {
+                    alert("图片无效");
+                }
+            }
+        });
+    }
+    function downLoad(id) {
+        window.location.href = remotesensingPrefix + "/download/"+id;
+    }
+    function audit(id) {
+        $.modal.confirm("确定审核通过吗？", function() {
+            $.operate.post(remotesensingPrefix + "/audit", {"id": id });
+        })
+    }
+    function auditAll() {
+        var ids=$("#remotesensing-table").bootstrapTable("getAllSelections")
+        if (ids.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确定要审核通过" + ids.length + "条数据吗?", function() {
+            var data="0";
+            for(var i=0;i<ids.length;i++){
+                data+=","+ids[i].id
+            }
+            $.operate.post(remotesensingPrefix + "/auditAll",{"ids":data});
+        });
+    }
+    function unaudit(id) {
+        $.modal.confirm("确定取消审核吗？", function() {
+            $.operate.post(remotesensingPrefix + "/unaudit", {"id": id });
+        })
+    }
+    function auditshp(id) {
+        $.modal.confirm("确定审核通过吗？", function() {
+            $.operate.post(aaaa + "/auditShp", {"id": id });
+        })
+    }
+    function unauditshp(id) {
+        $.modal.confirm("确定取消审核吗？", function() {
+            $.operate.post(aaaa + "/unauditShp", {"id": id });
+        })
+    }
+    function auditAllshp() {
+        var ids=$("#slsj").bootstrapTable("getAllSelections")
+        if (ids.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确定要审核通过" + ids.length + "条数据吗?", function() {
+            var data="0";
+            for(var i=0;i<ids.length;i++){
+                data+=","+ids[i].shpFileId
+            }
+            $.operate.post(aaaa + "/auditAllShp",{"ids":data});
+        });
+    }
+
+    function gisRemove() {
+        if (vectorDrawing != null) {
+            map.removeLayer(vectorDrawing);
+        }
+    }
+    function show(url){
+        if (vectorDrawing != null) {
+            map.removeLayer(vectorDrawing);
+        }
+        $.post(remotesensingPrefix+"/gisShow",{url:url},
+        function(res) {
+            gisShow(res);
+        }
+        )
+    }
+    function gisShow(data) {
+
+        var datashp=[];
+        for(var i=0;i<data.length;i++){
+            var dataShpArray=[];
+            var dataWipeOffArray=[];
+            var dataList=data[i];
+            if(dataList.shpList!=null){
+                var dataShpValue=dataList.shpList[0];
+                for(var n=0;n<dataShpValue.length;n++){
+                    var array=[];
+                    var datas=  dataShpValue[n] .split(" ");
+                    array.push(datas[0].substring(0,8),datas[1].substring(0,8));
+                    dataShpArray.push(array);
+                }
+                if(dataShpArray.length>0){
+                    datashp.push(dataShpArray);
+                }
+            }
+            if(dataList.wipeOffList!='[]' && dataList.wipeOffList!=''){
+                var dataShpwipeOffValue=dataList.wipeOffList[0];
+                for(var n=0;n>dataShpwipeOffValue.length;n++){
+                    var array=[];
+                    var datas=  dataShpwipeOffValue[n] .split(" ");
+                    array.push(datas[0].substring(0,8),datas[1].substring(0,8));
+                    dataShpArray.push(array);
+                }
+                if(dataWipeOffArray.length>0){
+                    datashp.push(dataWipeOffArray);
+                }
+            }
+        }
+        console.log(datashp)
+        var polygon = new ol.Feature({
+            geometry: new ol.geom.Polygon(datashp)
+        });
+        polygon.setStyle(new ol.style.Style({
+            //填充色
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.5)'
+            }),
+            //边线颜色
+            stroke: new ol.style.Stroke({
+                color: 'red',
+                width: 2
+            }),
+            //形状
+            image: new ol.style.Circle({
+                radius: 1,
+                fill: new ol.style.Fill({
+                    color: 'red'
+                })
+            })
+        }));
+        //实例化一个矢量图层Vector作为绘制层
+        var source = new ol.source.Vector({
+            features: [polygon]
+        });
+        //创建一个图层
+        vectorDrawing = new ol.layer.Vector({
+            source: source
+        });
+        //将绘制层添加到地图容器中
+        map.addLayer(vectorDrawing);
+    }
+
+    var map,vectorDrawing;
+    function onLoad() {
+        load();
+    }
+    function load() {
+        var source_vec = new ol.source.XYZ({
+            url: "http://t3.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=3defde9e465f739e73513ce9e8595fe3",//parent.TiandituKey()为天地图密钥
+            wrapX: false
+        });
+        var TiandiMap_vec = new ol.layer.Tile({
+            title: "天地图矢量图层",
+            source: source_vec
+        });
+        var source_cva = new ol.source.XYZ({
+            url: "http://t3.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&v=4.0&tk=3defde9e465f739e73513ce9e8595fe3",//parent.TiandituKey()为天地图密钥
+            wrapX: false
+        });
+        var TiandiMap_cva = new ol.layer.Tile({
+            title: "天地图矢量注记图层",
+            source: source_cva
+
+        })
+        //实例化鼠标位置控件
+        var mousePositionControl = new ol.control.MousePosition({
+            //坐标格式
+            coordinateFormat: ol.coordinate.createStringXY(4),
+            //地图投影坐标系（若未设置则输出为默认投影坐标系下的坐标）
+            projection: 'EPSG:4326',
+            //坐标信息显示样式，默认是'ol-mouse-position'
+            className: 'custom-mouse-position',
+            //显示鼠标位置信息的目标容器
+            target: document.getElementById('mouse-position'),
+            //未定义坐标的标记
+            undefinedHTML: '&nbsp;'
+        });
+        //实例化Map对象加载地图
+        map = new ol.Map({
+            //地图容器div的ID
+            target: 'map',
+            //地图容器中加载的图层
+            layers: [TiandiMap_vec, TiandiMap_cva],
+            //地图视图设置
+            view: new ol.View({
+                //地图初始中心点
+                center: [105, 35],
+                projection: "EPSG:4326",
+                //地图初始显示级别
+                zoom: 4,
+                minZoom: 4,
+                maxZoom: 18,
+            }),
+            //加载控件到地图容器中
+            controls: ol.control.defaults({}).extend([mousePositionControl]) //加载鼠标位置控件
+        });
+        map.on('click', function (event) {
+            map.forEachFeatureAtPixel(event.pixel, function (feature) {
+                // 为移动到的feature发送自定义的mousemove消息
+                feature.dispatchEvent({type: 'click', event: event});
+            });
+        });
+    }
+
+    //创建对象
+    // geocoder = new T.Geocoder();
+    // function searchResult(result)
+    // {
+    //     if(result.getStatus() == 0){
+    //         alert(result.getLocationPoint().lng+"---"+result.getLocationPoint().lat)
+    //         // map.panTo(result.getLocationPoint(), 16);
+    //
+    //         //获取地图视图
+    //         var view = map.getView();
+    //         var py = ol.proj.fromLonLat([result.getLocationPoint().lng, result.getLocationPoint().lat]);
+    //         //平移地图
+    //         view.setCenter(py);
+    //
+    //     }else{
+    //         alert(result.getMsg());
+    //     }
+    //
+    // }
+    //
+    // function searchtest(){
+    //     geocoder.getPoint("包头市青山区", searchResult);
+    // }
+
+</script>
+
+</body>
+<style type="text/css">
+    #map {
+        height: 50%;
+        width: 100%;
+    }
+    #gisRemove{
+        float: right;
+        position: absolute;
+        bottom: 52%;
+        right: 50%;
+        z-index: 2000;
+    }
+</style>
+</html>

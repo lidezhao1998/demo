@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<script type="text/javascript" src="http://api.tianditu.gov.cn/api?v=4.0&tk=3defde9e465f739e73513ce9e8595fe3"></script>
+
+<style type="text/css">
+    #mapDiv {
+        width: 80%;
+        height: 350px;
+        margin: auto;
+    }
+
+    input, b, p {
+        margin-left: 5px;
+        font-size: 14px
+    }
+
+    .tg td {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: black;
+    }
+
+    .tg th {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: black;
+    }
+</style>
+<th:block th:include="include :: layout-latest-css"/>
+<th:block th:include="include :: ztree-css"/>
+<head>
+    <th:block th:include="include :: header('修改退牧还草工程任务领取分解')"/>
+</head>
+
+<body class="white-bg" onLoad="onLoad()">
+<!--<div id="mapDiv" style="text-align: center"></div>-->
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+
+    <!-- 选项卡 -->
+    <div th:if="${countryFlag == 'true'}" class="col-sm-12 search-collapse" >
+        <div class="tabs-container">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">全国</a>
+                </li>
+                <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">长江经济带</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane active">
+                    <div class="col-sm-12 select-table table-striped" th:object="${tTaskResolve}">
+                        <h4 class="h4" style="font-size:15px;color:#6379bb;"><label class="form-control-static" th:text="${tTaskResolve.year}"></label>年<label id="tjprovince" class="form-control-static" th:text="${tTaskResolve.province}"></label>退牧还草任务信息</h4>
+                        <div class="col-sm-8  pull-left" style="padding: 0px;">
+                            <table class="table select-table table-striped" style="text-align:center;">
+                                <tr>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">围栏部分信息</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">禁牧</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">休牧</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">花区轮休</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">石漠化治理</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">围栏合计</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px;font-weight: bold;padding: 0px;">建设规模(万亩)</td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="jmSize" th:text="${tTaskResolve.jmSize}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="xmSize" th:text="${tTaskResolve.xmSize}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="hqlxSize" th:text="${tTaskResolve.hqlxSize}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="smhzlSize" th:text="${tTaskResolve.smhzlSize}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="wlScale" th:text="${tTaskResolve.wlScale}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px;font-weight: bold;padding: 0px;">建设投资(万元)</td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="jmMoney" th:text="${tTaskResolve.jmMoney}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="xmMoney" th:text="${tTaskResolve.xmMoney}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="hqlxMoney" th:text="${tTaskResolve.hqlxMoney}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="smhzlMoney" th:text="${tTaskResolve.smhzlMoney}" class="form-control-static"
+                                             type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="wlInvestment" th:text="${tTaskResolve.wlInvestment}" class="form-control-static"
+                                             type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="table table-striped " style="text-align: center;">
+                                <tr>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">其他部分信息</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">退化草原改良</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">人工种草地</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">含饲棚圈</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">黑土滩</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">毒害草</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px;font-weight: bold;padding: 0px;">建设规模(万亩)</td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="thzyglSize" th:text="${tTaskResolve.thzyglSize}" class="form-control-static"
+                                             type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="rgscdSize" th:text="${tTaskResolve.rgscdSize}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="hspjSize" th:text="${tTaskResolve.hspjSize}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="httSize" th:text="${tTaskResolve.httSize}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="dhcSize" th:text="${tTaskResolve.dhcSize}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px;font-weight: bold;padding: 0px;">建设投资(万元)</td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="thzyglMoney" th:text="${tTaskResolve.thzyglMoney}" class="form-control-static"
+                                             type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="rgscdMoney" th:text="${tTaskResolve.rgscdMoney}" class="form-control-static"
+                                             type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="hspjMoney" th:text="${tTaskResolve.hspjMoney}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="httMoney" th:text="${tTaskResolve.httMoney}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="dhcMoney" th:text="${tTaskResolve.dhcMoney}" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4  pull-right">
+                                <table class="table table-striped " style="text-align: left;height: 104px;width: 360px;">
+                                    <tr style="background-image: url('../img/ic_guhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                                        <td style="font-size: 16px;padding-left: 45px;">
+                                            <img src="../img/ic_gmhj.png" height="32" width="32"/>
+                                            <span style="margin-left: 10px">规模总合计</span>
+                                            <span id="zgmCount" th:text="${tTaskResolve.zgmCount}" style="font-size: 22px;color: #6b87f9"/>
+                                            <span>万亩</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table class="table table-striped" style="text-align: left;height: 104px;width: 360px;background-image: url('../img/ic_tzhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                                    <tr style="background-color: transparent">
+                                        <td style="font-size: 16px;padding-left: 45px;">
+                                            <div style="height: 50px">
+                                                <img src="../img/ic_tzhj.png" height="32" width="32"/>
+                                                <span style="margin-left: 10px">投资总合计</span>
+                                                <span id="zjeCount" th:text="${tTaskResolve.zjeCount}" style="font-size: 22px;color: #fe7d51"></span>
+                                                <span>万元</span>
+                                            </div>
+                                            <div>
+                                                <span>中央</span>
+                                                <span id="zyMoney" th:text="${tTaskResolve.zyMoney}"
+                                                      style="font-size: 22px;color: #fe7d51"></span>
+                                                <span>万元</span>
+                                                <span style="margin-left: 10px">地方</span>
+                                                <span id="dfMoney" th:text="${tTaskResolve.dfMoney}"
+                                                      style="font-size: 22px;color: #fe7d51"></span>
+                                                <span>万元</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                    </div>
+                </div>
+                <div id="tab-2" class="tab-pane">
+                    <div class="col-sm-12 select-table table-striped">
+                        <h4 class="h4" style="font-size:15px;color:#6379bb;"><label class="form-control-static" id="cj_year"></label>年<label id="cj_tjprovince" class="form-control-static"></label>退牧还草任务信息</h4>
+                        <div class="col-sm-8  pull-left" style="padding: 0px;">
+                            <table class="table select-table table-striped" style="text-align:center;">
+                                <tr>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">围栏部分信息</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">禁牧</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">休牧</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">花区轮休</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">石漠化治理</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">围栏合计</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px;font-weight: bold;padding: 0px;">建设规模(万亩)</td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_jmSize" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_xmSize" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_hqlxSize" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_smhzlSize" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_wlScale" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px;font-weight: bold;padding: 0px;">建设投资(万元)</td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_jmMoney" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_xmMoney" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_hqlxMoney"  class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_smhzlMoney" class="form-control-static"
+                                             type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_wlInvestment" class="form-control-static"
+                                             type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="table table-striped " style="text-align: center;">
+                                <tr>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">其他部分信息</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">退化草原改良</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">人工种草地</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">含饲棚圈</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">黑土滩</td>
+                                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">毒害草</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px;font-weight: bold;padding: 0px;">建设规模(万亩)</td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_thzyglSize" class="form-control-static"
+                                             type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_rgscdSize" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_hspjSize" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_httSize" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_dhcSize" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 12px;font-weight: bold;padding: 0px;">建设投资(万元)</td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_thzyglMoney" class="form-control-static"
+                                             type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_rgscdMoney" class="form-control-static"
+                                             type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_hspjMoney" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_httMoney" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                    <td style="font-size: 12px;padding: 0px;">
+                                        <div id="cj_dhcMoney" class="form-control-static" type="text"
+                                             disabled="disabled" style="font-size: 12px;">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4  pull-right">
+                                <table class="table table-striped " style="text-align: left;height: 104px;width: 360px;">
+                                    <tr style="background-image: url('../img/ic_guhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                                        <td style="font-size: 16px;padding-left: 45px;">
+                                            <img src="../img/ic_gmhj.png" height="32" width="32"/>
+                                            <span style="margin-left: 10px">规模总合计</span>
+                                            <span id="cj_zgmCount" style="font-size: 22px;color: #6b87f9"></span>
+                                            <span>万亩</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table class="table table-striped " style="text-align: left;height: 104px;width: 360px;background-image: url('../img/ic_tzhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                                    <tr style="background-color: transparent">
+                                        <td style="font-size: 16px;padding-left: 45px;">
+                                            <div style="height: 50px">
+                                                <img src="../img/ic_tzhj.png" height="32" width="32"/>
+                                                <span style="margin-left: 10px">投资总合计</span>
+                                                <span id="cj_zjeCount" style="font-size: 22px;color: #fe7d51"></span>
+                                                <span>万元</span>
+                                            </div>
+                                            <div>
+                                                <span>中央</span>
+                                                <span id="cj_zyMoney" style="font-size: 22px;color: #fe7d51"></span>
+                                                <span>万元</span>
+                                                <span style="margin-left: 10px">地方</span>
+                                                <span id="cj_dfMoney" style="font-size: 22px;color: #fe7d51"></span>
+                                                <span>万元</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 选项卡end -->
+
+    <form th:if="${countryFlag == 'false'}" class="form-horizontal m" id="form-resolve-edit" th:object="${tTaskResolve}" >
+        <h4 class="h4" style="font-size:15px;color:#6379bb;"><label class="form-control-static" th:text="${tTaskResolve.year}"></label>年<label id="tjprovince" class="form-control-static" th:text="${tTaskResolve.province}"></label>退牧还草任务信息</h4>
+        <div class="col-sm-8  pull-left" style="padding: 0px;">
+            <table class="table select-table table-striped" style="text-align:center;">
+                <tr>
+                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">围栏部分信息</td>
+                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">禁牧</td>
+                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">休牧</td>
+                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">花区轮休</td>
+                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">石漠化治理</td>
+                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">围栏合计</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 12px;font-weight: bold;padding: 0px;">建设规模(万亩)</td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="jmSize" th:text="${tTaskResolve.jmSize}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="xmSize" th:text="${tTaskResolve.xmSize}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="hqlxSize" th:text="${tTaskResolve.hqlxSize}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="smhzlSize" th:text="${tTaskResolve.smhzlSize}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="wlScale" th:text="${tTaskResolve.wlScale}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 12px;font-weight: bold;padding: 0px;">建设投资(万元)</td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="jmMoney" th:text="${tTaskResolve.jmMoney}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="xmMoney" th:text="${tTaskResolve.xmMoney}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="hqlxMoney" th:text="${tTaskResolve.hqlxMoney}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="smhzlMoney" th:text="${tTaskResolve.smhzlMoney}" class="form-control-static"
+                             type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="wlInvestment" th:text="${tTaskResolve.wlInvestment}" class="form-control-static"
+                             type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <table class="table table-striped " style="text-align: center;">
+                <tr>
+                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">其他部分信息</td>
+                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">退化草原改良</td>
+                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">人工种草地</td>
+                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">含饲棚圈</td>
+                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">黑土滩</td>
+                    <td style="font-size: 12px;color: white;font-weight: bold;background:#3CC4A9;">毒害草</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 12px;font-weight: bold;padding: 0px;">建设规模(万亩)</td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="thzyglSize" th:text="${tTaskResolve.thzyglSize}" class="form-control-static"
+                             type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="rgscdSize" th:text="${tTaskResolve.rgscdSize}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="hspjSize" th:text="${tTaskResolve.hspjSize}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="httSize" th:text="${tTaskResolve.httSize}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="dhcSize" th:text="${tTaskResolve.dhcSize}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size: 12px;font-weight: bold;padding: 0px;">建设投资(万元)</td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="thzyglMoney" th:text="${tTaskResolve.thzyglMoney}" class="form-control-static"
+                             type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="rgscdMoney" th:text="${tTaskResolve.rgscdMoney}" class="form-control-static"
+                             type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="hspjMoney" th:text="${tTaskResolve.hspjMoney}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="httMoney" th:text="${tTaskResolve.httMoney}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                    <td style="font-size: 12px;padding: 0px;">
+                        <div id="dhcMoney" th:text="${tTaskResolve.dhcMoney}" class="form-control-static" type="text"
+                             disabled="disabled" style="font-size: 12px;">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-4  pull-right">
+            <table class="table table-striped " style="text-align: left;height: 104px;width: 360px;">
+                <tr style="background-image: url('../img/ic_guhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                    <td style="font-size: 16px;padding-left: 45px;">
+                        <img src="../img/ic_gmhj.png" height="32" width="32"/>
+                        <span style="margin-left: 10px">规模总合计</span>
+                        <span id="zgmCount" th:text="${tTaskResolve.zgmCount}" style="font-size: 22px;color: #6b87f9"/>
+                        <span>万亩</span>
+                    </td>
+                </tr>
+            </table>
+            <table class="table table-striped "
+                   style="text-align: left;height: 104px;width: 360px;background-image: url('../img/ic_tzhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                <tr style="background-color: transparent">
+                    <td style="font-size: 16px;padding-left: 45px;">
+                        <div style="height: 50px">
+                            <img src="../img/ic_tzhj.png" height="32" width="32"/>
+                            <span style="margin-left: 10px">投资总合计</span>
+                            <span id="zjeCount" th:text="${tTaskResolve.zjeCount}"
+                                  style="font-size: 22px;color: #fe7d51"></span>
+                            <span>万元</span>
+                        </div>
+                        <div>
+                            <span>中央</span>
+                            <span id="zyMoney" th:text="${tTaskResolve.zyMoney}" style="font-size: 22px;color: #fe7d51"></span>
+                            <span>万元</span>
+                            <span style="margin-left: 10px">地方</span>
+                            <span id="dfMoney" th:text="${tTaskResolve.dfMoney}" style="font-size: 22px;color: #fe7d51"></span>
+                            <span>万元</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+
+<!--待办列表-->
+<div class="col-sm-12 select-table table-bordered" th:if="${tTaskResolve.auditName}!='国家级'">
+    <h4 class="form-header-line h4">待办列表</h4>
+    <table id="bootstrap-table"></table>
+</div>
+
+<!--退牧还草任务完成情况及任务分布比例图-->
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <div class="row">
+        <div class="col-sm-6">
+            <h4 class="form-header-line h4">退牧还草任务完成情况</h4>
+            <div class="ibox float-e-margins" id="missionCompletion"></div>
+        </div>
+        <div class="col-sm-6">
+            <h4 class="form-header-line h4">退牧还草任务分布比例图</h4>
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>饼状图</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-pie-chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<th:block th:include="include :: select2-css"/>
+
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:review:edit')}]];
+    var addFlag = [[${@permission.hasPermi('system:review:add')}]];
+    var prefix = ctx + "system/review";
+    var map;
+    var zoom = 12;
+
+    function onLoad() {
+        map = new T.Map('mapDiv', {
+            projection: 'EPSG:4326'
+        });
+        map.centerAndZoom(new T.LngLat(116.40769, 39.89945), zoom);
+    }
+
+    $(function () {
+
+        var options = {
+                url: prefix + "/UnrevieweRepostList",
+                createUrl: prefix + "/detail/{id}",
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+                pagination: false,
+                modalName: "退牧还草工程任务审核",
+                columns: [
+                    {
+                        field: 'index',
+                        title: '序号',
+                        align: 'center',
+                        valign: 'middle',
+                        pagination: false,
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+
+                    },
+                    {
+                        title: '任务地区',
+                        field: 'address',
+                        align: 'center',
+                        valign: 'middle'
+
+                    },
+                    {
+                        title: '任务年份',
+                        field: 'year',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'wlmjCount',
+                        title: '围栏规模合计(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+
+                        field: 'qtmjCount',
+                        title: '其他规模合计(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'zgmCount',
+                        title: '总规模(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '任务状态',
+                        align: 'center',
+                        valign: 'middle',
+                        visible: editFlag == 'hidden' ? false : true,
+                        formatter: function (value, row, index) {
+                            return statusTools(row);
+                        },
+                    },
+                    {
+                        title: '上报时间',
+                        field: 'updateTime',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '&emsp;' + '操作' + '&emsp;',
+                        align: 'center',
+                        valign: 'middle',
+                        formatter: function (value, row, index) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs ' + addFlag + '" href="javascript:void(0)" onclick="$.operate.addFul(\'' + row.reportId + '\')"><i class="fa fa-edit"></i>查看详情</a> ');
+                            return actions.join('');
+                        }
+
+                    },
+                ]
+
+            }
+        ;
+        $.table.init(options);
+    });
+
+    /* 审核状态显示 */
+    function statusTools(row) {
+        if (row.status == '0') {
+            return '<p>未审核</p> ';
+        } else if (row.status == '1') {
+            return '<p>通过</p> ';
+        } else if (row.status == '2') {
+            return '<p>驳回</p> ';
+        } else if (row.status == '3') {
+            return '<p>待审核</p> ';
+        } else if (row.status == '4') {
+            return '<p>通过</p> ';
+        } else if (row.status == '5') {
+            return '<p>驳回</p> ';
+        }
+    }
+</script>
+<script type="text/javascript">
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+</script>
+<script type="text/javascript">
+    $('#pay-qrcode').click(function () {
+        var html = $(this).html();
+        parent.layer.open({
+            title: false,
+            type: 1,
+            closeBtn: false,
+            shadeClose: true,
+            area: ['600px', 'auto'],
+            content: html
+        });
+    });
+</script>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script type="text/javascript">
+    $(function () {
+        var provinceRows = [];
+        var seriesDate = [];
+        var year = [];
+        var pieChart = echarts.init(document.getElementById("echarts-pie-chart"));
+
+        $.ajax({
+            type: "post",
+            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: "/getOptionHistogram",    //请求发送到dataActiont处
+            data: {},
+            dataType: "json",        //返回数据形式为json
+            success: function (result) {
+                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                if (result) {
+                    provinceRows = result.ProvinceRows;
+                    year = result.yearCols;
+                    for (var i = 0; i < result.datas.length; i++) {
+                        var aaa = result.datas[i];
+                        var item = {
+                            value: aaa[year[0]],
+                            name: result.datas[i].province
+                        };
+                        seriesDate.push(item);
+                    }
+
+                    pieChart.hideLoading();    //隐藏加载动画
+                    pieChart.setOption({        //加载数据图表
+                        title: {
+                            subtext: '单位：万亩',
+                            left: 'right'
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: '{a} <br/>{b} : {c} ({d}%)'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            data: provinceRows,
+                        },
+                        calculable: true,
+                        series: [
+                            {
+                                name: '已分配任务量',
+                                type: 'pie',
+                                radius: ['40%', '70%'],
+                                center: ['60%', '55%'],
+                                data: seriesDate
+                            }
+                        ]
+                    });
+                    window.onresize = pieChart.resize;
+                }
+            },
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                pieChart.hideLoading();
+            }
+        });
+    });
+
+    function change(id, status) {
+        $.post(ctx + "system/review/change", {reportId: id, change: status});
+        location.reload();
+    }
+
+    function changjiang() {
+        $.ajax({
+            url: ctx + "system/ajaxmain",
+            type: "post",
+            dataType: "json",
+            contentType: "application/json;charsetset=UTF-8",//必须
+            success: function (data) {
+                if(data.code == '0'){
+                    var a = data.data;
+                    $("#cj_jmSize").text(a.jmSize);
+                    $("#cj_xmSize").text(a.xmSize);
+                    $("#cj_hqlxSize").text(a.hqlxSize);
+                    $("#cj_smhzlSize").text(a.smhzlSize);
+                    $("#cj_wlScale").text(a.wlScale);
+                    $("#cj_jmMoney").text(a.jmMoney);
+                    $("#cj_xmMoney").text(a.xmMoney);
+                    $("#cj_hqlxMoney").text(a.hqlxMoney);
+                    $("#cj_smhzlMoney").text(a.smhzlMoney);
+                    $("#cj_wlInvestment").text(a.wlInvestment);
+                    $("#cj_thzyglSize").text(a.thzyglSize);
+                    $("#cj_rgscdSize").text(a.rgscdSize);
+                    $("#cj_hspjSize").text(a.hspjSize);
+                    $("#cj_httSize").text(a.httSize);
+                    $("#cj_dhcSize").text(a.dhcSize);
+                    $("#cj_thzyglMoney").text(a.thzyglMoney);
+                    $("#cj_rgscdMoney").text(a.rgscdMoney);
+                    $("#cj_hspjMoney").text(a.hspjMoney);
+                    $("#cj_httMoney").text(a.httMoney);
+                    $("#cj_dhcMoney").text(a.dhcMoney);
+                    $("#cj_zgmCount").text(a.zgmCount);
+                    $("#cj_zjeCount").text(a.zjeCount);
+                    $("#cj_zyMoney").text(a.zyMoney);
+                    $("#cj_dfMoney").text(a.dfMoney);
+                    $("#cj_tjprovince").text(a.province);
+                    $("#cj_year").text(a.year);
+                }
+            },
+        });
+    }
+    let countryFlag = [[${countryFlag}]];;
+    if(countryFlag){
+        changjiang();
+    }
+
+    /* 获取当前登录用户退牧还草任务完成情况 */
+    function getMissionCompletion() {
+        var url = ctx + "system/publish/getMissionCompletion";
+        $.ajax({
+            "url": url,
+            "type": "post",
+            "dataType": "json",
+            "success": function (data) {
+                if(data.code == 0){
+                    let list = data.data;
+                    let ht = '';
+                    list.forEach( data =>{
+                        let address = data.address;
+                        let schedule = data.schedule;
+                        if(schedule != 0){
+                            schedule = schedule * 100;
+                        }
+                        ht += '<div>' +
+                            '<span>'+ address +':</span>' +
+                            '<div class="stat-percent">'+schedule+'%</div>' +
+                            '<div class="progress progress-mini">' +
+                            '<div style="width: '+ schedule +'%;" class="progress-bar"></div>' +
+                            '</div>' +
+                            '</div>';
+                    })
+                    $("#missionCompletion").html(ht);
+                }else{
+                    //获取数据失败
+                }
+            }
+        });
+    }
+    getMissionCompletion();
+</script>
+</body>
+</html>

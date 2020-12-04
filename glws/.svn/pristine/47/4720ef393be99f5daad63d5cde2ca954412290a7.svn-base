@@ -1,0 +1,25 @@
+package com.sinosoft.analyze.service.impl;
+
+import com.sinosoft.analyze.domain.ProductionAnalyze;
+import com.sinosoft.analyze.mapper.ProductionAnalyzeMapper;
+import com.sinosoft.analyze.service.ProductionAnalyzeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * @author lhf
+ * @version 1.0
+ * @date 2020/6/15 17:54
+ * 生产力分析
+ */
+@Service
+public class ProductionAnalyzeServiceImpl implements ProductionAnalyzeService {
+    @Autowired
+    ProductionAnalyzeMapper productionAnalyzeMapper;
+    @Override
+    public List<ProductionAnalyze> selectProductionAnalyzeList(ProductionAnalyze productionAnalyze) {
+        return productionAnalyzeMapper.selectProductionAnalyzeList(productionAnalyze);
+    }
+}

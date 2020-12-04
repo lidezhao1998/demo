@@ -1,0 +1,238 @@
+package com.ruoyi.zaihai.ReserveManagement.controller;
+
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.system.domain.SysRole;
+import com.ruoyi.system.service.ISysDeptService;
+import com.ruoyi.system.service.ISysDictDataService;
+import com.ruoyi.zaihai.ReserveManagement.domain.Reserve;
+import com.ruoyi.zaihai.ReserveManagement.service.IReserveService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * 储备库Controller
+ *
+ * @author ruoyi
+ * @date 2020-06-02
+ */
+@Controller
+@RequestMapping("/reserves/reserve")
+public class ReserveController extends BaseController
+{
+    private String prefix = "ReserveManagement/reserve";
+
+    @Autowired
+    private IReserveService reserveService;
+    @Autowired
+    private ISysDeptService deptService;
+    @Autowired
+    private ISysDictDataService iSysDictDataService;
+
+    @RequiresPermissions("reserves:reserve:view")
+    @GetMapping()
+    public String reserve(ModelMap model)
+    {
+        Reserve reserve=new Reserve();
+        List<Reserve> list = reserveService.selectReserveList(reserve);
+        model.put("lngLat",list);
+
+        return prefix + "/reserveGis";
+    }
+
+    /**
+     * 查询储备库列表
+     */
+    @RequiresPermissions("reserves:reserve:list")
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(Reserve reserve,ModelMap model)
+    {
+        startPage();
+        //获取登录用户的部门
+        String deptName= ShiroUtils.getSysUser().getDept().getDeptName();
+        long deptId= ShiroUtils.getSysUser().getDept().getDeptId();
+
+
+        //获取角色
+        List<SysRole> roles = ShiroUtils.getSysUser().getRoles();
+        for (int i = 0; i < roles.size(); i++) {
+            SysRole sysRole = roles.get(i);
+            String roleName = sysRole.getRoleName();
+            if (roleName.equals("国家级")) {
+
+                List<Reserve> list = reserveService.selectReserveList(reserve);
+
+                for (int j = 0; j < list.size(); j++) {
+                    Reserve reserve1 =  list.get(j);
+
+                    String provinceLabel = iSysDictDataService.selectDictValueToLabel(reserve1.getAddress());
+                    reserve1.setAddress(provinceLabel);
+
+                }
+
+                return getDataTable(list);
+            } else if (roleName.equals("省级")) {
+                reserve.setAddress(deptName);
+                List<Reserve> list = reserveService.selectReserveList(reserve);
+                model.put("lngLat","116.413384,39.910925");
+
+                return getDataTable(list);
+
+            }
+        }
+        List<Reserve> list = reserveService.selectReserveList(reserve);
+        for (int i = 0; i < list.size(); i++) {
+            Reserve reserve1 =  list.get(i);
+            String provinceLabel = iSysDictDataService.selectDictValueToLabel(reserve1.getAddress());
+            reserve1.setAddress(provinceLabel);
+          /*  String address=reserve1.getAddress();
+            String name=reserve1.getLibrayName();
+            String dz=address+"_"+name;
+            reserve1.setDz(dz);*/
+
+        }
+        model.put("lngLat","116.413384,39.910925");
+
+        return getDataTable(list);
+    }
+
+    /**
+     * 导出储备库列表
+     */
+    @RequiresPermissions("reserves:reserve:export")
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(Reserve reserve)
+    {
+        List<Reserve> list = reserveService.selectReserveList(reserve);
+        ExcelUtil<Reserve> util = new ExcelUtil<Reserve>(Reserve.class);
+        return util.exportExcel(list, "reserve");
+    }
+
+    /**
+     * 新增储备库
+     */
+    @GetMapping("/add")
+    public String add()
+    {
+        return prefix + "/add";
+    }
+
+    /**
+     * 新增保存储备库
+     */
+    @RequiresPermissions("reserves:reserve:add")
+    @Log(title = "储备库", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(Reserve reserve)
+    {
+        //根据字典键值查询字典标签
+       if(reserve.getAddress()!=""){
+            String provinceLabel = iSysDictDataService.selectDictValueToLabel(reserve.getAddress());
+           SysDept dept=new SysDept();
+           List<SysDept> deptList = deptService.selectDeptList(dept);
+           for (int i = 0; i < deptList.size(); i++) {
+               SysDept sysDept =  deptList.get(i);
+               if(sysDept.getDeptName().equals(provinceLabel)){
+                   reserve.setDeptId(sysDept.getDeptId());
+               }
+           }
+
+       }
+
+        reserve.getAddress();
+        String operName = ShiroUtils.getSysUser().getUserName();
+        reserve.setCreateBy(operName);
+
+        return toAjax(reserveService.insertReserve(reserve));
+    }
+
+    /**
+     * 修改储备库
+     */
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        Reserve reserve = reserveService.selectReserveById(id);
+       // String provinceLabel = iSysDictDataService.selectDictValueCode(reserve.getAddress());
+       // reserve.setAddress(provinceLabel);
+        mmap.put("reserve", reserve);
+        return prefix + "/edit";
+    }
+
+    /**
+     * 修改保存储备库
+     */
+    @RequiresPermissions("reserves:reserve:edit")
+    @Log(title = "储备库", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(Reserve reserve)
+    {
+
+        return toAjax(reserveService.updateReserve(reserve));
+    }
+
+
+    /**
+     * 保存储备库查看
+     */
+    @RequestMapping("/getListCbkGisMap/{splitCoord}")
+    public String getListCbkGisMap(@PathVariable("splitCoord") String splitCoord,ModelMap model) {
+
+        Reserve reserve = reserveService.selectReserveByLatitude(splitCoord);
+        model.put("reserve", reserve);
+        return prefix + "/look";
+    }
+
+    /**
+     * 删除储备库
+     */
+    @RequiresPermissions("reserves:reserve:remove")
+    @Log(title = "储备库", businessType = BusinessType.DELETE)
+    @PostMapping( "/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids)
+    {
+        return toAjax(reserveService.deleteReserveByIds(ids));
+    }
+
+    /**
+     * 修改储备库状态
+     */
+    @Log(title = "储备库状态", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("reserves:reserve:edit")
+    @PostMapping("/changeStatus")
+    @ResponseBody
+    public AjaxResult changeStatus(Reserve reserve)
+    {
+        //验证用户
+        //reserveService.checkUserAllowed(reserve);
+        return toAjax(reserveService.changeStatus(reserve));
+    }
+    /**
+     * 获取储备库名称
+     */
+    @GetMapping("/getReserve")
+    @ResponseBody
+    public List<Reserve>  getReserve(Reserve reserve)
+    {
+
+        List<Reserve> list = reserveService.selectReserveList(reserve);
+        return list;
+    }
+
+}

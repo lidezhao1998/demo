@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('取样信息添加')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+    <th:block th:include="include :: select2-css" />
+    <th:block th:include="include :: bootstrap-select-css" />
+    <style type="text/css">
+        .tg-0lax{
+            text-align: center;
+            vertical-align: middle;
+            color:#333;
+        }
+
+        table{
+            background-color:white;
+            margin-left:35px;
+        }
+
+        .col-sm-3{
+            color:#333;
+        }
+        .form-control{
+            color:#333;
+        }
+        .form-group1{
+            margin-left:80px;
+        }
+        .col-sm-pt{
+        width: 95%;
+        }
+    </style>
+</head>
+<body class="white-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <form class="form-horizontal " id="form-survey-add">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">有害生物种类：</label>
+                                        <div class="col-sm-8">
+                                            <select id="codeId"  name="soilType" class="form-control noselect2 selectpicker" th:with="type=${@dict.getType('di_bian_shou')}">
+                                                <option value="">请选择</option>
+                                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">具体种类：</label>
+                                        <div class="col-sm-8">
+                                            <select id="codeId"  name="soilType" class="form-control noselect2 selectpicker" th:with="type=${@dict.getType('di_bian_shou')}">
+                                                <option value="">请选择</option>
+                                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">取样面积类型：</label>
+
+                                <div class="col-sm-8">
+                                    <input id="year" name="year" class="form-control" placeholder="yyyy" type="text" th:onkeyup="value=value.replace( /[^\d]/g,'')" maxlength="4" minlength="4" style="display:block;float:left; ">
+
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">取样时间：</label>
+
+                                    <div class="col-sm-8">
+                                        <input id="year" name="year" class="form-control" placeholder="yyyy" type="text" th:onkeyup="value=value.replace( /[^\d]/g,'')" maxlength="4" minlength="4" style="display:block;float:left; ">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">取样时间：</label>
+
+                                <div class="col-sm-8">
+                                    <input id="year" name="year" class="form-control" placeholder="yyyy" type="text" th:onkeyup="value=value.replace( /[^\d]/g,'')" maxlength="4" minlength="4" style="display:block;float:left; ">
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">调查组：</label>
+                                    <div class="col-sm-8">
+                                        <input id="zu" name="zu" class="form-control" type="text"  maxlength="1" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" th:onclick="check()">组内顺序：</label>
+                                    <div class="col-sm-8">
+                                        <input id="shunxu" name="shunxu" class="form-control" type="text" th:onkeyup="value=value.replace( /[^\d]/g,'')" maxlength="4" minlength="4"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-11">
+                                <div class="form-group1" style="color: red">
+                                    注：编号规则（S：鼠、虫、病、毒害草首字母，YYYY：年份；XXXXXX：县级行政代码；A：A-Z，调查分组组别；0001：组内顺序号）
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: jquery-steps-js" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: bootstrap-fileinput-js" />
+    <th:block th:include="include :: select2-js" />
+    <th:block th:include="include :: bootstrap-select-js" />
+<th:block th:include="include :: bootstrap-suggest-js" />
+<th:block th:include="include :: bootstrap-typeahead-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "system/survey";
+        $("#form-survey-add").validate({
+            focusCleanup: true
+        });
+
+  var chuanzhi=function () {
+      var index=document.getElementById("zu").value;
+      if (/^[A-Z]+$/.test(index)&&index.length==1)  //a-z
+      {
+          var codeId=$("#codeId").val();
+          var year=$("#year").val();
+          var xingz=$("#suggest-demo-1").attr("data-id");
+          var zu=$("#zu").val();
+          var shun=$("#shunxu").val();
+          var code=codeId+year+xingz+zu+shun;
+          return code;
+      } else {
+          alert("请规则重新输入调查组");
+          return false;
+      }
+  }
+
+
+
+
+//行政代码
+        var testBsSuggest = $("#suggest-demo-1").bsSuggest({
+            url: prefix + "/dictdata",
+            idField: "dictCode",
+            keyField: "dictLabel"
+        })
+    </script>
+
+</body>
+</html>

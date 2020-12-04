@@ -1,0 +1,412 @@
+package com.ruoyi.zaihai.caiji.service.impl;
+
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.zaihai.caiji.domain.CTaskSczj;
+import com.ruoyi.zaihai.caiji.mapper.CTaskSczjMapper;
+import com.ruoyi.zaihai.caiji.service.ICTaskSczjService;
+import com.ruoyi.zaihai.enums.ArabicToChineseNumerals;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 草原鼠害发生与防治情况Service业务层处理
+ *
+ * @author sudongdong
+ * @date 2020-05-26
+ */
+@Service
+public class CTaskSczjServiceImpl implements ICTaskSczjService
+{
+    @Autowired
+    private CTaskSczjMapper cTaskSczjMapper;
+
+    /**
+     * 查询草原鼠害发生与防治情况
+     *
+     * @param id 草原鼠害发生与防治情况ID
+     * @return 草原鼠害发生与防治情况
+     */
+    @Override
+    public CTaskSczj selectCTaskSczjById(Long id)
+    {
+        return cTaskSczjMapper.selectCTaskSczjById(id);
+    }
+
+    /**
+     * 查询草原鼠害发生与防治情况子列表
+     *
+     * @param cTaskSczj 草原鼠害发生与防治情况
+     * @return 草原鼠害发生与防治情况
+     */
+    @Override
+    public List<CTaskSczj> selectCTaskSczjList(CTaskSczj cTaskSczj)
+    {
+        return cTaskSczjMapper.selectCTaskSczjList(cTaskSczj);
+    }
+
+    @Override
+    public List<CTaskSczj> selectCTaskSczjAreaList(CTaskSczj cTaskSczj)
+    {
+        return cTaskSczjMapper.selectCTaskSczjAreaList(cTaskSczj);
+    }
+
+
+
+    @Override
+    public List<CTaskSczj> selectCTaskSczjList1(String code)
+    {
+        return cTaskSczjMapper.selectCTaskSczjList1(code);
+    }
+
+    /**
+     * 新增草原鼠害发生与防治情况
+     *
+     * @param cTaskSczj 草原鼠害发生与防治情况
+     * @return 结果
+     */
+    @Override
+    public int insertCTaskSczj(CTaskSczj cTaskSczj)
+    {
+        SysUser currentUser = ShiroUtils.getSysUser();
+        SysDept Dept =currentUser.getDept();
+        long id =currentUser.getUserId();
+        if(id!=0){
+            cTaskSczj.setCreateBy(String.valueOf(id));
+        }
+        cTaskSczj.setCreateTime(DateUtils.getNowDate());
+        String[] splitWeek = cTaskSczj.getWeek().split("-");
+        cTaskSczj.setYear(splitWeek[0]);
+        String week="";
+        if (splitWeek[1].length()==1){
+            week= ArabicToChineseNumerals.getNumber(splitWeek[1]);
+            week="第"+week+"周";
+        }else {
+            char[] chars = splitWeek[1].toCharArray();
+            String one= ArabicToChineseNumerals.getNumber(String.valueOf(chars[0]));
+            if (one.equals("一")){
+                one="";
+            }
+            String two= ArabicToChineseNumerals.getNumber(String.valueOf(chars[1]));
+            week="第"+one+"十"+two+"周";
+        }
+        cTaskSczj.setWeek(week);
+        return cTaskSczjMapper.insertCTaskSczj(cTaskSczj);
+    }
+
+    /**
+     * 修改草原鼠害发生与防治情况
+     *
+     * @param cTaskSczj 草原鼠害发生与防治情况
+     * @return 结果
+     */
+    @Override
+    public int updateCTaskSczj(CTaskSczj cTaskSczj)
+    {
+        cTaskSczj.setUpdateTime(DateUtils.getNowDate());
+        return cTaskSczjMapper.updateCTaskSczj(cTaskSczj);
+    }
+
+    /**
+     * 删除草原鼠害发生与防治情况对象
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    @Override
+    public int deleteCTaskSczjByIds(String ids)
+    {
+        return cTaskSczjMapper.deleteCTaskSczjByIds(Convert.toStrArray(ids));
+    }
+
+    /**
+     * 删除草原鼠害发生与防治情况信息
+     *
+     * @param id 草原鼠害发生与防治情况ID
+     * @return 结果
+     */
+    @Override
+    public int deleteCTaskSczjById(Long id)
+    {
+        return cTaskSczjMapper.deleteCTaskSczjById(id);
+    }
+
+    /**
+     * 查询草原鼠害发生与防治情况父列表
+     *
+     * @param cTaskSczj 草原鼠害发生与防治情况
+     * @return 草原鼠害发生与防治情况
+     */
+    @Override
+    public List<CTaskSczj> selectCTaskSczjParentList(CTaskSczj cTaskSczj) {
+        List<CTaskSczj> list = cTaskSczjMapper.selectCTaskSczjParentList(cTaskSczj);
+        if (cTaskSczj.getProvince()!=null &&!"".equals(cTaskSczj.getProvince())){
+            for (int i = list.size()-1; i>=0; i--) {
+                if (!cTaskSczj.getProvince().contains(list.get(i).getProvince())){
+                    list.remove(i);
+                }
+            }
+        }
+        return list;
+    }
+    /**
+     * 查询草原鼠害发生与防治情况父列表
+     *
+     * @param cTaskSczj 草原鼠害发生与防治情况
+     * @return 草原鼠害发生与防治情况
+     */
+    @Override
+    public List<CTaskSczj> selectCTaskChfzList(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskChfzList(cTaskSczj);
+    }
+
+    @Override
+    public List<CTaskSczj> selectCTaskChfzList1(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskChfzList1(cTaskSczj);
+    }
+    @Override
+    public List<CTaskSczj> selectCTaskChfzList2(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskChfzList2(cTaskSczj);
+    }
+    @Override
+    public List<CTaskSczj> selectCTaskChfzList3(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskChfzList3(cTaskSczj);
+    }
+    /**
+     * 修改草原鼠害发生与防治情况危害总面积
+     *
+     * @param
+     * @return 结果
+     */
+    @Override
+    public List<Map<String, Object>> getRequestCount() {
+        return cTaskSczjMapper.getRequestCount();
+    }
+    /**
+     * 修改草原鼠害发生与防治情况危害总面积
+     *
+     * @param
+     * @return 结果
+     */
+    @Override
+    public List<Map<String, Object>> getEngineeringhazardCount() {
+        return cTaskSczjMapper.getEngineeringhazardCount();
+    }
+
+
+
+    /**
+     * 修改草原鼠害发生与防治情况工程区严重危害面积
+     *
+     * @param
+     * @return 结果
+     */
+    @Override
+    public List<Map<String, Object>> getSeriousAreaCount() {
+        return cTaskSczjMapper.getSeriousAreaCount();
+    }
+
+    /**
+     * 修改草原鼠害发生与防治情况工程区严重危害面积
+     *
+     * @param
+     * @return 结果
+     */
+    @Override
+    public List<Map<String, Object>> getEngineeringSeriousAreaCount() {
+        return cTaskSczjMapper.getEngineeringSeriousAreaCount();
+    }
+    /**
+     * 修改草原鼠害发生与防治情况当年防治总面积
+     *
+     * @param
+     * @return 结果
+     */
+    @Override
+    public List<Map<String, Object>> getDefensiveAreaCount() {
+        return cTaskSczjMapper.getDefensiveAreaCount();
+    }
+
+    /**
+     * 修改草原鼠害发生与防治情况持续控制总面积
+     *
+     * @param
+     * @return 结果
+     */
+    @Override
+    public List<Map<String, Object>> getControlareaCount() {
+        return cTaskSczjMapper.getControlareaCount();
+    }
+
+    /**
+     * 修获取最大的主键id，获取最新的数据
+     *
+     * @param
+     * @return 主键id结果
+     */
+    @Override
+    public long selectCTaskSczjMaxId(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskSczjMaxId(cTaskSczj);
+    }
+
+    /**
+     * 查询草原鼠害发生与防治情况当年防治总面积
+     *
+     * @param
+     * @return 鼠害趋势预测
+     */
+    @Override
+    public List<CTaskSczj> selectCTaskSczjAnalyze(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskSczjAnalyze(cTaskSczj);
+    }
+
+    /**
+     * 查询草原鼠害发生与防治情况当年防治总面积
+     *
+     * @param
+     * @return 鼠害趋势预警
+     */
+    @Override
+    public List<CTaskSczj> selectCTaskSczjLine(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskSczjLine(cTaskSczj);
+    }
+
+    /**
+     * 查询草原鼠害发生与防治情况当年防治总面积
+     *
+     * @param
+     * @return 鼠害趋势预警柱状图
+     */
+    @Override
+    public List<CTaskSczj> selectCTaskSczjCityList(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskSczjCityList(cTaskSczj);
+    }
+
+    @Override
+    public List<CTaskSczj> selectCTaskSczjParentList1(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskSczjParentList1(cTaskSczj);
+    }
+
+    @Override
+    public int updateCTaskSczjStatus(long id) {
+        return cTaskSczjMapper.updateCTaskSczjStatus(id);
+    }
+    /**
+     * @description 获取 地区上报统计首页鼠害折线图
+     * @author feiyanxu
+     * @date
+     */
+    @Override
+    public List<CTaskSczj> selectCTaskSczjRatLine(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskSczjRatLine(cTaskSczj);
+    }
+
+    /**
+     * @description 获取 地区上报统计首页省级鼠害折线图
+     * @author feiyanxu
+     * @date
+     */
+    @Override
+    public List<CTaskSczj> selectCTaskSczjRatLineProvince(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskSczjRatLineProvince(cTaskSczj);
+    }
+
+    /**
+     * @description 获取 地区上报统计首页省级鼠害柱状图
+     * @author feiyanxu
+     * @date
+     */
+    @Override
+    public List<CTaskSczj> selectCTaskSczjRatcity(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskSczjRatcity(cTaskSczj);
+    }
+
+
+    /**
+     * @description 获取 地区上报统计首页市级鼠害柱状图
+     * @author feiyanxu
+     * @date
+     */
+    @Override
+    public List<CTaskSczj> selectCTaskSczjRatcounty(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskSczjRatcounty(cTaskSczj);
+    }
+
+    /**
+     * @description 数据统计 省级用户上报统计市级鼠害折线图
+     * @author feiyanxu
+     * @date
+     */
+    @Override
+    public List<CTaskSczj> selectCTaskSczjRatProvince(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskSczjRatProvince(cTaskSczj);
+    }
+
+    /**
+     * @description 省级用户严重危害总面积
+     * @author feiyanxu
+     * @date
+     */
+    @Override
+    public List<Map<String, Object>> getSeriousAreaCityCount() {
+        return cTaskSczjMapper.getSeriousAreaCityCount();
+    }
+    /**
+     * @description 省级用户工程区危害面积
+     * @author feiyanxu
+     * @date
+     */
+    @Override
+    public List<Map<String, Object>> getEngineeringSeriousAreaCityCount() {
+        return cTaskSczjMapper.getEngineeringSeriousAreaCityCount();
+    }
+    /**
+     * @description 省级用户当年防治面积
+     * @author feiyanxu
+     * @date
+     */
+    @Override
+    public List<Map<String, Object>> getDefensiveAreaCityCount() {
+        return cTaskSczjMapper.getDefensiveAreaCityCount();
+    }
+    /**
+     * @description 省级用户持续控制面积
+     * @author feiyanxu
+     * @date
+     */
+    @Override
+    public List<Map<String, Object>> getControlareaCityCount() {
+        return cTaskSczjMapper.getControlareaCityCount();
+    }
+
+
+    /**
+     * 查询草原鼠害发生与防治情况当年防治总面积
+     *
+     * @param
+     * @return 首页鼠害饼状图
+     */
+    @Override
+    public List<CTaskSczj> selectCTaskSczjSumList(CTaskSczj cTaskSczj) {
+        return cTaskSczjMapper.selectCTaskSczjSumList(cTaskSczj);
+    }
+
+    @Override
+    public List<Map<String, Object>> getCityCount() {
+        return cTaskSczjMapper.getCityCount();
+    }
+
+
+    @Override
+    public List<Map<String, Object>> getEngineeringhazardCityCount() {
+        return cTaskSczjMapper.getEngineeringhazardCityCount();
+    }
+
+
+}

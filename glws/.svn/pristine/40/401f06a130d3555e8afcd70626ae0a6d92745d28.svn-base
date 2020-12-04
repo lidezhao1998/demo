@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CTaskSczjMapper">
+    
+    <resultMap type="CTaskSczj" id="CTaskSczjResult">
+        <result property="id"    column="ID"    />
+        <result property="number"    column="NUMBER"    />
+        <result property="year"    column="YEAR"    />
+        <result property="week"    column="WEEK"    />
+        <result property="province"    column="PROVINCE"    />
+        <result property="city"    column="CITY"    />
+        <result property="county"    column="COUNTY"    />
+        <result property="type"    column="TYPE"    />
+        <result property="harmTotalarea"    column="HARM_TOTALAREA"    />
+        <result property="engineeringhazard"    column="ENGINEERINGHAZARD"    />
+        <result property="seriousArea"    column="SERIOUS_AREA"    />
+        <result property="engineeringSeriousArea"    column="ENGINEERING_SERIOUS_AREA"    />
+        <result property="chemistryControl"    column="CHEMISTRY_CONTROL"    />
+        <result property="cBotulinumtoxin"    column="C_BOTULINUMTOXIN"    />
+        <result property="dBotulinumtoxin"    column="D_BOTULINUMTOXIN"    />
+        <result property="tripterygium"    column="TRIPTERYGIUM"    />
+        <result property="curcumae"    column="CURCUMAE"    />
+        <result property="hawkMouse"    column="HAWK_MOUSE"    />
+        <result property="foxRat"    column="FOX_RAT"    />
+        <result property="physicalControl"    column="PHYSICAL_CONTROL"    />
+        <result property="defensiveArea"    column="DEFENSIVE_AREA"    />
+        <result property="controlarea"    column="CONTROLAREA"    />
+        <result property="hawkDeratization"    column="HAWK_DERATIZATION"    />
+        <result property="rodentControl"    column="RODENT_CONTROL"    />
+        <result property="artisan"    column="ARTISAN"    />
+        <result property="work"    column="WORK"    />
+        <result property="plane"    column="PLANE"    />
+        <result property="controlApparatus"    column="CONTROL_APPARATUS"    />
+        <result property="car"    column="CAR"    />
+        <result property="total"    column="TOTAL"    />
+        <result property="remarks"    column="REMARKS"    />
+        <result property="createTime"    column="CREAT_TIME"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="createId"    column="CREATE_ID"    />
+        <result property="createBy"    column="CREATE_By"    />
+        <result property="status"    column="STATUS"    />
+        <result property="roleName"    column="ROLENAME"    />
+        <result property="code"    column="CODE"    />
+
+    </resultMap>
+
+    <sql id="selectCTaskSczjVo">
+        select ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY, TYPE, HARM_TOTALAREA, ENGINEERINGHAZARD, SERIOUS_AREA, ENGINEERING_SERIOUS_AREA, CHEMISTRY_CONTROL, C_BOTULINUMTOXIN, D_BOTULINUMTOXIN, TRIPTERYGIUM, CURCUMAE, HAWK_MOUSE, FOX_RAT, PHYSICAL_CONTROL, DEFENSIVE_AREA, CONTROLAREA, HAWK_DERATIZATION, RODENT_CONTROL, ARTISAN, WORK, PLANE, CONTROL_APPARATUS, CAR, TOTAL, REMARKS, CREAT_TIME, UPDATE_TIME, CREATE_ID, CREATE_By, STATUS,ROLENAME,CODE,COUNTRYY  from c_task_sczj
+    </sql>
+
+    <sql id="selectCTaskSczjVo1">
+        select ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY, TYPE, HARM_TOTALAREA, ENGINEERINGHAZARD, SERIOUS_AREA, ENGINEERING_SERIOUS_AREA, CHEMISTRY_CONTROL, C_BOTULINUMTOXIN, D_BOTULINUMTOXIN, TRIPTERYGIUM, CURCUMAE, HAWK_MOUSE, FOX_RAT, PHYSICAL_CONTROL, DEFENSIVE_AREA, CONTROLAREA, HAWK_DERATIZATION, RODENT_CONTROL, ARTISAN, WORK, PLANE, CONTROL_APPARATUS, CAR, TOTAL, REMARKS, CREAT_TIME, UPDATE_TIME, CREATE_ID, CREATE_By, STATUS,ROLENAME,CODE,COUNTRYY  from c_task_sczj where PROVINCE = #{province}
+    </sql>
+
+    <sql id="selectCTaskSczjSumVo">
+        select ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY,COUNTRYY, TYPE, sum(HARM_TOTALAREA)HARM_TOTALAREA, sum(ENGINEERINGHAZARD)ENGINEERINGHAZARD,sum(SERIOUS_AREA) SERIOUS_AREA,sum(ENGINEERING_SERIOUS_AREA) ENGINEERING_SERIOUS_AREA,sum(CHEMISTRY_CONTROL) CHEMISTRY_CONTROL,sum(C_BOTULINUMTOXIN) C_BOTULINUMTOXIN, sum(D_BOTULINUMTOXIN) D_BOTULINUMTOXIN,sum(TRIPTERYGIUM) TRIPTERYGIUM,sum(CURCUMAE)  CURCUMAE,sum(HAWK_MOUSE)  HAWK_MOUSE,sum(FOX_RAT)  FOX_RAT,sum(PHYSICAL_CONTROL) PHYSICAL_CONTROL,sum(DEFENSIVE_AREA) DEFENSIVE_AREA,sum(CONTROLAREA) CONTROLAREA,sum(HAWK_DERATIZATION) HAWK_DERATIZATION,sum(RODENT_CONTROL) RODENT_CONTROL,sum(ARTISAN)  ARTISAN,sum(WORK)  WORK,sum(PLANE) PLANE,sum(CONTROL_APPARATUS) CONTROL_APPARATUS,sum(CAR) CAR, sum(TOTAL) TOTAL, REMARKS, CREAT_TIME, UPDATE_TIME, CREATE_ID, CREATE_By, STATUS,ROLENAME from c_task_sczj
+    </sql>
+
+    <select id="selectCTaskSczjList" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjVo"/>
+
+
+    </select>
+
+
+    <!--鼠害预测分析-->
+    <select id="selectCTaskSczjAnalyze" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjSumVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+<!--
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+-->
+
+            <if test="total != null "> and TOTAL = #{total}</if>
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="createTime != null "> and CREAT_TIME = #{createTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{createBy}, '%')</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+        </where>
+        group by year
+    </select>
+
+    <!--省级列表-->
+    <select id="selectCTaskSczjProvinceList" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjSumVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+
+            <if test="total != null "> and TOTAL = #{total}</if>
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="createTime != null "> and CREAT_TIME = #{createTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{createBy}, '%')</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+        </where>
+      group  by province
+    </select>
+
+    <!--首页省级用户进入后查看则线图-->
+    <!--省级列表-->
+    <select id="selectCTaskSczjRatLineProvince" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjSumVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="controlApparatus != null "> and CONTROL_APPARATUS = #{controlApparatus}</if>
+            <if test="car != null "> and CAR = #{car}</if>
+            <if test="total != null "> and TOTAL = #{total}</if>
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="createTime != null "> and CREAT_TIME = #{createTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{createBy}, '%')</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+        </where>
+        group  by WEEK order by CREAT_TIME
+    </select>
+
+
+    <!--首页省级用户进入后查看柱状图-->
+    <!--省级列表-->
+    <select id="selectCTaskSczjRatcity" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjSumVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="total != null "> and TOTAL = #{total}</if>
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="createTime != null "> and CREAT_TIME = #{createTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{createBy}, '%')</if>
+<!--
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+-->
+        </where>
+        group  by city order by CREAT_TIME
+    </select>
+
+    <!--首页市级用户鼠害柱状图-->
+    <select id="selectCTaskSczjRatcounty" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjSumVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="total != null "> and TOTAL = #{total}</if>
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="createTime != null "> and CREAT_TIME = #{createTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{createBy}, '%')</if>
+<!--
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+-->
+        </where>
+        group  by county order by CREAT_TIME
+    </select>
+
+
+    <!--市二级列表-->
+    <select id="selectCTaskSczjCityList" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjSumVo"/>
+        <where>
+
+        <if test="province != null  and province != ''"> and PROVINCE like concat(#{province},'%')</if>
+        <if test="city != null  and city != ''"> and CITY = #{city}</if>
+        <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+        <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+        </where>
+        group  by city
+    </select>
+
+    <!--县级二级列表-->
+    <select id="selectCTaskSczjAreaList" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjSumVo"/>
+
+        where COUNTY = #{county} group  by county
+    </select>
+    
+    <select id="selectCTaskSczjById" parameterType="Long" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjVo"/>
+        where ID = #{id}
+    </select>
+
+
+    <!--展示列表-->
+    <select id="selectCTaskSczjParentList"  resultMap="CTaskSczjResult">
+        select ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY,COUNTRYY, TYPE, sum(HARM_TOTALAREA)HARM_TOTALAREA, sum(ENGINEERINGHAZARD)ENGINEERINGHAZARD,sum(SERIOUS_AREA) SERIOUS_AREA,sum(ENGINEERING_SERIOUS_AREA) ENGINEERING_SERIOUS_AREA,sum(CHEMISTRY_CONTROL) CHEMISTRY_CONTROL,sum(C_BOTULINUMTOXIN) C_BOTULINUMTOXIN, sum(D_BOTULINUMTOXIN) D_BOTULINUMTOXIN,sum(TRIPTERYGIUM) TRIPTERYGIUM,sum(CURCUMAE)  CURCUMAE,sum(HAWK_MOUSE)  HAWK_MOUSE,sum(FOX_RAT)  FOX_RAT,sum(PHYSICAL_CONTROL) PHYSICAL_CONTROL,sum(DEFENSIVE_AREA) DEFENSIVE_AREA,sum(CONTROLAREA) CONTROLAREA,sum(HAWK_DERATIZATION) HAWK_DERATIZATION,sum(RODENT_CONTROL) RODENT_CONTROL,sum(ARTISAN)  ARTISAN,sum(WORK)  WORK,sum(PLANE) PLANE,sum(CONTROL_APPARATUS) CONTROL_APPARATUS,sum(CAR) CAR, sum(TOTAL) TOTAL, REMARKS, CREAT_TIME, UPDATE_TIME, CREATE_ID, CREATE_By, STATUS from c_task_sczj
+        GROUP BY province
+
+    </select>
+
+    <!--展示列表-->
+    <select id="selectCTaskSczjParentList1"  resultMap="CTaskSczjResult">
+        select ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY,COUNTRYY, TYPE, sum(HARM_TOTALAREA)HARM_TOTALAREA, sum(ENGINEERINGHAZARD)ENGINEERINGHAZARD,sum(SERIOUS_AREA) SERIOUS_AREA,sum(ENGINEERING_SERIOUS_AREA) ENGINEERING_SERIOUS_AREA,sum(CHEMISTRY_CONTROL) CHEMISTRY_CONTROL,sum(C_BOTULINUMTOXIN) C_BOTULINUMTOXIN, sum(D_BOTULINUMTOXIN) D_BOTULINUMTOXIN,sum(TRIPTERYGIUM) TRIPTERYGIUM,sum(CURCUMAE)  CURCUMAE,sum(HAWK_MOUSE)  HAWK_MOUSE,sum(FOX_RAT)  FOX_RAT,sum(PHYSICAL_CONTROL) PHYSICAL_CONTROL,sum(DEFENSIVE_AREA) DEFENSIVE_AREA,sum(CONTROLAREA) CONTROLAREA,sum(HAWK_DERATIZATION) HAWK_DERATIZATION,sum(RODENT_CONTROL) RODENT_CONTROL,sum(ARTISAN)  ARTISAN,sum(WORK)  WORK,sum(PLANE) PLANE,sum(CONTROL_APPARATUS) CONTROL_APPARATUS,sum(CAR) CAR, sum(TOTAL) TOTAL, REMARKS, CREAT_TIME, UPDATE_TIME, CREATE_ID, CREATE_By, STATUS  from c_task_sczj
+         GROUP BY province
+
+    </select>
+
+
+
+    <!--市级涌入登陆后首界面信息-->
+    <select id="selectCTaskSczjcityIndexList"  resultMap="CTaskSczjResult">
+        select ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY,COUNTRYY, TYPE, sum(HARM_TOTALAREA)HARM_TOTALAREA, sum(ENGINEERINGHAZARD)ENGINEERINGHAZARD,sum(SERIOUS_AREA) SERIOUS_AREA,sum(ENGINEERING_SERIOUS_AREA) ENGINEERING_SERIOUS_AREA,sum(CHEMISTRY_CONTROL) CHEMISTRY_CONTROL,sum(C_BOTULINUMTOXIN) C_BOTULINUMTOXIN, sum(D_BOTULINUMTOXIN) D_BOTULINUMTOXIN,sum(TRIPTERYGIUM) TRIPTERYGIUM,sum(CURCUMAE)  CURCUMAE,sum(HAWK_MOUSE)  HAWK_MOUSE,sum(FOX_RAT)  FOX_RAT,sum(PHYSICAL_CONTROL) PHYSICAL_CONTROL,sum(DEFENSIVE_AREA) DEFENSIVE_AREA,sum(CONTROLAREA) CONTROLAREA,sum(HAWK_DERATIZATION) HAWK_DERATIZATION,sum(RODENT_CONTROL) RODENT_CONTROL,sum(ARTISAN)  ARTISAN,sum(WORK)  WORK,sum(PLANE) PLANE,sum(CONTROL_APPARATUS) CONTROL_APPARATUS,sum(CAR) CAR, sum(TOTAL) TOTAL, REMARKS, CREAT_TIME, UPDATE_TIME, CREATE_ID, CREATE_By, STATUS from c_task_sczj  GROUP BY city
+    </select>
+
+
+    <insert id="insertCTaskSczj" parameterType="CTaskSczj" useGeneratedKeys="true" keyProperty="id">
+        insert into c_task_sczj
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER,</if>
+            <if test="year != null  and year != ''">YEAR,</if>
+            <if test="week != null  and week != ''">WEEK,</if>
+            <if test="province != null  and province != ''">PROVINCE,</if>
+            <if test="city != null  and city != ''">CITY,</if>
+            <if test="county != null  and county != ''">COUNTY,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="harmTotalarea != null ">HARM_TOTALAREA,</if>
+            <if test="engineeringhazard != null ">ENGINEERINGHAZARD,</if>
+            <if test="seriousArea != null ">SERIOUS_AREA,</if>
+            <if test="engineeringSeriousArea != null ">ENGINEERING_SERIOUS_AREA,</if>
+            <if test="chemistryControl != null ">CHEMISTRY_CONTROL,</if>
+            <if test="cBotulinumtoxin != null ">C_BOTULINUMTOXIN,</if>
+            <if test="dBotulinumtoxin != null ">D_BOTULINUMTOXIN,</if>
+            <if test="tripterygium != null ">TRIPTERYGIUM,</if>
+            <if test="curcumae != null ">CURCUMAE,</if>
+            <if test="hawkMouse != null ">HAWK_MOUSE,</if>
+            <if test="foxRat != null ">FOX_RAT,</if>
+            <if test="physicalControl != null ">PHYSICAL_CONTROL,</if>
+            <if test="defensiveArea != null ">DEFENSIVE_AREA,</if>
+            <if test="controlarea != null ">CONTROLAREA,</if>
+            <if test="hawkDeratization != null ">HAWK_DERATIZATION,</if>
+            <if test="rodentControl != null ">RODENT_CONTROL,</if>
+            <if test="artisan != null ">ARTISAN,</if>
+            <if test="work != null ">WORK,</if>
+            <if test="plane != null ">PLANE,</if>
+            <if test="controlApparatus != null ">CONTROL_APPARATUS,</if>
+            <if test="car != null ">CAR,</if>
+            <if test="total != null ">TOTAL,</if>
+            <if test="remarks != null  and remarks != ''">REMARKS,</if>
+            <if test="createTime != null ">CREAT_TIME,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="createId != null  and createId != ''">CREATE_ID,</if>
+            <if test="createName != null  and createName != ''">CREATE_NAME,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">#{number},</if>
+            <if test="year != null  and year != ''">#{year},</if>
+            <if test="week != null  and week != ''">#{week},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="county != null  and county != ''">#{county},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="harmTotalarea != null ">#{harmTotalarea},</if>
+            <if test="engineeringhazard != null ">#{engineeringhazard},</if>
+            <if test="seriousArea != null ">#{seriousArea},</if>
+            <if test="engineeringSeriousArea != null ">#{engineeringSeriousArea},</if>
+            <if test="chemistryControl != null ">#{chemistryControl},</if>
+            <if test="cBotulinumtoxin != null ">#{cBotulinumtoxin},</if>
+            <if test="dBotulinumtoxin != null ">#{dBotulinumtoxin},</if>
+            <if test="tripterygium != null ">#{tripterygium},</if>
+            <if test="curcumae != null ">#{curcumae},</if>
+            <if test="hawkMouse != null ">#{hawkMouse},</if>
+            <if test="foxRat != null ">#{foxRat},</if>
+            <if test="physicalControl != null ">#{physicalControl},</if>
+            <if test="defensiveArea != null ">#{defensiveArea},</if>
+            <if test="controlarea != null ">#{controlarea},</if>
+            <if test="hawkDeratization != null ">#{hawkDeratization},</if>
+            <if test="rodentControl != null ">#{rodentControl},</if>
+            <if test="artisan != null ">#{artisan},</if>
+            <if test="work != null ">#{work},</if>
+            <if test="plane != null ">#{plane},</if>
+            <if test="controlApparatus != null ">#{controlApparatus},</if>
+            <if test="car != null ">#{car},</if>
+            <if test="total != null ">#{total},</if>
+            <if test="remarks != null  and remarks != ''">#{remarks},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="createId != null  and createId != ''">#{createId},</if>
+            <if test="createName != null  and createName != ''">#{createName},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCTaskSczj" parameterType="CTaskSczj">
+        update c_task_sczj
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER = #{number},</if>
+            <if test="year != null  and year != ''">YEAR = #{year},</if>
+            <if test="week != null  and week != ''">WEEK = #{week},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="city != null  and city != ''">CITY = #{city},</if>
+            <if test="county != null  and county != ''">COUNTY = #{county},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="harmTotalarea != null ">HARM_TOTALAREA = #{harmTotalarea},</if>
+            <if test="engineeringhazard != null ">ENGINEERINGHAZARD = #{engineeringhazard},</if>
+            <if test="seriousArea != null ">SERIOUS_AREA = #{seriousArea},</if>
+            <if test="engineeringSeriousArea != null ">ENGINEERING_SERIOUS_AREA = #{engineeringSeriousArea},</if>
+            <if test="chemistryControl != null ">CHEMISTRY_CONTROL = #{chemistryControl},</if>
+            <if test="cBotulinumtoxin != null ">C_BOTULINUMTOXIN = #{cBotulinumtoxin},</if>
+            <if test="dBotulinumtoxin != null ">D_BOTULINUMTOXIN = #{dBotulinumtoxin},</if>
+            <if test="tripterygium != null ">TRIPTERYGIUM = #{tripterygium},</if>
+            <if test="curcumae != null ">CURCUMAE = #{curcumae},</if>
+            <if test="hawkMouse != null ">HAWK_MOUSE = #{hawkMouse},</if>
+            <if test="foxRat != null ">FOX_RAT = #{foxRat},</if>
+            <if test="physicalControl != null ">PHYSICAL_CONTROL = #{physicalControl},</if>
+            <if test="defensiveArea != null ">DEFENSIVE_AREA = #{defensiveArea},</if>
+            <if test="controlarea != null ">CONTROLAREA = #{controlarea},</if>
+            <if test="hawkDeratization != null ">HAWK_DERATIZATION = #{hawkDeratization},</if>
+            <if test="rodentControl != null ">RODENT_CONTROL = #{rodentControl},</if>
+            <if test="artisan != null ">ARTISAN = #{artisan},</if>
+            <if test="work != null ">WORK = #{work},</if>
+            <if test="plane != null ">PLANE = #{plane},</if>
+            <if test="controlApparatus != null ">CONTROL_APPARATUS = #{controlApparatus},</if>
+            <if test="car != null ">CAR = #{car},</if>
+            <if test="total != null ">TOTAL = #{total},</if>
+            <if test="remarks != null  and remarks != ''">REMARKS = #{remarks},</if>
+            <if test="createTime != null ">CREAT_TIME = #{createTime},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="createId != null  and createId != ''">CREATE_ID = #{createId},</if>
+            <if test="createName != null  and createName != ''">CREATE_NAME = #{createName},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCTaskSczjById" parameterType="Long">
+        delete from c_task_sczj where ID = #{id}
+    </delete>
+
+    <delete id="deleteCTaskSczjByIds" parameterType="String">
+        delete from c_task_sczj where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+<!--鼠害统计上周累加合计的数量-->
+    <!--省-->
+    <select id="selectCTaskChfzList"  resultMap="CTaskSczjResult">
+SELECT ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY,COUNTRYY, TYPE, sum(HARM_TOTALAREA)HARM_TOTALAREA, sum(ENGINEERINGHAZARD)ENGINEERINGHAZARD,sum(SERIOUS_AREA) SERIOUS_AREA,sum(ENGINEERING_SERIOUS_AREA) ENGINEERING_SERIOUS_AREA, SUM(CHEMISTRY_CONTROL+C_BOTULINUMTOXIN+TRIPTERYGIUM+HAWK_MOUSE+PHYSICAL_CONTROL)DEFENSIVE_AREA,SUM(HAWK_DERATIZATION+RODENT_CONTROL)CONTROLAREA FROM `c_task_sczj` where  PROVINCE = #{province}    group by province
+    </select>
+
+    <!--市-->
+    <select id="selectCTaskChfzList1"  resultMap="CTaskSczjResult">
+SELECT ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY,COUNTRYY, TYPE, sum(HARM_TOTALAREA)HARM_TOTALAREA, sum(ENGINEERINGHAZARD)ENGINEERINGHAZARD,sum(SERIOUS_AREA) SERIOUS_AREA,sum(ENGINEERING_SERIOUS_AREA) ENGINEERING_SERIOUS_AREA, SUM(CHEMISTRY_CONTROL+C_BOTULINUMTOXIN+TRIPTERYGIUM+HAWK_MOUSE+PHYSICAL_CONTROL)DEFENSIVE_AREA,SUM(HAWK_DERATIZATION+RODENT_CONTROL)CONTROLAREA FROM `c_task_sczj` where  CITY = #{city}    group by city
+    </select>
+
+
+    <!--县-->
+    <select id="selectCTaskChfzList2"  resultMap="CTaskSczjResult">
+SELECT ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY,COUNTRYY, TYPE, sum(HARM_TOTALAREA)HARM_TOTALAREA, sum(ENGINEERINGHAZARD)ENGINEERINGHAZARD,sum(SERIOUS_AREA) SERIOUS_AREA,sum(ENGINEERING_SERIOUS_AREA) ENGINEERING_SERIOUS_AREA, SUM(CHEMISTRY_CONTROL+C_BOTULINUMTOXIN+TRIPTERYGIUM+HAWK_MOUSE+PHYSICAL_CONTROL)DEFENSIVE_AREA,SUM(HAWK_DERATIZATION+RODENT_CONTROL)CONTROLAREA FROM `c_task_sczj` where  COUNTY = #{county}    group by county
+    </select>
+
+    <!--国家级-->
+    <select id="selectCTaskChfzList3"  resultMap="CTaskSczjResult">
+    SELECT ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY,COUNTRYY, TYPE, sum(HARM_TOTALAREA)HARM_TOTALAREA, sum(ENGINEERINGHAZARD)ENGINEERINGHAZARD,sum(SERIOUS_AREA) SERIOUS_AREA,sum(ENGINEERING_SERIOUS_AREA) ENGINEERING_SERIOUS_AREA, SUM(CHEMISTRY_CONTROL+C_BOTULINUMTOXIN+TRIPTERYGIUM+HAWK_MOUSE+PHYSICAL_CONTROL)DEFENSIVE_AREA,SUM(HAWK_DERATIZATION+RODENT_CONTROL)CONTROLAREA FROM `c_task_sczj`   group by province
+</select>
+
+
+    <!--趋势预警鼠害则线图-->
+    <select id="selectCTaskSczjLine" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjSumVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+
+            <if test="createTime != null "> and CREAT_TIME = #{createTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{createBy}, '%')</if>
+            <!--
+                        <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            -->
+        </where>
+        group  by YEAR   order by YEAR
+    </select>
+
+    <!--首页预警鼠害则线图-->
+    <select id="selectCTaskSczjRatLine" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjSumVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="total != null "> and TOTAL = #{total}</if>
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="createTime != null "> and CREAT_TIME = #{createTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{createBy}, '%')</if>
+            <!--
+                        <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            -->
+        </where>
+        group  by week   order by CREAT_TIME
+    </select>
+
+
+<!--柱状图-->
+    <select id="selectCTaskSczjSumList" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+
+            <if test="total != null "> and TOTAL = #{total}</if>
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="createTime != null "> and CREAT_TIME = #{createTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{createBy}, '%')</if>
+
+        </where>
+        group  by province
+    </select>
+
+
+    <!--上报信息修改状态-->
+    <update id="updateCTaskSczjStatus" parameterType="Long">
+    update c_task_sczj set status='1' where id=#{id}
+    </update>
+
+</mapper>

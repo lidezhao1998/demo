@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('发生防治年报列表')" />
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-bordered table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: white;
+    }
+
+</style>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <input type="hidden" id="provinceHidden"/>
+                    <input type="hidden" id="cityHidden"/>
+                    <div class="select-list">
+                        <ul>
+
+
+                            <!-- <li>
+                                 <div id="province">
+                                 <label class="col-sm-3 control-label" style="margin-top: 7px">省：</label>
+                                 <div class="col-sm-8">
+                                     <select id="addrProvince"
+                                             style="width: 130px;height: 34px;border:1px solid #e5e6e7"
+                                             name="province" onchange="getCities(this.value) "
+                                             required="required"></select>
+                                 </div>
+                                 </div>
+                             </li>-->
+
+                            <li>
+                                <div id="city">
+                                    <span>市：</span>
+                                    <select
+                                            id="addrCity" name="city" onchange="getAreas(this.value)"
+                                            style="width: 150px;height:30px; ">
+                                    </select>
+                                </div>
+                            </li>
+                            <li>
+                                <div id="area">
+                                    <input id="valuearea" type="hidden"/>
+                                    <em class="i-bit"></em><span>县/区：</span>
+                                    <select id="addrArea" name="county"
+                                            style="width: 150px;height:30px; ">
+                                    </select>
+                                </div>
+                            </li>
+                           <!-- <li class="select-time">
+                                <p>年度：</p>
+                                <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                            </li>-->
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+<!--            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="Echars()" >
+                    <i class="fa fa-download"></i> 图表展示
+                </a>
+            </div>-->
+            <div class="col-sm-12 select-table table-bordered">
+                <table id="bootstrap-table" class="table table-hover"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+     <style>
+         /* 表格样式 */
+
+         .table>tbody>tr>td {
+             border: 0px;
+             text-align: center;
+         }
+
+         .bootstrap-table .table thead>tr>th {
+             text-align: right;
+         }
+
+         .table thead {
+             background: #ebeaea;
+         }
+     </style>
+    <script th:inline="javascript">
+        var prefix = ctx + "zaihai/fznbtj";
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#test2'
+                , type: 'year'
+            });
+        });
+        $(function() {
+            var options = {
+                url: prefix + "/list2",
+                exportUrl: prefix + "/export",
+                pagination:false,
+                showExport: true,
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+                modalName: "发生防治年报",
+                detailView: false,
+                detailFormatter:detailFormatter,
+                queryParams:{"province":[[${province}]],"city":[[${city}]]},
+
+                // showFooter:true,
+
+                columns: [
+                    [
+
+                {
+                    rowspan: 3,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'year',
+                    title : '年份'
+                },
+              /*  {
+                    rowspan: 3,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'province',
+                    title : '所属省',
+                },
+                {
+                    rowspan: 3,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'city',
+                    title : '所属市',
+                },*/
+                {
+                    rowspan: 3,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'county',
+                    title : '所属县'
+                },
+                    {
+                        rowspan: 1,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        title : '项目类型'
+                    },
+                        {
+                            rowspan: 3,
+                            colspan: 1,
+                            align: 'center',
+                            valign: 'middle',
+                            title : '县'
+                        },
+                    {
+                        rowspan: 1,
+                        colspan: 4,
+                        align: 'center',
+                        valign: 'middle',
+                        title : '草原虫害防治(万元)'
+                    },
+                    {
+                        rowspan: 1,
+                        colspan: 4,
+                        align: 'center',
+                        valign: 'middle',
+                        title : '草原鼠害防治(万元)'
+                    },
+                    {
+                        rowspan: 1,
+                        colspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        title : '毒害草'
+                    },
+                    {
+                        rowspan: 3,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        field : 'hazardArea',
+                        title : '其中工程区危害面积(万亩)'
+                    },
+                    {
+                        rowspan: 3,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        field : 'hazardAllArea',
+                        title : '危害总面积'
+                    },
+                    {
+                        rowspan: 1,
+                        colspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        title : '农药'
+                    }
+                    ],
+                    [
+                        {
+                        rowspan: 2,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        title : '市(地/州/盟)'
+                    },
+
+                        {
+                            rowspan: 1,
+                            colspan: 4,
+                            align: 'center',
+                            valign: 'middle',
+                            title : '资金配套(万元)'
+                        },
+                        {
+                            rowspan: 1,
+                            colspan: 4,
+                            align: 'center',
+                            valign: 'middle',
+                            title : '资金配套(万元)'
+                        },
+
+                        {
+                            rowspan: 2,
+                            colspan: 1,
+                            align: 'center',
+                            valign: 'middle',
+                            field : 'economicLoss',
+                            title : '经济损失(万元)'
+                        },
+                    {
+                        rowspan: 2,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        field : 'livestockDeath',
+                        title : '家畜死亡(只/条/个)'
+                    },
+                        {
+                            rowspan: 2,
+                            colspan: 1,
+                            align: 'center',
+                            valign: 'middle',
+                            field : 'controlDosage',
+                            title : '当年防治用量(亩/量)'
+                        },
+                        {
+                            rowspan: 2,
+                            colspan: 1,
+                            align: 'center',
+                            valign: 'middle',
+                            field : 'muDosage',
+                            title : '亩用量(亩/量)'
+                        }
+
+                      ],
+               [{
+                    rowspan: 1,
+                    colspan: 1,
+                    field : 'ratharmCenter',
+                    title : '中央'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field : 'ratharmProvince',
+                    title : '省级'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field : 'ratharmCity',
+                    title : '地级'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field : 'ratharmCounty',
+                    title : '县级'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field : 'insectharmCenter',
+                    title : '中央'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field : 'insectharmProvince',
+                    title : '省级'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field : 'insectharmCity',
+                    title : '地级'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    field : 'insectharmCounty',
+                    title : '县级'
+                },
+                ],
+           ],
+
+            };
+            $.table.init(options);
+        });
+        $(function () {
+            var code = [[${code}]];
+            var roleName = [[${roleName}]];
+            if (roleName == 'gj') {
+                getCities(code);
+
+            } else if (roleName == 'sj') {
+                $("#city").hide();
+                getAreas(code);
+
+            }
+
+
+        });
+
+
+        // ===== 加载市列表 =====
+        function getCities(value) {
+
+            $("#addrCity").empty();
+            $("#addrArea").empty();
+            var url = ctx + "caiji/survey/getCities";
+            var data = "provinceCode=" + value;
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function (data) {
+                    var op = document.createElement("option");
+                    op.value = '';
+                    op.text = "----- 请选择市 -------";
+                    document.getElementById("addrCity").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictLabel;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("addrCity").appendChild(op);
+                    }
+                }
+            });
+            // var op2 = document.createElement("option");
+            // op2.value = '';
+            // document.getElementById("addrArea").appendChild(op2);
+        }
+
+        // ===== 加载区列表 =====
+        function getAreas(value) {
+            var roleName = [[${roleName}]];
+            if (roleName == 'sj') {
+                var url = ctx + "caiji/survey/getAreas";
+
+            } else {
+                var url = ctx + "caiji/survey/getAreasLable";
+
+            }
+            $("#addrArea").empty();
+            //var url = "<%=basePath%>dict/getAreas";
+            var data = "cityCode=" + value;
+
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function (data) {
+                    var op = document.createElement("option");
+                    op.value = '';
+                    op.text = "----- 请选择县/区 -------";
+                    document.getElementById("addrArea").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictLabel;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("addrArea").appendChild(op);
+                    }
+                }
+            });
+
+        }
+
+
+
+        function detailFormatter(index, row) {
+            return index=== length
+        }
+        function Echars() {
+            var url = prefix + '/Echars';
+            $.modal.openFull("防治年报统计图", url);
+        }
+        function detailViewrow(falg) {
+
+            return falg;
+        }
+
+    </script>
+</body>
+</html>

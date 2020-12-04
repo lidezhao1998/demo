@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('舍饲棚围栏建设任务报表')" />
+</head>
+<body class="gray-bg">
+<div class="col-sm-18 select-table">
+    <div class="col-sm-12 search-collapse">
+        <form id="formId">
+            <div class="select-list">
+                <ul>
+
+                    <li class="select-time">
+                        <p>年度：</p>
+                        <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                    </li>
+                    <li>
+                        <select name="province" th:with="type=${@dict.getType('sys_province')}">
+                            <option value="">请选择任务省份</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                    </li>
+                    <li>
+                        <button class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</button>
+                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>图表展示</h5>
+            <div class="ibox-tools">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+                <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                    <i class="fa fa-wrench"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a href="graph_flot.html#">选项1</a>
+                    </li>
+                    <li><a href="graph_flot.html#">选项2</a>
+                    </li>
+                </ul>
+                <a class="close-link">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content">
+
+            <div class="echarts" id="echarts-bar-chart"></div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:build:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:build:remove')}]];
+    var prefix = ctx + "system/build";
+
+
+    $(function(){
+        //myChart.showLoading();
+        var names=[];    //横坐标数组（实际用来盛放X轴坐标值）
+        var values=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var rgvalues=[];
+        var seriesdata = []; //用于拼接到echarts图形里面的数据
+        var applycata=[];//用来盛放申请类型
+        var applynames=[];//用来盛放x轴坐标值
+        var year= [[${year}]];
+        var province= [[${province}]];
+
+        var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+        /*var baroption = {
+            title : {
+                text: '含饲棚围栏建设任务报表'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['直辖市','省份']
+            },
+            grid:{
+                x:30,
+                x2:40,
+                y2:24
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : names,
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name:'蒸发量',
+                    type:'bar',
+                    data:values,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'降水量',
+                    type:'bar',
+                    data:values,
+                    markPoint : {
+                        data : [
+                            {name : '年最高', value : 182.2, xAxis: 7, yAxis: 183, symbolSize:18},
+                            {name : '年最低', value : 2.3, xAxis: 11, yAxis: 3}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name : '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };*/
+        $.ajax({
+            type : "post",
+            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url : prefix + "/getOption",    //请求发送到dataActiont处
+            data : {year:year,province:province},
+            dataType : "json",        //返回数据形式为json
+            success : function(result) {
+
+                var resdata=result;
+
+                //alert(2)
+                //alert(JSON.stringify(result))
+                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                if (result) {
+                    /* for(var i=0;i<result.length;i++){
+                         names.push(result[i].province);
+                         values.push(result[i].year);
+                         rgvalues.push(result[i].rgscdSize);
+
+                     }*/
+                    //取出 x轴显示月份和分类类型
+                    $.each(resdata,function(index,element){
+                        //去重,没有返回-1 indexOf() 方法可返回某个指定的字符串值在字符串中首次出现的位置。
+                        if(applycata.indexOf(element.year) == -1){
+                            applycata.push(element.year);
+                            //alert(applycata+"--0----")
+                        }
+                        if(applynames.indexOf(element.province) == -1){
+                            applynames.push(element.province);
+                            //  alert(789)
+                            // alert("==++=="+applynames)
+                        }
+                    });
+
+
+                    //tmpo 需要往series中拼接的数据
+                    $.each(applycata,function (index,elemennt) {
+                        //alert(elemennt+"+-")
+                        var json = {};
+                        var tmpo = {
+                            name:elemennt,
+                            type:'bar',
+                            stack: '总量',
+                            label:{
+                                normal: {
+                                    show: true,
+                                    position: 'insideRight'
+                                }
+                            },
+
+                        };
+                        //循环所有数据，判断每条数据所属类型
+                        $.each(resdata,function (index,ele) {
+                            // alert("//"+ele)
+                            if(ele.year == elemennt){
+                                //如果属于当前类型，给这个x轴赋对应数据
+                                json[ele.province] =ele.rgscdSize;
+                                //  alert("//=="+ele.rgscdSize)
+                            }
+                        });
+                        //循环x轴数据，如果这个数据没有对应的x轴，则为0
+                        $.each(applynames,function (index,province) {
+                            //alert("==//"+year)
+                            if(!json[province]){
+                                json[province] = '-';
+                                //alert(json[year])
+                            }
+                        });
+                        //相当于排序输出结果
+                        var data = [];
+                        $.each(applynames,function (index,province) {
+                            for(var k in json){
+                                if(k == province){
+                                    data.push(json[province]);
+                                }
+                            }
+                            // alert(data+"++01234567++")
+                        });
+                        tmpo.data = data;
+                        seriesdata.push(tmpo);
+                    })
+                    /* alert(names[i])
+                     alert("___"+values)
+                     alert("+++"+rgvalues)*/
+                    //alert(seriesdata)
+                    // alert(applynames+"-------")
+                    // alert(applycata+"++++++++++")
+                    barChart.hideLoading();    //隐藏加载动画
+
+                    barChart.setOption({        //加载数据图表
+                        title : {
+                            text: '黑土滩、毒害草、已垦草原治理报表'
+                        },
+                        tooltip: {},
+                        legend: {
+                            data:applycata
+                        },
+                        xAxis: {
+                            data:applynames
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series:seriesdata
+
+
+                        /*{
+                                // 根据名字对应到相应的系列
+                                name: names,//薪资 series not exists. Legend data should be same with series name or data name.
+                                type: 'bar',
+                                stack: '省份',
+                                data: rgvalues,
+                            itemStyle:{
+                                normal:{color:"#00BFFF"},//表示堆叠柱状图填充的颜色
+                            }
+
+                            },*/
+
+
+
+
+
+                    });
+
+                    window.onresize = barChart.resize;
+
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                barChart.hideLoading();
+            }
+        });
+
+    })
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+</script>
+</body>
+</html>

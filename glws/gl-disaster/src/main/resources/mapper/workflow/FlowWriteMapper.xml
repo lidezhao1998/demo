@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.workflow.mapper.FlowWriteMapper">
+    
+    <resultMap type="FlowWrite" id="FlowWriteResult">
+        <result property="id"    column="ID"    />
+        <result property="workflowinfoid"    column="WORKFLOWINFOID"    />
+        <result property="title"    column="TITLE"    />
+        <result property="recordid"    column="RECORDID"    />
+        <result property="filetypeid"    column="FILETYPEID"    />
+        <result property="filetypename"    column="FILETYPENAME"    />
+        <result property="workflowid"    column="WORKFLOWID"    />
+        <result property="workflowname"    column="WORKFLOWNAME"    />
+        <result property="userid"    column="USERID"    />
+        <result property="deptid"    column="DEPTID"    />
+        <result property="organiseid"    column="ORGANISEID"    />
+        <result property="receivetime"    column="RECEIVETIME"    />
+        <result property="signtime"    column="SIGNTIME"    />
+        <result property="signtag"    column="SIGNTAG"    />
+        <result property="limittime"    column="LIMITTIME"    />
+        <result property="preuserid"    column="PREUSERID"    />
+        <result property="predeptid"    column="PREDEPTID"    />
+        <result property="preorganiseid"    column="PREORGANISEID"    />
+        <result property="createTime"    column="CREATETIME"    />
+        <result property="para"    column="PARA"    />
+        <result property="draftuser"    column="DRAFTUSER"    />
+        <result property="draftdept"    column="DRAFTDEPT"    />
+        <result property="accdeptid"    column="ACCDEPTID"    />
+        <result property="accinfo"    column="ACCINFO"    />
+        <result property="giveaccuser"    column="GIVEACCUSER"    />
+        <result property="wfleveid"    column="WFLEVEID"    />
+        <result property="stattag"    column="STATTAG"    />
+        <result property="prewflevelid"    column="PREWFLEVELID"    />
+        <result property="superfiletype"    column="SUPERFILETYPE"    />
+        <result property="accflag"    column="ACCFLAG"    />
+        <result property="attr"    column="ATTR"    />
+        <result property="attr1"    column="ATTR1"    />
+        <result property="attr2"    column="ATTR2"    />
+        <result property="formurl"    column="FORMURL"    />
+        <result property="logid"    column="LOGID"    />
+        <result property="waitdourl"    column="WAITDOURL"    />
+        <result property="docid"    column="DOCID"    />
+        <result property="superworkflow"    column="SUPERWORKFLOW"    />
+        <result property="sortid"    column="SORTID"    />
+        <result property="workflowinfoidInt"    column="WORKFLOWINFOID_INT"    />
+    </resultMap>
+
+    <sql id="selectFlowWriteVo">
+        select ID, WORKFLOWINFOID, TITLE, RECORDID, FILETYPEID, FILETYPENAME, WORKFLOWID, WORKFLOWNAME, USERID, DEPTID, ORGANISEID, RECEIVETIME, SIGNTIME, SIGNTAG, LIMITTIME, PREUSERID, PREDEPTID, PREORGANISEID, CREATETIME, PARA, DRAFTUSER, DRAFTDEPT, ACCDEPTID, ACCINFO, GIVEACCUSER, WFLEVEID, STATTAG, PREWFLEVELID, SUPERFILETYPE, ACCFLAG, ATTR, ATTR1, ATTR2, FORMURL, LOGID, WAITDOURL, DOCID, SUPERWORKFLOW, SORTID, WORKFLOWINFOID_INT from flow_write
+    </sql>
+
+    <select id="selectFlowWriteList" parameterType="FlowWrite" resultMap="FlowWriteResult">
+        <include refid="selectFlowWriteVo"/>
+        <where>  
+            <if test="workflowinfoid != null  and workflowinfoid != ''"> and WORKFLOWINFOID = #{workflowinfoid}</if>
+            <if test="title != null  and title != ''"> and TITLE = #{title}</if>
+            <if test="recordid != null  and recordid != ''"> and RECORDID = #{recordid}</if>
+            <if test="filetypeid != null  and filetypeid != ''"> and FILETYPEID = #{filetypeid}</if>
+            <if test="filetypename != null  and filetypename != ''"> and FILETYPENAME like concat('%', #{filetypename}, '%')</if>
+            <if test="workflowid != null  and workflowid != ''"> and WORKFLOWID = #{workflowid}</if>
+            <if test="workflowname != null  and workflowname != ''"> and WORKFLOWNAME like concat('%', #{workflowname}, '%')</if>
+            <if test="userid != null  and userid != ''"> and USERID = #{userid}</if>
+            <if test="deptid != null  and deptid != ''"> and DEPTID = #{deptid}</if>
+            <if test="organiseid != null  and organiseid != ''"> and ORGANISEID = #{organiseid}</if>
+            <if test="receivetime != null "> and RECEIVETIME = #{receivetime}</if>
+            <if test="signtime != null "> and SIGNTIME = #{signtime}</if>
+            <if test="signtag != null  and signtag != ''"> and SIGNTAG = #{signtag}</if>
+            <if test="limittime != null "> and LIMITTIME = #{limittime}</if>
+            <if test="preuserid != null  and preuserid != ''"> and PREUSERID = #{preuserid}</if>
+            <if test="predeptid != null  and predeptid != ''"> and PREDEPTID = #{predeptid}</if>
+            <if test="preorganiseid != null  and preorganiseid != ''"> and PREORGANISEID = #{preorganiseid}</if>
+            <if test="createTime != null "> and CREATETIME = #{createTime}</if>
+            <if test="para != null  and para != ''"> and PARA = #{para}</if>
+            <if test="draftuser != null  and draftuser != ''"> and DRAFTUSER = #{draftuser}</if>
+            <if test="draftdept != null  and draftdept != ''"> and DRAFTDEPT = #{draftdept}</if>
+            <if test="accdeptid != null  and accdeptid != ''"> and ACCDEPTID = #{accdeptid}</if>
+            <if test="accinfo != null  and accinfo != ''"> and ACCINFO = #{accinfo}</if>
+            <if test="giveaccuser != null  and giveaccuser != ''"> and GIVEACCUSER = #{giveaccuser}</if>
+            <if test="wfleveid != null  and wfleveid != ''"> and WFLEVEID = #{wfleveid}</if>
+            <if test="stattag != null  and stattag != ''"> and STATTAG = #{stattag}</if>
+            <if test="prewflevelid != null  and prewflevelid != ''"> and PREWFLEVELID = #{prewflevelid}</if>
+            <if test="superfiletype != null  and superfiletype != ''"> and SUPERFILETYPE = #{superfiletype}</if>
+            <if test="accflag != null  and accflag != ''"> and ACCFLAG = #{accflag}</if>
+            <if test="attr != null  and attr != ''"> and ATTR = #{attr}</if>
+            <if test="attr1 != null  and attr1 != ''"> and ATTR1 = #{attr1}</if>
+            <if test="attr2 != null  and attr2 != ''"> and ATTR2 = #{attr2}</if>
+            <if test="formurl != null  and formurl != ''"> and FORMURL = #{formurl}</if>
+            <if test="logid != null  and logid != ''"> and LOGID = #{logid}</if>
+            <if test="waitdourl != null  and waitdourl != ''"> and WAITDOURL = #{waitdourl}</if>
+            <if test="docid != null  and docid != ''"> and DOCID = #{docid}</if>
+            <if test="superworkflow != null  and superworkflow != ''"> and SUPERWORKFLOW = #{superworkflow}</if>
+            <if test="sortid != null  and sortid != ''"> and SORTID = #{sortid}</if>
+            <if test="workflowinfoidInt != null "> and WORKFLOWINFOID_INT = #{workflowinfoidInt}</if>
+        </where>
+    </select>
+
+
+    <select id="selectFlowWriteListdai" parameterType="String" resultMap="FlowWriteResult">
+        select ID, WORKFLOWINFOID, TITLE, RECORDID, FILETYPEID, FILETYPENAME, WORKFLOWID, WORKFLOWNAME, USERID, DEPTID, ORGANISEID, RECEIVETIME, SIGNTIME, SIGNTAG, LIMITTIME,  PREUSERID, PREDEPTID, PREORGANISEID, CREATETIME, PARA, u.user_name as DRAFTUSER, DRAFTDEPT, ACCDEPTID, ACCINFO, GIVEACCUSER, WFLEVEID, STATTAG, PREWFLEVELID, SUPERFILETYPE, ACCFLAG, ATTR, ATTR1, ATTR2, FORMURL, LOGID,
+        WAITDOURL, DOCID, SUPERWORKFLOW, SORTID, WORKFLOWINFOID_INT from flow_write t  LEFT  JOIN sys_user u  ON  t.draftuser=u.user_id where t.USERID=#{userid} order  by createTime desc
+    </select>
+    
+    <select id="selectFlowWriteById" parameterType="String" resultMap="FlowWriteResult">
+        <include refid="selectFlowWriteVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertFlowWrite" parameterType="FlowWrite">
+        insert into flow_write
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="workflowinfoid != null  and workflowinfoid != ''">WORKFLOWINFOID,</if>
+            <if test="title != null  and title != ''">TITLE,</if>
+            <if test="recordid != null  and recordid != ''">RECORDID,</if>
+            <if test="filetypeid != null  and filetypeid != ''">FILETYPEID,</if>
+            <if test="filetypename != null  and filetypename != ''">FILETYPENAME,</if>
+            <if test="workflowid != null  and workflowid != ''">WORKFLOWID,</if>
+            <if test="workflowname != null  and workflowname != ''">WORKFLOWNAME,</if>
+            <if test="userid != null  and userid != ''">USERID,</if>
+            <if test="deptid != null  and deptid != ''">DEPTID,</if>
+            <if test="organiseid != null  and organiseid != ''">ORGANISEID,</if>
+            <if test="receivetime != null ">RECEIVETIME,</if>
+            <if test="signtime != null ">SIGNTIME,</if>
+            <if test="signtag != null  and signtag != ''">SIGNTAG,</if>
+            <if test="limittime != null ">LIMITTIME,</if>
+            <if test="preuserid != null  and preuserid != ''">PREUSERID,</if>
+            <if test="predeptid != null  and predeptid != ''">PREDEPTID,</if>
+            <if test="preorganiseid != null  and preorganiseid != ''">PREORGANISEID,</if>
+            <if test="createTime != null ">CREATETIME,</if>
+            <if test="para != null  and para != ''">PARA,</if>
+            <if test="draftuser != null  and draftuser != ''">DRAFTUSER,</if>
+            <if test="draftdept != null  and draftdept != ''">DRAFTDEPT,</if>
+            <if test="accdeptid != null  and accdeptid != ''">ACCDEPTID,</if>
+            <if test="accinfo != null  and accinfo != ''">ACCINFO,</if>
+            <if test="giveaccuser != null  and giveaccuser != ''">GIVEACCUSER,</if>
+            <if test="wfleveid != null  and wfleveid != ''">WFLEVEID,</if>
+            <if test="stattag != null  and stattag != ''">STATTAG,</if>
+            <if test="prewflevelid != null  and prewflevelid != ''">PREWFLEVELID,</if>
+            <if test="superfiletype != null  and superfiletype != ''">SUPERFILETYPE,</if>
+            <if test="accflag != null  and accflag != ''">ACCFLAG,</if>
+            <if test="attr != null  and attr != ''">ATTR,</if>
+            <if test="attr1 != null  and attr1 != ''">ATTR1,</if>
+            <if test="attr2 != null  and attr2 != ''">ATTR2,</if>
+            <if test="formurl != null  and formurl != ''">FORMURL,</if>
+            <if test="logid != null  and logid != ''">LOGID,</if>
+            <if test="waitdourl != null  and waitdourl != ''">WAITDOURL,</if>
+            <if test="docid != null  and docid != ''">DOCID,</if>
+            <if test="superworkflow != null  and superworkflow != ''">SUPERWORKFLOW,</if>
+            <if test="sortid != null  and sortid != ''">SORTID,</if>
+            <if test="workflowinfoidInt != null ">WORKFLOWINFOID_INT,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="workflowinfoid != null  and workflowinfoid != ''">#{workflowinfoid},</if>
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="recordid != null  and recordid != ''">#{recordid},</if>
+            <if test="filetypeid != null  and filetypeid != ''">#{filetypeid},</if>
+            <if test="filetypename != null  and filetypename != ''">#{filetypename},</if>
+            <if test="workflowid != null  and workflowid != ''">#{workflowid},</if>
+            <if test="workflowname != null  and workflowname != ''">#{workflowname},</if>
+            <if test="userid != null  and userid != ''">#{userid},</if>
+            <if test="deptid != null  and deptid != ''">#{deptid},</if>
+            <if test="organiseid != null  and organiseid != ''">#{organiseid},</if>
+            <if test="receivetime != null ">#{receivetime},</if>
+            <if test="signtime != null ">#{signtime},</if>
+            <if test="signtag != null  and signtag != ''">#{signtag},</if>
+            <if test="limittime != null ">#{limittime},</if>
+            <if test="preuserid != null  and preuserid != ''">#{preuserid},</if>
+            <if test="predeptid != null  and predeptid != ''">#{predeptid},</if>
+            <if test="preorganiseid != null  and preorganiseid != ''">#{preorganiseid},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="para != null  and para != ''">#{para},</if>
+            <if test="draftuser != null  and draftuser != ''">#{draftuser},</if>
+            <if test="draftdept != null  and draftdept != ''">#{draftdept},</if>
+            <if test="accdeptid != null  and accdeptid != ''">#{accdeptid},</if>
+            <if test="accinfo != null  and accinfo != ''">#{accinfo},</if>
+            <if test="giveaccuser != null  and giveaccuser != ''">#{giveaccuser},</if>
+            <if test="wfleveid != null  and wfleveid != ''">#{wfleveid},</if>
+            <if test="stattag != null  and stattag != ''">#{stattag},</if>
+            <if test="prewflevelid != null  and prewflevelid != ''">#{prewflevelid},</if>
+            <if test="superfiletype != null  and superfiletype != ''">#{superfiletype},</if>
+            <if test="accflag != null  and accflag != ''">#{accflag},</if>
+            <if test="attr != null  and attr != ''">#{attr},</if>
+            <if test="attr1 != null  and attr1 != ''">#{attr1},</if>
+            <if test="attr2 != null  and attr2 != ''">#{attr2},</if>
+            <if test="formurl != null  and formurl != ''">#{formurl},</if>
+            <if test="logid != null  and logid != ''">#{logid},</if>
+            <if test="waitdourl != null  and waitdourl != ''">#{waitdourl},</if>
+            <if test="docid != null  and docid != ''">#{docid},</if>
+            <if test="superworkflow != null  and superworkflow != ''">#{superworkflow},</if>
+            <if test="sortid != null  and sortid != ''">#{sortid},</if>
+            <if test="workflowinfoidInt != null ">#{workflowinfoidInt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFlowWrite" parameterType="FlowWrite">
+        update flow_write
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workflowinfoid != null  and workflowinfoid != ''">WORKFLOWINFOID = #{workflowinfoid},</if>
+            <if test="title != null  and title != ''">TITLE = #{title},</if>
+            <if test="recordid != null  and recordid != ''">RECORDID = #{recordid},</if>
+            <if test="filetypeid != null  and filetypeid != ''">FILETYPEID = #{filetypeid},</if>
+            <if test="filetypename != null  and filetypename != ''">FILETYPENAME = #{filetypename},</if>
+            <if test="workflowid != null  and workflowid != ''">WORKFLOWID = #{workflowid},</if>
+            <if test="workflowname != null  and workflowname != ''">WORKFLOWNAME = #{workflowname},</if>
+            <if test="userid != null  and userid != ''">USERID = #{userid},</if>
+            <if test="deptid != null  and deptid != ''">DEPTID = #{deptid},</if>
+            <if test="organiseid != null  and organiseid != ''">ORGANISEID = #{organiseid},</if>
+            <if test="receivetime != null ">RECEIVETIME = #{receivetime},</if>
+            <if test="signtime != null ">SIGNTIME = #{signtime},</if>
+            <if test="signtag != null  and signtag != ''">SIGNTAG = #{signtag},</if>
+            <if test="limittime != null ">LIMITTIME = #{limittime},</if>
+            <if test="preuserid != null  and preuserid != ''">PREUSERID = #{preuserid},</if>
+            <if test="predeptid != null  and predeptid != ''">PREDEPTID = #{predeptid},</if>
+            <if test="preorganiseid != null  and preorganiseid != ''">PREORGANISEID = #{preorganiseid},</if>
+            <if test="createTime != null ">CREATETIME = #{createTime},</if>
+            <if test="para != null  and para != ''">PARA = #{para},</if>
+            <if test="draftuser != null  and draftuser != ''">DRAFTUSER = #{draftuser},</if>
+            <if test="draftdept != null  and draftdept != ''">DRAFTDEPT = #{draftdept},</if>
+            <if test="accdeptid != null  and accdeptid != ''">ACCDEPTID = #{accdeptid},</if>
+            <if test="accinfo != null  and accinfo != ''">ACCINFO = #{accinfo},</if>
+            <if test="giveaccuser != null  and giveaccuser != ''">GIVEACCUSER = #{giveaccuser},</if>
+            <if test="wfleveid != null  and wfleveid != ''">WFLEVEID = #{wfleveid},</if>
+            <if test="stattag != null  and stattag != ''">STATTAG = #{stattag},</if>
+            <if test="prewflevelid != null  and prewflevelid != ''">PREWFLEVELID = #{prewflevelid},</if>
+            <if test="superfiletype != null  and superfiletype != ''">SUPERFILETYPE = #{superfiletype},</if>
+            <if test="accflag != null  and accflag != ''">ACCFLAG = #{accflag},</if>
+            <if test="attr != null  and attr != ''">ATTR = #{attr},</if>
+            <if test="attr1 != null  and attr1 != ''">ATTR1 = #{attr1},</if>
+            <if test="attr2 != null  and attr2 != ''">ATTR2 = #{attr2},</if>
+            <if test="formurl != null  and formurl != ''">FORMURL = #{formurl},</if>
+            <if test="logid != null  and logid != ''">LOGID = #{logid},</if>
+            <if test="waitdourl != null  and waitdourl != ''">WAITDOURL = #{waitdourl},</if>
+            <if test="docid != null  and docid != ''">DOCID = #{docid},</if>
+            <if test="superworkflow != null  and superworkflow != ''">SUPERWORKFLOW = #{superworkflow},</if>
+            <if test="sortid != null  and sortid != ''">SORTID = #{sortid},</if>
+            <if test="workflowinfoidInt != null ">WORKFLOWINFOID_INT = #{workflowinfoidInt},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteFlowWriteById" parameterType="String">
+        delete from flow_write where ID = #{id}
+    </delete>
+
+    <delete id="deleteFlowWriteByreId" parameterType="String">
+        delete from flow_write where RECORDID = #{recordid} and FILETYPEID=#{filetypeid}
+    </delete>
+
+    <delete id="deleteFlowWriteByIds" parameterType="String">
+        delete from flow_write where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteFlowWriteBylogId" parameterType="String">
+        delete from flow_write where logid = #{id}
+    </delete>
+</mapper>

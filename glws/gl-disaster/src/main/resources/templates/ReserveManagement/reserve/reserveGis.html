@@ -1,0 +1,597 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>加载天地图</title>
+    <th:block th:include="include :: header('地图')"/>
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-bordered table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: whitesmoke;
+        height: 25px;
+    }
+    /*按钮背景色*/
+    .btn-success{
+        background-color: #30923E;
+    }
+
+</style>
+<body onLoad="onLoad()">
+<div class="ui-layout-center">
+
+    <div class="container-div">
+        <div class="row">
+            <div id="map">
+                <div class="header-r">
+                    <div class="header-r-bg">
+                        <a href="javascript:;" id="markedList">列表</a>
+                    </div>
+                </div>
+                <div id="menu">
+                   <!-- <label style="cursor: pointer;color: #13c6ae;font-size: 18px" onclick="drawGis('Point','map')">绘点</label>
+                    <label style="cursor: pointer;color: #13c6ae;font-size: 18px" onclick="drawGis('Polygon','map')">绘面</label>-->
+                    <input type="button" id="off" style="cursor: pointer;color: #13c6ae;font-size: 16px;display: none"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="reportList">
+    <div class="col-sm-12 select-table table-bordered">
+        <table id="bootstrap-table"></table>
+    </div>
+</div>
+<div class="btn-group-sm" id="toolbar" role="group">
+    <a class="btn btn-success" style="margin-left: 20px" onclick="$.operate.add()" shiro:hasPermission="reserves:reserve:add">
+        <i class="fa fa-plus"></i> 添加
+    </a>
+
+    <form id="formId">
+        <div class="select-list">
+            <ul>
+                <li>
+                    <p>库名称：</p>
+                    <input type="text" name="librayName"/>
+                </li>
+                <!-- <li>
+                     <p>库管理员：</p>
+                     <input type="text" name="librayAdmin"/>
+                 </li>
+                 <li>
+                     <p>地点：</p>
+                     <input type="text" name="address"/>
+                 </li>-->
+
+                <li class="select-time">
+                    <p>创建时间：</p>
+                    <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
+                    <span>-</span>
+                    <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
+                </li>
+                <li>
+                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                    <a class="btn btn-primary btn-rounded btn-sm" onclick="closeReportList()"><i class="fa fa-search"></i>&nbsp;关闭</a>
+
+                </li>
+            </ul>
+        </div>
+    </form>
+</div>
+
+
+</body>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-css"/>
+<th:block th:include="include :: ztree-css"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var lngLat = [[${lngLat}]];
+    var gid = [[${gid}]];
+</script>
+<script type="text/javascript">
+    var prefixGisMap = ctx + "system/gisMap";
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+    });
+
+    function onLoad() {
+        load();
+        for(var i=0;i<lngLat.length;i++){
+            var safdy=lngLat [i].latitude;
+            if(safdy!=null && safdy!=''){
+                drawPoint1(safdy);
+            }
+            if(gid!=null){
+                loadgisByGid(gid);
+            }
+        }
+    }
+</script>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('reserves:reserve:edit')}]];
+    var addFlag = [[${@permission.hasPermi('reserves:reserve:add')}]];
+    var removeFlag = [[${@permission.hasPermi('reserves:reserve:remove')}]];
+    var prefix = ctx + "reserves/reserve";
+
+    $(function() {
+        $("#toolbar").hide()
+    });
+    $("#markedList").click(function(){
+        document.getElementById("toolbar").style.display="";//隐藏
+
+
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "储备库管理",
+            pageList:[5,10,15,20],//分页步进值
+            pageSize: 3,
+            clickToSelect: true,
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            showExport: false,
+            rememberSelected: true,
+            onClickRow: onClickRowMark,
+            columns: [
+                {
+                    field: 'id',
+                    title: '序号',
+                    width:5 ,
+                    align: 'center',
+                    valign: 'middle',
+                    switchable:false,
+                    formatter:function(value,row,index){
+                        //return index+1; //序号正序排序从1开始
+                        var pageSize=$('#bootstrap-table').bootstrapTable('getOptions').pageSize;//通过表的#id 可以得到每页多少条
+                        var pageNumber=$('#bootstrap-table').bootstrapTable('getOptions').pageNumber;//通过表的#id 可以得到当前第几页
+                        return pageSize * (pageNumber - 1) + index + 1;    //返回每条的序号： 每页条数 * （当前页 - 1 ）+ 序号
+                    }
+                },
+                {
+                    field : 'id',
+                    title : 'ID',
+                    align: 'center',
+                    valign: 'middle',
+                    visible: false
+                },
+                {
+                    field : 'librayName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '库名称',
+
+                },
+                {
+                    field : 'librayAdmin',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '库管理员'
+                },
+                {
+                    field : 'address',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '地点'
+                },
+                {
+                    field: 'coverage',
+                    align: 'center',
+                    valign: 'middle',
+                    title: '覆盖范围'
+                },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    field : 'status',
+                    title : '状态',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        var split
+                        if (value!=null && value!=''){
+                            return   split = value.split(" ")[0];
+                        }
+                        return "-";
+                    }
+                },
+                {
+                    field : 'createBy',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '创建人'
+                },
+
+                {
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+
+        $('.reportList').show();
+    });
+    /* 关闭上报信息列表 */
+    function closeReportList() {
+        $('.reportList').hide();
+    }
+
+    /* 标记列表 单击行定位上报图层 */
+    function onClickRowMark(row, $element){
+        var centre=row.latitude;
+        if (centre != null) {
+            var cent = centre.split(",");
+            var view = map.getView();
+            view.setZoom(10);
+            view.setCenter([parseFloat(cent[0]), parseFloat(cent[1])]);
+        }
+    }
+
+    /* 储备库状态显示 */
+    function statusTools(row) {
+        if (row.status=='0') {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\')"></i> ';
+        } else if (row.status=='1') {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\')"></i> ';
+        }
+    }
+
+    /* 储备库管理-停用 */
+    function disable(id) {
+        $.modal.confirm("确认要停用储备库吗？", function() {
+            $.operate.post(prefix + "/changeStatus", { "id": id, "status": 0 });
+        })
+    }
+
+    /* 储备库管理启用 */
+    function enable(id) {
+        $.modal.confirm("确认要启用储备库吗？", function() {
+            $.operate.post(prefix + "/changeStatus", { "id": id, "status": 1 });
+        })
+    }
+
+    //绘制点
+    function drawPoint1(poi) {
+         var splitCoord=poi.split(",");
+        var point = new ol.Feature({
+            geometry: new ol.geom.Point([splitCoord[0], splitCoord[1]])
+        });
+        //设置点1的样式信息
+        point.setStyle(new ol.style.Style({
+            //填充色
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)'
+            }),
+            //边线颜色
+            stroke: new ol.style.Stroke({
+                color: '#ff2c10',
+                width: 2
+            }),
+            //形状
+            image: new ol.style.Icon({
+                anchor: [0.5, 60],              //锚点
+                anchorOrigin:'top-right',       //锚点源
+                anchorXUnits: 'fraction',       //锚点X值单位
+                anchorYUnits: 'pixels',         //锚点Y值单位
+                offsetOrigin: 'top-right',      //偏移原点
+                opacity: 0.75,
+                src: '/img/cbk.jpg'  //图标的URL
+            }),
+        }));
+
+    //实例化一个矢量图层Vector作为绘制层
+        var source = new ol.source.Vector({
+            features: [point]
+        });
+    //创建一个图层
+        var vector = new ol.layer.Vector({
+            source: source
+        });
+    //将绘制层添加到地图容器中
+        map.addLayer(vector);
+        // 为地图注册鼠标移动事件的监听
+        point.on('click', function (e) {
+            var prefix = ctx + "reserves/reserve";
+            var url = prefix + '/getListCbkGisMap/'+splitCoord;
+            $.modal.open("库详情", url, '320', '550');
+        });
+
+    }
+
+</script>
+<style type="text/css">
+    body, html {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        font-family: "微软雅黑";
+    }
+    #map {
+        height: 100%;
+        width: 100%;
+    }
+    #savaInput {
+        float: right;
+        margin-top: 0px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+    #menu {
+        float: right;
+        position: absolute;
+        right: 50%;
+        z-index: 2000;
+    }
+    #zqdw {
+        float: left;
+        width: 100%;
+    }
+    #dist_positioning {
+        position: absolute;
+        z-index: 10;
+        top: 6%;
+        width: 380px;
+        min-height: 50px;
+        background: #fff;
+        box-shadow: 0 1px 10px 1px #ccc;
+        display: none;
+        left: 30px;
+    }
+    #shpTitle{
+        height: 250px;
+        bottom: 3px;
+        position: absolute;
+        z-index: 2001;
+        display: none;
+    }
+    #dist_positioning ul{
+        padding: 0px;
+    }
+    #dist_positioning ul li {
+        float: left;
+        width: 90px;
+        min-width: 90px;
+        text-align: center;
+        line-height: 25px;
+        padding: 0 8px;
+        margin: 2px;
+        font-size: 14px;
+        cursor: pointer;
+        border: 1px solid #efefef;
+        word-break: keep-all;
+        list-style: none;
+    }
+    #dist_positioning ul li:hover {
+        background-color:  rgba(48,146,62, 0.9);
+        color:  white;
+    }
+    #menu3 {
+        float: left;
+        position: absolute;
+        bottom: 95%;
+        left: 30px;
+        z-index: 2000;
+    }
+    input, b {
+        margin-left: 5px;
+        font-size: 14px
+    }
+    input {
+        margin-top: 10px;
+        margin-left: 5px;
+        font-size: 14px;
+        text-align: center;
+    }
+    /* 鼠标位置控件层样式设置 */
+    #mouse-position {
+        float: right;
+        position: absolute;
+        left: 40%;
+        bottom: 5px;
+        width: 200px;
+        height: 20px;
+        /*在地图容器中的层，要设置z-index的值让其显示在地图上层*/
+        z-index: 2000;
+    }
+    #dist_positioning p {
+        width: 100%;
+        height: 35px;
+        line-height: 35px;
+        padding-left: 20px;
+        font-size: 14px;
+        background: #f7f7f7;
+    }
+    #zqdw .content_ul {
+        width: auto;
+        min-width: 50px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 12px;
+    }
+    /* 鼠标位置信息自定义样式设置 */
+    .custom-mouse-position {
+        color: rgb(0,0,0);
+        font-size: 18px;
+        font-family: "微软雅黑";
+    }
+    /**
+   * 提示框的样式信息
+   */
+    .tooltip {
+        position: relative;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 4px;
+        color: white;
+        padding: 4px 8px;
+        opacity: 0.7;
+        white-space: nowrap;
+    }
+
+    .tooltip-measure {
+        opacity: 1;
+        font-weight: bold;
+    }
+
+    .tooltip-static {
+        background-color: #ffcc33;
+        color: black;
+        border: 1px solid white;
+    }
+
+    .tooltip-measure:before,
+    .tooltip-static:before {
+        border-top: 6px solid rgba(0, 0, 0, 0.5);
+        border-right: 6px solid transparent;
+        border-left: 6px solid transparent;
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        margin-left: -7px;
+        left: 50%;
+    }
+    .ui-layout-pane-south{
+        height: 100px;
+    }
+    .west{
+        position: absolute;
+        margin: 0px;
+        left: 36px;
+        right: auto;
+        top: 50px;
+        bottom: 0px;
+        height: 568px;
+        z-index: 1;
+        overflow: hidden;
+        width: 185px;
+        display: none;
+        visibility: visible;
+    }
+    .layer_tree_show{
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        left: 36px;
+        right: auto;
+        top: 50px;
+        bottom: 0px;
+        z-index: 1;
+        font-size: 25px;
+        color:  rgba(48,146,62, 0.9);
+        cursor: pointer;
+    }
+    .layer_tree_hide{
+        position: absolute;
+        width: 20px;
+        height: 45px;
+        left: 221px;
+        right: auto;
+        top: 50px;
+        bottom: 0px;
+        z-index: 1;
+        font-size: 14px;
+        color:  rgba(48,146,62, 0.9);
+        background-color: #ececec;
+        padding-top: 10px;
+        cursor: pointer;
+        display: none;
+    }
+    .layer_tree_hide i{
+        padding: 4px;
+    }
+    .header-r {
+        position: absolute;
+        z-index: 2;
+        height: 40px;
+        padding-left: 10px;
+        background: #fff;
+        background-size: 100%;
+        padding-right: 10px;
+        right: 20px;
+        top: 6px;
+        border-radius: 3px;
+    }
+    .header-r .header-r-bg {
+        margin-top: 5px;
+        display: inline-block;
+        padding: 0 5px;
+        background: #fff;
+        border-radius: 20px;
+    }
+    .header-r a {
+        position: relative;
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+        color: #000;
+        font-size: 14px;
+        padding: 0 10px 0 20px;
+    }
+    .header-r a:hover {
+        text-decoration: none !important;
+        color: #ff6600;
+    }
+    .layer_tree_show_map{
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        z-index: 2;
+        background: url(../../img/icon-map-dq.png) no-repeat center;
+    }
+    #off{
+        border: 0px;
+        cursor: pointer;
+        color: rgba(48,146,62, 0.9);
+        font-size: 16px;
+        display: none;
+        background-color: white;
+        width: 100px;
+        height: 36px;
+        border-radius: 16px;
+        outline: none;
+    }
+    /* 上报任务列表 */
+    .reportList{
+        color: rgba(48,146,62, 0.9);
+        position: absolute;
+        margin: 0px;
+        top: auto;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        width: auto;
+        z-index: 0;
+        display: none;
+        visibility: visible;
+    }
+
+
+</style>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('地面调查数据列表')" />
+    <th:block th:include="include :: jquery-steps-css" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>样地编号：</p>
+                                <input type="text" name="codeId"/>
+                            </li>
+                            <li>
+                                <p>省级名称：</p>
+                                <input type="text" name="provincialLevelName"/>
+                            </li>
+                            <li>
+                                <p>地级名称：</p>
+                                <input type="text" name="cityLevelName"/>
+                            </li>
+                            <li>
+                                <p>县级名称：</p>
+                                <input type="text" name="countyLevelName"/>
+                            </li>
+
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="system:survey:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:survey:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:survey:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:survey:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var detailFlag = [[${@permission.hasPermi('system:survey:detail')}]];
+        var editFlag = [[${@permission.hasPermi('system:survey:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:survey:remove')}]];
+        var prefix = ctx + "system/survey";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                detailUrl: prefix + "/detail/{id}",
+                exportUrl: prefix + "/export",
+                modalName: "地面调查数据",
+                columns: [
+                {
+                    field : 'codeId',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '样地编号'
+                },
+                {
+                    field : 'provincialLevelName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '省级名称'
+                },
+                {
+                    field : 'cityLevelName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '地级名称'
+                },
+                {
+                    field : 'countyLevelName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '县级名称'
+                },
+                {
+                    field : 'surveyTime',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '调查时间'
+                },
+                {
+                    field : 'name',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '填报人'
+                },
+                {
+                    field : 'staute',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '状态'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.groundId + '\')"><i class="fa fa-search"></i>查看</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.groundId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.groundId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

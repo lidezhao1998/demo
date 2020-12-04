@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.workflow.mapper.FlowIdeaMapper">
+    
+    <resultMap type="FlowIdea" id="FlowIdeaResult">
+        <result property="id"    column="ID"    />
+        <result property="filetypeid"    column="FILETYPEID"    />
+        <result property="recordid"    column="RECORDID"    />
+        <result property="ideafieldname"    column="IDEAFIELDNAME"    />
+        <result property="idea"    column="IDEA"    />
+        <result property="tablename"    column="TABLENAME"    />
+        <result property="tableidname"    column="TABLEIDNAME"    />
+        <result property="organiseid"    column="ORGANISEID"    />
+        <result property="userid"    column="USERID"    />
+        <result property="deptid"    column="DEPTID"    />
+        <result property="ideatime"    column="IDEATIME"    />
+        <result property="sequence"    column="SEQUENCE"    />
+        <result property="deptlevel"    column="DEPTLEVEL"    />
+        <result property="roleid"    column="ROLEID"    />
+        <result property="username"    column="USERNAME"    />
+        <result property="deptname"    column="DEPTNAME"    />
+        <result property="uniqueid"    column="UNIQUEID"    />
+        <result property="tempidea"    column="TEMPIDEA"    />
+        <result property="isvisible"    column="ISVISIBLE"    />
+        <result property="visiblescope"    column="VISIBLESCOPE"    />
+        <result property="deptorder"    column="DEPTORDER"    />
+        <result property="wfisvisible"    column="WFISVISIBLE"    />
+        <result property="ishand"    column="ISHAND"    />
+        <result property="stattag"    column="STATTAG"    />
+        <result property="typistdeptid"    column="TYPISTDEPTID"    />
+        <result property="typistuserid"    column="TYPISTUSERID"    />
+        <result property="sortname"    column="SORTNAME"    />
+        <result property="subisvisible"    column="SUBISVISIBLE"    />
+        <result property="iscollect"    column="ISCOLLECT"    />
+        <result property="hqendisvisible"    column="HQENDISVISIBLE"    />
+        <result property="subhqisshow"    column="SUBHQISSHOW"    />
+    </resultMap>
+
+    <sql id="selectFlowIdeaVo">
+        select ID, FILETYPEID, RECORDID, IDEAFIELDNAME, IDEA, TABLENAME, TABLEIDNAME, ORGANISEID, USERID, DEPTID, IDEATIME, SEQUENCE, DEPTLEVEL, ROLEID, USERNAME, DEPTNAME, UNIQUEID, TEMPIDEA, ISVISIBLE, VISIBLESCOPE, DEPTORDER, WFISVISIBLE, ISHAND, STATTAG, TYPISTDEPTID, TYPISTUSERID, SORTNAME, SUBISVISIBLE, ISCOLLECT, HQENDISVISIBLE, SUBHQISSHOW from flow_idea
+    </sql>
+
+    <select id="selectFlowIdeaList" parameterType="FlowIdea" resultMap="FlowIdeaResult">
+        <include refid="selectFlowIdeaVo"/>
+        <where>  
+            <if test="filetypeid != null  and filetypeid != ''"> and FILETYPEID = #{filetypeid}</if>
+            <if test="recordid != null  and recordid != ''"> and RECORDID = #{recordid}</if>
+            <if test="ideafieldname != null  and ideafieldname != ''"> and IDEAFIELDNAME like concat('%', #{ideafieldname}, '%')</if>
+            <if test="idea != null  and idea != ''"> and IDEA = #{idea}</if>
+            <if test="tablename != null  and tablename != ''"> and TABLENAME like concat('%', #{tablename}, '%')</if>
+            <if test="tableidname != null  and tableidname != ''"> and TABLEIDNAME like concat('%', #{tableidname}, '%')</if>
+            <if test="organiseid != null  and organiseid != ''"> and ORGANISEID = #{organiseid}</if>
+            <if test="userid != null  and userid != ''"> and USERID = #{userid}</if>
+            <if test="deptid != null  and deptid != ''"> and DEPTID = #{deptid}</if>
+            <if test="ideatime != null "> and IDEATIME = #{ideatime}</if>
+            <if test="sequence != null  and sequence != ''"> and SEQUENCE = #{sequence}</if>
+            <if test="deptlevel != null  and deptlevel != ''"> and DEPTLEVEL = #{deptlevel}</if>
+            <if test="roleid != null  and roleid != ''"> and ROLEID = #{roleid}</if>
+            <if test="username != null  and username != ''"> and USERNAME like concat('%', #{username}, '%')</if>
+            <if test="deptname != null  and deptname != ''"> and DEPTNAME like concat('%', #{deptname}, '%')</if>
+            <if test="uniqueid != null  and uniqueid != ''"> and UNIQUEID = #{uniqueid}</if>
+            <if test="tempidea != null  and tempidea != ''"> and TEMPIDEA = #{tempidea}</if>
+            <if test="isvisible != null  and isvisible != ''"> and ISVISIBLE = #{isvisible}</if>
+            <if test="visiblescope != null  and visiblescope != ''"> and VISIBLESCOPE = #{visiblescope}</if>
+            <if test="deptorder != null  and deptorder != ''"> and DEPTORDER = #{deptorder}</if>
+            <if test="wfisvisible != null  and wfisvisible != ''"> and WFISVISIBLE = #{wfisvisible}</if>
+            <if test="ishand != null  and ishand != ''"> and ISHAND = #{ishand}</if>
+            <if test="stattag != null  and stattag != ''"> and STATTAG = #{stattag}</if>
+            <if test="typistdeptid != null  and typistdeptid != ''"> and TYPISTDEPTID = #{typistdeptid}</if>
+            <if test="typistuserid != null  and typistuserid != ''"> and TYPISTUSERID = #{typistuserid}</if>
+            <if test="sortname != null  and sortname != ''"> and SORTNAME like concat('%', #{sortname}, '%')</if>
+            <if test="subisvisible != null  and subisvisible != ''"> and SUBISVISIBLE = #{subisvisible}</if>
+            <if test="iscollect != null  and iscollect != ''"> and ISCOLLECT = #{iscollect}</if>
+            <if test="hqendisvisible != null  and hqendisvisible != ''"> and HQENDISVISIBLE = #{hqendisvisible}</if>
+            <if test="subhqisshow != null  and subhqisshow != ''"> and SUBHQISSHOW = #{subhqisshow}</if>
+        </where>
+    </select>
+    
+    <select id="selectFlowIdeaById" parameterType="String" resultMap="FlowIdeaResult">
+        <include refid="selectFlowIdeaVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertFlowIdea" parameterType="FlowIdea">
+        insert into flow_idea
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">ID,</if>
+            <if test="filetypeid != null  and filetypeid != ''">FILETYPEID,</if>
+            <if test="recordid != null  and recordid != ''">RECORDID,</if>
+            <if test="ideafieldname != null  and ideafieldname != ''">IDEAFIELDNAME,</if>
+            <if test="idea != null  and idea != ''">IDEA,</if>
+            <if test="tablename != null  and tablename != ''">TABLENAME,</if>
+            <if test="tableidname != null  and tableidname != ''">TABLEIDNAME,</if>
+            <if test="organiseid != null  and organiseid != ''">ORGANISEID,</if>
+            <if test="userid != null  and userid != ''">USERID,</if>
+            <if test="deptid != null  and deptid != ''">DEPTID,</if>
+            <if test="ideatime != null ">IDEATIME,</if>
+            <if test="sequence != null  and sequence != ''">SEQUENCE,</if>
+            <if test="deptlevel != null  and deptlevel != ''">DEPTLEVEL,</if>
+            <if test="roleid != null  and roleid != ''">ROLEID,</if>
+            <if test="username != null  and username != ''">USERNAME,</if>
+            <if test="deptname != null  and deptname != ''">DEPTNAME,</if>
+            <if test="uniqueid != null  and uniqueid != ''">UNIQUEID,</if>
+            <if test="tempidea != null  and tempidea != ''">TEMPIDEA,</if>
+            <if test="isvisible != null  and isvisible != ''">ISVISIBLE,</if>
+            <if test="visiblescope != null  and visiblescope != ''">VISIBLESCOPE,</if>
+            <if test="deptorder != null  and deptorder != ''">DEPTORDER,</if>
+            <if test="wfisvisible != null  and wfisvisible != ''">WFISVISIBLE,</if>
+            <if test="ishand != null  and ishand != ''">ISHAND,</if>
+            <if test="stattag != null  and stattag != ''">STATTAG,</if>
+            <if test="typistdeptid != null  and typistdeptid != ''">TYPISTDEPTID,</if>
+            <if test="typistuserid != null  and typistuserid != ''">TYPISTUSERID,</if>
+            <if test="sortname != null  and sortname != ''">SORTNAME,</if>
+            <if test="subisvisible != null  and subisvisible != ''">SUBISVISIBLE,</if>
+            <if test="iscollect != null  and iscollect != ''">ISCOLLECT,</if>
+            <if test="hqendisvisible != null  and hqendisvisible != ''">HQENDISVISIBLE,</if>
+            <if test="subhqisshow != null  and subhqisshow != ''">SUBHQISSHOW,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="filetypeid != null  and filetypeid != ''">#{filetypeid},</if>
+            <if test="recordid != null  and recordid != ''">#{recordid},</if>
+            <if test="ideafieldname != null  and ideafieldname != ''">#{ideafieldname},</if>
+            <if test="idea != null  and idea != ''">#{idea},</if>
+            <if test="tablename != null  and tablename != ''">#{tablename},</if>
+            <if test="tableidname != null  and tableidname != ''">#{tableidname},</if>
+            <if test="organiseid != null  and organiseid != ''">#{organiseid},</if>
+            <if test="userid != null  and userid != ''">#{userid},</if>
+            <if test="deptid != null  and deptid != ''">#{deptid},</if>
+            <if test="ideatime != null ">#{ideatime},</if>
+            <if test="sequence != null  and sequence != ''">#{sequence},</if>
+            <if test="deptlevel != null  and deptlevel != ''">#{deptlevel},</if>
+            <if test="roleid != null  and roleid != ''">#{roleid},</if>
+            <if test="username != null  and username != ''">#{username},</if>
+            <if test="deptname != null  and deptname != ''">#{deptname},</if>
+            <if test="uniqueid != null  and uniqueid != ''">#{uniqueid},</if>
+            <if test="tempidea != null  and tempidea != ''">#{tempidea},</if>
+            <if test="isvisible != null  and isvisible != ''">#{isvisible},</if>
+            <if test="visiblescope != null  and visiblescope != ''">#{visiblescope},</if>
+            <if test="deptorder != null  and deptorder != ''">#{deptorder},</if>
+            <if test="wfisvisible != null  and wfisvisible != ''">#{wfisvisible},</if>
+            <if test="ishand != null  and ishand != ''">#{ishand},</if>
+            <if test="stattag != null  and stattag != ''">#{stattag},</if>
+            <if test="typistdeptid != null  and typistdeptid != ''">#{typistdeptid},</if>
+            <if test="typistuserid != null  and typistuserid != ''">#{typistuserid},</if>
+            <if test="sortname != null  and sortname != ''">#{sortname},</if>
+            <if test="subisvisible != null  and subisvisible != ''">#{subisvisible},</if>
+            <if test="iscollect != null  and iscollect != ''">#{iscollect},</if>
+            <if test="hqendisvisible != null  and hqendisvisible != ''">#{hqendisvisible},</if>
+            <if test="subhqisshow != null  and subhqisshow != ''">#{subhqisshow},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFlowIdea" parameterType="FlowIdea">
+        update flow_idea
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="filetypeid != null  and filetypeid != ''">FILETYPEID = #{filetypeid},</if>
+            <if test="recordid != null  and recordid != ''">RECORDID = #{recordid},</if>
+            <if test="ideafieldname != null  and ideafieldname != ''">IDEAFIELDNAME = #{ideafieldname},</if>
+            <if test="idea != null  and idea != ''">IDEA = #{idea},</if>
+            <if test="tablename != null  and tablename != ''">TABLENAME = #{tablename},</if>
+            <if test="tableidname != null  and tableidname != ''">TABLEIDNAME = #{tableidname},</if>
+            <if test="organiseid != null  and organiseid != ''">ORGANISEID = #{organiseid},</if>
+            <if test="userid != null  and userid != ''">USERID = #{userid},</if>
+            <if test="deptid != null  and deptid != ''">DEPTID = #{deptid},</if>
+            <if test="ideatime != null ">IDEATIME = #{ideatime},</if>
+            <if test="sequence != null  and sequence != ''">SEQUENCE = #{sequence},</if>
+            <if test="deptlevel != null  and deptlevel != ''">DEPTLEVEL = #{deptlevel},</if>
+            <if test="roleid != null  and roleid != ''">ROLEID = #{roleid},</if>
+            <if test="username != null  and username != ''">USERNAME = #{username},</if>
+            <if test="deptname != null  and deptname != ''">DEPTNAME = #{deptname},</if>
+            <if test="uniqueid != null  and uniqueid != ''">UNIQUEID = #{uniqueid},</if>
+            <if test="tempidea != null  and tempidea != ''">TEMPIDEA = #{tempidea},</if>
+            <if test="isvisible != null  and isvisible != ''">ISVISIBLE = #{isvisible},</if>
+            <if test="visiblescope != null  and visiblescope != ''">VISIBLESCOPE = #{visiblescope},</if>
+            <if test="deptorder != null  and deptorder != ''">DEPTORDER = #{deptorder},</if>
+            <if test="wfisvisible != null  and wfisvisible != ''">WFISVISIBLE = #{wfisvisible},</if>
+            <if test="ishand != null  and ishand != ''">ISHAND = #{ishand},</if>
+            <if test="stattag != null  and stattag != ''">STATTAG = #{stattag},</if>
+            <if test="typistdeptid != null  and typistdeptid != ''">TYPISTDEPTID = #{typistdeptid},</if>
+            <if test="typistuserid != null  and typistuserid != ''">TYPISTUSERID = #{typistuserid},</if>
+            <if test="sortname != null  and sortname != ''">SORTNAME = #{sortname},</if>
+            <if test="subisvisible != null  and subisvisible != ''">SUBISVISIBLE = #{subisvisible},</if>
+            <if test="iscollect != null  and iscollect != ''">ISCOLLECT = #{iscollect},</if>
+            <if test="hqendisvisible != null  and hqendisvisible != ''">HQENDISVISIBLE = #{hqendisvisible},</if>
+            <if test="subhqisshow != null  and subhqisshow != ''">SUBHQISSHOW = #{subhqisshow},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteFlowIdeaById" parameterType="String">
+        delete from flow_idea where ID = #{id}
+    </delete>
+
+    <delete id="deleteFlowIdeaByIds" parameterType="String">
+        delete from flow_idea where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

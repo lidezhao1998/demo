@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增天然林资源保护工程建设情况统计')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-projects-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">年度：</label>
+                <div class="col-sm-8">
+                    <input type="text" name="annual" class="form-control" placeholder="请选择" id="annual"/>
+                    <!--<input name="annual" class="form-control" type="text">-->
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">地区省份：</label>
+                <div class="col-sm-8">
+                    <select class="form-control m-b" name="area" th:with="type=${@dict.getType('sys_province')}">
+                        <option value="0">--请选择地区--</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">造林面积总计：</label>
+                <div class="col-sm-8">
+                    <input name="afforestionAreaTotal" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人工造林合计：</label>
+                <div class="col-sm-8">
+                    <input name="artificialAfforestionTotal" class="form-control" type="text">
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">灌木林面积：</label>
+                <div class="col-sm-8">
+                    <input name="shrubArea" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">飞播造林：</label>
+                <div class="col-sm-8">
+                    <input name="airSendAfforest" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">当年新封山育林合计：</label>
+                <div class="col-sm-8">
+                    <input name="newAfforestTotal" class="form-control" type="text">
+                </div>
+            </div>
+<!--            <div class="form-group">
+                <label class="col-sm-3 control-label">无林地和疏林地新封山育林面积：</label>
+                <div class="col-sm-8">
+                    <input name="noNewAfforestArea" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">有林地和灌木林地新封山育林面积：</label>
+                <div class="col-sm-8">
+                    <input name="haveNewAfforestArea" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">退化林修复面积：</label>
+                <div class="col-sm-8">
+                    <input name="degraRepairArea" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">森林抚育面积：</label>
+                <div class="col-sm-8">
+                    <input name="forestTendArea" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">年末实有封山育林面积：</label>
+                <div class="col-sm-8">
+                    <input name="yearendAfforestArea" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">年末实有森林管护面积合计：</label>
+                <div class="col-sm-8">
+                    <input name="manageAreaTotal" class="form-control" type="text">
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">国有林：</label>
+                <div class="col-sm-8">
+                    <input name="nationalForest" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">集体和个人所有的国家级公益林：</label>
+                <div class="col-sm-8">
+                    <input name="nationalPublicForest" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">集体和个人所有的地方公益林：</label>
+                <div class="col-sm-8">
+                    <input name="localPublicForest" class="form-control" type="text">
+                </div>
+            </div>-->
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "eceas/projects";
+        $("#form-projects-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-projects-add').serialize());
+            }
+        }
+
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#annual'
+                , type: 'year'
+            });
+        });
+    </script>
+</body>
+</html>

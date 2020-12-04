@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增等级')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-grade-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">等级名：</label>
+                <div class="col-sm-8">
+                    <input name="gradeName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">等级值：</label>
+                <div class="col-sm-8">
+                    <input name="gradeValue" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">描述：</label>
+                <div class="col-sm-8">
+                    <textarea name="gradeDesc" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">类型：</label>
+                <div class="col-sm-8">
+                    <select name="gradeType" class="form-control m-b">
+                        <option value="">--- 请选择 ---</option>
+                        <option value="1">涵养水源</option>
+                        <option value="2">水土保持</option>
+                        <option value="3">防风固沙</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "eceas/grade";
+        $("#form-grade-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-grade-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

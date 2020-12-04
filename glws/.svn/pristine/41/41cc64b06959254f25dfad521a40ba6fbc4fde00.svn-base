@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('文件资源审核列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>文件名称：</p>
+                                <input type="text" name="fileName"/>
+                            </li>
+                            <li>
+                                <p>文件描述：</p>
+                                <input type="text" name="fileDesc"/>
+                            </li>
+                            <!--<li>
+                                <p>文件路径：</p>
+                                <input type="text" name="fileUrl"/>
+                            </li>
+                            <li>
+                                <p>访问路径：</p>
+                                <input type="text" name="playUrl"/>
+                            </li>-->
+                            <li>
+                                <p>文件类型：</p>
+                                <select name="fileType" th:with="type=${@dict.getType('eceas_water-factor')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+<!--                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="eceas:resources:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>-->
+                <a class="btn btn-success multiple disabled" onclick="batchAudit();" shiro:hasPermission="eceas:waterFile:edit">
+                    <i class="fa fa-edit"></i> 批量审核
+                </a>
+<!--                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="eceas:resources:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="eceas:resources:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('eceas:resources:edit')}]];
+        var fileTypeDatas = [[${@dict.getType('eceas_water-factor')}]];
+        var prefix = ctx + "eceas/waterFile";
+
+        $(function() {
+            var options = {
+                url: prefix + "/waterFileAuditList",
+                updateUrl: prefix + "/edit/{id}",
+                auditUrl: prefix + "/audit",
+                modalName: "文件资源",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'index',
+                    title : '序号',
+                    formatter: function(value, row, index){
+                        return index + 1;
+                    }
+                },
+                {
+                    field : 'fileName', 
+                    title : '文件名称'
+                },
+                {
+                    field : 'fileDesc', 
+                    title : '文件描述'
+                },
+                {
+                    field : 'fileUrl', 
+                    title : '文件路径',
+                    visible: false
+                },
+                {
+                    field : 'playUrl', 
+                    title : '访问路径',
+                    visible: false
+                },
+                {
+                    field : 'fileType', 
+                    title : '文件类型',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(fileTypeDatas, value);
+                    }
+                },
+                {
+                        filed : 'auditStatus',
+                        title : '审核状态',
+                        formatter: function (value, row, index) {
+                            if(row.auditStatus=='1'){
+                                return "已审核";
+                            }else{
+                                return "未审核";
+                            }
+                        }
+                 },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-warning btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="check(\'' + row.fileId + '\')"><i class="fa fa-search"></i>查看</a>');
+                        if(row.auditStatus!="1"){
+                            actions.push('&nbsp;<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="audit(\'' + row.fileId + '\')"><i class="fa fa-search"></i>审核</a>');
+                        }else{
+                            actions.push('&nbsp;<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cancelAudit(\'' + row.fileId + '\')"><i class="fa fa-search"></i>取消审核</a>');
+        }
+            return actions.join('');
+        }
+        }]
+        };
+        $.table.init(options);
+        });
+        function check(fileId){
+            $.modal.get
+        }
+        function audit(fileId) {
+            $.modal.confirm("您确定审核通过该数据吗？", function() {
+                $.operate.post(prefix + "/audit", {"fileId": fileId });
+            })
+        }
+        function cancelAudit(fileId){
+            $.modal.confirm("您确定取消该审核吗？", function(){
+                $.operate.post(prefix + "/cancelAudit", {"fileId": fileId});
+            })
+        }
+
+        function batchAudit(){
+            var fileIds = $("#bootstrap-table").bootstrapTable("getAllSelections")
+            $.modal.confirm("您确定要批量审核通过以下" + fileIds.length + "条数据吗？", function() {
+                var ids = "";
+                for(var i=0;i<fileIds.length;i++){
+                    ids+=","+fileIds[i].fileId
+                }
+                $.operate.post(prefix + "/batchAudit",{"fileIds": ids})
+            });
+        }
+    </script>
+</body>
+</html>

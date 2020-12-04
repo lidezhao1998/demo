@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TTaskReportMapper">
+
+    <resultMap type="TTaskReport" id="TTaskReportResult">
+        <result property="reportId"    column="REPORT_ID"    />
+        <result property="resolveId"    column="RESOLVE_ID"    />
+        <result property="year"    column="YEAR"    />
+        <result property="province"    column="PROVINCE"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="addressId"    column="ADDRESS_ID"    />
+        <result property="timeScale"    column="TIME_SCALE"    />
+        <result property="jmSize"    column="JM_SIZE"    />
+        <result property="jmMoney"    column="JM_MONEY"    />
+        <result property="xmSize"    column="XM_SIZE"    />
+        <result property="xmMoney"    column="XM_MONEY"    />
+        <result property="hqlxSize"    column="HQLX_SIZE"    />
+        <result property="hqlxMoney"    column="HQLX_MONEY"    />
+        <result property="smhzlSize"    column="SMHZL_SIZE"    />
+        <result property="smhzlMoney"    column="SMHZL_MONEY"    />
+        <result property="thcyglSize"    column="THCYGL_SIZE"    />
+        <result property="thcyglMoney"    column="THCYGL_MONEY"    />
+        <result property="rgscdSize"    column="RGSCD_SIZE"    />
+        <result property="rgscdMoney"    column="RGSCD_MONEY"    />
+        <result property="hspjSize"    column="HSPJ_SIZE"    />
+        <result property="hspjMoney"    column="HSPJ_MONEY"    />
+        <result property="httSize"    column="HTT_SIZE"    />
+        <result property="httMoney"    column="HTT_MONEY"    />
+        <result property="dhcSize"    column="DHC_SIZE"    />
+        <result property="dhcMoney"    column="DHC_MONEY"    />
+        <result property="ykcyzlSize"    column="YKCYZL_SIZE"    />
+        <result property="ykcyzlMoney"    column="YKCYZL_MONEY"    />
+        <result property="zyMoney"    column="ZY_MONEY"    />
+        <result property="dfMoney"    column="DF_MONEY"    />
+        <result property="startTime"    column="START_TIME"    />
+        <result property="endTime"    column="END_TIME"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="updateBy"    column="UPDATE_BY"    />
+        <result property="status"    column="STATUS"    />
+        <result property="delStatus"    column="DEL_STATUS"    />
+        <result property="auditId"    column="AUDIT_ID"    />
+        <result property="auditName"    column="AUDIT_NAME"    />
+        <result property="auditTime"    column="AUDIT_TIME"    />
+        <result property="auditStatus"    column="AUDIT_STATUS"    />
+    </resultMap>
+
+    <sql id="selectTTaskReportVo">
+        select REPORT_ID, RESOLVE_ID, YEAR, PROVINCE, ADDRESS, ADDRESS_ID, TIME_SCALE, JM_SIZE, JM_MONEY, XM_SIZE, XM_MONEY, HQLX_SIZE, HQLX_MONEY, SMHZL_SIZE, SMHZL_MONEY, THCYGL_SIZE, THCYGL_MONEY, RGSCD_SIZE, RGSCD_MONEY, HSPJ_SIZE, HSPJ_MONEY, HTT_SIZE, HTT_MONEY, DHC_SIZE, DHC_MONEY, YKCYZL_SIZE, YKCYZL_MONEY, ZY_MONEY, DF_MONEY, START_TIME, END_TIME, CREATE_TIME, CREATE_BY, UPDATE_TIME, UPDATE_BY, STATUS, DEL_STATUS, AUDIT_ID, AUDIT_NAME, AUDIT_TIME, AUDIT_STATUS from t_task_report
+    </sql>
+
+    <select id="selectTTaskReportList" parameterType="TTaskReport" resultMap="TTaskReportResult">
+        <include refid="selectTTaskReportVo"/>
+        <where>
+            RESOLVE_ID is not null
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+        </where>
+    </select>
+
+    <select id="selectTTaskReportListById" parameterType="TTaskReport" resultMap="TTaskReportResult">
+        <include refid="selectTTaskReportVo"/>
+        WHERE RESOLVE_ID = #{resolveId}
+    </select>
+
+    <select id="selectTimeScaleFromYearAndAddress" parameterType="TTaskReport" resultMap="TTaskReportResult">
+        <include refid="selectTTaskReportVo"/>
+        WHERE YEAR = #{year} and ADDRESS = #{address} and TIME_SCALE = '年'
+    </select>
+
+    <select id="selectTTaskReportById" parameterType="Long" resultMap="TTaskReportResult">
+        <include refid="selectTTaskReportVo"/>
+        where RESOLVE_ID = #{resolveId}
+    </select>
+
+    <select id="selectProvince" parameterType="tTaskReport" resultMap="TTaskReportResult">
+        SELECT PROVINCE FROM t_task_report
+        <where>
+            <if test="province != null  and province != ''">PROVINCE = #{province} and</if>
+            RESOLVE_ID is not null GROUP BY PROVINCE
+        </where>
+    </select>
+
+    <select id="selectZyMoney" parameterType="String" resultMap="TTaskReportResult">
+        SELECT year,sum(ZY_MONEY) as ZY_MONEY FROM t_task_report WHERE PROVINCE = #{province}
+    </select>
+
+    <select id="selectSumRgscdSize" parameterType="String" resultMap="TTaskReportResult">
+        SELECT sum(RGSCD_SIZE) as RGSCD_SIZE FROM t_task_report WHERE PROVINCE = #{province} and YEAR = '2019' and RESOLVE_ID is null
+    </select>
+
+    <select id="selectSummaryList" parameterType="TTaskReport" resultMap="TTaskReportResult">
+        select province,year,sum(JM_SIZE) as JM_SIZE,sum(XM_SIZE) as XM_SIZE,sum(HQLX_SIZE) as HQLX_SIZE,sum(SMHZL_SIZE) as SMHZL_SIZE,sum(THCYGL_SIZE) as THCYGL_SIZE,sum(RGSCD_SIZE) as RGSCD_SIZE,sum(HSPJ_SIZE) as HSPJ_SIZE,sum(HTT_SIZE) as HTT_SIZE,sum(DHC_SIZE) as DHC_SIZE,sum(YKCYZL_SIZE) as YKCYZL_SIZE,sum(ZY_MONEY) as ZY_MONEY,sum(DF_MONEY) as DF_MONEY from t_task_report
+        <where>
+            RESOLVE_ID is not null
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            GROUP BY year
+        </where>
+    </select>
+
+    <select id="selectEnclosureList" parameterType="TTaskReport" resultMap="TTaskReportResult">
+        select province,sum(JM_SIZE) as JM_SIZE,sum(XM_SIZE) as XM_SIZE,sum(HQLX_SIZE) as HQLX_SIZE,sum(SMHZL_SIZE) as SMHZL_SIZE from t_task_report
+        <where>
+            YEAR = '2019'
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            GROUP BY province
+        </where>
+    </select>
+
+    <insert id="insertTTaskReport" parameterType="TTaskReport" useGeneratedKeys="true" keyProperty="reportId">
+        insert into t_task_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resolveId != null ">RESOLVE_ID,</if>
+            <if test="year != null  and year != ''">YEAR,</if>
+            <if test="province != null  and province != ''">PROVINCE,</if>
+            <if test="address != null  and address != ''">ADDRESS,</if>
+            <if test="addressId != null  and addressId != ''">ADDRESS_ID,</if>
+            <if test="timeScale != null  and timeScale != ''">TIME_SCALE,</if>
+            <if test="jmSize != null ">JM_SIZE,</if>
+            <if test="jmMoney != null  and jmMoney != ''">JM_MONEY,</if>
+            <if test="xmSize != null ">XM_SIZE,</if>
+            <if test="xmMoney != null  and xmMoney != ''">XM_MONEY,</if>
+            <if test="hqlxSize != null ">HQLX_SIZE,</if>
+            <if test="hqlxMoney != null  and hqlxMoney != ''">HQLX_MONEY,</if>
+            <if test="smhzlSize != null ">SMHZL_SIZE,</if>
+            <if test="smhzlMoney != null  and smhzlMoney != ''">SMHZL_MONEY,</if>
+            <if test="thcyglSize != null ">THCYGL_SIZE,</if>
+            <if test="thcyglMoney != null  and thcyglMoney != ''">THCYGL_MONEY,</if>
+            <if test="rgscdSize != null ">RGSCD_SIZE,</if>
+            <if test="rgscdMoney != null  and rgscdMoney != ''">RGSCD_MONEY,</if>
+            <if test="hspjSize != null ">HSPJ_SIZE,</if>
+            <if test="hspjMoney != null  and hspjMoney != ''">HSPJ_MONEY,</if>
+            <if test="httSize != null ">HTT_SIZE,</if>
+            <if test="httMoney != null  and httMoney != ''">HTT_MONEY,</if>
+            <if test="dhcSize != null ">DHC_SIZE,</if>
+            <if test="dhcMoney != null  and dhcMoney != ''">DHC_MONEY,</if>
+            <if test="ykcyzlSize != null ">YKCYZL_SIZE,</if>
+            <if test="ykcyzlMoney != null  and ykcyzlMoney != ''">YKCYZL_MONEY,</if>
+            <if test="zyMoney != null  and zyMoney != ''">ZY_MONEY,</if>
+            <if test="dfMoney != null  and dfMoney != ''">DF_MONEY,</if>
+            <if test="startTime != null ">START_TIME,</if>
+            <if test="endTime != null ">END_TIME,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="updateBy != null ">UPDATE_BY,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="delStatus != null  and delStatus != ''">DEL_STATUS,</if>
+            <if test="auditId != null ">AUDIT_ID,</if>
+            <if test="auditName != null  and auditName != ''">AUDIT_NAME,</if>
+            <if test="auditTime != null ">AUDIT_TIME,</if>
+            <if test="auditStatus != null  and auditStatus != ''">AUDIT_STATUS,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="resolveId != null ">#{resolveId},</if>
+            <if test="year != null  and year != ''">#{year},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="addressId != null  and addressId != ''">#{addressId},</if>
+            <if test="timeScale != null  and timeScale != ''">#{timeScale},</if>
+            <if test="jmSize != null ">#{jmSize},</if>
+            <if test="jmMoney != null  and jmMoney != ''">#{jmMoney},</if>
+            <if test="xmSize != null ">#{xmSize},</if>
+            <if test="xmMoney != null  and xmMoney != ''">#{xmMoney},</if>
+            <if test="hqlxSize != null ">#{hqlxSize},</if>
+            <if test="hqlxMoney != null  and hqlxMoney != ''">#{hqlxMoney},</if>
+            <if test="smhzlSize != null ">#{smhzlSize},</if>
+            <if test="smhzlMoney != null  and smhzlMoney != ''">#{smhzlMoney},</if>
+            <if test="thcyglSize != null ">#{thcyglSize},</if>
+            <if test="thcyglMoney != null  and thcyglMoney != ''">#{thcyglMoney},</if>
+            <if test="rgscdSize != null ">#{rgscdSize},</if>
+            <if test="rgscdMoney != null  and rgscdMoney != ''">#{rgscdMoney},</if>
+            <if test="hspjSize != null ">#{hspjSize},</if>
+            <if test="hspjMoney != null  and hspjMoney != ''">#{hspjMoney},</if>
+            <if test="httSize != null ">#{httSize},</if>
+            <if test="httMoney != null  and httMoney != ''">#{httMoney},</if>
+            <if test="dhcSize != null ">#{dhcSize},</if>
+            <if test="dhcMoney != null  and dhcMoney != ''">#{dhcMoney},</if>
+            <if test="ykcyzlSize != null ">#{ykcyzlSize},</if>
+            <if test="ykcyzlMoney != null  and ykcyzlMoney != ''">#{ykcyzlMoney},</if>
+            <if test="zyMoney != null  and zyMoney != ''">#{zyMoney},</if>
+            <if test="dfMoney != null  and dfMoney != ''">#{dfMoney},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null ">#{updateBy},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delStatus != null  and delStatus != ''">#{delStatus},</if>
+            <if test="auditId != null ">#{auditId},</if>
+            <if test="auditName != null  and auditName != ''">#{auditName},</if>
+            <if test="auditTime != null ">#{auditTime},</if>
+            <if test="auditStatus != null  and auditStatus != ''">#{auditStatus},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTTaskReport" parameterType="TTaskReport">
+        update t_task_report
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="resolveId != null ">RESOLVE_ID = #{resolveId},</if>
+            <if test="year != null  and year != ''">YEAR = #{year},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="address != null  and address != ''">ADDRESS = #{address},</if>
+            <if test="addressId != null  and addressId != ''">ADDRESS_ID = #{addressId},</if>
+            <if test="timeScale != null  and timeScale != ''">TIME_SCALE = #{timeScale},</if>
+            <if test="jmSize != null ">JM_SIZE = #{jmSize},</if>
+            <if test="jmMoney != null  and jmMoney != ''">JM_MONEY = #{jmMoney},</if>
+            <if test="xmSize != null ">XM_SIZE = #{xmSize},</if>
+            <if test="xmMoney != null  and xmMoney != ''">XM_MONEY = #{xmMoney},</if>
+            <if test="hqlxSize != null ">HQLX_SIZE = #{hqlxSize},</if>
+            <if test="hqlxMoney != null  and hqlxMoney != ''">HQLX_MONEY = #{hqlxMoney},</if>
+            <if test="smhzlSize != null ">SMHZL_SIZE = #{smhzlSize},</if>
+            <if test="smhzlMoney != null  and smhzlMoney != ''">SMHZL_MONEY = #{smhzlMoney},</if>
+            <if test="thcyglSize != null ">THCYGL_SIZE = #{thcyglSize},</if>
+            <if test="thcyglMoney != null  and thcyglMoney != ''">THCYGL_MONEY = #{thcyglMoney},</if>
+            <if test="rgscdSize != null ">RGSCD_SIZE = #{rgscdSize},</if>
+            <if test="rgscdMoney != null  and rgscdMoney != ''">RGSCD_MONEY = #{rgscdMoney},</if>
+            <if test="hspjSize != null ">HSPJ_SIZE = #{hspjSize},</if>
+            <if test="hspjMoney != null  and hspjMoney != ''">HSPJ_MONEY = #{hspjMoney},</if>
+            <if test="httSize != null ">HTT_SIZE = #{httSize},</if>
+            <if test="httMoney != null  and httMoney != ''">HTT_MONEY = #{httMoney},</if>
+            <if test="dhcSize != null ">DHC_SIZE = #{dhcSize},</if>
+            <if test="dhcMoney != null  and dhcMoney != ''">DHC_MONEY = #{dhcMoney},</if>
+            <if test="ykcyzlSize != null ">YKCYZL_SIZE = #{ykcyzlSize},</if>
+            <if test="ykcyzlMoney != null  and ykcyzlMoney != ''">YKCYZL_MONEY = #{ykcyzlMoney},</if>
+            <if test="zyMoney != null  and zyMoney != ''">ZY_MONEY = #{zyMoney},</if>
+            <if test="dfMoney != null  and dfMoney != ''">DF_MONEY = #{dfMoney},</if>
+            <if test="startTime != null ">START_TIME = #{startTime},</if>
+            <if test="endTime != null ">END_TIME = #{endTime},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="updateBy != null ">UPDATE_BY = #{updateBy},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="delStatus != null  and delStatus != ''">DEL_STATUS = #{delStatus},</if>
+            <if test="auditId != null ">AUDIT_ID = #{auditId},</if>
+            <if test="auditName != null  and auditName != ''">AUDIT_NAME = #{auditName},</if>
+            <if test="auditTime != null ">AUDIT_TIME = #{auditTime},</if>
+            <if test="auditStatus != null  and auditStatus != ''">AUDIT_STATUS = #{auditStatus},</if>
+        </trim>
+        where REPORT_ID = #{reportId}
+    </update>
+</mapper>

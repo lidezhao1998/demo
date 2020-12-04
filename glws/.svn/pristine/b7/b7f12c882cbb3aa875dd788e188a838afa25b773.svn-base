@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增入库')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-instock-add">
+            <h4 class="form-header h4">物资类型</h4>
+
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <!--
+                                       <div class="layui-input-block" style="margin-top: 30px">
+                        -->
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>物资：</label>
+                        <!--
+                                         <em class="i-bit"></em><span>物资类型：</span>
+                        -->
+                        <select
+                                id="manufactorType" name="manufactorType" onchange="getCities()" style="width: 165px;height:30px;border:1px solid #e5e6e7 " required="required" >
+                        </select>
+                        <select
+                                id="manufactorName" name="name" onchange="getAreas()"   style="width: 165px;height:30px;border:1px solid #e5e6e7 " required="required">
+                        </select>
+                        <!--</div>-->
+                    </div>
+                </div>
+
+
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>入库时间：</label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input name="warehousingTime" class="form-control" placeholder="yyyy-MM-dd HH:mm:ss" type="text" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <h4 class="form-header h4">物资信息</h4>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>入库方式：</label>
+
+                        <div class="col-sm-8">
+                            <input name="warehousingMode" class="form-control" type="text" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">接货人：</label>
+
+                        <div class="col-sm-8">
+                            <input name="receiver" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>接货人电话：</label>
+
+                        <div class="col-sm-8">
+                            <input name="receiverNumber" id="receiverNumber" class="form-control" type="text" maxlength="11" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">送货人：</label>
+
+                        <div class="col-sm-8">
+                            <input name="deliveryPerson" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>送货人电话：</label>
+
+                        <div class="col-sm-8">
+                            <input name="reasonNumber" id="reasonNumber" class="form-control" type="text" required>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>货物数量：</label>
+
+                        <div class="col-sm-8">
+                            <input name="goodsNumber" class="form-control" type="text" required>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">货物金额(万元)：</label>
+                        <div class="col-sm-8">
+                            <input name="goodsMoney" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">原因：</label>
+                        <div class="col-sm-8">
+                            <textarea name="reason" maxlength="500" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandler()"  ><i class="fa fa-check"></i>入 库</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandlerSave()"  ><i class="fa fa-check"></i>保 存</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+<!--
+            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('form-publish-add', 'bootstrap-table1')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+-->
+
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/instock";
+
+        $("#form-instock-add").validate({
+            onkeyup: false,
+            rules:{
+
+                email:{
+                    email:true,
+                    remote: {
+                        url: prefix + "/checkEmailUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "email": function () {
+                                return $.common.trim($("#email").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                            return $.validate.unique(data);
+                        }
+                    }
+                },
+                receiverNumber:{
+                    isPhone:true,
+                   /* remote: {
+                        url: prefix + "/checkPhoneUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "phonenumber": function () {
+                                return $.common.trim($("#phonenumber").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                            return $.validate.unique(data);
+                        }
+                    }*/
+                },
+                reasonNumber:{
+                    isPhone:true,
+
+                },
+            },
+            messages: {
+                "loginName": {
+                    remote: "用户已经存在"
+                },
+                "email": {
+                    remote: "Email已经存在"
+                },
+                "phonenumber":{
+                    remote: "手机号码已经存在"
+                }
+            },
+            focusCleanup: true
+        });
+
+       /* $("#form-instock-add").validate({
+            focusCleanup: true
+        });*/
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-instock-add').serialize());
+            }
+        }
+
+
+        function submitHandlerSave() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/addrk", $('#form-instock-add').serialize());
+            }
+        }
+
+        $("input[name='warehousingTime']").datetimepicker({
+            format: "yyyy-mm-dd hh:ii:ss",
+            minView: "month",
+            autoclose: true
+        });
+
+
+
+
+        //省市区三级联动
+        $(function(){
+            getProvinces();
+            var op1 = document.createElement("option");
+            op1.value = -1;
+            op1.text ="名称";
+            document.getElementById("manufactorName").appendChild(op1);
+
+        });
+    </script>
+    <script type="text/javascript">
+        // ===== 加载省列表 =====
+        function getProvinces() {
+            var url=ctx+"system/instock/getType";
+            $.ajax({
+                "url": url,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+                    //alert(JSON.stringify(data))
+                    var op = document.createElement("option");
+                    op.value = -1;
+                    op.text = "类型";
+                    document.getElementById("manufactorType").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].materialType;
+                        op.text = data[i].materialName;
+                        document.getElementById("manufactorType").appendChild(op);
+                    }
+                }
+            });
+            getCities();
+        }
+
+
+        // ===== 加载市列表 =====
+        function getCities() {
+            $("#manufactorName").empty();
+            var url=ctx+"system/instock/getGoods";
+            var data = "provinceCode=" + $("#manufactorType").val();
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+
+                    var op = document.createElement("option");
+                    op.value = -1;
+                    document.getElementById("manufactorName").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].materialName;
+                        op.text = data[i].materialName;
+                        document.getElementById("manufactorName").appendChild(op);
+                    }
+                }
+            });
+
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改科技成果信息')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: jasny-bootstrap-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+    <th:block th:include="include :: select2-css"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+    <th:block th:include="include :: jquery-steps-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-technology-edit" th:object="${cTaskTechnology}">
+        <input id="id" name="id" th:field="*{id}" type="hidden">
+        <input id="creatTime" name="creatTime" th:value="${#dates.format(cTaskTechnology.creatTime, 'yyyy-MM-dd')}" type="hidden">
+        <div class="row">
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>成果名称：</label>
+                    <div class="col-sm-8">
+                        <input name="name" th:field="*{name}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>所属技术领域：</label>
+                    <div class="col-sm-8">
+                        <input name="technicalField" th:field="*{technicalField}" class="form-control" type="text"
+                               required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>提交人：</label>
+                    <div class="col-sm-8">
+                        <input name="sumbitter" th:field="*{sumbitter}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>Email：</label>
+                    <div class="col-sm-8">
+                        <input name="email" th:field="*{email}" id="email" class="form-control" type="email" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>地址：</label>
+                    <div class="col-sm-8">
+                        <input name="address" th:field="*{address}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>联系方式：</label>
+                    <div class="col-sm-8">
+                        <input name="phone" th:field="*{phone}" placeholder="请输入手机号码" class="form-control"
+                               maxlength="11" id="phone" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">邮政编码：</label>
+                    <div class="col-sm-8">
+                        <input name="fax" th:field="*{fax}" maxlength="6" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">技术成熟度：</label>
+                    <div class="col-sm-8">
+                        <input name="technologyMaturity" th:field="*{technologyMaturity}" class="form-control"
+                               type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">研发方式：</label>
+                    <div class="col-sm-8">
+                        <input name="rdmethods" th:field="*{rdmethods}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">合作方式：</label>
+                    <div class="col-sm-8">
+                        <input name="cooperationMethod" th:field="*{cooperationMethod}" class="form-control" type="text"
+                               >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">成果应用情况：</label>
+                    <div class="col-sm-8">
+                        <input name="resultsApplication" th:field="*{resultsApplication}" class="form-control"
+                               type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">实施成果转化需求：</label>
+                    <div class="col-sm-8">
+                        <input name="demand" th:field="*{demand}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">成果应用行业：</label>
+                    <div class="col-sm-8">
+                        <input name="industry" th:field="*{industry}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">获奖类别：</label>
+                    <div class="col-sm-8">
+                        <input name="awardCategory" th:field="*{awardCategory}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">填报时间：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input id="inputTime" name="inputTime" th:value="${#dates.format(cTaskTechnology.inputTime, 'yyyy-MM-dd')}"
+                                   class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">获奖级别：</label>
+                    <div class="col-sm-8">
+                        <input name="awardLevel" th:field="*{awardLevel}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" id="fileUploadShow">
+            <label class="col-sm-3 control-label">附件：</label>
+            <div class="col-sm-8">
+                <div class="form-control-static" th:text="${cTaskTechnology.fileName}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">修改附件：</label>
+            <div class="col-sm-8">
+                <label class="radio-box"> <input type="radio" name="menuType" value="N" checked="checked"/> 否
+                </label>
+                <label class="radio-box"> <input type="radio" name="menuType" value="Y"/> 是 </label>
+            </div>
+        </div>
+        <div class="form-group" id="fileUpload">
+            <label class="col-sm-3 control-label">附件：</label>
+            <div class="col-sm-8">
+                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                    <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                    <span class="input-group-addon btn btn-white btn-file"><span class="fileinput-new">选择文件</span><span class="fileinput-exists">更改</span><input id="file" type="file" onchange="checkFileType()"></span>
+                    <a href="#" class="input-group-addon btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+                </div>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 注：上传文件格式'doc', 'xls', 'png','jpg','pdf'</span>
+            </div>
+        </div>
+    </form>
+    <!--    <div class="button-b" style="margin-left: 70%;margin-top: 10%" id="button-set">-->
+    <!--        <button type="button" class="btn btn-w-m btn-primary" onclick="saveup()">保存并上报</button>-->
+    <!--        <button type="button" class="btn btn-w-m btn-primary" onclick="save()">保 存</button>-->
+    <!--        <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()">关 闭</button>-->
+
+    <!--    </div>-->
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: jasny-bootstrap-js"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<th:block th:include="include :: select2-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: jquery-steps-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "achievements/technology";
+
+    $(function () {
+        $("#fileUpload").hide();
+        $("input[name='menuType']").on('ifChecked',
+            function (event) {
+                var menuType = $(event.target).val();
+                menuVisible(menuType);
+            });
+    });
+
+
+    function checkFileType() {
+        var file = $("input[id='file']").val();
+        var flag = false;
+        if (file == '') {
+            $.modal.msgWarning("请选择上传文件。");
+        } else {
+            if ($.common.endWith(file, '.pdf')) {
+                flag = true
+            } else if ($.common.endWith(file, '.png')) {
+                flag = true
+            } else if ($.common.endWith(file, '.doc')) {
+                flag = true
+            } else if ($.common.endWith(file, '.jpg')) {
+                flag = true
+            } else if ($.common.endWith(file, '.xls')) {
+                flag = true
+            }
+            if (!flag) {
+                $.modal.msgWarning("请选择正确的文件格式。");
+                $("input[id='file']").val("");
+            }
+        }
+    }
+
+    function submitHandler() {
+
+
+        if ($.validate.form()) {
+            layer.confirm("是否现在上报。", {
+                btn: ['上报', '保存'],
+                title: "上报提示",
+                btn1: function (index) {
+                    console.log("上报");
+                    layer.close(index);
+                    edit(1);//提交
+                },
+                btn2: function () {
+                    console.log("保存");
+                    edit(0);//保存
+                }
+            });
+        }
+    }
+
+
+    // $("#form-technology-edit").validate({
+    //     focusCleanup: true,
+    //     rules: {
+    //         email: {
+    //             isEmail: true,
+    //         },
+    //         phone: {
+    //             isPhone: true,
+    //
+    //         }
+    //     }
+    //
+    // });
+
+    function menuVisible(menuType) {
+        if (menuType == "N") {
+            $("#fileUpload").hide();
+            $("#fileUploadShow").show();
+        } else if (menuType == "Y") {
+            $("#fileUpload").show();
+            $("#fileUploadShow").hide();
+        }
+    }
+
+    $("input[name='inputTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    $("input[name='creatTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+    function edit(status) {
+        var id = $("input[name='id']").val();
+        var name = $("input[name='name']").val();
+        var technicalField = $("input[name='technicalField']").val();
+        var sumbitter = $("input[name='sumbitter']").val();
+        var email = $("input[name='email']").val();
+        var address = $("input[name='address']").val();
+        var phone = $("input[name='phone']").val();
+        var fax = $("input[name='fax']").val();
+        var creatTime = $("input[name='creatTime']").val();
+        var rdmethods = $("input[name='rdmethods']").val();
+        var cooperationMethod = $("input[name='cooperationMethod']").val();
+        var resultsApplication = $("input[name='resultsApplication']").val();
+        var demand = $("input[name='demand']").val();
+        var industry = $("input[name='industry']").val();
+        var awardCategory = $("input[name='awardCategory']").val();
+        var awardLevel = $("input[name='awardLevel']").val();
+        var technologyMaturity = $("input[name='technologyMaturity']").val();
+
+        var file = $("#file")[0].files[0];
+        var formData = new FormData();
+        var isNotFile = $('input[name="menuType"]:checked').val();
+        if (isNotFile == "Y") {
+            formData.append("file", file);
+        }
+
+        formData.append("id", id);
+        formData.append("name", name);
+        formData.append("technicalField", technicalField);
+        formData.append("sumbitter", sumbitter);
+        formData.append("email", email);
+        formData.append("address", address);
+        formData.append("phone", phone);
+        formData.append("fax", fax);
+        formData.append("creatTime", creatTime);
+        formData.append("rdmethods", rdmethods);
+        formData.append("cooperationMethod", cooperationMethod);
+        formData.append("resultsApplication", resultsApplication);
+        formData.append("demand", demand);
+        formData.append("industry", industry);
+        formData.append("awardCategory", awardCategory);
+        formData.append("awardLevel", awardLevel);
+        formData.append("technologyMaturity", technologyMaturity);
+        formData.append("inputTime", inputTime);
+
+        formData.append("status", status);
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: ctx + "achievements/technology/edit",
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            error: function (request) {
+                $.modal.alertError("系统错误");
+            },
+            success: function (data) {
+                $.operate.successCallback(data);
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.integration.mapper.NprojectSampleDataMapper">
+    
+    <resultMap type="NprojectSampleData" id="NprojectSampleDataResult">
+    	<id     property="id"      column="id"      />
+        <result property="surveyTime"     column="survey_time"/>
+        <result property="surveyArea"    column="survey_area"/>
+        <result property="sampleNumber"    column="sample_number"/>
+        <result property="shrubTallPlants"    column="shrub_tall_plants"/>
+        <result property="grasslandClass"    column="grassland_class"/>
+        <result property="grasslandType"    column="grassland_type"/>
+        <result property="photoName"    column="photo_name"/>
+        <result property="photoUrl"    column="photo_url"/>
+        <result property="photoRealName"    column="photo_real_name"/>
+        <result property="createBy"      column="create_by"/>
+        <result property="createTime"    column="create_time"/>
+        <result property="updateBy"      column="update_by"/>
+        <result property="updateTime"    column="update_time"/>
+    </resultMap>
+    
+    <sql id="selectNprojectSampleDataVo">
+        SELECT
+                id,
+                survey_time,
+                survey_area,
+                sample_number,
+                grassland_class,
+                grassland_type,
+                shrub_tall_plants,
+                photo_name,
+                photo_url,
+                photo_real_name,
+                create_time,
+                create_by,
+                update_time,
+                update_by,
+                status
+                FROM
+                a_nproject_sample_data
+    </sql>
+    
+    <!-- 查询条件 -->
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="id !=null">
+				and id = #{id}
+			</if>
+		</where>
+	</sql>
+    
+    <select id="selectNprojectSampleData" parameterType="NprojectSampleData" resultMap="NprojectSampleDataResult">
+        <include refid="selectNprojectSampleDataVo"/>
+        <include refid="sqlwhereSearch"/>
+    </select>
+    <select id="selectNprojectSampleDataList" parameterType="NprojectSampleData" resultMap="NprojectSampleDataResult">
+        SELECT
+        a.id,
+        a.survey_time,
+        a.survey_area,
+        a.sample_number,
+        sd.dict_label grassland_class,
+        s.dict_label grassland_type,
+        a.shrub_tall_plants,
+        a.photo_name,
+        a.photo_url,
+        a.photo_real_name,
+        a.create_time,
+        a.create_by,
+        a.update_time,
+        a.update_by,
+        a. STATUS
+        FROM
+        a_nproject_sample_data a
+        LEFT JOIN sys_dict_data s ON a.grassland_type = s.dict_code
+        AND s.dict_type = "di_terrain"
+
+
+
+        LEFT JOIN sys_dict_data sd ON a.grassland_type = sd.dict_code
+        AND sd.dict_type = "di_grassland"
+        <where>
+			<if test="id != null and id != ''">
+				AND a.id =#{id}
+			</if>
+            <if test="surveyArea != null and surveyArea != ''">
+                AND a.survey_area =#{surveyArea}
+            </if>
+            <if test="grasslandClass != null and grasslandClass != ''">
+                AND a.grassland_class =#{grasslandClass}
+            </if>
+            <if test="sampleNumber != null and sampleNumber != ''">
+                AND a.sample_number =#{sampleNumber}
+            </if>
+            <if test="surveyTime != null and surveyTime != ''">
+                and date_format(a.survey_time,'%y%m%d') = date_format(#{params.surveyTime},'%y%m%d')
+            </if>
+		</where>
+    </select>
+
+
+    <insert id="insertNprojectSampleData" parameterType="NprojectSampleData">
+        insert into a_nproject_sample_data (
+        <if test="surveyTime != null ">survey_time,</if>
+        <if test="surveyArea!= null ">survey_area,</if>
+        <if test="sampleNumber!= null ">sample_number,</if>
+        <if test="shrubTallPlants!= null ">shrub_tall_plants,</if>
+        <if test="grasslandClass!= null ">grassland_class,</if>
+        <if test="grasslandType!= null ">grassland_type,</if>
+        <if test="photoName!= null ">photo_name,</if>
+        <if test="photoUrl!= null ">photo_url,</if>
+        <if test="photoRealName!= null ">photo_real_name,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="status!= null ">status,</if>
+        create_time
+        )values(
+        <if test="surveyTime != null ">#{surveyTime},</if>
+        <if test="surveyArea!= null ">#{surveyArea},</if>
+        <if test="sampleNumber!= null ">#{sampleNumber},</if>
+        <if test="shrubTallPlants!= null ">#{shrubTallPlants},</if>
+        <if test="grasslandClass!= null ">#{grasslandClass},</if>
+        <if test="grasslandType!= null ">#{grasslandType},</if>
+        <if test="photoName!= null ">#{photoName},</if>
+        <if test="photoUrl!= null ">#{photoUrl},</if>
+        <if test="photoRealName!= null ">#{photoRealName},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="status!= null ">#{status},</if>
+        sysdate()
+        )
+    </insert>
+
+
+    <update id="updateNprojectSampleData" parameterType="NprojectSampleData">
+        update a_nproject_sample_data
+        <set>
+            <if test="surveyTime != null ">survey_time=#{surveyTime},</if>
+            <if test="surveyArea!= null ">survey_area=#{surveyArea},</if>
+            <if test="sampleNumber!= null ">sample_number=#{sampleNumber},</if>
+            <if test="shrubTallPlants!= null ">shrub_tall_plants=#{shrubTallPlants},</if>
+            <if test="grasslandClass!= null ">grassland_class=#{grasslandClass},</if>
+            <if test="grasslandType!= null ">grassland_type=#{grasslandType},</if>
+            <if test="photoName!= null ">photo_name=#{photoName},</if>
+            <if test="photoUrl!= null ">photo_url=#{photoUrl},</if>
+            <if test="photoRealName!= null ">photo_real_name=#{photoRealName},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="status!= null ">status=#{status},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <delete id="deleteNprojectSampleDataByIds" parameterType="String">
+        delete from a_nproject_sample_data where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+        	#{id}
+        </foreach>
+    </delete>
+    <update id="updateStatusByIds">
+        update a_nproject_sample_data set status =1 where id in
+        <foreach collection="array" item="ids" open="("  separator=","  close=")">
+            #{ids}
+        </foreach>
+    </update>
+</mapper>

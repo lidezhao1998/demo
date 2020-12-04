@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.ReserveManagement.mapper.KOutboundMapper">
+    
+    <resultMap type="KOutbound" id="KOutboundResult">
+        <result property="id"    column="ID"    />
+        <result property="name"    column="NAME"    />
+        <result property="deliveryTime"    column="DELIVERY_TIME"    />
+        <result property="reason"    column="REASON"    />
+        <result property="status"    column="STATUS"    />
+        <result property="createName"    column="CREATE_NAME"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="updateName"    column="UPDATE_NAME"    />
+        <result property="reserveId"    column="RESERVE_ID"    />
+    </resultMap>
+
+    <sql id="selectKOutboundVo">
+        select ID, NAME, DELIVERY_TIME, REASON, STATUS, CREATE_NAME, CREATE_TIME, UPDATE_TIME, UPDATE_NAME, RESERVE_ID from k_outbound
+    </sql>
+
+    <select id="selectKOutboundList" parameterType="KOutbound" resultMap="KOutboundResult">
+        <include refid="selectKOutboundVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="deliveryTime != null "> and DELIVERY_TIME = #{deliveryTime}</if>
+            <if test="reason != null  and reason != ''"> and REASON = #{reason}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="createName != null  and createName != ''"> and CREATE_NAME like concat('%', #{createName}, '%')</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="updateName != null "> and UPDATE_NAME like concat('%', #{updateName}, '%')</if>
+            <if test="reserveId != null "> and RESERVE_ID = #{reserveId}</if>
+        </where>
+    </select>
+    
+    <select id="selectKOutboundById" parameterType="Long" resultMap="KOutboundResult">
+        <include refid="selectKOutboundVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertKOutbound" parameterType="KOutbound">
+        insert into k_outbound
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">ID,</if>
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="deliveryTime != null ">DELIVERY_TIME,</if>
+            <if test="reason != null  and reason != ''">REASON,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="createName != null  and createName != ''">CREATE_NAME,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="updateName != null ">UPDATE_NAME,</if>
+            <if test="reserveId != null ">RESERVE_ID,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="deliveryTime != null ">#{deliveryTime},</if>
+            <if test="reason != null  and reason != ''">#{reason},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createName != null  and createName != ''">#{createName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateName != null ">#{updateName},</if>
+            <if test="reserveId != null ">#{reserveId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKOutbound" parameterType="KOutbound">
+        update k_outbound
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="deliveryTime != null ">DELIVERY_TIME = #{deliveryTime},</if>
+            <if test="reason != null  and reason != ''">REASON = #{reason},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="createName != null  and createName != ''">CREATE_NAME = #{createName},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="updateName != null ">UPDATE_NAME = #{updateName},</if>
+            <if test="reserveId != null ">RESERVE_ID = #{reserveId},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteKOutboundById" parameterType="Long">
+        delete from k_outbound where ID = #{id}
+    </delete>
+
+    <delete id="deleteKOutboundByIds" parameterType="String">
+        delete from k_outbound where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+<!--确认出库改变状态-->
+    <update id="updateoutbound" parameterType="Long">
+        update  k_outbound set STATUS='2' where ID=#{instockId}
+    </update>
+    
+</mapper>

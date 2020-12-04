@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CTaskFznbMapper">
+
+    <resultMap type="CTaskFznb" id="CTaskFznbResult">
+        <result property="id" column="ID"/>
+        <result property="number" column="NUMBER"/>
+        <result property="year" column="YEAR"/>
+        <result property="province" column="PROVINCE"/>
+        <result property="city" column="CITY"/>
+        <result property="county" column="COUNTY"/>
+        <result property="type" column="TYPE"/>
+        <result property="ratharmCenter" column="RATHARM_CENTER"/>
+        <result property="ratharmProvince" column="RATHARM_PROVINCE"/>
+        <result property="ratharmCity" column="RATHARM_CITY"/>
+        <result property="ratharmCounty" column="RATHARM_COUNTY"/>
+        <result property="insectharmCenter" column="INSECTHARM_CENTER"/>
+        <result property="insectharmProvince" column="INSECTHARM_PROVINCE"/>
+        <result property="insectharmCity" column="INSECTHARM_CITY"/>
+        <result property="insectharmCounty" column="INSECTHARM_COUNTY"/>
+        <result property="economicLoss" column="ECONOMIC_LOSS"/>
+        <result property="livestockDeath" column="LIVESTOCK_DEATH"/>
+        <result property="hazardArea" column="HAZARD_AREA"/>
+        <result property="hazardAllArea" column="HAZARD_ALL_AREA"/>
+        <result property="controlDosage" column="CONTROL_DOSAGE"/>
+        <result property="muDosage" column="MU_DOSAGE"/>
+        <result property="creatTime" column="CREAT_TIME"/>
+        <result property="updateTime" column="UPDATE_TIME"/>
+        <result property="createBy" column="CREATE_BY"/>
+        <result property="status" column="STATUS"/>
+        <result property="roleName" column="ROLENAME"/>
+        <result property="code" column="CODE"/>
+
+    </resultMap>
+
+    <sql id="selectCTaskFznbVo">
+        select ID, NUMBER, YEAR, PROVINCE, CITY, COUNTY, TYPE, RATHARM_CENTER, RATHARM_PROVINCE, RATHARM_CITY, RATHARM_COUNTY, INSECTHARM_CENTER, INSECTHARM_PROVINCE, INSECTHARM_CITY, INSECTHARM_COUNTY, ECONOMIC_LOSS, LIVESTOCK_DEATH, HAZARD_AREA, HAZARD_ALL_AREA, CONTROL_DOSAGE, MU_DOSAGE, CREAT_TIME, UPDATE_TIME, CREATE_BY, STATUS,CODE from c_task_fznb
+    </sql>
+
+    <sql id="selectCTaskSumFznbVo">
+             select ID, NUMBER, YEAR, PROVINCE, CITY, COUNTY, TYPE, sum(RATHARM_CENTER)RATHARM_CENTER, sum(RATHARM_PROVINCE)RATHARM_PROVINCE, sum(RATHARM_CITY)RATHARM_CITY, sum(RATHARM_COUNTY)RATHARM_COUNTY, sum(INSECTHARM_CENTER)INSECTHARM_CENTER, sum(INSECTHARM_PROVINCE)INSECTHARM_PROVINCE, sum(INSECTHARM_CITY)INSECTHARM_CITY, sum(INSECTHARM_COUNTY)INSECTHARM_COUNTY, sum(ECONOMIC_LOSS)ECONOMIC_LOSS, sum(LIVESTOCK_DEATH)LIVESTOCK_DEATH, sum(HAZARD_AREA)HAZARD_AREA, sum(HAZARD_ALL_AREA)HAZARD_ALL_AREA, sum(CONTROL_DOSAGE)CONTROL_DOSAGE, sum(MU_DOSAGE)MU_DOSAGE, CREAT_TIME, UPDATE_TIME, CREATE_BY, STATUS,roleName from c_task_fznb
+
+    </sql>
+
+    <select id="selectCTaskFznbList" parameterType="CTaskFznb" resultMap="CTaskFznbResult">
+        <include refid="selectCTaskSumFznbVo"/>
+        <where>
+            <if test="number != null  and number != ''">and NUMBER = #{number}</if>
+            <if test="year != null ">and YEAR = #{year}</if>
+            <!--<if test="province != null  and province != ''">and PROVINCE = #{province}</if>-->
+            <if test="city != null  and city != ''">and CITY like concat('%',#{city},'%')</if>
+            <if test="county != null  and county != ''">and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''">and TYPE = #{type}</if>
+
+            <if test="creatTime != null ">and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null ">and UPDATE_TIME = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''">and CREATE_BY = #{createBy}</if>
+            <if test="status != null  and status != ''">and STATUS = #{status}</if>
+<!--
+            <if test="code != null  and code != ''">and CODE = #{code}</if>
+-->
+        </where>
+        group  by county
+    </select>
+
+
+    <!--省级用户查看-->
+    <select id="selectCTaskFznbParentList" parameterType="CTaskFznb" resultMap="CTaskFznbResult">
+        <include refid="selectCTaskSumFznbVo"/>
+        <where>
+            <if test="number != null  and number != ''">and NUMBER = #{number}</if>
+            <if test="year != null ">and YEAR = #{year}</if>
+            <if test="province != null  and province != ''">and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''">and CITY = #{city}</if>
+            <if test="county != null  and county != ''">and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''">and TYPE = #{type}</if>
+
+            <if test="creatTime != null ">and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null ">and UPDATE_TIME = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''">and CREATE_BY = #{createBy}</if>
+<!--
+            <if test="code != null  and code != ''">and CODE = #{code}</if>
+-->
+        </where>
+        group by  province
+    </select>
+
+    <select id="selectCTaskFznbCityList" parameterType="CTaskFznb" resultMap="CTaskFznbResult">
+        <include refid="selectCTaskSumFznbVo"/>
+        <where>
+            <if test="number != null  and number != ''">and NUMBER = #{number}</if>
+            <if test="year != null ">and YEAR = #{year}</if>
+            <if test="province != null  and province != ''">and PROVINCE like concat('%',#{province},'%')</if>
+            <if test="city != null  and city != ''">and CITY like concat(#{city},'%')</if>
+            <if test="county != null  and county != ''">and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''">and TYPE = #{type}</if>
+            <if test="creatTime != null ">and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null ">and UPDATE_TIME = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''">and CREATE_BY = #{createBy}</if>
+            <!--<if test="code != null  and code != ''">and CODE = #{code}</if>-->
+        </where>
+        group  by city
+    </select>
+
+    <!-- 省级列表详情展示区县级列表 -->
+    <select id="selectCTaskFznbAreaListByProvince" parameterType="String" resultMap="CTaskFznbResult">
+        <include refid="selectCTaskSumFznbVo"/>
+
+        where PROVINCE = #{province} group by county
+    </select>
+
+    <!-- 市级列表详情展示区县级列表 -->
+    <select id="selectCTaskFznbAreaListByCity" parameterType="String" resultMap="CTaskFznbResult">
+        <include refid="selectCTaskSumFznbVo"/>
+        where CITY = #{city}
+        group by county
+    </select>
+
+
+    <select id="selectCTaskFznbAreaList" parameterType="CTaskFznb" resultMap="CTaskFznbResult">
+        <include refid="selectCTaskSumFznbVo"/>
+        <where>
+            <if test="number != null  and number != ''">and NUMBER = #{number}</if>
+            <if test="year != null ">and YEAR = #{year}</if>
+            <if test="province != null  and province != ''">and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''">and CITY = #{city}</if>
+            <if test="county != null  and county != ''">and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''">and TYPE = #{type}</if>
+
+            <if test="creatTime != null ">and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null ">and UPDATE_TIME = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''">and CREATE_BY = #{createBy}</if>
+<!--
+            <if test="code != null  and code != ''">and CODE = #{code}</if>
+-->
+        </where>
+
+        group  by county
+    </select>
+
+    <!--<select id="selectCTaskFznbParentList" resultMap="CTaskFznbResult">
+                select ID, NUMBER, YEAR, PROVINCE, CITY, COUNTY, TYPE, sum(RATHARM_CENTER)RATHARM_CENTER, sum(RATHARM_PROVINCE)RATHARM_PROVINCE, sum(RATHARM_CITY)RATHARM_CITY, sum(RATHARM_COUNTY)RATHARM_COUNTY, sum(INSECTHARM_CENTER)INSECTHARM_CENTER, sum(INSECTHARM_PROVINCE)INSECTHARM_PROVINCE, sum(INSECTHARM_CITY)INSECTHARM_CITY, sum(INSECTHARM_COUNTY)INSECTHARM_COUNTY, sum(ECONOMIC_LOSS)ECONOMIC_LOSS, sum(LIVESTOCK_DEATH)LIVESTOCK_DEATH, sum(HAZARD_AREA)HAZARD_AREA, sum(HAZARD_ALL_AREA)HAZARD_ALL_AREA, sum(CONTROL_DOSAGE)CONTROL_DOSAGE, sum(MU_DOSAGE)MU_DOSAGE, CREAT_TIME, UPDATE_TIME, CREATE_BY, STATUS from c_task_fznb GROUP BY province
+
+    </select>-->
+
+
+    <select id="selectCTaskFznbById" parameterType="Long" resultMap="CTaskFznbResult">
+        <include refid="selectCTaskFznbVo"/>
+        where ID = #{id}
+    </select>
+
+    <insert id="insertCTaskFznb" parameterType="CTaskFznb" useGeneratedKeys="true" keyProperty="id">
+        insert into c_task_fznb
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER,</if>
+            <if test="year != null ">YEAR,</if>
+            <if test="province != null  and province != ''">PROVINCE,</if>
+            <if test="city != null  and city != ''">CITY,</if>
+            <if test="county != null  and county != ''">COUNTY,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="ratharmCenter != null ">RATHARM_CENTER,</if>
+            <if test="ratharmProvince != null ">RATHARM_PROVINCE,</if>
+            <if test="ratharmCity != null ">RATHARM_CITY,</if>
+            <if test="ratharmCounty != null ">RATHARM_COUNTY,</if>
+            <if test="insectharmCenter != null ">INSECTHARM_CENTER,</if>
+            <if test="insectharmProvince != null ">INSECTHARM_PROVINCE,</if>
+            <if test="insectharmCity != null ">INSECTHARM_CITY,</if>
+            <if test="insectharmCounty != null ">INSECTHARM_COUNTY,</if>
+            <if test="economicLoss != null ">ECONOMIC_LOSS,</if>
+            <if test="livestockDeath != null ">LIVESTOCK_DEATH,</if>
+            <if test="hazardArea != null ">HAZARD_AREA,</if>
+            <if test="hazardAllArea != null ">HAZARD_ALL_AREA,</if>
+            <if test="controlDosage != null ">CONTROL_DOSAGE,</if>
+            <if test="muDosage != null ">MU_DOSAGE,</if>
+            <if test="creatTime != null ">CREAT_TIME,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">#{number},</if>
+            <if test="year != null ">#{year},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="county != null  and county != ''">#{county},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="ratharmCenter != null ">#{ratharmCenter},</if>
+            <if test="ratharmProvince != null ">#{ratharmProvince},</if>
+            <if test="ratharmCity != null ">#{ratharmCity},</if>
+            <if test="ratharmCounty != null ">#{ratharmCounty},</if>
+            <if test="insectharmCenter != null ">#{insectharmCenter},</if>
+            <if test="insectharmProvince != null ">#{insectharmProvince},</if>
+            <if test="insectharmCity != null ">#{insectharmCity},</if>
+            <if test="insectharmCounty != null ">#{insectharmCounty},</if>
+            <if test="economicLoss != null ">#{economicLoss},</if>
+            <if test="livestockDeath != null ">#{livestockDeath},</if>
+            <if test="hazardArea != null ">#{hazardArea},</if>
+            <if test="hazardAllArea != null ">#{hazardAllArea},</if>
+            <if test="controlDosage != null ">#{controlDosage},</if>
+            <if test="muDosage != null ">#{muDosage},</if>
+            <if test="creatTime != null ">#{creatTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCTaskFznb" parameterType="CTaskFznb">
+        update c_task_fznb
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER = #{number},</if>
+            <if test="year != null ">YEAR = #{year},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="city != null  and city != ''">CITY = #{city},</if>
+            <if test="county != null  and county != ''">COUNTY = #{county},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="ratharmCenter != null ">RATHARM_CENTER = #{ratharmCenter},</if>
+            <if test="ratharmProvince != null ">RATHARM_PROVINCE = #{ratharmProvince},</if>
+            <if test="ratharmCity != null ">RATHARM_CITY = #{ratharmCity},</if>
+            <if test="ratharmCounty != null ">RATHARM_COUNTY = #{ratharmCounty},</if>
+            <if test="insectharmCenter != null ">INSECTHARM_CENTER = #{insectharmCenter},</if>
+            <if test="insectharmProvince != null ">INSECTHARM_PROVINCE = #{insectharmProvince},</if>
+            <if test="insectharmCity != null ">INSECTHARM_CITY = #{insectharmCity},</if>
+            <if test="insectharmCounty != null ">INSECTHARM_COUNTY = #{insectharmCounty},</if>
+            <if test="economicLoss != null ">ECONOMIC_LOSS = #{economicLoss},</if>
+            <if test="livestockDeath != null ">LIVESTOCK_DEATH = #{livestockDeath},</if>
+            <if test="hazardArea != null ">HAZARD_AREA = #{hazardArea},</if>
+            <if test="hazardAllArea != null ">HAZARD_ALL_AREA = #{hazardAllArea},</if>
+            <if test="controlDosage != null ">CONTROL_DOSAGE = #{controlDosage},</if>
+            <if test="muDosage != null ">MU_DOSAGE = #{muDosage},</if>
+            <if test="creatTime != null ">CREAT_TIME = #{creatTime},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCTaskFznbById" parameterType="Long">
+        delete from c_task_fznb where ID = #{id}
+    </delete>
+
+    <delete id="deleteCTaskFznbByIds" parameterType="String">
+        delete from c_task_fznb where ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

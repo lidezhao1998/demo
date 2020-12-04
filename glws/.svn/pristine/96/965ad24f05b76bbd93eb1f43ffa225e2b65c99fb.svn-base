@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('害鼠取样信息')" />
+    <th:block th:include="include :: select2-css"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: jquery-steps-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+</head>
+<style  type="text/css">
+    .btn-file{
+        display:none;
+    }
+    .kv-file-remove{
+        display:none;
+    }
+    .form-group1 {
+        margin-left: 80px;
+    }
+</style>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal " id="form-allocation-add" th:object="${cPlot}">
+        <input id="photoUrl" name="photoUrl" class="form-control" type="hidden"  th:field="*{photoUrl}">
+        <input id="plotId" name="plotId" class="form-control" type="hidden"  th:field="*{plotId}">
+        <input id="groundId" name="groundId" class="form-control" type="hidden" th:value="${groundId}">
+        <input id="harmfulSpeciesType" name="harmfulSpeciesType" class="form-control" type="hidden" value="004">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">目种类：</label>
+                    <div class="col-sm-8">
+                        <div name="detailedType"  class="form-control-static" th:text="${@dict.getLabels(cPlot.detailedType)}"></div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">科种类：</label>
+                    <div class="col-sm-8">
+                        <div name="sectiondType"  class="form-control-static" th:text="${@dict.getLabels( cPlot.sectiondType)}">
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+          <!--  <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">具体种类：</label>
+                    <div class="col-sm-8">
+                        <input id="detailedType" name="detailedType" class="form-control" th:field="*{detailedType}" type="text" required>
+                    </div>
+                </div>
+            </div>-->
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">取样面积类型：</label>
+                    <div class="col-sm-8">
+                        <div name="detailedType"  th:text="*{samplingArea}" class="form-control-static"></div>                    </div>
+                    <!-- <label class="col-sm-3 control-label">取样面积：</label>
+                     <div class="col-sm-8">
+                         <select name="samplingArea" id="detailedType"  class="form-control m-b" th:with="type=${@dict.getCode('1000021')}" required>
+                             <option>请选择</option>
+                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" id="dj2"></option>
+                         </select>
+                     </div>-->
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--<div class="col-sm-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">具体种类：</label>
+                <div class="col-sm-8">
+                    <input name="detailedType" class="form-control" type="text">
+                </div>
+            </div>
+        </div>-->
+
+        <div class="row">
+            <div class="col-sm-6" id="cdNumber">
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label" id="sumName">测定数量：</label>
+                    <div class="col-sm-8">
+                        <div name="quantityDetermination"  class="form-control-static" th:text="*{quantityDetermination}"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--<div  id="hidden">
+                  <div class="col-sm-6">
+                      <div class="form-group">
+                          <label class="col-sm-3 control-label">每株害虫数：</label>
+                          <div class="col-sm-8">
+                              <input  id="eachpestNumber" name="eachpestNumber"  class="form-control" type="text" onchange="eachpest()"   required>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>-->
+
+            <div class="row">
+                <div id="plantNumber1">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">每百平米植株数：</label>
+                            <div class="col-sm-8">
+                                <div name="plantNumber"  class="form-control-static" th:text="*{plantNumber}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">换算标准密度：</label>
+                        <div class="col-sm-8">
+                            <div name="standardDensity"  class="form-control-static" th:text="*{standardDensity}"></div>
+                            <span  >密度单位：</span><span id="danwei">每平米害虫数</span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">取样时间：</label>
+                        <div class="col-sm-8">
+                            <div name="surveyTime"
+                                 th:text="${#dates.format(cPlot.samplingTime, 'yyyy-MM-dd HH:mm')}"
+                                 class=" form-control-static">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-pt">
+                <div class="form-group1">
+                    <label class="font-noraml">照片：</label>
+                    <div class="file-loading">
+                        <input id="fileinput-demo-2" name="photo" type="file" multiple>
+                    </div>
+                </div>
+               <!-- <div class="row">
+                    <div class="col-sm-11">
+                        <div class="form-group1" style="color: red">
+                            注：上传图片格式'jpg', 'gif', 'png','bmp','jpeg';<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 单次最多上传图片数量10个;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 单个图片限制大小10MB。
+
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </form>
+    <!-- <div class="button-b" style="margin-left: 70%" id="button-set">
+         &lt;!&ndash;<button type="button" class="btn btn-w-m btn-primary" onclick="saveup()"id="saveup" >&ndash;&gt;&lt;!&ndash;保存并上报</button>&ndash;&gt;
+         <button type="button" class="btn btn-w-m btn-primary" onclick="save()"id="save" >保 存</button>
+         <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+     </div>-->
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: select2-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: jquery-steps-js"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<script th:inline="javascript">
+
+    var sectiondType = [[${cPlot.sectiondType}]];
+    $(function(){
+        getKeType();
+
+        // document.getElementById("hidden").style.display="none";//隐藏
+        document.getElementById("plantNumber1").style.display="none";//隐藏
+        //document.getElementById("hidden").style.display="";//显示
+    });
+    var prefix = ctx + "caiji/plot";
+    var prefix1 = ctx + "caiji/survey";
+
+
+    $("#form-allocation-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        /*alert(JSON.stringify($('#form-allocation-add').serialize()))*/
+        if ($.validate.form()) {
+            var formData = new FormData(document.getElementById("form-allocation-add"));
+            var files1=$("#fileinput-demo-2").get(0).files ;
+            for(var i=0;i<files1.length;i++){
+                formData.append("file", document.getElementById("fileinput-demo-2").files[i]);
+            };
+            $.ajax({
+                url: prefix + "/editY",
+                type: 'post',
+                cache: false,
+                data: formData,
+                dataType:'json',
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    $.operate.successCallback(result);
+                }
+            });
+        }
+    }
+
+
+    $("input[name='samplingTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+
+    function save() {
+        if ($.validate.form()) {
+            $.modal.confirm("确认要点击确定吗?", function () {
+                saveTab(prefix + "/add", $('#form-allocation-add').serialize());
+            });
+        }
+    }
+    function saveTab(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+            },
+            success: function(result) {
+                if (typeof callback == "function" ) {
+                    callback(result);
+                }
+                if (result.code == web_status.SUCCESS) {
+                    confirmdemo(result.msg,function() {
+                        reload();
+                    });
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            }
+        };
+        $.ajax(config)
+    }
+    function saveup(){
+        if ($.validate.form()) {
+            $.modal.confirm("确认要点击确定吗?", function () {
+                saveModal(prefix + "/add1", $('#form-allocation-add').serialize());
+            });
+        }
+    }
+    /* $("input[name='time']").datetimepicker({
+         format: "yyyy-mm-dd",
+         minView: "month",
+         autoclose: true
+     });*/
+    function confirmdemo(content, callBack) {
+        layer.confirm(content, {
+            icon: 3,
+            title: "系统提示",
+            btn: ['确认']
+        },  function (index) {
+            layer.close(index);
+
+            callBack(true);
+
+        });
+    };
+
+    // 保存信息 弹出提示框
+    function saveModal(url, data, callback) {
+        debugger
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            success: function(result) {
+                if (typeof callback == "function" ) {
+                    callback(result);
+                }
+                if (result.code == web_status.SUCCESS) {
+                    confirmdemo(result.msg,function() {
+                        reload();
+                    });
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+
+            }
+        };
+        $.ajax(config)
+    }
+    function reload () {
+        parent.location.reload();
+    }
+
+
+
+    function conversion() {
+        debugger
+        var type=$("#samplingArea option:selected").val();
+        var string="每平米害虫数";
+        var string1="每网害虫数";
+        var suName="测定数量：";
+        var suName1="每株害虫数：";
+        /*alert(type)*/
+        //害虫兆隆每平米
+        if(type=='0'){
+            document.getElementById("cdNumber").style.display="";//显示
+            // document.getElementById("hidden").style.display="none";//隐藏
+            document.getElementById("plantNumber1").style.display="none";//隐藏
+            var data = $("#quantityDetermination").val();
+            /*alert(data)*/
+            var a=(data + "("+ string +")")
+            $("#standardDensity" ) .val(data);//赋值给一个id为ridStr的input文本框
+            $("#danwei" ) .text(string);
+            $("#sumName" ) .text(suName);
+            $("#plantNumber").val("");
+        }else if(type=='1'){
+
+            document.getElementById("cdNumber").style.display="";//显示
+            //document.getElementById("hidden").style.display="none";//隐藏
+            document.getElementById("plantNumber1").style.display="none";//隐藏
+
+            var data = $("#quantityDetermination").val();
+            var a=(data*4)
+            $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
+            $("#danwei" ) .text(string);
+            $("#sumName" ) .text(suName);
+            $("#plantNumber").val("");
+        }else if(type=='2'){
+            document.getElementById("cdNumber").style.display="";//显示
+            //document.getElementById("hidden").style.display="none";//隐藏
+            document.getElementById("plantNumber1").style.display="none";//隐藏
+
+
+            var data = $("#quantityDetermination").val();
+            var a=(data*2 )
+            $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
+            $("#danwei" ) .text(string);
+            $("#sumName" ) .text(suName);
+            $("#plantNumber").val("");
+        }else if(type=='3'){
+            /*alert(3)*/
+            document.getElementById("cdNumber").style.display="";//隐藏
+            document.getElementById("plantNumber1").style.display="";//显示
+            //document.getElementById("hidden").style.display="";//显示
+            var plantNumber = $("#plantNumber").val();
+            var quantityDetermination = $("#quantityDetermination").val();
+            //var eachpestNumber = $("#eachpestNumber").val() ;
+            var number= (plantNumber*quantityDetermination)/100;
+            $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
+            $("#danwei" ) .text(string);
+            $("#sumName" ) .text(suName1);
+
+        }else if(type=='4'){
+
+            document.getElementById("cdNumber").style.display="";//显示
+            document.getElementById("plantNumber1").style.display="none";//隐藏
+            //document.getElementById("hidden").style.display="";//显示
+            var quantityDetermination = $("#quantityDetermination").val();
+            var number=(quantityDetermination)/100  ;
+            $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
+            $("#danwei" ) .text(string1);
+            $("#sumName" ) .text(suName);
+            $("#plantNumber").val("");
+        }else if(type=='5'){
+            document.getElementById("cdNumber").style.display="";//隐藏
+            document.getElementById("plantNumber1").style.display="none";//隐藏
+            // document.getElementById("hidden").style.display="";//显示
+            var quantityDetermination = $("#quantityDetermination").val();
+            var number=(quantityDetermination)/200 ;
+            $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
+            $("#danwei" ) .text(string1);
+            $("#sumName" ) .text(suName);
+            $("#plantNumber").val("");
+        }
+
+
+    }
+
+    //
+    function plant() {
+        var plantNumber = $("#plantNumber").val();
+        var eachpestNumber = $("#quantityDetermination").val();
+        if(eachpestNumber==null){
+            alert("请填写完整")
+        }else{
+            var number=(plantNumber*eachpestNumber)/100;
+            $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
+        }
+    }
+
+    function eachpest() {
+        var plantNumber = $("#plantNumber").val();
+        var eachpestNumber = $("#eachpestNumber").val();
+        if(plantNumber==null){
+            alert("请填写完整")
+        }else{
+            var number=(plantNumber*eachpestNumber)/100;
+            $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
+        }
+    }
+
+    var obj = document.getElementById("photoUrl");//储存图图片id
+    var ids = obj.value;
+    var initialPreview = [[${initialPreview}]];
+    var initialPreviewConfig = [[${initialPreviewConfig}]];
+    $("#fileinput-demo-2").fileinput({
+        'theme': 'explorer-fas',
+        uploadExtraData: {
+            codeId: plotId
+        },
+        'uploadUrl': prefix1 + '/upload',
+        overwriteInitial: false,
+        uploadIcon: "<i class=\"glyphicon glyphicon-upload\"></i>",
+        initialPreviewAsData: true,
+        showBrowse:true,
+        showPreview:true,
+        uploadAsync: false,
+        showCancel: false,
+        showRemove:true,
+        showUpload:false,
+        showClose:false,
+        dropZoneEnabled:false,
+        showCaption:false,
+        allowedFileExtensions: ['jpg', 'gif', 'png', 'bmp', 'jpeg'],//指出带有哪些后缀名的文件才是被接受上传的
+        previewFileIcon: '',//当文件无法被预览时出现在缩略图中的图标，默认是
+        maxFileCount: 10,
+        layoutTemplates: {
+            actionUpload: ""
+        },
+        deleteExtraData: {
+            files: "111111111"
+        },
+        initialPreview: initialPreview,
+        initialPreviewConfig: initialPreviewConfig,
+
+
+    }).on('filebatchuploaderror', function (event, data, msg) {
+        alert("上传失败");
+    }).on("filepredelete", function (event, key, jax, data) {
+        return !confirm("确定删除？");
+    }).on('filedeleted', function (event, key) {
+        //ids 存储的id key删除图片id
+        //删除图片
+        removearry(ids, key)
+        //删除图片路径
+        removearryUrl(initialPreview,initialPreviewConfig, key)
+        alert("删除成功");
+
+        obj.value = ids;
+    });
+    $(".kv-file-remove").click(function () {
+
+        // alert("target" + JSON.stringify($(this).target));
+    });
+
+    $("#fileinput-demo-2").on("fileuploaded", function (event, data, previewId, index) {
+        //alert("data"+JSON.stringify(data));
+        initialPreview.push(data.response.initialPreview)
+        var obj = {
+            caption: data.response.filename,
+            size: data.response.size,
+            url: prefix + '/delete',
+            key: data.response.id,
+        }
+        // alert(JSON.stringify(obj));
+        // initialPreviewConfig.push(obj);
+        alert(JSON.stringify(initialPreview));
+        if (ids.length == 0) {
+            ids = data.response.id;
+        } else {
+            ids = ids + "," + data.response.id;
+            var idsarry = ids.split(",");
+            ids = evlabc(idsarry);
+        }
+        //alert("ids"+ids);
+        $("#photoUrl").val(ids);
+        // alert("obj"+$("#photoUrl").val())
+        $('#fileinput-demo-2').fileinput('destroy');
+        $("#fileinput-demo-2").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': prefix1 + '/upload',
+            overwriteInitial: false,
+            uploadIcon: "<i class=\"glyphicon glyphicon-upload\"></i>",
+            initialPreviewAsData: true,
+            uploadAsync: true,
+            showCancel: false,
+            allowedFileExtensions: ['jpg', 'gif', 'png', 'bmp', 'jpeg'],//指出带有哪些后缀名的文件才是被接受上传的
+            previewFileIcon: '',//当文件无法被预览时出现在缩略图中的图标，默认是
+            maxFileCount: 10,
+            layoutTemplates: {
+                actionUpload: ""
+            },
+            deleteExtraData: {
+                files: "111111111"
+            },
+            initialPreview: initialPreview,
+            initialPreviewConfig: initialPreviewConfig,
+
+
+        })
+        $('#fileinput-demo-2').fileinput('enable');
+
+    });
+
+    var chuanzhi=function () {
+        /*      var index=document.getElementById("zu").value;
+              if (/^[A-Z]+$/.test(index)&&index.length==1)  //a-z
+              {
+                  var codeId=$("#codeId").val();
+                  var year=$("#year").val();
+                  var xingz=$("#suggest-demo-1").attr("data-id");
+                  var zu=$("#zu").val();
+                  var shun=$("#shunxu").val();
+                  var code=codeId+year+xingz+zu+shun;
+                  return code;
+              } else {
+                  alert("请规则重新输入调查组");
+                  return false;
+              }*/
+
+        //具体种类
+        var detailedType=$("#detailedType").val();
+        //取样面积
+        var samplingArea=$('#samplingArea option:selected') .val();
+        var samplingAreatext=$('#samplingArea option:selected') .text();
+        /*alert("samplingAreatext--"+samplingAreatext);*/
+        //测定数量
+        var quantityDetermination=$("#quantityDetermination").val();
+        //每百平米植株数
+        var plantNumber=$("#plantNumber").val();
+        //换算标准密度
+        var standardDensity=$("#standardDensity").val();
+        //取样时间
+        var samplingTime=$("#samplingTime").val();
+        var code={
+
+            detailedType:detailedType,
+            samplingArea:samplingArea,
+            samplingAreatext:samplingAreatext,
+            quantityDetermination:quantityDetermination,
+            plantNumber:plantNumber,
+            standardDensity:standardDensity,
+            samplingTime:samplingTime
+        }
+        return code;
+    }
+
+    function evlabc(a) { //排序大小
+        var i = j = t = 0;
+        for (i = 0; i < a.length; i++) {
+            for (j = 0; j < a.length; j++) {
+                if (a[i] < a[j]) {// 相邻元素两两对比
+                    t = a[i];
+                    a[i] = a[j];
+                    a[j] = t;
+                }
+            }
+        }
+        return a;
+    }
+
+    //取值在数组中的下标
+    function indexOfArry(arry, val) {
+        for (var i = 0; i < arry.length; i++) {
+            if (arry[i] == val) return i;
+        }
+        return -1;
+    };
+
+    //删除数组中固定的值
+    function removearry(arry, val) {
+        var index = indexOfArry(arry, val);
+        if (index > -1) {
+            arry.splice(index, 1);
+        }
+    };
+    function indexOfArry1(arry, val) {
+        for (var i = 0; i < arry.length; i++) {
+            if (arry[i].key== val) return i;
+        }
+        return -1;
+    };
+    function removearryUrl(arry1,arry2 ,val) {
+        var index = indexOfArry1(arry2, val);
+        if (index > -1) {
+            arry1.splice(index, 1);
+            arry2.splice(index, 1);
+        }
+    };
+</script>
+</body>
+</html>

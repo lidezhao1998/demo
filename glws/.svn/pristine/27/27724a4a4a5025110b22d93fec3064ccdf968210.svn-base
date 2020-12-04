@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原病害草知识库信息列表')" />
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-striped table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: whitesmoke;
+        height: 55px;
+    }
+    /*按钮背景色*/
+    .btn-success{
+        background-color: #30923E;
+    }
+
+</style>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <div class="select-list">
+                                            <ul>
+
+                                                <li class="select-selectpicker">
+                                                    <p style="width: 80px">中文名：</p>
+                                                    <input type="text" name="middleName"/>
+
+                                                </li>
+                                                <li>
+                                                    <p style="width: 80px">拉丁名：</p>
+                                                    <input type="text" name="latinName"/>
+
+                                                </li>
+                                                <li>
+                                                    <p>状态：</p>
+                                                    <select name="status">
+                                                        <option value="">所有</option>
+                                                    </select>
+                                                </li>
+                                                <li>
+                                                    <p style="width: 80px">分布：</p>
+                                                    <select>
+                                                        <option value="">所有</option>
+                                                        <option value="0">内蒙古</option>
+                                                        <option value="1">新疆</option>
+                                                        <option value="2">山西</option>
+                                                    </select>
+                                                </li>
+                                                <li>
+                                                </li>
+
+                                                <li class="select-time">
+                                                    <p style="width: 80px">时间段查询：</p>
+                                                    <input type="text" class="time-input" placeholder="开始时间"/>
+                                                    <span>-</span>
+                                                    <input type="text" class="time-input" placeholder="结束时间"/>
+                                                </li>
+                                                <li>
+                                                    <a class="btn btn-primary btn-rounded btn-sm m50" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('complex-form')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">虫类信息</a>
+                            </li>
+                            <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false" >病类信息</a>
+                            </li>
+                            <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false" >毒害草类信息</a>
+                            </li>
+                            <li class=""><a data-toggle="tab" href="#tab-4" aria-expanded="false">鼠类信息</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="panel-body">
+                                    <div class="col-sm-12 select-table table-striped" id="test">
+                                        <table id="bootstrap-table" style="table-layout: fixed;"></table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-2" class="tab-pane">
+                                <div class="panel-body">
+                                    <div class="col-sm-12 select-table table-striped">
+                                        <table id="bootstrap-table2" style="table-layout: fixed;"></table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-3" class="tab-pane">
+                                <div class="panel-body">
+
+                                    <div class="col-sm-12 select-table table-striped">
+                                        <table id="bootstrap-table3" style="table-layout: fixed;"></table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-4" class="tab-pane">
+                                <div class="panel-body">
+
+                                    <div class="col-sm-12 select-table table-striped">
+                                        <table id="bootstrap-table4" style="table-layout: fixed;"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var detailFlag = [[${@permission.hasPermi('system:knowledgeBase:detail')}]];
+    var editFlag = [[${@permission.hasPermi('system:knowledgeBase:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:knowledgeBase:remove')}]];
+    var prefix = ctx + "system/knowledgeBase";
+
+    var sum=document.getElementsByTagName("bootstrap-table")[0];
+
+
+    $(function() {
+        var options = {
+            url: prefix + "/chList",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            id:"bootstrap-table",
+            exportUrl: prefix + "/export",
+            modalName: "草原虫害知识库信息",
+            showSearch:false,
+            showRefresh:false,
+            showColumns:false,
+            showToggle:false,
+            showExport:false,
+            columns: [
+
+                {
+                    field : 'code',
+                    title : '编码',
+                    width:50,
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field : 'middleName',
+                    title : '中名',
+                    align: 'center',
+                    valign: 'middle',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+                /*{
+                    field : 'alias',
+                    title : '别名',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },*/
+
+
+                {
+                    field : 'genus',
+                    title : '属',
+                    align: 'center',
+                    valign: 'middle',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+
+                {
+                    field : 'grasslandType',
+                    title : '草原类型',
+                    align: 'center',
+                    valign: 'middle',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+
+                {field : '成虫图',title : '成虫图', align: 'center',
+                    valign: 'middle',formatter: function(value, row, index) {
+                        if($.common.isNotEmpty(row.adultPattern)){
+                            var url="";
+                            if(ctx=='/'){
+                                url=row.adultPattern;
+                            }else{
+                                url=ctx+row.adultPattern;
+                            }
+                            return $.table.imageView(url);
+                        }else{
+                            return "-";
+                        }
+                    }
+                },
+
+                {
+                    title: '操作',
+                    align: 'center',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        /* actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                         actions.push('<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="authUser(\'' + row.id + '\')"><i class="fa fa-edit"></i>查看</a>');*/
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="chauthUser(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /* -详情展开 */
+    function chauthUser(id) {
+        var prefix = ctx + "system/Ratpestknowledge";
+        var url = prefix + '/detail/' + id;
+        $.modal.openTab("详情展开", url);
+    }
+
+
+
+    //表格超出宽度鼠标悬停显示td内容
+    function paramsMatter(value,row,index, field) {
+        var span=document.createElement('span');
+        span.setAttribute('title',value);
+        span.innerHTML = value;
+        return span.outerHTML;
+    }
+    //td宽度以及内容超过宽度隐藏
+    function formatTableUnit(value, row, index) {
+        return {
+            css: {
+                "white-space": 'nowrap',
+                "text-overflow": 'ellipsis',
+                "overflow": 'hidden',
+                "max-width":"150px"
+            }
+        }
+    }
+
+
+
+    $(function() {
+        var options2 = {
+            url: prefix + "/bhList",
+            id:"bootstrap-table2",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            showSearch:false,
+            showRefresh:false,
+            showColumns:false,
+            showToggle:false,
+            showExport:false,
+            modalName: "草原病害草知识库信息",
+            columns: [
+                {
+                    field : 'code',
+                    width:50,
+                    align: 'center',
+                    valign: 'middle',
+                    title : '编码'
+                },
+                {
+                    field : 'middleName',
+                    title : '中文名',
+                    align: 'center',
+                    valign: 'middle',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+                {
+                    field : 'latinName',
+                    title : '病原拉丁名',
+                    align: 'center',
+                    valign: 'middle',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+                /* {
+                     field : 'byName',
+                     title : '病原中名',
+                     cellStyle:formatTableUnit,
+                     formatter :paramsMatter
+                 },*/
+                {
+                    field : 'byForm',
+                    title : '病原形态',
+                    align: 'center',
+                    valign: 'middle',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+
+                {
+                    field : '病原形态图',
+                    title : '病原形态图',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        if($.common.isNotEmpty(row.byMorphology)){
+                            var url="";
+                            if(ctx=='/'){
+                                url=row.byMorphology;
+                            }else{
+                                url=ctx+row.byMorphology;
+                            }
+                            return $.table.imageView(url);
+                        }else{
+                            return "-";
+                        }
+                    }
+                },
+                {
+                    field : '症状图',
+                    title : '症状图',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        if($.common.isNotEmpty(row.symptomMap)){
+                            var url="";
+                            if(ctx=='/'){
+                                url=row.symptomMap;
+                            }else{
+                                url=ctx+row.symptomMap;
+                            }
+                            return $.table.imageView(url);
+                        }else{
+                            return "-";
+                        }
+                    }
+                },
+                /* {
+                     field : 'status',
+                     title : '状态'
+                 },*/
+
+                {
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="bhauthUser(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a>');
+                       /* actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="bhauthUser(\'' + row.id + '\')"><i class="fa fa-key"></i>查看</a>');*/
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options2);
+    });
+    /* -详情展开 */
+    function bhauthUser(id) {
+        var prefix = ctx + "system/knowledge";
+        var url = prefix + '/detail/' + id;
+        $.modal.openTab("详情展开", url);
+    }
+
+
+    //表格超出宽度鼠标悬停显示td内容
+    function paramsMatter(value,row,index, field) {
+        var span=document.createElement('span');
+        span.setAttribute('title',value);
+        span.innerHTML = value;
+        return span.outerHTML;
+    }
+    //td宽度以及内容超过宽度隐藏
+    function formatTableUnit(value, row, index) {
+        return {
+            css: {
+                "white-space": 'nowrap',
+                "text-overflow": 'ellipsis',
+                "overflow": 'hidden',
+                "max-width":"150px"
+            }
+        }
+    }
+
+
+
+
+    $(function() {
+        var options = {
+            id:"bootstrap-table3",
+            url: prefix + "/dhList",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "【毒害草管理】",
+            id:"bootstrap-table3",
+            showSearch:false,
+            showRefresh:false,
+            showColumns:false,
+            showToggle:false,
+            showExport:false,
+            columns: [
+                {
+                    field : 'id',
+                    title : 'id',
+                    visible: false
+                },
+               /* {
+                    field : 'code',
+                    title : '编码'
+                },*/
+                 {
+                    field : 'id',
+                     width:50,
+                     align: 'center',
+                     valign: 'middle',
+                    title : '编码'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'chineseName',
+                    title : '中文名'
+                },
+
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'alias',
+                    title : '别名'
+                },
+
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'divisionSubfamily',
+                    title : '科_亚科'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'genusSubgenus',
+                    title : '属_亚属'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'morphologicalCharacter',
+                    title : '形态特征',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+
+                {
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="dhauthUser(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a>');
+
+
+                        /*actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="authUser(\'' + row.id + '\')"><i class="fa fa-key"></i>查看</a>');*/
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+
+    /* -详情展开 */
+    function dhauthUser(id) {
+        var prefix = ctx + "system/poisonknowledge";
+
+        var url = prefix + '/detail/' + id;
+        $.modal.openTab("详情展开", url);
+    }
+
+
+
+
+
+    //表格超出宽度鼠标悬停显示td内容
+    function paramsMatter(value,row,index, field) {
+        var span=document.createElement('span');
+        span.setAttribute('title',value);
+        span.innerHTML = value;
+        return span.outerHTML;
+    }
+    //td宽度以及内容超过宽度隐藏
+    function formatTableUnit(value, row, index) {
+        return {
+            css: {
+                "white-space": 'nowrap',
+                "text-overflow": 'ellipsis',
+                "overflow": 'hidden',
+                "max-width":"150px"
+            }
+        }
+    }
+
+
+
+    $(function() {
+
+        var editFlag = [[${@permission.hasPermi('system:knowledge:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:knowledge:remove')}]];
+        var prefix = ctx + "system/mouseknowledge";
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "鼠害知识库信息",
+            id:"bootstrap-table4",
+            showSearch:false,
+            showRefresh:false,
+            showColumns:false,
+            showToggle:false,
+            columns: [
+                {
+                    field: 'id',
+                    title: '序号',
+                    width:50,
+                    align: 'center',
+                    valign: 'middle',
+                    switchable:false,
+                    formatter:function(value,row,index){
+                        //return index+1; //序号正序排序从1开始
+                        var pageSize=$('#bootstrap-table').bootstrapTable('getOptions').pageSize;//通过表的#id 可以得到每页多少条
+                        var pageNumber=$('#bootstrap-table').bootstrapTable('getOptions').pageNumber;//通过表的#id 可以得到当前第几页
+                        return pageSize * (pageNumber - 1) + index + 1;    //返回每条的序号： 每页条数 * （当前页 - 1 ）+ 序号
+                    }
+                },
+
+
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'chineseName',
+                    title : '中文名称',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'code',
+                    title : '代码'
+                },
+
+                {
+                    align: 'center',
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'latinName',
+                    title : '拉丁名称'
+                },
+
+
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'gbName',
+                    title : '国标名称'
+                },
+
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'hazardousParts',
+                    title : '危害部位',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field : 'harmfulSymptoms',
+                    title : '危害症状',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+
+                {field : '图片',title : '图片',align: 'center',
+                    valign: 'middle',formatter: function(value, row, index) {
+                        if($.common.isNotEmpty(row.picture)){
+                            var url="";
+                            if(ctx=='/'){
+                                url=row.picture;
+                            }else{
+                                url=ctx+row.picture;
+                            }
+                            return $.table.imageView(url);
+                        }else{
+                            return "-";
+                        }
+                    }
+                },
+
+                {
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+
+
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a>');
+
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /* -详情展开 */
+    function detail(id) {
+        var prefix = ctx + "system/mouseknowledge";
+
+        var url = prefix + '/detail/' + id;
+        $.modal.openTab("详情展开", url);
+    }
+
+
+    //表格超出宽度鼠标悬停显示td内容
+    function paramsMatter(value,row,index, field) {
+        var span=document.createElement('span');
+        span.setAttribute('title',value);
+        span.innerHTML = value;
+        return span.outerHTML;
+    }
+    //td宽度以及内容超过宽度隐藏
+    function formatTableUnit(value, row, index) {
+        return {
+            css: {
+                "white-space": 'nowrap',
+                "text-overflow": 'ellipsis',
+                "overflow": 'hidden',
+                "max-width":"150px"
+            }
+        }
+    }
+</script>
+
+
+</body>
+</html>

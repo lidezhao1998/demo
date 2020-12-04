@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TTaskResolveRecordMapper">
+    
+    <resultMap type="TTaskRecord" id="TTaskRecordResult">
+        <result property="recordId"    column="RECORD_ID"    />
+        <result property="year"    column="YEAR"    />
+        <result property="province"    column="PROVINCE"    />
+        <result property="city"    column="CITY"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="wlScale"    column="WL_SCALE"    />
+        <result property="wlInvestment"    column="WL_INVESTMENT"    />
+        <result property="jmSize"    column="JM_SIZE"    />
+        <result property="jmMoney"    column="JM_MONEY"    />
+        <result property="xmSize"    column="XM_SIZE"    />
+        <result property="xmMoney"    column="XM_MONEY"    />
+        <result property="hqlxSize"    column="HQLX_SIZE"    />
+        <result property="hqlxMoney"    column="HQLX_MONEY"    />
+        <result property="rgscdSize"    column="RGSCD_SIZE"    />
+        <result property="rgscdMoney"    column="RGSCD_MONEY"    />
+        <result property="hspjSize"    column="HSPJ_SIZE"    />
+        <result property="hspjMoney"    column="HSPJ_MONEY"    />
+        <result property="smhzlSize"    column="SMHZL_SIZE"    />
+        <result property="smhzlMoney"    column="SMHZL_MONEY"    />
+        <result property="thzyglSize"    column="THZYGL_SIZE"    />
+        <result property="thzyglMoney"    column="THZYGL_MONEY"    />
+        <result property="httSize"    column="HTT_SIZE"    />
+        <result property="httMoney"    column="HTT_MONEY"    />
+        <result property="dhcSize"    column="DHC_SIZE"    />
+        <result property="dhcMoney"    column="DHC_MONEY"    />
+        <result property="zyMoney"    column="ZY_MONEY"    />
+        <result property="dfMoney"    column="DF_MONEY"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="updateBy"    column="UPDATE_BY"    />
+        <result property="status"    column="STATUS"    />
+        <result property="delStatus"    column="DEL_STATUS"    />
+    </resultMap>
+
+    <sql id="selectTTaskRecordVo">
+        select RECORD_ID, YEAR, PROVINCE, CITY, ADDRESS, WL_SCALE, WL_INVESTMENT, JM_SIZE, JM_MONEY, XM_SIZE, XM_MONEY, HQLX_SIZE, HQLX_MONEY, RGSCD_SIZE, RGSCD_MONEY, HSPJ_SIZE, HSPJ_MONEY, SMHZL_SIZE, SMHZL_MONEY, THZYGL_SIZE, THZYGL_MONEY, HTT_SIZE, HTT_MONEY, DHC_SIZE, DHC_MONEY, ZY_MONEY, DF_MONEY, CREATE_TIME, CREATE_BY, UPDATE_TIME, UPDATE_BY, STATUS, DEL_STATUS from t_task_resolve_record
+    </sql>
+
+    <select id="selectTTaskRecordList" parameterType="TTaskRecord" resultMap="TTaskRecordResult">
+        <include refid="selectTTaskRecordVo"/>
+        <where>
+            <if test="year != null  and year != ''">and YEAR = #{year}</if>
+            <if test="province != null  and province != ''">and PROVINCE = #{province}</if>
+            <if test="address != null  and address != ''">and ADDRESS = #{address}</if>
+            and DEL_STATUS='1'
+        </where>
+    </select>
+    
+    <select id="selectTTaskRecordById" parameterType="Long" resultMap="TTaskRecordResult">
+        <include refid="selectTTaskRecordVo"/>
+        where RECORD_ID = #{recordId}
+    </select>
+        
+    <insert id="insertTTaskRecord" parameterType="TTaskRecord" useGeneratedKeys="true" keyProperty="recordId">
+        insert into t_task_resolve_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="year != null  and year != ''">YEAR,</if>
+            <if test="province != null  and province != ''">PROVINCE,</if>
+            CITY,
+            <if test="address != null  and address != ''">ADDRESS,</if>
+            <if test="wlScale != null ">WL_SCALE,</if>
+            <if test="wlInvestment != null ">WL_INVESTMENT,</if>
+            <if test="jmSize != null ">JM_SIZE,</if>
+            <if test="jmMoney != null ">JM_MONEY,</if>
+            <if test="xmSize != null ">XM_SIZE,</if>
+            <if test="xmMoney != null ">XM_MONEY,</if>
+            <if test="hqlxSize != null ">HQLX_SIZE,</if>
+            <if test="hqlxMoney != null ">HQLX_MONEY,</if>
+            <if test="rgscdSize != null ">RGSCD_SIZE,</if>
+            <if test="rgscdMoney != null ">RGSCD_MONEY,</if>
+            <if test="hspjSize != null ">HSPJ_SIZE,</if>
+            <if test="hspjMoney != null ">HSPJ_MONEY,</if>
+            <if test="smhzlSize != null ">SMHZL_SIZE,</if>
+            <if test="smhzlMoney != null ">SMHZL_MONEY,</if>
+            <if test="thzyglSize != null ">THZYGL_SIZE,</if>
+            <if test="thzyglMoney != null ">THZYGL_MONEY,</if>
+            <if test="httSize != null ">HTT_SIZE,</if>
+            <if test="httMoney != null ">HTT_MONEY,</if>
+            <if test="dhcSize != null ">DHC_SIZE,</if>
+            <if test="dhcMoney != null ">DHC_MONEY,</if>
+            <if test="zyMoney != null ">ZY_MONEY,</if>
+            <if test="dfMoney != null ">DF_MONEY,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="updateBy != null ">UPDATE_BY,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="delStatus != null  and delStatus != ''">DEL_STATUS,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="year != null  and year != ''">#{year},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            "",
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="wlScale != null ">#{wlScale},</if>
+            <if test="wlInvestment != null ">#{wlInvestment},</if>
+            <if test="jmSize != null ">#{jmSize},</if>
+            <if test="jmMoney != null ">#{jmMoney},</if>
+            <if test="xmSize != null ">#{xmSize},</if>
+            <if test="xmMoney != null ">#{xmMoney},</if>
+            <if test="hqlxSize != null ">#{hqlxSize},</if>
+            <if test="hqlxMoney != null ">#{hqlxMoney},</if>
+            <if test="rgscdSize != null ">#{rgscdSize},</if>
+            <if test="rgscdMoney != null ">#{rgscdMoney},</if>
+            <if test="hspjSize != null ">#{hspjSize},</if>
+            <if test="hspjMoney != null ">#{hspjMoney},</if>
+            <if test="smhzlSize != null ">#{smhzlSize},</if>
+            <if test="smhzlMoney != null ">#{smhzlMoney},</if>
+            <if test="thzyglSize != null ">#{thzyglSize},</if>
+            <if test="thzyglMoney != null ">#{thzyglMoney},</if>
+            <if test="httSize != null ">#{httSize},</if>
+            <if test="httMoney != null ">#{httMoney},</if>
+            <if test="dhcSize != null ">#{dhcSize},</if>
+            <if test="dhcMoney != null ">#{dhcMoney},</if>
+            <if test="zyMoney != null ">#{zyMoney},</if>
+            <if test="dfMoney != null ">#{dfMoney},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null ">#{updateBy},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="delStatus != null  and delStatus != ''">#{delStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTTaskRecord" parameterType="TTaskRecord">
+        update t_task_resolve_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="year != null  and year != ''">YEAR = #{year},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="city != null  and city != ''">CITY = #{city},</if>
+            <if test="address != null  and address != ''">ADDRESS = #{address},</if>
+            <if test="wlScale != null ">WL_SCALE = #{wlScale},</if>
+            <if test="wlInvestment != null ">WL_INVESTMENT = #{wlInvestment},</if>
+            <if test="jmSize != null ">JM_SIZE = #{jmSize},</if>
+            <if test="jmMoney != null ">JM_MONEY = #{jmMoney},</if>
+            <if test="xmSize != null ">XM_SIZE = #{xmSize},</if>
+            <if test="xmMoney != null ">XM_MONEY = #{xmMoney},</if>
+            <if test="hqlxSize != null ">HQLX_SIZE = #{hqlxSize},</if>
+            <if test="hqlxMoney != null ">HQLX_MONEY = #{hqlxMoney},</if>
+            <if test="rgscdSize != null ">RGSCD_SIZE = #{rgscdSize},</if>
+            <if test="rgscdMoney != null ">RGSCD_MONEY = #{rgscdMoney},</if>
+            <if test="hspjSize != null ">HSPJ_SIZE = #{hspjSize},</if>
+            <if test="hspjMoney != null ">HSPJ_MONEY = #{hspjMoney},</if>
+            <if test="smhzlSize != null ">SMHZL_SIZE = #{smhzlSize},</if>
+            <if test="smhzlMoney != null ">SMHZL_MONEY = #{smhzlMoney},</if>
+            <if test="thzyglSize != null ">THZYGL_SIZE = #{thzyglSize},</if>
+            <if test="thzyglMoney != null ">THZYGL_MONEY = #{thzyglMoney},</if>
+            <if test="httSize != null ">HTT_SIZE = #{httSize},</if>
+            <if test="httMoney != null ">HTT_MONEY = #{httMoney},</if>
+            <if test="dhcSize != null ">DHC_SIZE = #{dhcSize},</if>
+            <if test="dhcMoney != null ">DHC_MONEY = #{dhcMoney},</if>
+            <if test="zyMoney != null ">ZY_MONEY = #{zyMoney},</if>
+            <if test="dfMoney != null ">DF_MONEY = #{dfMoney},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="updateBy != null ">UPDATE_BY = #{updateBy},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="delStatus != null  and delStatus != ''">DEL_STATUS = #{delStatus},</if>
+        </trim>
+        where RECORD_ID = #{recordId}
+    </update>
+
+    <delete id="deleteTTaskRecordById" parameterType="Long">
+        delete from t_task_resolve_record where RECORD_ID = #{recordId}
+    </delete>
+
+    <delete id="deleteTTaskRecordByIds" parameterType="String">
+        delete from t_task_resolve_record where RECORD_ID in 
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+    
+</mapper>

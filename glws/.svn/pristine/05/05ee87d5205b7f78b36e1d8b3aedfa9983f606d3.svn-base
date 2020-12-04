@@ -1,0 +1,1665 @@
+package com.ruoyi.zaihai.caiji.domain;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
+
+/**
+ * 草原鼠虫害知识库信息对象 c_ratpest_knowledge
+ *
+ * @author ruoyi
+ * @date 2020-05-07
+ */
+public class CRatpestKnowledge extends BaseEntity
+{
+    private static final long serialVersionUID = 1L;
+
+    /** ID */
+    private Long id;
+
+    /** 编码 */
+    @Excel(name = "编码")
+    private String code;
+
+    /** 中名 */
+    @Excel(name = "中名")
+    private String middleName;
+
+    /** 别名 */
+    @Excel(name = "别名")
+    private String alias;
+
+    /** 俗名 */
+    @Excel(name = "俗名")
+    private String commonName;
+
+    /** 目 */
+    @Excel(name = "目")
+    private String order;
+
+    /** 科 */
+    @Excel(name = "科")
+    private String section;
+
+    /** 属 */
+    @Excel(name = "属")
+    private String genus;
+
+    /** 近缘种 */
+    @Excel(name = "近缘种")
+    private String relatedSpecie;
+
+    /** 国外行政分布 */
+    @Excel(name = "国外行政分布")
+    private String gwDistribution;
+
+    /** 国内行政分布 */
+    @Excel(name = "国内行政分布")
+    private String gnDistribution;
+
+    /** 草原类型 */
+    @Excel(name = "草原类型")
+    private String grasslandType;
+
+    /** 海拔 */
+    @Excel(name = "海拔")
+    private String altitude;
+
+    /** 最低海拔 */
+    @Excel(name = "最低海拔")
+    private String lowAltitude;
+
+    /** 最高海拔 */
+    @Excel(name = "最高海拔")
+    private String highAltitude;
+
+    /** 土壤基质 */
+    @Excel(name = "土壤基质")
+    private String soilMatrix;
+
+    /** 土壤类型 */
+    @Excel(name = "土壤类型")
+    private String soilType;
+
+    /** 指示植物 */
+    @Excel(name = "指示植物")
+    private String indicatorPlants;
+
+    /** 地理生态分布图 */
+    @Excel(name = "地理生态分布图")
+    private String distributionMap;
+
+    /** 全国图 */
+    @Excel(name = "全国图")
+    private String nationalMap;
+
+    /** 分省图 */
+    @Excel(name = "分省图")
+    private String provincialMap;
+
+    /** 成虫形态特征 */
+    @Excel(name = "成虫形态特征")
+    private String features;
+
+    /** 头部 */
+    @Excel(name = "头部")
+    private String head;
+
+    /** 胸部 */
+    @Excel(name = "胸部")
+    private String chest;
+
+    /** 翅 */
+    @Excel(name = "翅")
+    private String wing;
+
+    /** 足 */
+    @Excel(name = "足")
+    private String foot;
+
+    /** 腹部 */
+    @Excel(name = "腹部")
+    private String abdomen;
+
+    /** 生殖器 */
+    @Excel(name = "生殖器")
+    private String genitals;
+
+    /** 成虫模式图 */
+    @Excel(name = "成虫模式图")
+    private String adultPattern;
+
+    /** 成虫照片 */
+    @Excel(name = "成虫照片")
+    private String adultPhotos;
+
+    /** 卵的形态 */
+    @Excel(name = "卵的形态")
+    private String eggShape;
+
+    /** 卵粒的形态 */
+    @Excel(name = "卵粒的形态")
+    private String eggMorphology;
+
+    /** 卵囊的形态 */
+    @Excel(name = "卵囊的形态")
+    private String oocystMorphology;
+
+    /** 卵的模式图照片 */
+    @Excel(name = "卵的模式图照片")
+    private String eggPattern;
+
+    /** 卵的模式图照片 */
+    @Excel(name = "卵的模式图照片")
+    private String larvalMorphology;
+
+    /** 一龄 */
+    @Excel(name = "一龄")
+    private String oneAge;
+
+    /** 二龄 */
+    @Excel(name = "二龄")
+    private String twoAge;
+
+    /** 三龄 */
+    @Excel(name = "三龄")
+    private String threeAge;
+
+    /** 四龄 */
+    @Excel(name = "四龄")
+    private String foreAge;
+
+    /** 五龄 */
+    @Excel(name = "五龄")
+    private String fiveAge;
+
+    /** 六龄 */
+    @Excel(name = "六龄")
+    private String sixAge;
+
+    /** 各龄期模式图及照片 */
+    @Excel(name = "各龄期模式图及照片")
+    private String sixPhotos;
+
+    /** 蛹的形态 */
+    @Excel(name = "蛹的形态")
+    private String pupaMorphology;
+
+    /** 蛹的模式图及照片 */
+    @Excel(name = "蛹的模式图及照片")
+    private String pupaPhotos;
+
+    /** 生物学 */
+    @Excel(name = "生物学")
+    private String biology;
+
+    /** 生活史 */
+    @Excel(name = "生活史")
+    private String lifeHistory;
+
+    /** 世代数 */
+    @Excel(name = "世代数")
+    private Long generationNumber;
+
+    /** 越冬虫态及场所 */
+    @Excel(name = "越冬虫态及场所")
+    private String winteringPlace;
+
+    /** 发育历期 */
+    @Excel(name = "发育历期")
+    private String developmentalStage;
+
+    /** 一般描述 */
+    @Excel(name = "一般描述")
+    private String generalDescription;
+
+    /** 昼夜节律 */
+    @Excel(name = "昼夜节律")
+    private String circadianRhythm;
+
+    /** 食性 */
+    @Excel(name = "食性")
+    private String feedingHabits;
+
+    /** 趋性 */
+    @Excel(name = "趋性")
+    private String taxis;
+
+    /** 群集性 */
+    @Excel(name = "群集性")
+    private String clustering;
+
+    /** 迁飞性 */
+    @Excel(name = "迁飞性")
+    private String relocation;
+
+    /** 生命表 */
+    @Excel(name = "生命表")
+    private String lifeTable;
+
+    /** 常规描述 */
+    @Excel(name = "常规描述")
+    private String conventionalDescription;
+
+    /** 植物群落描述 */
+    @Excel(name = "植物群落描述")
+    private String planDecription;
+
+    /** 天敌 */
+    @Excel(name = "天敌")
+    private String naturalEnemy;
+
+    /** 气候 */
+    @Excel(name = "气候")
+    private String climate;
+
+    /** 气候带 */
+    @Excel(name = "气候带")
+    private String climaticZone;
+
+    /** 水分条件 */
+    @Excel(name = "水分条件")
+    private String moistureCondition;
+
+    /** 温度 */
+    @Excel(name = "温度")
+    private String temperature;
+
+    /** 卵发育起点的温度 */
+    @Excel(name = "卵发育起点的温度")
+    private String eggTemperature;
+
+    /** 卵发育起点土壤含水量 */
+    @Excel(name = "卵发育起点土壤含水量")
+    private String eggWater;
+
+    /** 产卵地识别 */
+    @Excel(name = "产卵地识别")
+    private String ovipositionRecognition;
+
+    /** 土壤特征 */
+    @Excel(name = "土壤特征")
+    private String soilCharacteristics;
+
+    /** 地面覆盖状况 */
+    @Excel(name = "地面覆盖状况")
+    private String groundCoverage;
+
+    /** 土壤紧实度 */
+    @Excel(name = "土壤紧实度")
+    private String soilCompactness;
+
+    /** pH值 */
+    @Excel(name = "pH值")
+    private String phValue;
+
+    /** 盐分 */
+    @Excel(name = "盐分")
+    private String salinity;
+
+    /** 含水量 */
+    @Excel(name = "含水量")
+    private String waterContent;
+
+    /** 扩散与传播 */
+    @Excel(name = "扩散与传播")
+    private String spread;
+
+    /** 迁飞的定义 */
+    @Excel(name = "迁飞的定义")
+    private String definitionRelocation;
+
+    /** 迁飞主导因素 */
+    @Excel(name = "迁飞主导因素")
+    private String migrationFactors;
+
+    /** 迁飞能力 */
+    @Excel(name = "迁飞能力")
+    private String migrationAbility;
+
+    /** 迁移 */
+    @Excel(name = "迁移")
+    private String transfer;
+
+    /** 迁移的定义 */
+    @Excel(name = "迁移的定义")
+    private String migrationDefinition;
+
+    /** 迁移主导因素 */
+    @Excel(name = "迁移主导因素")
+    private String transferFactors;
+
+    /** 自然扩散 */
+    @Excel(name = "自然扩散")
+    private String naturalDiffusion;
+
+    /** 食物 */
+    @Excel(name = "食物")
+    private String food;
+
+    /** 产卵地 */
+    @Excel(name = "产卵地")
+    private String spawningGround;
+
+    /** 刺激 */
+    @Excel(name = "刺激")
+    private String stimulate;
+
+    /** 迁移能力 */
+    @Excel(name = "迁移能力")
+    private String migrationPower;
+
+    /** 传播途径 */
+    @Excel(name = "传播途径")
+    private String spreadChannel;
+
+    /** 寄生植物 */
+    @Excel(name = "寄生植物")
+    private String hostPlant;
+
+    /** 危害照片 */
+    @Excel(name = "危害照片")
+    private String hazardPhotos;
+
+    /** 危害程度 */
+    @Excel(name = "危害程度")
+    private String damageDegree;
+
+    /** 三龄前摄食量 */
+    @Excel(name = "三龄前摄食量")
+    private Long threeIntake;
+
+    /** 三龄至成虫前摄食量 */
+    @Excel(name = "三龄至成虫前摄食量")
+    private Long threeBigIntake;
+
+    /** 成虫期摄食量 */
+    @Excel(name = "成虫期摄食量")
+    private Long adultFoodIntake;
+
+    /** 成虫期摄食量 */
+    @Excel(name = "成虫期摄食量")
+    private Long foodRation;
+
+    /** 三龄前损失量 */
+    @Excel(name = "三龄前损失量")
+    private Long threeLoss;
+
+    /** 三龄至成虫前损失量 */
+    @Excel(name = "三龄至成虫前损失量")
+    private Long threeBigLoss;
+
+    /** 成虫期损失量 */
+    @Excel(name = "成虫期损失量")
+    private Long bigLoss;
+
+    /** 历史数据回归模型 */
+    @Excel(name = "历史数据回归模型")
+    private String historicalModel;
+
+    /** 发生期预测模型 */
+    @Excel(name = "发生期预测模型")
+    private String occurrenceModel;
+
+    /** 发育进度预测法模型 */
+    @Excel(name = "发育进度预测法模型")
+    private String developmentModel;
+
+    /** 发育历期预测法模型 */
+    @Excel(name = "发育历期预测法模型")
+    private String calendarModel;
+
+    /** 虫态分级预测法模型 */
+    @Excel(name = "虫态分级预测法模型")
+    private String ctfjycfModel;
+
+    /** 平均发育进度预测法模型 */
+    @Excel(name = "平均发育进度预测法模型")
+    private String pjfyjdycfModel;
+
+    /** 卵巢发育分级预测法模型 */
+    @Excel(name = "卵巢发育分级预测法模型")
+    private String lcfyfjycfModel;
+
+    /** 期距预测模型 */
+    @Excel(name = "期距预测模型")
+    private String qjycModel;
+
+    /** 有效积温预测模型 */
+    @Excel(name = "有效积温预测模型")
+    private String yxjwycModel;
+
+    /** 各虫态有效积温与发育速度基本模型 */
+    @Excel(name = "各虫态有效积温与发育速度基本模型")
+    private String gctyxjwModel;
+
+    /** 物候期预测模型 */
+    @Excel(name = "物候期预测模型")
+    private String whqycModel;
+
+    /** 相关统计预测 */
+    @Excel(name = "相关统计预测")
+    private String xgtjyc;
+
+    /** 发生量预测模型 */
+    @Excel(name = "发生量预测模型")
+    private String fslycModel;
+
+    /** 有效基数预测法 */
+    @Excel(name = "有效基数预测法")
+    private String yxjsycf;
+
+    /** 气候图预测法 */
+    @Excel(name = "气候图预测法")
+    private String qhtycf;
+
+    /** 积温_土壤含水量预测孵化可能性模型 */
+    @Excel(name = "积温_土壤含水量预测孵化可能性模型")
+    private String jwtrhslModel;
+
+    /** 地面植被_气象因子预测迁移扩散几率模型 */
+    @Excel(name = "地面植被_气象因子预测迁移扩散几率模型")
+    private String dmzbqxyzModel;
+
+    /** 经验指数预测法 */
+    @Excel(name = "经验指数预测法")
+    private String jyzsycf;
+
+    /** 形态指标预测法 */
+    @Excel(name = "形态指标预测法")
+    private String xtzbycf;
+
+    /** 迁飞害虫预测模型 */
+    @Excel(name = "迁飞害虫预测模型")
+    private String qfhcycModel;
+
+    /** 灾害程度预测及损失估计模型 */
+    @Excel(name = "灾害程度预测及损失估计模型")
+    private String zhcdycModel;
+
+    /** 防治指标 */
+    @Excel(name = "防治指标")
+    private String controlIndex;
+
+    /** 经济阈值 */
+    @Excel(name = "经济阈值")
+    private String economicThreshold;
+
+    /** 生态阈值 */
+    @Excel(name = "生态阈值")
+    private String ecologicalThreshold;
+
+    /** 经济生态阈值 */
+    @Excel(name = "经济生态阈值")
+    private String economicEcologicalThreshold;
+
+    /** 防治方法_转至防治方法子表 */
+    @Excel(name = "防治方法_转至防治方法子表")
+    private String fzffTable;
+
+    /** 化学防治方法概述 */
+    @Excel(name = "化学防治方法概述")
+    private String hxfzSetUp;
+
+    /** 生物防治方法概述 */
+    @Excel(name = "生物防治方法概述")
+    private String swfzSetUp;
+
+    /** 生态治理方法概述 */
+    @Excel(name = "生态治理方法概述")
+    private String stzlSetUp;
+
+    /** 物理防治方法概述 */
+    @Excel(name = "物理防治方法概述")
+    private String wlfzSetUp;
+
+    /** 状态 */
+    @Excel(name = "状态")
+    private String status;
+
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public String getCommonName() {
+        return commonName;
+    }
+
+    public void setCommonName(String commonName) {
+        this.commonName = commonName;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public String getGenus() {
+        return genus;
+    }
+
+    public void setGenus(String genus) {
+        this.genus = genus;
+    }
+
+    public String getRelatedSpecie() {
+        return relatedSpecie;
+    }
+
+    public void setRelatedSpecie(String relatedSpecie) {
+        this.relatedSpecie = relatedSpecie;
+    }
+
+    public String getGwDistribution() {
+        return gwDistribution;
+    }
+
+    public void setGwDistribution(String gwDistribution) {
+        this.gwDistribution = gwDistribution;
+    }
+
+    public String getGnDistribution() {
+        return gnDistribution;
+    }
+
+    public void setGnDistribution(String gnDistribution) {
+        this.gnDistribution = gnDistribution;
+    }
+
+    public String getGrasslandType() {
+        return grasslandType;
+    }
+
+    public void setGrasslandType(String grasslandType) {
+        this.grasslandType = grasslandType;
+    }
+
+    public String getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(String altitude) {
+        this.altitude = altitude;
+    }
+
+    public String getLowAltitude() {
+        return lowAltitude;
+    }
+
+    public void setLowAltitude(String lowAltitude) {
+        this.lowAltitude = lowAltitude;
+    }
+
+    public String getHighAltitude() {
+        return highAltitude;
+    }
+
+    public void setHighAltitude(String highAltitude) {
+        this.highAltitude = highAltitude;
+    }
+
+    public String getSoilMatrix() {
+        return soilMatrix;
+    }
+
+    public void setSoilMatrix(String soilMatrix) {
+        this.soilMatrix = soilMatrix;
+    }
+
+    public String getSoilType() {
+        return soilType;
+    }
+
+    public void setSoilType(String soilType) {
+        this.soilType = soilType;
+    }
+
+    public String getIndicatorPlants() {
+        return indicatorPlants;
+    }
+
+    public void setIndicatorPlants(String indicatorPlants) {
+        this.indicatorPlants = indicatorPlants;
+    }
+
+    public String getDistributionMap() {
+        return distributionMap;
+    }
+
+    public void setDistributionMap(String distributionMap) {
+        this.distributionMap = distributionMap;
+    }
+
+    public String getNationalMap() {
+        return nationalMap;
+    }
+
+    public void setNationalMap(String nationalMap) {
+        this.nationalMap = nationalMap;
+    }
+
+    public String getProvincialMap() {
+        return provincialMap;
+    }
+
+    public void setProvincialMap(String provincialMap) {
+        this.provincialMap = provincialMap;
+    }
+
+    public String getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(String features) {
+        this.features = features;
+    }
+
+    public String getHead() {
+        return head;
+    }
+
+    public void setHead(String head) {
+        this.head = head;
+    }
+
+    public String getChest() {
+        return chest;
+    }
+
+    public void setChest(String chest) {
+        this.chest = chest;
+    }
+
+    public String getWing() {
+        return wing;
+    }
+
+    public void setWing(String wing) {
+        this.wing = wing;
+    }
+
+    public String getFoot() {
+        return foot;
+    }
+
+    public void setFoot(String foot) {
+        this.foot = foot;
+    }
+
+    public String getAbdomen() {
+        return abdomen;
+    }
+
+    public void setAbdomen(String abdomen) {
+        this.abdomen = abdomen;
+    }
+
+    public String getGenitals() {
+        return genitals;
+    }
+
+    public void setGenitals(String genitals) {
+        this.genitals = genitals;
+    }
+
+    public String getAdultPattern() {
+        return adultPattern;
+    }
+
+    public void setAdultPattern(String adultPattern) {
+        this.adultPattern = adultPattern;
+    }
+
+    public String getAdultPhotos() {
+        return adultPhotos;
+    }
+
+    public void setAdultPhotos(String adultPhotos) {
+        this.adultPhotos = adultPhotos;
+    }
+
+    public String getEggShape() {
+        return eggShape;
+    }
+
+    public void setEggShape(String eggShape) {
+        this.eggShape = eggShape;
+    }
+
+    public String getEggMorphology() {
+        return eggMorphology;
+    }
+
+    public void setEggMorphology(String eggMorphology) {
+        this.eggMorphology = eggMorphology;
+    }
+
+    public String getOocystMorphology() {
+        return oocystMorphology;
+    }
+
+    public void setOocystMorphology(String oocystMorphology) {
+        this.oocystMorphology = oocystMorphology;
+    }
+
+    public String getEggPattern() {
+        return eggPattern;
+    }
+
+    public void setEggPattern(String eggPattern) {
+        this.eggPattern = eggPattern;
+    }
+
+    public String getLarvalMorphology() {
+        return larvalMorphology;
+    }
+
+    public void setLarvalMorphology(String larvalMorphology) {
+        this.larvalMorphology = larvalMorphology;
+    }
+
+    public String getOneAge() {
+        return oneAge;
+    }
+
+    public void setOneAge(String oneAge) {
+        this.oneAge = oneAge;
+    }
+
+    public String getTwoAge() {
+        return twoAge;
+    }
+
+    public void setTwoAge(String twoAge) {
+        this.twoAge = twoAge;
+    }
+
+    public String getThreeAge() {
+        return threeAge;
+    }
+
+    public void setThreeAge(String threeAge) {
+        this.threeAge = threeAge;
+    }
+
+    public String getForeAge() {
+        return foreAge;
+    }
+
+    public void setForeAge(String foreAge) {
+        this.foreAge = foreAge;
+    }
+
+    public String getFiveAge() {
+        return fiveAge;
+    }
+
+    public void setFiveAge(String fiveAge) {
+        this.fiveAge = fiveAge;
+    }
+
+    public String getSixAge() {
+        return sixAge;
+    }
+
+    public void setSixAge(String sixAge) {
+        this.sixAge = sixAge;
+    }
+
+    public String getSixPhotos() {
+        return sixPhotos;
+    }
+
+    public void setSixPhotos(String sixPhotos) {
+        this.sixPhotos = sixPhotos;
+    }
+
+    public String getPupaMorphology() {
+        return pupaMorphology;
+    }
+
+    public void setPupaMorphology(String pupaMorphology) {
+        this.pupaMorphology = pupaMorphology;
+    }
+
+    public String getPupaPhotos() {
+        return pupaPhotos;
+    }
+
+    public void setPupaPhotos(String pupaPhotos) {
+        this.pupaPhotos = pupaPhotos;
+    }
+
+    public String getBiology() {
+        return biology;
+    }
+
+    public void setBiology(String biology) {
+        this.biology = biology;
+    }
+
+    public String getLifeHistory() {
+        return lifeHistory;
+    }
+
+    public void setLifeHistory(String lifeHistory) {
+        this.lifeHistory = lifeHistory;
+    }
+
+    public Long getGenerationNumber() {
+        return generationNumber;
+    }
+
+    public void setGenerationNumber(Long generationNumber) {
+        this.generationNumber = generationNumber;
+    }
+
+    public String getWinteringPlace() {
+        return winteringPlace;
+    }
+
+    public void setWinteringPlace(String winteringPlace) {
+        this.winteringPlace = winteringPlace;
+    }
+
+    public String getDevelopmentalStage() {
+        return developmentalStage;
+    }
+
+    public void setDevelopmentalStage(String developmentalStage) {
+        this.developmentalStage = developmentalStage;
+    }
+
+    public String getGeneralDescription() {
+        return generalDescription;
+    }
+
+    public void setGeneralDescription(String generalDescription) {
+        this.generalDescription = generalDescription;
+    }
+
+    public String getCircadianRhythm() {
+        return circadianRhythm;
+    }
+
+    public void setCircadianRhythm(String circadianRhythm) {
+        this.circadianRhythm = circadianRhythm;
+    }
+
+    public String getFeedingHabits() {
+        return feedingHabits;
+    }
+
+    public void setFeedingHabits(String feedingHabits) {
+        this.feedingHabits = feedingHabits;
+    }
+
+    public String getTaxis() {
+        return taxis;
+    }
+
+    public void setTaxis(String taxis) {
+        this.taxis = taxis;
+    }
+
+    public String getClustering() {
+        return clustering;
+    }
+
+    public void setClustering(String clustering) {
+        this.clustering = clustering;
+    }
+
+    public String getRelocation() {
+        return relocation;
+    }
+
+    public void setRelocation(String relocation) {
+        this.relocation = relocation;
+    }
+
+    public String getLifeTable() {
+        return lifeTable;
+    }
+
+    public void setLifeTable(String lifeTable) {
+        this.lifeTable = lifeTable;
+    }
+
+    public String getConventionalDescription() {
+        return conventionalDescription;
+    }
+
+    public void setConventionalDescription(String conventionalDescription) {
+        this.conventionalDescription = conventionalDescription;
+    }
+
+    public String getPlanDecription() {
+        return planDecription;
+    }
+
+    public void setPlanDecription(String planDecription) {
+        this.planDecription = planDecription;
+    }
+
+    public String getNaturalEnemy() {
+        return naturalEnemy;
+    }
+
+    public void setNaturalEnemy(String naturalEnemy) {
+        this.naturalEnemy = naturalEnemy;
+    }
+
+    public String getClimate() {
+        return climate;
+    }
+
+    public void setClimate(String climate) {
+        this.climate = climate;
+    }
+
+    public String getClimaticZone() {
+        return climaticZone;
+    }
+
+    public void setClimaticZone(String climaticZone) {
+        this.climaticZone = climaticZone;
+    }
+
+    public String getMoistureCondition() {
+        return moistureCondition;
+    }
+
+    public void setMoistureCondition(String moistureCondition) {
+        this.moistureCondition = moistureCondition;
+    }
+
+    public String getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
+    }
+
+    public String getEggTemperature() {
+        return eggTemperature;
+    }
+
+    public void setEggTemperature(String eggTemperature) {
+        this.eggTemperature = eggTemperature;
+    }
+
+    public String getEggWater() {
+        return eggWater;
+    }
+
+    public void setEggWater(String eggWater) {
+        this.eggWater = eggWater;
+    }
+
+    public String getOvipositionRecognition() {
+        return ovipositionRecognition;
+    }
+
+    public void setOvipositionRecognition(String ovipositionRecognition) {
+        this.ovipositionRecognition = ovipositionRecognition;
+    }
+
+    public String getSoilCharacteristics() {
+        return soilCharacteristics;
+    }
+
+    public void setSoilCharacteristics(String soilCharacteristics) {
+        this.soilCharacteristics = soilCharacteristics;
+    }
+
+    public String getGroundCoverage() {
+        return groundCoverage;
+    }
+
+    public void setGroundCoverage(String groundCoverage) {
+        this.groundCoverage = groundCoverage;
+    }
+
+    public String getSoilCompactness() {
+        return soilCompactness;
+    }
+
+    public void setSoilCompactness(String soilCompactness) {
+        this.soilCompactness = soilCompactness;
+    }
+
+    public String getPhValue() {
+        return phValue;
+    }
+
+    public void setPhValue(String phValue) {
+        this.phValue = phValue;
+    }
+
+    public String getSalinity() {
+        return salinity;
+    }
+
+    public void setSalinity(String salinity) {
+        this.salinity = salinity;
+    }
+
+    public String getWaterContent() {
+        return waterContent;
+    }
+
+    public void setWaterContent(String waterContent) {
+        this.waterContent = waterContent;
+    }
+
+    public String getSpread() {
+        return spread;
+    }
+
+    public void setSpread(String spread) {
+        this.spread = spread;
+    }
+
+    public String getDefinitionRelocation() {
+        return definitionRelocation;
+    }
+
+    public void setDefinitionRelocation(String definitionRelocation) {
+        this.definitionRelocation = definitionRelocation;
+    }
+
+    public String getMigrationFactors() {
+        return migrationFactors;
+    }
+
+    public void setMigrationFactors(String migrationFactors) {
+        this.migrationFactors = migrationFactors;
+    }
+
+    public String getMigrationAbility() {
+        return migrationAbility;
+    }
+
+    public void setMigrationAbility(String migrationAbility) {
+        this.migrationAbility = migrationAbility;
+    }
+
+    public String getTransfer() {
+        return transfer;
+    }
+
+    public void setTransfer(String transfer) {
+        this.transfer = transfer;
+    }
+
+    public String getMigrationDefinition() {
+        return migrationDefinition;
+    }
+
+    public void setMigrationDefinition(String migrationDefinition) {
+        this.migrationDefinition = migrationDefinition;
+    }
+
+    public String getTransferFactors() {
+        return transferFactors;
+    }
+
+    public void setTransferFactors(String transferFactors) {
+        this.transferFactors = transferFactors;
+    }
+
+    public String getNaturalDiffusion() {
+        return naturalDiffusion;
+    }
+
+    public void setNaturalDiffusion(String naturalDiffusion) {
+        this.naturalDiffusion = naturalDiffusion;
+    }
+
+    public String getFood() {
+        return food;
+    }
+
+    public void setFood(String food) {
+        this.food = food;
+    }
+
+    public String getSpawningGround() {
+        return spawningGround;
+    }
+
+    public void setSpawningGround(String spawningGround) {
+        this.spawningGround = spawningGround;
+    }
+
+    public String getStimulate() {
+        return stimulate;
+    }
+
+    public void setStimulate(String stimulate) {
+        this.stimulate = stimulate;
+    }
+
+    public String getMigrationPower() {
+        return migrationPower;
+    }
+
+    public void setMigrationPower(String migrationPower) {
+        this.migrationPower = migrationPower;
+    }
+
+    public String getSpreadChannel() {
+        return spreadChannel;
+    }
+
+    public void setSpreadChannel(String spreadChannel) {
+        this.spreadChannel = spreadChannel;
+    }
+
+    public String getHostPlant() {
+        return hostPlant;
+    }
+
+    public void setHostPlant(String hostPlant) {
+        this.hostPlant = hostPlant;
+    }
+
+    public String getHazardPhotos() {
+        return hazardPhotos;
+    }
+
+    public void setHazardPhotos(String hazardPhotos) {
+        this.hazardPhotos = hazardPhotos;
+    }
+
+    public String getDamageDegree() {
+        return damageDegree;
+    }
+
+    public void setDamageDegree(String damageDegree) {
+        this.damageDegree = damageDegree;
+    }
+
+    public Long getThreeIntake() {
+        return threeIntake;
+    }
+
+    public void setThreeIntake(Long threeIntake) {
+        this.threeIntake = threeIntake;
+    }
+
+    public Long getThreeBigIntake() {
+        return threeBigIntake;
+    }
+
+    public void setThreeBigIntake(Long threeBigIntake) {
+        this.threeBigIntake = threeBigIntake;
+    }
+
+    public Long getAdultFoodIntake() {
+        return adultFoodIntake;
+    }
+
+    public void setAdultFoodIntake(Long adultFoodIntake) {
+        this.adultFoodIntake = adultFoodIntake;
+    }
+
+    public Long getFoodRation() {
+        return foodRation;
+    }
+
+    public void setFoodRation(Long foodRation) {
+        this.foodRation = foodRation;
+    }
+
+    public Long getThreeLoss() {
+        return threeLoss;
+    }
+
+    public void setThreeLoss(Long threeLoss) {
+        this.threeLoss = threeLoss;
+    }
+
+    public Long getThreeBigLoss() {
+        return threeBigLoss;
+    }
+
+    public void setThreeBigLoss(Long threeBigLoss) {
+        this.threeBigLoss = threeBigLoss;
+    }
+
+    public Long getBigLoss() {
+        return bigLoss;
+    }
+
+    public void setBigLoss(Long bigLoss) {
+        this.bigLoss = bigLoss;
+    }
+
+    public String getHistoricalModel() {
+        return historicalModel;
+    }
+
+    public void setHistoricalModel(String historicalModel) {
+        this.historicalModel = historicalModel;
+    }
+
+    public String getOccurrenceModel() {
+        return occurrenceModel;
+    }
+
+    public void setOccurrenceModel(String occurrenceModel) {
+        this.occurrenceModel = occurrenceModel;
+    }
+
+    public String getDevelopmentModel() {
+        return developmentModel;
+    }
+
+    public void setDevelopmentModel(String developmentModel) {
+        this.developmentModel = developmentModel;
+    }
+
+    public String getCalendarModel() {
+        return calendarModel;
+    }
+
+    public void setCalendarModel(String calendarModel) {
+        this.calendarModel = calendarModel;
+    }
+
+    public String getCtfjycfModel() {
+        return ctfjycfModel;
+    }
+
+    public void setCtfjycfModel(String ctfjycfModel) {
+        this.ctfjycfModel = ctfjycfModel;
+    }
+
+    public String getPjfyjdycfModel() {
+        return pjfyjdycfModel;
+    }
+
+    public void setPjfyjdycfModel(String pjfyjdycfModel) {
+        this.pjfyjdycfModel = pjfyjdycfModel;
+    }
+
+    public String getLcfyfjycfModel() {
+        return lcfyfjycfModel;
+    }
+
+    public void setLcfyfjycfModel(String lcfyfjycfModel) {
+        this.lcfyfjycfModel = lcfyfjycfModel;
+    }
+
+    public String getQjycModel() {
+        return qjycModel;
+    }
+
+    public void setQjycModel(String qjycModel) {
+        this.qjycModel = qjycModel;
+    }
+
+    public String getYxjwycModel() {
+        return yxjwycModel;
+    }
+
+    public void setYxjwycModel(String yxjwycModel) {
+        this.yxjwycModel = yxjwycModel;
+    }
+
+    public String getGctyxjwModel() {
+        return gctyxjwModel;
+    }
+
+    public void setGctyxjwModel(String gctyxjwModel) {
+        this.gctyxjwModel = gctyxjwModel;
+    }
+
+    public String getWhqycModel() {
+        return whqycModel;
+    }
+
+    public void setWhqycModel(String whqycModel) {
+        this.whqycModel = whqycModel;
+    }
+
+    public String getXgtjyc() {
+        return xgtjyc;
+    }
+
+    public void setXgtjyc(String xgtjyc) {
+        this.xgtjyc = xgtjyc;
+    }
+
+    public String getFslycModel() {
+        return fslycModel;
+    }
+
+    public void setFslycModel(String fslycModel) {
+        this.fslycModel = fslycModel;
+    }
+
+    public String getYxjsycf() {
+        return yxjsycf;
+    }
+
+    public void setYxjsycf(String yxjsycf) {
+        this.yxjsycf = yxjsycf;
+    }
+
+    public String getQhtycf() {
+        return qhtycf;
+    }
+
+    public void setQhtycf(String qhtycf) {
+        this.qhtycf = qhtycf;
+    }
+
+    public String getJwtrhslModel() {
+        return jwtrhslModel;
+    }
+
+    public void setJwtrhslModel(String jwtrhslModel) {
+        this.jwtrhslModel = jwtrhslModel;
+    }
+
+    public String getDmzbqxyzModel() {
+        return dmzbqxyzModel;
+    }
+
+    public void setDmzbqxyzModel(String dmzbqxyzModel) {
+        this.dmzbqxyzModel = dmzbqxyzModel;
+    }
+
+    public String getJyzsycf() {
+        return jyzsycf;
+    }
+
+    public void setJyzsycf(String jyzsycf) {
+        this.jyzsycf = jyzsycf;
+    }
+
+    public String getXtzbycf() {
+        return xtzbycf;
+    }
+
+    public void setXtzbycf(String xtzbycf) {
+        this.xtzbycf = xtzbycf;
+    }
+
+    public String getQfhcycModel() {
+        return qfhcycModel;
+    }
+
+    public void setQfhcycModel(String qfhcycModel) {
+        this.qfhcycModel = qfhcycModel;
+    }
+
+    public String getZhcdycModel() {
+        return zhcdycModel;
+    }
+
+    public void setZhcdycModel(String zhcdycModel) {
+        this.zhcdycModel = zhcdycModel;
+    }
+
+    public String getControlIndex() {
+        return controlIndex;
+    }
+
+    public void setControlIndex(String controlIndex) {
+        this.controlIndex = controlIndex;
+    }
+
+    public String getEconomicThreshold() {
+        return economicThreshold;
+    }
+
+    public void setEconomicThreshold(String economicThreshold) {
+        this.economicThreshold = economicThreshold;
+    }
+
+    public String getEcologicalThreshold() {
+        return ecologicalThreshold;
+    }
+
+    public void setEcologicalThreshold(String ecologicalThreshold) {
+        this.ecologicalThreshold = ecologicalThreshold;
+    }
+
+    public String getEconomicEcologicalThreshold() {
+        return economicEcologicalThreshold;
+    }
+
+    public void setEconomicEcologicalThreshold(String economicEcologicalThreshold) {
+        this.economicEcologicalThreshold = economicEcologicalThreshold;
+    }
+
+    public String getFzffTable() {
+        return fzffTable;
+    }
+
+    public void setFzffTable(String fzffTable) {
+        this.fzffTable = fzffTable;
+    }
+
+    public String getHxfzSetUp() {
+        return hxfzSetUp;
+    }
+
+    public void setHxfzSetUp(String hxfzSetUp) {
+        this.hxfzSetUp = hxfzSetUp;
+    }
+
+    public String getSwfzSetUp() {
+        return swfzSetUp;
+    }
+
+    public void setSwfzSetUp(String swfzSetUp) {
+        this.swfzSetUp = swfzSetUp;
+    }
+
+    public String getStzlSetUp() {
+        return stzlSetUp;
+    }
+
+    public void setStzlSetUp(String stzlSetUp) {
+        this.stzlSetUp = stzlSetUp;
+    }
+
+    public String getWlfzSetUp() {
+        return wlfzSetUp;
+    }
+
+    public void setWlfzSetUp(String wlfzSetUp) {
+        this.wlfzSetUp = wlfzSetUp;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "CRatpestKnowledge{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", alias='" + alias + '\'' +
+                ", commonName='" + commonName + '\'' +
+                ", order='" + order + '\'' +
+                ", section='" + section + '\'' +
+                ", genus='" + genus + '\'' +
+                ", relatedSpecie='" + relatedSpecie + '\'' +
+                ", gwDistribution='" + gwDistribution + '\'' +
+                ", gnDistribution='" + gnDistribution + '\'' +
+                ", grasslandType='" + grasslandType + '\'' +
+                ", altitude='" + altitude + '\'' +
+                ", lowAltitude='" + lowAltitude + '\'' +
+                ", highAltitude='" + highAltitude + '\'' +
+                ", soilMatrix='" + soilMatrix + '\'' +
+                ", soilType='" + soilType + '\'' +
+                ", indicatorPlants='" + indicatorPlants + '\'' +
+                ", distributionMap='" + distributionMap + '\'' +
+                ", nationalMap='" + nationalMap + '\'' +
+                ", provincialMap='" + provincialMap + '\'' +
+                ", features='" + features + '\'' +
+                ", head='" + head + '\'' +
+                ", chest='" + chest + '\'' +
+                ", wing='" + wing + '\'' +
+                ", foot='" + foot + '\'' +
+                ", abdomen='" + abdomen + '\'' +
+                ", genitals='" + genitals + '\'' +
+                ", adultPattern='" + adultPattern + '\'' +
+                ", adultPhotos='" + adultPhotos + '\'' +
+                ", eggShape='" + eggShape + '\'' +
+                ", eggMorphology='" + eggMorphology + '\'' +
+                ", oocystMorphology='" + oocystMorphology + '\'' +
+                ", eggPattern='" + eggPattern + '\'' +
+                ", larvalMorphology='" + larvalMorphology + '\'' +
+                ", oneAge='" + oneAge + '\'' +
+                ", twoAge='" + twoAge + '\'' +
+                ", threeAge='" + threeAge + '\'' +
+                ", foreAge='" + foreAge + '\'' +
+                ", fiveAge='" + fiveAge + '\'' +
+                ", sixAge='" + sixAge + '\'' +
+                ", sixPhotos='" + sixPhotos + '\'' +
+                ", pupaMorphology='" + pupaMorphology + '\'' +
+                ", pupaPhotos='" + pupaPhotos + '\'' +
+                ", biology='" + biology + '\'' +
+                ", lifeHistory='" + lifeHistory + '\'' +
+                ", generationNumber=" + generationNumber +
+                ", winteringPlace='" + winteringPlace + '\'' +
+                ", developmentalStage='" + developmentalStage + '\'' +
+                ", generalDescription='" + generalDescription + '\'' +
+                ", circadianRhythm='" + circadianRhythm + '\'' +
+                ", feedingHabits='" + feedingHabits + '\'' +
+                ", taxis='" + taxis + '\'' +
+                ", clustering='" + clustering + '\'' +
+                ", relocation='" + relocation + '\'' +
+                ", lifeTable='" + lifeTable + '\'' +
+                ", conventionalDescription='" + conventionalDescription + '\'' +
+                ", planDecription='" + planDecription + '\'' +
+                ", naturalEnemy='" + naturalEnemy + '\'' +
+                ", climate='" + climate + '\'' +
+                ", climaticZone='" + climaticZone + '\'' +
+                ", moistureCondition='" + moistureCondition + '\'' +
+                ", temperature='" + temperature + '\'' +
+                ", eggTemperature='" + eggTemperature + '\'' +
+                ", eggWater='" + eggWater + '\'' +
+                ", ovipositionRecognition='" + ovipositionRecognition + '\'' +
+                ", soilCharacteristics='" + soilCharacteristics + '\'' +
+                ", groundCoverage='" + groundCoverage + '\'' +
+                ", soilCompactness='" + soilCompactness + '\'' +
+                ", phValue='" + phValue + '\'' +
+                ", salinity='" + salinity + '\'' +
+                ", waterContent='" + waterContent + '\'' +
+                ", spread='" + spread + '\'' +
+                ", definitionRelocation='" + definitionRelocation + '\'' +
+                ", migrationFactors='" + migrationFactors + '\'' +
+                ", migrationAbility='" + migrationAbility + '\'' +
+                ", transfer='" + transfer + '\'' +
+                ", migrationDefinition='" + migrationDefinition + '\'' +
+                ", transferFactors='" + transferFactors + '\'' +
+                ", naturalDiffusion='" + naturalDiffusion + '\'' +
+                ", food='" + food + '\'' +
+                ", spawningGround='" + spawningGround + '\'' +
+                ", stimulate='" + stimulate + '\'' +
+                ", migrationPower='" + migrationPower + '\'' +
+                ", spreadChannel='" + spreadChannel + '\'' +
+                ", hostPlant='" + hostPlant + '\'' +
+                ", hazardPhotos='" + hazardPhotos + '\'' +
+                ", damageDegree='" + damageDegree + '\'' +
+                ", threeIntake=" + threeIntake +
+                ", threeBigIntake=" + threeBigIntake +
+                ", adultFoodIntake=" + adultFoodIntake +
+                ", foodRation=" + foodRation +
+                ", threeLoss=" + threeLoss +
+                ", threeBigLoss=" + threeBigLoss +
+                ", bigLoss=" + bigLoss +
+                ", historicalModel='" + historicalModel + '\'' +
+                ", occurrenceModel='" + occurrenceModel + '\'' +
+                ", developmentModel='" + developmentModel + '\'' +
+                ", calendarModel='" + calendarModel + '\'' +
+                ", ctfjycfModel='" + ctfjycfModel + '\'' +
+                ", pjfyjdycfModel='" + pjfyjdycfModel + '\'' +
+                ", lcfyfjycfModel='" + lcfyfjycfModel + '\'' +
+                ", qjycModel='" + qjycModel + '\'' +
+                ", yxjwycModel='" + yxjwycModel + '\'' +
+                ", gctyxjwModel='" + gctyxjwModel + '\'' +
+                ", whqycModel='" + whqycModel + '\'' +
+                ", xgtjyc='" + xgtjyc + '\'' +
+                ", fslycModel='" + fslycModel + '\'' +
+                ", yxjsycf='" + yxjsycf + '\'' +
+                ", qhtycf='" + qhtycf + '\'' +
+                ", jwtrhslModel='" + jwtrhslModel + '\'' +
+                ", dmzbqxyzModel='" + dmzbqxyzModel + '\'' +
+                ", jyzsycf='" + jyzsycf + '\'' +
+                ", xtzbycf='" + xtzbycf + '\'' +
+                ", qfhcycModel='" + qfhcycModel + '\'' +
+                ", zhcdycModel='" + zhcdycModel + '\'' +
+                ", controlIndex='" + controlIndex + '\'' +
+                ", economicThreshold='" + economicThreshold + '\'' +
+                ", ecologicalThreshold='" + ecologicalThreshold + '\'' +
+                ", economicEcologicalThreshold='" + economicEcologicalThreshold + '\'' +
+                ", fzffTable='" + fzffTable + '\'' +
+                ", hxfzSetUp='" + hxfzSetUp + '\'' +
+                ", swfzSetUp='" + swfzSetUp + '\'' +
+                ", stzlSetUp='" + stzlSetUp + '\'' +
+                ", wlfzSetUp='" + wlfzSetUp + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
+}

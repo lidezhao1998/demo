@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.gis.GresslandEcologyTypeMapper">
+    <resultMap type="com.ruoyi.system.domain.gis.GrasslandEcologyType" id="GrasslandEcologyType">
+        <result property="id" column="id"/>
+        <result property="parent_id" column="parent_id"/>
+        <result property="name" column="name"/>
+        <result property="value" column="value"/>
+        <result property="color" column="color"/>
+        <result property="status" column="statue"/>
+
+    </resultMap>
+    <select id="getGressTypeList" resultMap="GrasslandEcologyType">
+        select id,parent_id,name,value,status,color from public.grassland_ecology_type where status='1'
+    </select>
+    <select id="getGressGlmaTypeList" resultType="com.ruoyi.system.domain.gis.GrasslandEcologyType">
+          select id,parent_id,name,value,status,color from public.land_space_type where status='1'
+    </select>
+
+</mapper>

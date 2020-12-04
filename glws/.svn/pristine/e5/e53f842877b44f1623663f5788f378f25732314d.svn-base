@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原鼠害发生与防治情况列表')" />
+    <style>
+        .btn-large-dim{
+            width: auto;
+        }
+        button.dim{
+            margin-right:40px;
+            margin-left: 90px;
+        }
+        .btn-large-dim{
+            height:60px;
+            font-size:25px;
+        }
+        .wrapper-content{
+            padding: 20px 20px 0px 20px;
+        }
+        .ceshi{
+            display:block;
+        }
+        .waibian{
+            float: left;
+            height: 90px;
+            width: 90px;
+            border-radius: 4px 0 0 4px;
+
+
+        }
+        .youbian{
+            float: left;
+            height: 90px;
+            width: 160px;
+            background-color: #F3F3F4;
+            border-radius: 0 4px 4px 0;
+            line-height: 90px;
+
+
+        }
+        .btmdome{
+            margin-left:50px;
+            padding: 0px 0px 0px 0px;
+            border-width:0px;
+        }
+        .ziti{
+            font-family: PingFangSC-Regular;
+            font-size: 18px;
+            color: #666666;
+            letter-spacing: 0;
+        }
+        .select-list li input {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: transparent;
+            outline: none;
+            height: 30px;
+            width: 180px;
+            padding-left: 5px;
+        }
+        .search-collapse, .select-table {
+            width: 100%;
+            background: #fff;
+            border-radius: 6px;
+            margin-top: 5px;
+            padding-top: 5px;
+            padding-bottom: 0px;
+            box-shadow: 1px 1px 3px rgba(0,0,0,.2);
+        }
+        /*修改表头颜色*/
+        .table-striped table thead{
+            background-color:rgba(48,146,62, 0.9);
+            color: whitesmoke;
+            height: 55px;
+        }
+
+        /*按钮背景色*/
+        .btn-success{
+            background-color:rgba(48,146,62, 0.9);
+        }
+    </style>
+
+</head>
+<body class="gray-bg">
+<div class="row wrapper wrapper-content animated fadeInRight" >
+
+    <div class="col-sm-12" style="padding-left: 8px;padding-right: 8px;" >
+        <div class="ibox float-e-margins" style="margin-bottom:0px" >
+            <!--<div class="ibox-title" style="background-color:#7CCD7C">-->
+                <!--<h3 style="align-content: center">请选择填报类型</h3>-->
+            <!--</div>-->
+            <div class="ibox-content" style="background-color:#7CCD7C">
+                <h3 style="align-content: center">请选择填报类型</h3>
+                <button class="btmdome" type="button" onclick="add1()">
+                    <div >
+                        <div class="waibian" >
+                         <img src="/img/ic_shu.png">
+                        </div>
+                        <div class="youbian"  >
+                            <div class="ziti">鼠害防治</div>
+                        </div>
+                    </div>
+                </button>
+                <button class="btmdome" type="button" onclick="add2()">
+                    <div >
+                        <div class="waibian" >
+                            <img src="/img/ic_chfz.png">
+                        </div>
+                        <div class="youbian"  >
+                            <div class="ziti">虫害防治</div>
+                        </div>
+                    </div>
+                </button>
+                <button class="btmdome" type="button" onclick="add3()">
+                    <div >
+                        <div class="waibian" >
+                            <img src="/img/ic_nysy.png">
+                        </div>
+                        <div class="youbian"  >
+                            <div class="ziti">农药使用</div>
+                        </div>
+                    </div>
+                </button>
+                <button class="btmdome" type="button" onclick="add4()">
+                    <div >
+                        <div class="waibian" >
+                            <img src="/img/ic_fznb.png">
+                        </div>
+                        <div class="youbian"  >
+                            <div class="ziti">防治年报</div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>编号：</p>
+                                <input type="text" name="number" width="80px"/>
+                            </li>
+                            <li>
+                                <p>年度：</p>
+                                <input type="text" name="year"/>
+                            </li>
+                            <li>
+                                <p>类型：</p>
+                                <input type="text" name="type">
+
+                            </li>
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                    <option value="0">未上报</option>
+                                    <option value="1">已上报</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+           <!-- <div class="btn-group-sm" id="toolbar" role="group">
+                <div class="select-list">
+                    <ul>
+
+                    &lt;!&ndash;    <li>
+                            <p style="width:115px">请选择填报类型：</p>
+                        <select name="type" th:with="type=${@dict.getType('')}" id="type">
+                            <option value="1">草原鼠害发生与防治</option>
+                            <option value="2">草原虫害发生与防治</option>
+                            <option value="3">草原虫害防治农药使用</option>
+                            <option value="4">发生防治年报</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                        </li>
+                        <li>
+                        <a class="btn btn-success" onclick="add()" shiro:hasPermission="system:sczj:add">
+                            <i class="fa fa-plus"></i> 添加
+                        </a>
+                        </li>&ndash;&gt;
+                      &lt;!&ndash;  <li>
+                            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:sczjj:remove">
+                                <i class="fa fa-remove"></i> 删除
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:sczjj:export">
+                                <i class="fa fa-download"></i> 导出
+                            </a>
+                        </li>&ndash;&gt;
+                    </ul>
+                </div>
+            </div>-->
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+
+        var detailFlag = [[${@permission.hasPermi('system:sczj:detail')}]];
+        var detailFlag2 = [[${@permission.hasPermi('system:chfz:detail')}]];
+        var detailFlag3 = [[${@permission.hasPermi('system:scny:detail')}]];
+        var detailFlag4= [[${@permission.hasPermi('system:fznb:detail')}]];
+
+        var editFlag = [[${@permission.hasPermi('system:sczj:edit')}]];
+        var editFlag2 = [[${@permission.hasPermi('system:chfz:edit')}]];
+        var editFlag3 = [[${@permission.hasPermi('system:scny:edit')}]];
+        var editFlag4= [[${@permission.hasPermi('system:fznb:edit')}]];
+
+        var removeFlag = [[${@permission.hasPermi('system:sczj:remove')}]];
+        var removeFlag2 = [[${@permission.hasPermi('system:chfz:remove')}]];
+        var removeFlag3 = [[${@permission.hasPermi('system:scny:remove')}]];
+        var removeFlag4 = [[${@permission.hasPermi('system:fznb:remove')}]];
+
+        　　　　　　　　　　　
+        var prefix = ctx + "system/sczjj";
+        var modalNames="草原鼠害发生与防治添加页面";
+        var prefixcre = ctx + "system/sczjj/add";
+        var prefixcre2 = ctx + "system/sczjj/edit";
+        var type=1;
+        var typee='草原鼠害发生与防治';
+        $("#type").change(function(){
+            var typedoc = $("#type option:selected");　　　　//获取选中项
+             type = typedoc.val();
+            if(type==1){
+                modalNames="草原鼠害发生与防治添加页面";
+                prefixcre = ctx + "system/sczjj/add";
+            }
+            else if (type==2){
+                modalNames="草原虫害发生与防治添加页面";
+                prefixcre=ctx + "system/chfz/add";
+            }
+            else if (type==3){
+                modalNames="草原鼠虫害防治农药使用添加页面";
+                prefixcre=ctx + "system/scny/add";
+
+            }
+            else if (type==4){
+                modalNames="发生防治年报添加页面";
+                prefixcre=ctx + "system/fznb/add";
+            }
+            alert(prefixcre);
+        });
+
+        $("#typee").change(function(){
+            var typedoc = $("#typee option:selected");　　　　//获取选中项
+            typee = typedoc.val();
+            if(typee=='草原鼠害发生与防治'){
+                modalNames="草原鼠害发生与防治";
+                prefixcre2 = ctx + "system/sczj/edit";
+            }
+            else if (typee=='草原虫害发生与防治'){
+                modalNames="草原虫害发生与防治";
+                prefixcre2=ctx + "system/chfz/edit";
+            }
+            else if (typee=='草原鼠虫害防治农药使用'){
+                modalNames="草原鼠虫害防治农药使用";
+                prefixcre2=ctx + "system/scny/edit";
+
+            }
+            else if (typee=='发生防治年报'){
+                modalNames="发生防治年报";
+                prefixcre2=ctx + "system/fznb/edit";
+            }
+            alert(prefixcre2);
+        });
+
+        function add1(){
+            $.modal.openTab("草原鼠害发生与防治添加页面",ctx + "caiji/sczj/add");
+        }
+        function add2(){
+            $.modal.openTab("草原虫害发生与防治添加页面",ctx + "caiji/chfz/add");
+        }
+        function add3(){
+            $.modal.openTab("草原鼠虫害防治农药使用添加页面",ctx + "caiji/scny/add");
+        }
+        function add4(){
+            $.modal.openTab("发生防治年报添加页面",ctx + "caiji/fznb/add");
+        }
+        function add(){
+            $.modal.open(modalNames,prefixcre);
+        }
+
+        function edit(id){
+                $.modal.openTab("草原鼠害发生与防治",ctx + "caiji/sczj/edit/"+id);
+
+        }
+        function edit1(id){
+                $.modal.openTab("草原虫害发生与防治页面",ctx + "caiji/chfz/edit/"+id);
+        }
+
+        function edit2(id){
+                $.modal.openTab("草原鼠虫害防治农药使用",ctx + "caiji/scny/edit/"+id);
+        }
+
+        function edit3(id){
+                $.modal.openTab("发生防治年报",ctx + "caiji/fznb/edit/"+id);
+        }
+
+        $(function() {
+
+            var options = {
+
+                url: prefix + "/list",
+                createUrl: prefixcre + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                detailUrl: prefix + "/detail/{id}",
+                modalName: modalNames,
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+                columns: [
+
+                {
+                    field : 'number',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '编号'
+                },
+                    {
+                        field : 'year',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '年度'
+                    },
+                {
+                    field : 'week',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '周'
+                },
+                {
+                    field : 'city',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '市'
+                },
+                {
+                    field : 'county',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '县'
+                },
+                    {
+                        field : 'type',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '类型'
+                    },
+                {
+                    field : 'creatTime',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '创建时间'
+                },
+                {
+                    field : 'status',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '状态',
+                    formatter: function (value, row, index) {
+                        return statusTool(row);
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        if (row.type=='草原鼠害发生与防治'){
+                            if(row.status=='1'){
+                                var actions = [];
+/*
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> &nbsp');
+*/
+                                actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
+                                return actions.join('');
+                            }else{
+                                var actions = [];
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>&nbsp');
+                                actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="report(\'' + row.id + '\')"><i class="fa fa-edit"></i>上报</a> ');
+
+                                return actions.join('');
+                            }
+
+                        }else if (row.type=='草原虫害发生与防治'){
+                            if(row.status=='1'){
+                                var actions = [];
+/*
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag2 + '" href="javascript:void(0)" onclick="edit1(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> &nbsp');
+*/
+                                actions.push('<a class="btn btn-info btn-xs ' + detailFlag2 + '" href="javascript:void(0)" onclick="detail1(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
+
+                                return actions.join('');
+                            }else{
+                                var actions = [];
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag2 + '" href="javascript:void(0)" onclick="edit1(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag2 + '" href="javascript:void(0)" onclick="remove1(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>&nbsp');
+                                actions.push('<a class="btn btn-info btn-xs ' + detailFlag2 + '" href="javascript:void(0)" onclick="detail1(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag2 + '" href="javascript:void(0)" onclick="report2(\'' + row.id + '\')"><i class="fa fa-edit"></i>上报</a> ');
+
+                                return actions.join('');
+                            }
+
+                        }else if (row.type=='草原鼠虫害防治农药使用'){
+                            if(row.status=='1'){
+                                var actions = [];
+/*
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag3 + '" href="javascript:void(0)" onclick="edit2(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> &nbsp');
+*/
+                                actions.push('<a class="btn btn-info btn-xs ' + detailFlag3 + '" href="javascript:void(0)" onclick="detail2(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
+
+                                return actions.join('');
+                            }else{
+                                var actions = [];
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag3 + '" href="javascript:void(0)" onclick="edit2(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag3 + '" href="javascript:void(0)" onclick="remove2(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>&nbsp');
+                                actions.push('<a class="btn btn-info btn-xs ' + detailFlag3 + '" href="javascript:void(0)" onclick="detail2(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag3 + '" href="javascript:void(0)" onclick="report3(\'' + row.id + '\')"><i class="fa fa-edit"></i>上报</a> ');
+
+                                return actions.join('');
+                            }
+
+                        }else if(row.type=='发生防治年报'){
+                            if(row.status=='1'){
+                                var actions = [];
+                             /*   actions.push('<a class="btn btn-success btn-xs ' + editFlag4 + '" href="javascript:void(0)" onclick="edit3(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a>&nbsp ');*/
+                                actions.push('<a class="btn btn-info btn-xs ' + detailFlag4 + '" href="javascript:void(0)" onclick="detail3(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
+
+                                return actions.join('');
+                            }else {
+                                var actions = [];
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag4 + '" href="javascript:void(0)" onclick="edit3(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag4 + '" href="javascript:void(0)" onclick="remove3(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>&nbsp');
+                                actions.push('<a class="btn btn-info btn-xs ' + detailFlag4 + '" href="javascript:void(0)" onclick="detail3(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
+                                actions.push('<a class="btn btn-success btn-xs ' + editFlag4 + '" href="javascript:void(0)" onclick="report4(\'' + row.id + '\')"><i class="fa fa-edit"></i>上报</a> ');
+
+                                return actions.join('');
+                            }
+
+
+                        }
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+
+        function statusTool(row) {
+            if (row.status=='0') {
+                return '<p>未上报</p> ';
+            } else if (row.status=='1') {
+                return '<p>已上报</p> ';
+            }
+        }
+
+        function remove(id) {
+            $.modal.confirm("确定删除该条信息吗？", function() {
+                    var data = { "ids": id };
+                    $.operate.submit(ctx + "caiji/sczj/remove", "post", "json", data);
+            });
+
+        }
+        function remove1(id) {
+            $.modal.confirm("确定删除该条信息吗？", function() {
+                var data = { "ids": id };
+                $.operate.submit(ctx + "caiji/chfz/remove", "post", "json", data);
+            });
+
+        }
+        function remove2(id) {
+            $.modal.confirm("确定删除该条信息吗？", function() {
+                var data = { "ids": id };
+                $.operate.submit(ctx + "caiji/scny/remove", "post", "json", data);
+            });
+
+        }
+        function remove3(id) {
+            $.modal.confirm("确定删除该条信息吗？", function() {
+                var data = { "ids": id };
+                $.operate.submit(ctx + "caiji/fznb/remove", "post", "json", data);
+            });
+
+        }
+
+        function detail(id){
+            $.modal.openTab("草原鼠害发生与防治",ctx + "caiji/sczj/detail/"+id);
+
+        }
+        function detail1(id){
+            $.modal.openTab("草原虫害发生与防治页面",ctx + "caiji/chfz/detail/"+id);
+        }
+
+        function detail2(id){
+            $.modal.openTab("草原鼠虫害防治农药使用",ctx + "caiji/scny/detail/"+id);
+        }
+
+        function detail3(id){
+            $.modal.openTab("发生防治年报",ctx + "caiji/fznb/detail/"+id);
+        }
+
+
+
+
+       /* function report(id) {
+            $.modal.confirm("确定上报该条任务吗？", function() {
+                var data = { "ids": id };
+                $.operate.submit(ctx + "caiji/sczj/report", "post", "json", data);
+            });
+
+        }
+        function report2(id) {
+            $.modal.confirm("确定上报该条任务吗？", function() {
+                var data = { "ids": id };
+                $.operate.submit(ctx + "caiji/chfz/report2", "post", "json", data);
+            });
+
+        }
+        function report3(id) {
+            $.modal.confirm("确定上报该条任务吗？", function() {
+                var data = { "ids": id };
+                $.operate.submit(ctx + "caiji/scny/report3", "post", "json", data);
+            });
+
+        }
+        function report4(id) {
+            $.modal.confirm("确定上报该条任务吗？", function() {
+                var data = { "ids": id };
+                $.operate.submit(ctx + "caiji/fznb/report4", "post", "json", data);
+            });
+
+        }*/
+
+
+    </script>
+</body>
+</html>

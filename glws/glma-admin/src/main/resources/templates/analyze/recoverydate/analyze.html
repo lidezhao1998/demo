@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('返青期分析')" />
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="col-sm-10 search-collapse">
+        <form id="recoverydate-form">
+        <div class="select-list">
+            <ul>
+                <li>
+                    地点：<!--<input type="text" id="address" name="address" th:value="${address}"/>-->
+                    <select id="addrProvince" style="width: 291px;height: 34px;border:1px solid #e5e6e7" name="address"  th:with="type=${@dict.getType('sys_province')}">
+                        <option value="">请选择</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{address}"></option>
+                    </select>
+                </li>
+                <li>
+                    <a id="search" name="search" class="btn btn-primary btn-rounded btn-sm">&nbsp;搜索</a>
+                    <!--<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('recoverydate-form')"><i class="fa fa-refresh"></i>&nbsp;重置</a>&lt;!&ndash;&ndash;&gt;-->
+                </li>
+            </ul>
+        </div>
+
+        </form>
+    </div>
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <div class="echarts" id="linear"></div>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="maxSumOfDateInYear" th:value="${lineAnalyzes}"/>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script  type="text/javascript" th:inline="javascript">
+    var prefix = ctx + "analyze/recovdrydate";
+    $(function () {
+        var linear = echarts.init(document.getElementById("linear"));
+        var recoveryQuestions=[[${recoveryQuestions}]];
+        var address=[[${address}]];
+        $("#addrProvince").val(address);
+        var date = [];
+        var data =[];
+        for (var i = 0; i < recoveryQuestions.length; i++) {
+            var greendate=recoveryQuestions[i].greenDate;
+            var now = new Date(greendate);
+            date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('-'));
+            data.push(recoveryQuestions[i].compareDayss);
+        }
+        if(address == null){
+            address="内蒙古";
+        }
+        lineoption = {
+            tooltip: {
+                trigger: 'axis',
+                position: function (pt) {
+                    return [pt[0], '10%'];
+                }
+            },
+            legend:{
+                data:['变化天数']
+            },
+            title: {
+                left: 'left',
+                text:address+"观察点"
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: date
+            },
+            yAxis: {
+                type: 'value',
+                boundaryGap: [0, '100%']
+            },
+            dataZoom: [{
+                type: 'inside',
+                start: 0,
+                end: 100
+            }],
+            series: [
+
+                {
+                    name: "变化天数",
+                    type: 'line',
+                    smooth: true,
+                    symbol: 'none',
+                    sampling: 'average',
+                    itemStyle: {
+                        color: function(data){
+                            if(data.data>0){
+                                return "rgb(77,141,22)"
+                            }else{
+                                return 'rgb(255, 70, 131)';
+                            }
+                        },
+                        lineStyle:{
+                            color:"green"
+                        }
+                    },
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: 'rgb(77,141,22)'
+                        }, {
+                            offset: 1,
+                            color: 'rgb(255, 70, 131)'
+                        }])
+                    },
+                    data: data
+                }
+
+            ]
+        };
+        // 9.3,-3, 8.6,-3, 10.2,2, 10.5,2, 9.0,2
+
+        // var data =[[${s}]];
+        // var datas = new Array()
+        // var das=data.split('#');
+        // for(var j=0;j<das.length;j++){
+        //     if (das[j].length>1){
+        //         var sub=das[j].split("@");
+        //         var ss=new Array();
+        //         for(var n=0;n<sub.length;n++){
+        //             ss.push(parseFloat(sub[n]))
+        //         }
+        //         datas.push(ss);
+        //     }
+        // }
+        // var myRegression = ecStat.regression('linear', datas);
+        // myRegression.points.sort(function(a, b) {
+        //     return a[0] - b[0];
+        // });
+        // option = {
+        //     title: {
+        //         text: '返青期线性回归',
+        //         left: 'center'
+        //     },
+        //     tooltip: {
+        //         trigger: 'axis',
+        //         axisPointer: {
+        //             type: 'cross'
+        //         }
+        //     },
+        //     xAxis: {
+        //         name: '平均温度',
+        //         type: 'value',
+        //         splitLine: {
+        //             lineStyle: {
+        //                 type: 'dashed'
+        //             }
+        //         },
+        //     },
+        //     yAxis: {
+        //         name: '推迟天数',
+        //         type: 'value',
+        //         splitLine: {
+        //             lineStyle: {
+        //                 type: 'dashed'
+        //             }
+        //         },
+        //     },
+        //     series: [{
+        //         name: '推迟天数',
+        //         type: 'scatter',
+        //         emphasis: {
+        //             label: {
+        //                 show: true,
+        //                 position: 'left',
+        //                 color: 'blue',
+        //                 fontSize: 16
+        //             }
+        //         },
+        //         data: datas
+        //     }, {
+        //         name: '系数',
+        //         type: 'line',
+        //         showSymbol: false,
+        //         data: myRegression.points,
+        //         markPoint: {
+        //             itemStyle: {
+        //                 color: 'transparent'
+        //             },
+        //             label: {
+        //                 show: true,
+        //                 position: 'left',
+        //                 formatter: myRegression.expression,
+        //                 color: '#333',
+        //                 fontSize: 14
+        //             },
+        //             data: [{
+        //                 coord: myRegression.points[myRegression.points.length - 1]
+        //             }]
+        //         }
+        //     }]
+        // };
+
+        // linear.setOption(option);
+
+
+        // $(window).resize(linear.resize);
+        linear.setOption(lineoption);
+        window.onresize = linear.resize;
+        var options = {
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            pageSize:5,
+            pageList:[5,10,15,20],//分页步进值
+            url: prefix + "/list",
+            sortName: "greenDate",
+            sortOrder: "asc",
+            modalName: "返青期变化",
+            queryParams:{"address":[[${address}]]},
+            columns: [
+                {
+                    field: 'id',
+                    title: 'ID'
+                },
+                {
+                    field: 'greenDate',
+                    title: '返青日期',
+                    formatter: function (value, row, index) {
+                        return changeDateFormat(value)
+                    }
+
+                },
+                {
+                    field: 'compareWay',
+                    title: '与常年比较方式'
+                },
+                {
+                    field: 'compareDayss',
+                    title: '与常年变化天数',
+                    formatter:function(value){
+                        return Math.abs(value);
+                    }
+                }
+            ]
+        };
+        $.table.init(options);
+        //修改——转换日期格式(时间戳转换为datetime格式)
+        function changeDateFormat(cellval) {
+            if (cellval != null) {
+                var date = new Date(cellval);
+                var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+                return date.getFullYear() + "-" + month + "-" + currentDate;
+            }
+        }
+    });
+    $('#search').click(function () {
+        var address=$("#addrProvince").val();
+        window.location.href=prefix+"?address="+address;
+    })
+    function getProvinces() {
+        //  var url = "<%=basePath%>dict/getProvinces";
+        var url=ctx+"caiji/survey/getProvinces";
+        $.ajax({
+            "url": url,
+            "type": "GET",
+            "dataType": "json",
+            "success": function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictLabel;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrProvince").appendChild(op);
+                }
+                getCities();
+            }
+        });
+    }
+</script>
+</body>
+</html>

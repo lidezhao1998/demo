@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.integration.mapper.MeteorologyDataMapper">
+    
+    <resultMap type="MeteorologyData" id="MeteorologyDataResult">
+    	<id     property="id"      column="id"      />
+        <result property="area"     column="district"/>
+        <result property="downDate"    column="concrete"/>
+        <result property="weather"    column="weather"/>
+        <result property="temperature"    column="temperature"/>
+        <result property="wind"    column="wind_direction"/>
+    </resultMap>
+    
+    <sql id="selectMeteorologyDataVo">
+        SELECT
+                id,
+                district,
+                concrete,
+                weather,
+                temperature,
+                wind_direction
+                FROM
+                spider_information_weather
+    </sql>
+    
+    <!-- 查询条件 -->
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="id !=null">
+				and id = #{id}
+			</if>
+		</where>
+	</sql>
+    
+    <select id="selectMeteorologyData" parameterType="MeteorologyData" resultMap="MeteorologyDataResult">
+        <include refid="selectMeteorologyDataVo"/>
+        <include refid="sqlwhereSearch"/>
+    </select>
+    <select id="selectMeteorologyDataList" parameterType="MeteorologyData" resultMap="MeteorologyDataResult">
+        <include refid="selectMeteorologyDataVo"/>
+        <where>
+			<if test="id != null and id != ''">
+				AND id =#{id}
+			</if>
+            <if test="area != null and area != ''">
+                AND district =#{area}
+            </if>
+		</where>
+    </select>
+
+
+    <!--<insert id="insertNprojectSampleData" parameterType="NprojectSampleData">-->
+        <!--insert into a_nproject_sample_data (-->
+        <!--<if test="surveyTime != null ">survey_time,</if>-->
+        <!--<if test="surveyArea!= null ">survey_area,</if>-->
+        <!--<if test="sampleNumber!= null ">sample_number,</if>-->
+        <!--<if test="shrubTallPlants!= null ">shrub_tall_plants,</if>-->
+        <!--<if test="grasslandClass!= null ">grassland_class,</if>-->
+        <!--<if test="grasslandType!= null ">grassland_type,</if>-->
+        <!--<if test="createBy != null and createBy != ''">create_by,</if>-->
+        <!--create_time-->
+        <!--)values(-->
+        <!--<if test="surveyTime != null ">#{surveyTime},</if>-->
+        <!--<if test="surveyArea!= null ">#{surveyArea},</if>-->
+        <!--<if test="sampleNumber!= null ">#{sampleNumber},</if>-->
+        <!--<if test="shrubTallPlants!= null ">#{shrubTallPlants},</if>-->
+        <!--<if test="grasslandClass!= null ">#{grasslandClass},</if>-->
+        <!--<if test="grasslandType!= null ">#{grasslandType},</if>-->
+        <!--<if test="createBy != null and createBy != ''">#{createBy},</if>-->
+        <!--sysdate()-->
+        <!--)-->
+    <!--</insert>-->
+
+
+    <!--<update id="updateNprojectSampleData" parameterType="NprojectSampleData">-->
+        <!--update a_nproject_sample_data-->
+        <!--<set>-->
+            <!--<if test="surveyTime != null ">survey_time=#{surveyTime},</if>-->
+            <!--<if test="surveyArea!= null ">survey_area=#{surveyArea},</if>-->
+            <!--<if test="sampleNumber!= null ">sample_number=#{sampleNumber},</if>-->
+            <!--<if test="shrubTallPlants!= null ">shrub_tall_plants=#{shrubTallPlants},</if>-->
+            <!--<if test="grasslandClass!= null ">grassland_class=#{grasslandClass},</if>-->
+            <!--<if test="grasslandType!= null ">grassland_type=#{grasslandType},</if>-->
+            <!--<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>-->
+            <!--update_time = sysdate()-->
+        <!--</set>-->
+        <!--where id = #{id}-->
+    <!--</update>-->
+
+
+    <delete id="deleteMeteorologyDataByIds" parameterType="String">
+        delete from spider_information_weather where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+        	#{id}
+        </foreach>
+    </delete>
+    
+</mapper>

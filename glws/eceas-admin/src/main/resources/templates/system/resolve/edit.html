@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+    .tg .tg-lboi{border-color:inherit;text-align:left;vertical-align:middle}
+    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+</style>
+<th:block th:include="include :: layout-latest-css" />
+<th:block th:include="include :: ztree-css" />
+<head>
+    <th:block th:include="include :: header('修改退牧还草工程任务领取分解')" />
+</head>
+
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-resolve-edit" th:object="${tTaskResolve}">
+            <input  id="publishId" name="publishId" th:field="*{publishId}" type="hidden">
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">任务发布id：</label>
+                <div class="col-sm-8">
+                    <input name="publishId" th:field="*{publishId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">父分解id：</label>
+                <div class="col-sm-8">
+                    <input name="parentId" th:field="*{parentId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">分解编码：</label>
+                <div class="col-sm-8">
+                    <input name="resolveCode" th:field="*{resolveCode}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">分解等级：</label>
+                <div class="col-sm-8">
+                    <input name="resolveLevel" th:field="*{resolveLevel}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">年份：</label>
+                <div class="col-sm-8">
+                    <input name="year" th:field="*{year}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">省份：</label>
+                <div class="col-sm-8">
+                    <input name="province" th:field="*{province}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">地址：</label>
+                <div class="col-sm-8">
+                    <input name="address" th:field="*{address}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">地址id：</label>
+                <div class="col-sm-8">
+                    <input name="addressId" th:field="*{addressId}" class="form-control" type="text">
+                </div>
+            </div>-->
+            <!--<div class="form-group">
+                <div class="col-sm-8">
+                    <input name="parentId" id="parentId" th:field="*{parentId}" class="form-control" type="hidden">
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">年份：</label>
+                <div class="col-sm-8">
+                    <input name="year" id="year2"  th:field="*{year}" class="form-control" type="text" disabled="disabled" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">省份：</label>
+                <div class="col-sm-8">
+                    <input name="province" id="province" th:field="*{province}" class="form-control" type="text" disabled="disabled">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">地址：</label>
+                <div class="col-sm-8">
+                    <input name="address" th:field="*{address}" class="form-control" type="text" disabled="disabled">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>禁牧建设规模：</label>
+                        <div class="col-sm-8">
+                            <input name="jmSize" id="jmSize" th:field="*{jmSize}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万亩
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>禁牧建设投资：</label>
+                        <div class="col-sm-8">
+                            <input name="jmMoney" id="jmMoney" th:field="*{jmMoney}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>休牧建设规模：</label>
+                        <div class="col-sm-8">
+                            <input name="xmSize" id="xmSize" th:field="*{xmSize}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万亩
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>休牧建设投资：</label>
+                        <div class="col-sm-8">
+                            <input name="xmMoney" id="xmMoney" th:field="*{xmMoney}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>划区轮休建设规模：</label>
+                        <div class="col-sm-8">
+                            <input name="hqlxSize"  id="hqlxSize" th:field="*{hqlxSize}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万亩
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>划区轮休建设投资：</label>
+                        <div class="col-sm-8">
+                            <input name="hqlxMoney" id="hqlxMoney" th:field="*{hqlxMoney}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>石漠化治理建设规模：：</label>
+                        <div class="col-sm-8">
+                            <input name="smhzlSize" id="smhzlSize" th:field="*{smhzlSize}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万亩
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>石漠化治理建设投资：</label>
+                        <div class="col-sm-8">
+                            <input name="smhzlMoney" id="smhzlMoney" th:field="*{smhzlMoney}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>围栏合计：</label>
+                        <div class="col-sm-8">
+                            <input id="hj" name="hj"  style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" maxlength="30" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>投资合计：</label>
+                        <div class="col-sm-8">
+                            <input name="tzhj" id="tzhj" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="form-header h4">其他部分</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>退化草原改良建设规模：</label>
+                        <div class="col-sm-8">
+                            <input name="thzyglSize"  id="thzyglSize" th:field="*{thzyglSize}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万亩
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>退化草原改良建设投资：</label>
+                        <div class="col-sm-8">
+                            <input name="thzyglMoney" id="thzyglMoney"  th:field="*{thzyglMoney}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>人工饲草地建设规模：</label>
+                        <div class="col-sm-8">
+                            <input name="rgscdSize" id="rgscdSize" th:field="*{rgscdSize}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万亩
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>人工饲草地建设投资：</label>
+                        <div class="col-sm-8">
+                            <input name="rgscdMoney" id="rgscdMoney" th:field="*{rgscdMoney}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>含饲棚圈建设规模 ：</label>
+                        <div class="col-sm-8">
+                            <input name="hspjSize" id="hspjSize" th:field="*{hspjSize}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万亩
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>含饲棚圈建设投资：</label>
+                        <div class="col-sm-8">
+                            <input name="hspjMoney"  id="hspjMoney" th:field="*{hspjMoney}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>黑土滩建设规模：</label>
+                        <div class="col-sm-8">
+                            <input name="httSize" id="httSize" th:field="*{httSize}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万亩
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>黑土滩建设投资：</label>
+                        <div class="col-sm-8">
+                            <input name="httMoney" id="httMoney" th:field="*{httMoney}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>毒害草建设规模 ：</label>
+                        <div class="col-sm-8">
+                            <input name="dhcSize" id="dhcSize" th:field="*{dhcSize}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万亩
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>毒害草建设投资：</label>
+                        <div class="col-sm-8">
+                            <input name="dhcMoney" id="dhcMoney" th:field="*{dhcMoney}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>已垦草原治理建设规模：</label>
+                        <div class="col-sm-8">
+                            <input name="ykcyzlSize" id="ykcyzlSize" th:field="*{ykcyzlSize}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万亩
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>已垦草原治理建设投资：</label>
+                        <div class="col-sm-8">
+                            <input name="ykcazlMoney" id="ykcazlMoney" th:field="*{ykcazlMoney}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>总合计面积：</label>
+                        <div class="col-sm-8">
+                            <input id="zmj" name="zmj"  style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" th:onchange="zysumMoney()" disabled="disabled">万亩
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>总合计金额：</label>
+                        <div class="col-sm-8">
+                            <input name="zhj" id="zhj"  style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" th:onchange="zysumMoney()" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>中央投资：</label>
+                        <div class="col-sm-8">
+                            <input name="zyMoney" id="zyMoney" th:field="*{zyMoney}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; "></span>地方投资：</label>
+                        <div class="col-sm-8">
+                            <input name="dfMoney" id="dfMoney" th:field="*{dfMoney}" style="width: 90%;height: 30px;border:1px solid #f7f7f7" type="text" disabled="disabled">万元
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>合计：</label>
+                    <div class="col-sm-8">
+                        <input name="zdhj" id="zdhj"  style="width: 90%;height: 30px;border:1px solid #f7f7f7" disabled="disabled" >万元
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+
+
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form id="form-resolve-add" class="form-horizontal">
+        <table id="mytable" class="tg">
+            <tr id="tr1">
+                <th class="tg-0lax" rowspan="3">序号</th>
+                <th class="tg-0lax" colspan="3" rowspan="3">任务地址</th>
+                <th class="tg-0lax" colspan="3" rowspan="3">任务地区</th>
+                <th class="tg-0lax" colspan="2" rowspan="3">任务时间</th>
+                <th class="tg-0lax" colspan="8">围栏部分</th>
+                <th class="tg-0lax" colspan="12">其他部分</th>
+            </tr>
+            <tr id="tr2">
+                <td class="tg-0lax" colspan="2">禁牧</td>
+                <td class="tg-0lax" colspan="2">休牧 </td>
+                <td class="tg-0lax" colspan="2">划区轮休</td>
+                <td class="tg-0lax" colspan="2">石漠化治理</td>
+                <td class="tg-0lax" colspan="2">退化草原改良</td>
+                <td class="tg-0lax" colspan="2">人工饲草地</td>
+                <td class="tg-0lax" colspan="2">含饲棚围</td>
+                <td class="tg-0lax" colspan="2">黑土滩</td>
+                <td class="tg-0lax" colspan="2">毒害草</td>
+                <td class="tg-0lax" colspan="2">已垦草原治理</td>
+            </tr>
+            <tr id="tr3">
+                <td class="tg-0pky">建设</td>
+                <td class="tg-lboi">投资</td>
+                <td class="tg-0lax">建设</td>
+                <td class="tg-0lax">投资</td>
+
+                <td class="tg-0lax">建设</td>
+                <td class="tg-0lax">投资</td>
+                <td class="tg-0lax">建设</td>
+                <td class="tg-0lax">投资</td>
+                <td class="tg-0lax">建设</td>
+                <td class="tg-0lax">投资</td>
+                <td class="tg-0lax">建设</td>
+                <td class="tg-0lax">投资</td>
+                <td class="tg-0lax">建设</td>
+                <td class="tg-0lax">投资</td>
+                <td class="tg-0lax">建设</td>
+                <td class="tg-0lax">投资</td>
+                <td class="tg-0lax">建设</td>
+                <td class="tg-0lax">投资</td>
+                <td class="tg-0lax">建设</td>
+                <td class="tg-0lax">投资</td>
+            </tr>
+            <tr id="tr4">
+                <td class="tg-lboi">
+                    <input  id="publishID_1" name="publishId_1"   value="1" style="width: 90%;height: 30px;border:0px solid #f7f7f7" required >
+
+                    <input  id="publishID" name="publishId"  type="hidden"  >
+
+                </td>
+                <td class="tg-lboi" colspan="3">
+
+                    <select id="addrCity" name="addrCity" onchange="getAreas()"
+                            style="width: 125px;height:30px; " required></select>
+
+                </td>
+                <td class="tg-lboi" colspan="3">
+
+                    <select
+                            id="addrArea" name="addrArea"
+                            style="width: 125px;height:30px;">
+                    </select>
+
+                </td>
+                <td class="tg-lboi" colspan="2">
+<!--
+                    <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"  width="5px" style="width:85px;" required/>
+-->
+                    <input name="year" id="yea" width="20px" type="text"  disabled="disabled">
+
+                </td>
+
+                <td class="tg-lboi" >
+                    <input name="jmSize" id="jmSize0" type="text" th:onchange="jmsize()"  class="form-control" width="3px" min >
+                </td>
+                <td class="tg-lboi">
+                    <input name="jmMoney" id="jmMoney0" type="text" th:onchange="jmM()"  class="form-control" width="3px" min>
+                </td>
+                <td class="tg-lboi">
+                    <input name="xmSize" id="xmSize0" type="text" th:onchange="xmS()" class="form-control"  width="3px" min>
+                </td>
+                <td class="tg-0lax">
+                    <input name="xmMoney" id="xmMoney0" type="text" th:onchange="xmM()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="hqlxSize" id="hqlxSize0" type="text" th:onchange="hqlxS()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="hqlxMoney" id="hqlxMoney0" type="text" th:onchange="hqlxM()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="smhzlSize" id="smhzlSize0" type="text" th:onchange="smhzlS()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="smhzlMoney" id="smhzlMoney0" type="text" th:onchange="smhzlM()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="thzyglSize" id="thzyglSize0" type="text" th:onchange="thzyglS()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="thzyglMoney" id="thzyglMoney0" type="text" th:onchange="thzyglM()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="rgscdSize" id="rgscdSize0" type="text" th:onchange="rgscdS()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="rgscdMoney" id="rgscdMoney0" type="text" th:onchange="rgscdM()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="hspjSize" id="hspjSize0" type="text" th:onchange="hspjS()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="hspjMoney" id="hspjMoney0" type="text" th:onchange="hspjM()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="httSize" id="httSize0" type="text" th:onchange="httS()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="httMoney" id="httMoney0" type="text" th:onchange="httM()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="dhcSize" id="dhcSize0" type="text" th:onchange="dhcS()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="dhcMoney" id="dhcMoney0" type="text" th:onchange="dhcM()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="ykcyzlSize" id="ykcyzlSize0"  type="text" th:onchange="ykcyzlS()" class="form-control"  width="3px" min>
+
+                </td>
+                <td class="tg-0lax">
+                    <input name="ykcazlMoney" id="ykcazlMoney0" type="text" th:onchange="ykcazlM()" class="form-control"  width="3px" min>
+                </td>
+            </tr>
+        </table>
+        <!--<table id="fieldTable">
+            <tr id="tr1">
+                <th>字段名</th>
+                <th>字段类型</th>
+                <th>字段长度</th>
+            </tr>
+            <tr id="tr2">
+                <td id="td1"><input type="text" name="fieldName_1" value="姓名"></td>
+                <td id="td2"><input type="text" name="fieldType_1" value="字符串"></td>
+                <td id="td3"><input type="text" name="fieldLength_1" value="40"></td>
+            </tr>
+            <tr id="tr3">
+                <td id="td1"><input type="text" name="fieldName_2" value="籍贯"></td>
+                <td id="td2"><input type="text" name="fieldType_2" value="字符串"></td>
+                <td id="td3"><input type="text" name="fieldLength_2" value="120"></td>
+            </tr>
+        </table>
+-->
+
+
+
+   <!-- </form>
+        <form action="/system/resolve/submitUserList_1" method="post">
+            ID:<input type="text" name="id"><br/>
+            Username:<input type="text" name="name"><br/>
+            Password:<input type="text" name="pwd"><br/><br/>
+
+            ID:<input type="text" name="id"><br/>
+            Username:<input type="text" name="name"><br/>
+            Password:<input type="text" name="pwd"><br/><br/>
+            <input type="submit" value="submit">
+        </form>-->
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="btnyizhu()"><i class="fa fa-check"></i>发布任务</button>&nbsp;
+<!--
+            <button type="button" class="btn btn-sm btn-primary" onclick="addRow()" ><i class="fa fa-check"></i>添加一行</button>&nbsp;
+-->
+            <button type="button" class="btn btn-sm btn-primary" onclick="jj()" ><i class="fa fa-check"></i>追加一行</button>&nbsp;
+
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+
+        </div>
+    </div>
+
+
+
+
+    <script src="layer/layer.js"></script>
+    <script src="layer/extend/layer.ext.js"></script>
+    <script type="text/javascript">
+    //省市区三级联动
+    $(function(){
+
+        var data="150000";
+
+    getCities(data);
+    var op2 = document.createElement("option");
+    op2.value = -1;
+    op2.text = "----- 所在区 -------";
+    document.getElementById("addrArea").appendChild(op2);
+    });
+</script>
+    <script type="text/javascript">
+
+
+
+    // ===== 加载市列表 =====
+    function getCities(data) {
+    var url=ctx+"system/resolve/getCities";
+
+    var provinceCode = $("#province").val();
+    var addressCode = $("#address").val();
+        $.ajax({
+            "url": url,
+            "data": {provinceCode:provinceCode,addressCode:addressCode},
+            "type": "GET",
+            "dataType": "json",
+            "success": function(data) {
+                var op = document.createElement("option");
+                op.value = -1;
+                op.text = "--请选择地址--";
+                document.getElementById("addrCity").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrCity").appendChild(op);
+                }
+            }
+        });
+        //隐藏下拉框
+        if(addressCode != "" && addressCode != provinceCode){
+             //$("#addrArea").show();
+            $("#addrArea").hide();
+
+        }
+        else {
+            getAreas();
+        }
+    //getAreas();
+    var op2 = document.createElement("option");
+    op2.value = -1;
+    op2.text = "--所在区--";
+    document.getElementById("addrArea").appendChild(op2);
+    }
+    // ===== 加载区列表 =====
+    function getAreas() {
+    $("#addrArea").empty();
+    //var url = "<%=basePath%>dict/getAreas";
+    var url=ctx+"system/resolve/getAreas";
+    var data = "cityCode=" + $("#addrCity").val();
+    $.ajax({
+    "url": url,
+    "data": data,
+    "type": "GET",
+    "dataType": "json",
+    "success": function(data) {
+    var op = document.createElement("option");
+    op.value = -1;
+    op.text = "----- 所在区 -------";
+    document.getElementById("addrArea").appendChild(op);
+    for (var i = 0; i < data.length; i++) {
+    var op = document.createElement("option");
+    op.value = data[i].dictCode;
+    op.text = data[i].dictLabel;
+    document.getElementById("addrArea").appendChild(op);
+    }
+    }
+    });
+    }
+        function cheshi(){
+            $.operate.save(ctx + "system/resolve/add", $('#form-resolve-add').serialize());
+        }
+
+
+
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#test2'
+                , type: 'year'
+            });
+        });
+
+        //求和围栏部分面积
+        $(function () {
+
+            var jmSize = document.getElementById("jmSize").value;
+            var xmSize = document.getElementById("xmSize").value;
+            var smhzlSize = document.getElementById("smhzlSize").value;
+            var hqlxSize = document.getElementById("hqlxSize").value;
+            if(jmSize==''){
+                var jmSize=0;
+            }
+            if(xmSize==''){
+                var xmSize=0;
+            }
+            if(smhzlSize==''){
+                var smhzlSize=0;
+            }
+            if(hqlxSize==''){
+                var hqlxSize=0;
+            }
+
+            hj.value=parseInt(xmSize)+parseInt(jmSize)+parseInt(smhzlSize)+parseInt(hqlxSize);
+
+        });
+
+        //求和围栏部分资金
+        $(function () {
+
+            var jmMoney=$("#jmMoney").val();
+            var xmMoney = $("#xmMoney").val();
+            var hqlxMoney=$("#hqlxMoney").val();
+            var smhzlMoney = $("#smhzlMoney").val();
+
+            //判断不为空
+            if(jmMoney==''){
+                var jmMoney=0;
+            }
+            if(xmMoney==''){
+                var xmMoney=0;
+            }
+            if(hqlxMoney==''){
+                var hqlxMoney=0;
+            }
+            if(smhzlMoney==''){
+                var smhzlMoney=0;
+            }
+
+            tzhj.value=parseInt(jmMoney)+parseInt(xmMoney)+parseInt(hqlxMoney)+parseInt(smhzlMoney);
+
+        });
+
+        //求出全有的规模面积
+
+        $(function () {
+            var thzyglSize = document.getElementById("thzyglSize").value;
+            var rgscdSize = document.getElementById("rgscdSize").value;
+            var hspjSize = document.getElementById("hspjSize").value;
+            var httSize = document.getElementById("httSize").value;
+            var dhcSize = document.getElementById("dhcSize").value;
+            var ykcyzlSize = document.getElementById("ykcyzlSize").value;
+            var hj = document.getElementById("hj").value;
+
+            //判断不为空
+            if(thzyglSize==''){
+                var thzyglSize=0;
+            }
+            if(rgscdSize==''){
+                var rgscdSize=0;
+            }
+            if(hspjSize==''){
+                var hspjSize=0;
+            }
+            if(httSize==''){
+                var httSize=0;
+            }
+            if(dhcSize==''){
+                var dhcSize=0;
+            }
+            if(ykcyzlSize==''){
+                var ykcyzlSize=0;
+            }
+            if(hj==''){
+                var hj=0;
+            }
+
+
+            zmj.value=parseInt(thzyglSize)+parseInt(rgscdSize)+parseInt(hspjSize)+parseInt(httSize)+parseInt(dhcSize)+parseInt(ykcyzlSize)+parseInt(hj);
+
+        });
+
+        //求出全有的投入金额
+
+        $(function () {
+
+            var thzyglMoney=$("#thzyglMoney").val();
+            var rgscdMoney = $("#rgscdMoney").val();
+            var hspjMoney=$("#hspjMoney").val();
+            var httMoney = $("#httMoney").val();
+            var dhcMoney = $("#dhcMoney").val();
+            var ykcazlMoney = $("#ykcazlMoney").val();
+            var tzhj = $("#tzhj").val();
+
+            //判断不为空
+            if(thzyglMoney==''){
+                var thzyglMoney=0;
+            }
+            if(rgscdMoney==''){
+                var rgscdMoney=0;
+            }
+            if(hspjMoney==''){
+                var hspjMoney=0;
+            }
+            if(httMoney==''){
+                var httMoney=0;
+            }
+            if(dhcMoney==''){
+                var dhcMoney=0;
+            }
+            if(ykcazlMoney==''){
+                var ykcazlMoney=0;
+            }
+            if(tzhj==''){
+                var tzhj=0;
+            }
+
+            //相加
+            zhj.value=parseInt(thzyglMoney)+parseInt(rgscdMoney)+parseInt(hspjMoney)+parseInt(httMoney)+parseInt(dhcMoney)+parseInt(ykcazlMoney)+parseInt(tzhj);
+        });
+
+        //求出全有的投入金额
+        $(function () {
+            var zyMoney=$("#zyMoney").val();
+            var dfMoney = $("#dfMoney").val();
+
+            //判断不为空
+            if(zyMoney==''){
+                var zyMoney=0;
+            }
+            if(dfMoney==''){
+                var dfMoney=0;
+            }
+
+            //相加
+            zdhj.value=parseInt(zyMoney)+parseInt(dfMoney);
+        });
+
+        var prefix = ctx + "system/resolve";
+        $("#form-publish-edit").validate({
+            focusCleanup: true
+        });
+
+    $(function(){
+        var publishId=$("#publishId").val();
+        //给分解赋值(任务的父id)
+        $("#publishID").val(publishId);
+
+        //赋值总任务年份
+        var year= $("#year2").val();
+        $("#yea").val(year);
+    })
+
+
+    function submitHandler() {
+        if ($.validate.form()) {
+
+           /* if($('#form-resolve-add').serialize()==""){
+                $.modal.confirm("信息未填写成,请填写后提交", function() {
+                })
+            }else{
+                $.modal.confirm("确认分解任务吗？", function() {
+                    $.operate.save(prefix + "/add", $('#form-resolve-add').serialize());
+                })
+            }*/
+            if($("#jmSize0").val()=='' && $("#jmMoney0").val() =='' && $("#xmSize0").val() =='' && $("#xmMoney0").val() =='' && $("#hqlxSize0").val() =='' && $("#hqlxMoney0").val() ==''  && $("#smhzlSize0").val() ==''  && $("#smhzlMoney0").val() ==''  && $("#thzyglSize0").val()=='' && $("#thzyglMoney0").val()=='' && $("#rgscdSize0").val()=='' && $("#rgscdMoney0").val()=='' && $("#hspjSize0").val()=='' && $("#hspjMoney0").val()=='' && $("#httSize0").val()=='' && $("#httMoney0").val()=='' && $("#dhcSize0").val()=='' && $("#dhcMoney0").val()==''   && $("#ykcyzlSize0").val()=='') {
+
+                $.modal.confirm("信息未填写成,请填写后提交", function() {
+                })}else{
+                $.modal.confirm("确认分解任务吗？", function() {
+                    $.operate.save(prefix + "/add", $('#form-resolve-add').serialize());
+                })
+
+            }
+        }
+    }
+        $(function(){
+          var a= $("#parentId").val();
+
+        })
+    //追加一行
+    function addRow(){
+        var tableNode =	document.getElementById("fieldTable");
+        var trNodeList = tableNode.getElementsByTagName("tr");
+//		for (var index = 0; index < trNodeList.length; index++) {
+//			var tdNodeList = trNodeList[index].getElementsByTagName("td");
+//			for (var i = 0; i < tdNodeList.length; i++) {
+//					alert(tdNodeList[i].id);
+//			}
+//		}
+        //得到最后一行(tr)的所有td
+        var tdNodeList = trNodeList[trNodeList.length - 1].getElementsByTagName("td");
+        var td_input_name = tdNodeList[0].getElementsByTagName("input")[0].name;
+        var strIndex = td_input_name.indexOf("_");
+        var number = td_input_name.substring(strIndex + 1)
+        var trNode = document.createElement("tr");
+        number++;
+        var tdText = ''
+       /* var td1_input_fieldName = '<td><input type="text"  value=""></td>';
+        var td2_input_fieldType = '<td><input type="text"  value=""></td>';
+        var td3_input_fieldLength = '<td><input type="text"  value=""></td>';
+        var td4_input_fieldLength = '<td><input type="text"  value=""></td>';
+        var td5_input_fieldLength = '<td><input type="text"  value=""></td>';*/
+
+
+        var td6 ='<td class="tg-lboi" ><input name="jmSize" id="jmSize0"  type="text" class="form-control" width="3px" min> </td>'
+        var td7='<td class="tg-lboi" colspan="3" > <input name="jmSize" id="jmSize0"  type="text" class="form-control" width="3px" min></td>';
+
+        var td8='<td class="tg-lboi" colspan="3"> <input name="jmSize" id="jmSize0"  type="text" class="form-control" width="3px" min> </td>';
+
+        var td9= '<td class="tg-lboi" colspan="2"> <input name="jmSize" id="jmSize0"  type="text" class="form-control" width="3px" min></td>';
+
+        var td10='<td class="tg-lboi" > <input name="jmSize" id="jmSize0"  type="text" class="form-control" width="3px" min> </td>';
+        var td11='<td class="tg-lboi"> <input name="jmMoney" id="jmMoney0" type="text"  class="form-control" width="3px" min> </td>';
+        var td12='<td class="tg-lboi"> <input name="xmSize" id="xmSize0" type="text"  class="form-control"  width="3px" min> </td>';
+        var td13='<td class="tg-0lax"> <input name="xmMoney" id="xmMoney0" type="text" class="form-control"  width="3px" min> </td>';
+        var td14= '<td class="tg-0lax"><input name="hqlxSize" id="hqlxSize0" type="text" class="form-control"  width="3px" min> </td>';
+        var td15='<td class="tg-0lax"> <input name="hqlxMoney" id="hqlxMoney0" type="text" class="form-control"  width="3px" min> </td>';
+        var td16='<td class="tg-0lax"> <input name="smhzlSize" id="smhzlSize0" type="text" class="form-control"  width="3px" min> </td>';
+        var td17='<td class="tg-0lax"> <input name="smhzlMoney" id="smhzlMoney0" type="text" class="form-control"  width="3px" min> </td>';
+        var td18='<td class="tg-0lax"> <input name="thzyglSize" id="thzyglSize0" type="text" class="form-control"  width="3px" min> </td>';
+        var td19='<td class="tg-0lax"> <input name="thzyglMoney" id="thzyglMoney0" type="text" class="form-control"  width="3px" min> </td>';
+        var td20= '<td class="tg-0lax"> <input name="rgscdSize" id="rgscdSize0" type="text" class="form-control"  width="3px" min> </td>';
+        var td21='<td class="tg-0lax"> <input name="rgscdMoney" id="rgscdMoney0" type="text" class="form-control"  width="3px" min> </td>';
+        var td22= '<td class="tg-0lax"> <input name="hspjSize" id="hspjSize0" type="text" class="form-control"  width="3px" min> </td>';
+        var td23='<td class="tg-0lax"> <input name="hspjMoney" id="hspjMoney0" type="text" class="form-control"  width="3px" min> </td>';
+        var td24='<td class="tg-0lax"> <input name="httSize" id="httSize0" type="text" class="form-control"  width="3px" min> </td>';
+        var td25='<td class="tg-0lax"> <input name="httMoney" id="httMoney0" type="text" class="form-control"  width="3px" min> </td>';
+        var td26='<td class="tg-0lax"> <input name="dhcSize" id="dhcSize0" type="text" class="form-control"  width="3px" min> </td>';
+        var td27='<td class="tg-0lax"> <input name="dhcMoney" id="dhcMoney0" type="text" class="form-control"  width="3px" min> </td>';
+        var td28='<td class="tg-0lax"> <input name="ykcyzlSize" id="ykcyzlSize0"  type="text" class="form-control"  width="3px" min> </td>';
+        var td29='<td class="tg-0lax"> <input name="ykcazlMoney" id="ykcazlMoney0" type="text" class="form-control"  width="3px" min> </td>';
+
+        tdText = td6 + td7 + td8 + td9 + td10 + td11 + td12 + td13 + td14 + td15 + td16 + td17 + td18 + td19 + td20 + td21 + td22 + td23 + td24 + td25 + td26 + td27 + td28 + td29;
+
+        //tdText = td1_input_fieldName + td2_input_fieldType + td3_input_fieldLength;
+        trNode.innerHTML = tdText;
+        tableNode.appendChild(trNode);
+    }
+    function btnyizhu() {
+
+        if($("#jmSize0").val()=='' && $("#jmMoney0").val() =='' && $("#xmSize0").val() =='' && $("#xmMoney0").val() =='' && $("#hqlxSize0").val() =='' && $("#hqlxMoney0").val() ==''  && $("#smhzlSize0").val() ==''  && $("#smhzlMoney0").val() ==''  && $("#thzyglSize0").val()=='' && $("#thzyglMoney0").val()=='' && $("#rgscdSize0").val()=='' && $("#rgscdMoney0").val()=='' && $("#hspjSize0").val()=='' && $("#hspjMoney0").val()=='' && $("#httSize0").val()=='' && $("#httMoney0").val()=='' && $("#dhcSize0").val()=='' && $("#dhcMoney0").val()==''   && $("#ykcyzlSize0").val()=='') {
+
+            $.modal.confirm("信息未填写成,请填写后提交", function() {
+            })
+        }else{
+            var orderItemArray = new Array();
+
+            $("#form-resolve-add tr").each(function(){
+                //this代表当前dom对象tr
+                var that = this;
+                var orderItemObj = new Object();
+                $(that).find("select,input").each(function(){
+                    var name = $(this).attr("name");
+                    orderItemObj[name] = $(this).val();
+                });
+
+                orderItemArray.push(orderItemObj);
+            });
+            var url=prefix + "/addFenJie";
+            $.ajax({
+                url : url,
+                dataType : "json",
+                contentType : "application/json;charsetset=UTF-8",//必
+                type : "post",
+                cache : false,
+                data: JSON.stringify(orderItemArray),//必须
+                success : function(obj) {
+                    if (obj == "400") {
+                        layer.alert('任务分解成功！', function(index) {
+                            //window.location.reload();
+                            self.location = document.referrer;
+
+                        });
+                    } else if (obj == "404") {
+
+                        layer.alert("该库存不足！");
+                    } else {
+                        layer.alert("发布失败，请查看网络！！！");
+                    }
+                },
+                error : function(textStatus, e) {
+                    layer.alert("系统ajax交互错误: ");
+                }
+            });
+        }
+
+
+    }
+
+    //验证
+    var prefix = ctx + "system/resolve";
+    $("#form-resolve-add").validate({
+        rules:{
+            onkeyup: false,
+            min:true,
+            required:true,
+    },
+        focusCleanup: true
+    });
+        //验证分解的数值
+    function jmsize(){
+        var jmSize = document.getElementById("jmSize").value;
+        var jmSize0 = document.getElementById("jmSize0").value;
+        /*var smhzlSize = document.getElementById("smhzlSize").value;
+        alert(smhzlSize)
+        var smhzlSize0 = document.getElementById("smhzlSize0").value;
+        alert(2)
+        alert(smhzlSize0)
+        var xmSize = document.getElementById("xmSize").value;
+        var xmSize0 = document.getElementById("xmSize0").value;
+        alert(xmSize)
+        alert(xmSize0)*/
+        /*var thzyglSize = document.getElementById("thzyglSize").value;
+        var thzyglSize0 = document.getElementById("thzyglSize0").value;
+
+        var rgscdSize = document.getElementById("rgscdSize").value;
+        var rgscdSize0 = document.getElementById("rgscdSize0").value;
+
+        var hspjSize = document.getElementById("hspjSize").value;
+        var hspjSize0 = document.getElementById("hspjSize0").value;
+
+        var httSize = document.getElementById("httSize").value;
+        var httSize0 = document.getElementById("httSize0").value;
+
+        var dhcSize = document.getElementById("dhcSize").value;
+        var dhcSize0 = document.getElementById("dhcSize0").value;
+
+        var ykcyzlSize = document.getElementById("ykcyzlSize").value;
+        var ykcyzlSize0 = document.getElementById("ykcyzlSize0").value;
+*/
+
+        if(parseInt(jmSize0)>parseInt(jmSize)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+
+        }else{
+        }
+
+    }
+
+
+    function smhzlS(){
+        var smhzlSize = document.getElementById("smhzlSize").value;
+
+        var smhzlSize0 = document.getElementById("smhzlSize0").value;
+        if(parseInt(smhzlSize0)>parseInt(smhzlSize)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+
+    function xmS(){
+        var xmSize = document.getElementById("xmSize").value;
+        var xmSize0 = document.getElementById("xmSize0").value;
+        if(parseInt(xmSize0)>parseInt(xmSize)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+    function hqlxS(){
+        var hqlxSize = document.getElementById("hqlxSize").value;
+        var hqlxSize0 = document.getElementById("hqlxSize0").value;
+        if(parseInt(hqlxSize0)>parseInt(hqlxSize)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+
+        }else{
+        }
+
+    }
+
+    function thzyglS(){
+        var hqlxSize = document.getElementById("hqlxSize").value;
+        var hqlxSize0 = document.getElementById("hqlxSize0").value;
+        if(parseInt(hqlxSize0)>parseInt(hqlxSize)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+    function rgscdM(){
+        var rgscdMoney = document.getElementById("rgscdMoney").value;
+        var rgscdMoney0 = document.getElementById("rgscdMoney0").value;
+        if(parseInt(rgscdMoney0)>parseInt(rgscdMoney)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+
+    function smhzlM(){
+        var smhzlM = document.getElementById("smhzlM").value;
+        var smhzlM0 = document.getElementById("smhzlM0").value;
+        if(parseInt(smhzlM0)>parseInt(smhzlM)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+
+    function hspjmMjM(){
+        var hspjMoney = document.getElementById("hspjMoney").value;
+        var hspjMoney0 = document.getElementById("hspjMoney0").value;
+        if(parseInt(hspjMoney0)>parseInt(hspjMoney)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+    function httM(){
+        var httMoney = document.getElementById("httMoney").value;
+        var httMoney0 = document.getElementById("httMoney0").value;
+        if(parseInt(httMoney0)>parseInt(httMoney)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+    function dhcM(){
+        var dhcMoney = document.getElementById("dhcMoney").value;
+        var dhcMoney0 = document.getElementById("dhcMoney0").value;
+        if(parseInt(dhcMoney0)>parseInt(dhcMoney)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+
+
+    function ykcazlM(){
+        var ykcazlM = document.getElementById("ykcazlMoney").value;
+        var ykcazlM0 = document.getElementById("ykcazlMoney0").value;
+        if(parseInt(ykcazlM0)>parseInt(ykcazlM)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+
+
+    function jmM(){
+        var jmM = document.getElementById("jmMoney").value;
+        var jmM0 = document.getElementById("jmMoney0").value;
+        if(parseInt(ykcazlM0)>parseInt(ykcazlM)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+
+
+    function xmM(){
+        var xmM = document.getElementById("xmMoney").value;
+        var xmM0 = document.getElementById("xmMoney0").value;
+        if(parseInt(xmM0)>parseInt(xmM)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+
+    function hqlxM(){
+        var hqlxM = document.getElementById("hqlxMoney").value;
+        var hqlxM0 = document.getElementById("hqlxMoney0").value;
+        if(parseInt(hqlxM0)>parseInt(hqlxM)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+    function thzyglM(){
+        var thzyglM = document.getElementById("thzyglMoney").value;
+        var thzyglM0 = document.getElementById("thzyglMoney0").value;
+        if(parseInt(thzyglM0)>parseInt(thzyglM)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+
+    function rgscdM(){
+        var rgscdM = document.getElementById("rgscdMoney").value;
+        var rgscdM0 = document.getElementById("rgscdMoney0").value;
+        if(parseInt(rgscdM0)>parseInt(rgscdM)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+    function hspjM(){
+        var hspjM = document.getElementById("hspjMoney").value;
+        var rgscdM0 = document.getElementById("rgscdMoney0").value;
+        if(parseInt(rgscdM0)>parseInt(rgscdM)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+    function httM(){
+        var httM = document.getElementById("httMoney").value;
+        var httM0 = document.getElementById("httMoney0").value;
+        if(parseInt(httM0)>parseInt(httM)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+    function hspjM(){
+        var hspjM = document.getElementById("hspjMoney").value;
+        var hspjM0 = document.getElementById("hspjMoney0").value;
+        if(parseInt(hspjM0)>parseInt(hspjM)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+
+    function httM(){
+        var httM = document.getElementById("httMoney").value;
+        var httM0 = document.getElementById("httMoney0").value;
+        if(parseInt(httM0)>parseInt(httM)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+
+    }
+    function dhcM(){
+        var dhcM = document.getElementById("dhcMoney").value;
+        var dhcM0 = document.getElementById("dhcMoney0").value;
+        if(parseInt(dhcM0)>parseInt(dhcM)){
+            layer.alert("分解值大于总分解值,请重新填写！！！");
+        }else{
+        }
+    }
+
+        function ykcazlM(){
+            var ykcazlM = document.getElementById("ykcazlMoney").value;
+            var ykcazlM0 = document.getElementById("ykcazlMoney0").value;
+            if(parseInt(ykcazlM0)>parseInt(ykcazlM)){
+                layer.alert("分解值大于总分解值,请重新填写！！！");
+            }else{
+            }
+    }
+
+
+
+    $(function(){
+
+
+    var jmSize = document.getElementById("jmSize").value;
+    var xmSize = document.getElementById("xmSize").value;
+    var smhzlSize = document.getElementById("smhzlSize").value;
+    var hqlxSize = document.getElementById("hqlxSize").value;
+
+
+    var jmMoney=$("#jmMoney").val();
+    var xmMoney = $("#xmMoney").val();
+    var hqlxMoney=$("#hqlxMoney").val();
+    var smhzlMoney = $("#smhzlMoney").val();
+
+
+
+    var thzyglSize = document.getElementById("thzyglSize").value;
+    var rgscdSize = document.getElementById("rgscdSize").value;
+    var hspjSize = document.getElementById("hspjSize").value;
+    var httSize = document.getElementById("httSize").value;
+    var dhcSize = document.getElementById("dhcSize").value;
+    var ykcyzlSize = document.getElementById("ykcyzlSize").value;
+
+
+
+    var thzyglMoney=$("#thzyglMoney").val();
+    var rgscdMoney = $("#rgscdMoney").val();
+    var hspjMoney=$("#hspjMoney").val();
+    var httMoney = $("#httMoney").val();
+    var dhcMoney = $("#dhcMoney").val();
+    var ykcazlMoney = $("#ykcazlMoney").val();
+
+})
+    </script>
+    <script>
+        function jj(){
+            var tableNode =	document.getElementById("mytable");
+            var trNodeList = tableNode.getElementsByTagName("tr");
+            //得到最后一行(tr)的所有td
+            var tdNodeList = trNodeList[trNodeList.length - 1].getElementsByTagName("td");
+            var td_input_name = tdNodeList[0].getElementsByTagName("input")[0].name;
+            var strIndex = td_input_name.indexOf("_");
+            var number = td_input_name.substring(strIndex + 1)
+
+            var trNode = document.createElement("tr");
+            number++;
+            var year =$("#yea").val();
+            $("#mytable").append("<tr id=\"tr4\">\n" +
+                "                <td class=\"tg-lboi\">\n" +
+                "                    <input  name=\"publishId_"+number+"\" id=\"publishId\" value="+number+" style=\"width: 90%;height: 30px;border:0px solid #f7f7f7\"  required >\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-lboi\" colspan=\"3\">\n" +
+                "\n" +
+                "                    <select id=\"addrCityy_"+number+"\" name=\"addrCity\" onchange=\"getAreass()\"\n" +
+                "                            style=\"width: 125px;height:30px; \"required  ></select>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-lboi\" colspan=\"3\">\n" +
+                "\n" +
+                "                    <select\n" +
+                "                            id=\"addrAreaa_"+number+"\" name=\"addrArea\"\n" +
+                "                            style=\"width: 125px;height:30px;\">\n" +
+                "                    </select>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-lboi\" colspan=\"2\">\n" +
+                "<!--\n" +
+                "                    <input type=\"text\" name=\"year\" class=\"layui-layer-input\" placeholder=\"请选择\" id=\"test2\"  width=\"5px\" style=\"width:85px;\" required/>\n" +
+                "-->\n" +
+                "                    <input name=\"year\" id=\"yea\" width=\"20px\" type=\"text\"  value="+year+" disabled=\"disabled\">\n" +
+                "\n" +
+                "                </td>\n" +
+                "\n" +
+                "                <td class=\"tg-lboi\" >\n" +
+                "                    <input name=\"jmSize\" id=\"jmSize0\"  type=\"text\" th:onchange=\"jmsize()\"  class=\"form-control\" width=\"3px\" min required>\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-lboi\">\n" +
+                "                    <input name=\"jmMoney\" id=\"jmMoney0\" type=\"text\" th:onchange=\"jmM()\"  class=\"form-control\" width=\"3px\" min required>\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-lboi\">\n" +
+                "                    <input name=\"xmSize\" id=\"xmSize0\" type=\"text\" th:onchange=\"xmS()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"xmMoney\" id=\"xmMoney0\" type=\"text\" th:onchange=\"xmM()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"hqlxSize\" id=\"hqlxSize0\" type=\"text\" th:onchange=\"hqlxS()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"hqlxMoney\" id=\"hqlxMoney0\" type=\"text\" th:onchange=\"hqlxM()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"smhzlSize\" id=\"smhzlSize0\" type=\"text\" th:onchange=\"smhzlS()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"smhzlMoney\" id=\"smhzlMoney0\" type=\"text\" th:onchange=\"smhzlM()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"thzyglSize\" id=\"thzyglSize0\" type=\"text\" th:onchange=\"thzyglS()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"thzyglMoney\" id=\"thzyglMoney0\" type=\"text\" th:onchange=\"thzyglM()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"rgscdSize\" id=\"rgscdSize0\" type=\"text\" th:onchange=\"rgscdS()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"rgscdMoney\" id=\"rgscdMoney0\" type=\"text\" th:onchange=\"rgscdM()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"hspjSize\" id=\"hspjSize0\" type=\"text\" th:onchange=\"hspjS()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"hspjMoney\" id=\"hspjMoney0\" type=\"text\" th:onchange=\"hspjM()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"httSize\" id=\"httSize0\" type=\"text\" th:onchange=\"httS()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"httMoney\" id=\"httMoney0\" type=\"text\" th:onchange=\"httM()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"dhcSize\" id=\"dhcSize0\" type=\"text\" th:onchange=\"dhcS()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"dhcMoney\" id=\"dhcMoney0\" type=\"text\" th:onchange=\"dhcM()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"ykcyzlSize\" id=\"ykcyzlSize0\"  type=\"text\" th:onchange=\"ykcyzlS()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "\n" +
+                "                </td>\n" +
+                "                <td class=\"tg-0lax\">\n" +
+                "                    <input name=\"ykcazlMoney\" id=\"ykcazlMoney0\" type=\"text\" th:onchange=\"ykcazlM()\" class=\"form-control\"  width=\"3px\" min>\n" +
+                "                </td>\n" +
+                "            </tr>")
+            var data="150000";
+
+            getCitiess(number);
+            var op2 = document.createElement("option");
+            op2.value = -1;
+            op2.text = "----- 所在区 -------";
+            document.getElementById("addrAreaa").appendChild(op2);
+
+        }
+        /*function cc(){
+            var data="150000";
+
+            getCitiess(data);
+            var op2 = document.createElement("option");
+            op2.value = -1;
+            op2.text = "----- 所在区 -------";
+            document.getElementById("addrAreaa").appendChild(op2);
+
+
+        }*/
+        // ===== 加载市列表 =====
+        function getCitiess(number) {
+            var url = ctx + "system/resolve/getCities";
+
+            var provinceCode = $("#province").val();
+            var addressCode = $("#address").val();
+            $.ajax({
+                "url": url,
+                "data": {provinceCode: provinceCode, addressCode: addressCode},
+                "type": "GET",
+                "dataType": "json",
+                "success": function (data) {
+                    var op = document.createElement("option");
+                    op.value = -1;
+                    op.text = "--请选择地址--";
+                    document.getElementById("addrCityy_"+number).appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("addrCityy_"+number).appendChild(op);
+                    }
+                }
+            });
+        //隐藏下拉框
+        if(addressCode != "" && addressCode != provinceCode){
+            //$("#addrArea").show();
+            $("#addrAreaa").hide();
+
+        }
+        else {
+            getAreass(number);
+        }
+        var op2 = document.createElement("option");
+        op2.value = -1;
+        op2.text = "--所在区--";
+        document.getElementById("addrAreaa_"+number).appendChild(op2);
+        }
+
+        // ===== 加载区列表 =====
+        function getAreass() {
+            var tableNode =	document.getElementById("mytable");
+            var trNodeList = tableNode.getElementsByTagName("tr");
+            //得到最后一行(tr)的所有td
+            var tdNodeList = trNodeList[trNodeList.length - 1].getElementsByTagName("td");
+            var td_input_name = tdNodeList[0].getElementsByTagName("input")[0].name;
+            var strIndex = td_input_name.indexOf("_");
+            var number = td_input_name.substring(strIndex + 1)
+
+            var trNode = document.createElement("tr");
+            $("#addrAreaa_"+number).empty();
+            //var url = "<%=basePath%>dict/getAreas";
+            var url=ctx+"system/resolve/getAreas";
+            var data = "cityCode=" + $("#addrCityy_"+number).val();
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+                    var op = document.createElement("option");
+                    op.value = -1;
+                    op.text = "----- 所在区 1-------";
+                    document.getElementById("addrAreaa_"+number).appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].dictCode;
+                        op.text = data[i].dictLabel;
+                        document.getElementById("addrAreaa_"+number).appendChild(op);
+                    }
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

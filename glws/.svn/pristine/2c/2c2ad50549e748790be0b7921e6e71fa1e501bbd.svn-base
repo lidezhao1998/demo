@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('防治组织信息管理详情')" />
+	<th:block th:include="include :: datetimepicker-css" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<meta name="keywords" content="天地图"/>
+	<title>天地图－地图API－范例－地理编码</title>
+	<style type="text/css">body,html{width:100%;height:100%;margin:0;font-family:"Microsoft YaHei"}#mapDiv{width:100%;height:400px}input,b,p{margin-left:5px;font-size:14px}</style>
+</head>
+<body class="white-bg" >
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m" id="form-management-edit" th:object="${cDataManagement}" >
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="form-group">
+					<label class=" control-label col-sm-3" >组织名称：</label>
+					<div class="col-sm-8">
+						<div name="name" th:text="*{name}" class=" form-control-static"  style="font-weight: bold" >
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label class="control-label col-sm-3">所属行业：</label>
+					<div class="col-sm-8">
+						<div name="industry" th:text="*{industry}" class=" form-control-static" type="text" style="font-weight: bold" >
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="form-group">
+					<label class=" control-label col-sm-3" >编号：</label>
+					<div class="col-sm-8">
+						<div name="id" th:text="*{id}" class=" form-control-static" style="font-weight: bold"  >
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">人数：</label>
+					<div class="col-sm-8">
+						<div name="peopleNumber" th:text="*{peopleNumber}" class="form-control-static" type="text" style="font-weight: bold">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">负责人：</label>
+					<div class="col-sm-8">
+						<div name="personName" th:text="*{personName}" class=" form-control-static" type="text" style="font-weight: bold">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">成立时间：</label>
+					<div class="col-sm-8">
+						<div name="time" th:text="${#dates.format(cDataManagement.time, 'yyyy-MM-dd')}" class=" form-control-static" style="font-weight: bold" >
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">上报时间：</label>
+					<div class="col-sm-8">
+						<div name="time" th:text="${#dates.format(cDataManagement.reportTime, 'yyyy-MM-dd')}" class=" form-control-static" style="font-weight: bold" >
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">注册资金(/万)：</label>
+					<div class="col-sm-8">
+						<div name="registeredCapital" th:text="*{registeredCapital}" class=" form-control-static" type="text" style="font-weight: bold">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">联系方式：</label>
+					<div class="col-sm-8">
+						<div name="phone" th:text="*{phone}" class=" form-control-static" type="text" style="font-weight: bold">
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">防治地点：</label>
+					<div class="col-sm-8">
+						<div name="controlPlace" th:text="*{controlPlace}" class=" form-control-static" type="text" style="font-weight: bold">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">防治类型：</label>
+					<div class="col-sm-8">
+						<div name="controlType" class="  form-control-static" th:text="${controlType}" style="font-weight: bold" >
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">法定代表人：</label>
+					<div class="col-sm-8">
+						<div name="legalRepresentative" th:text="*{legalRepresentative}" class=" form-control-static" type="text" required style="font-weight: bold">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">曾用名：</label>
+					<div class="col-sm-8">
+						<div name="userName" th:text="*{userName}" class="  form-control-static" type="text" style="font-weight: bold">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label class=" col-sm-3 control-label" style="text-align:right" >统一社会信用代码：</label>
+					<div class="col-sm-8">
+						<div name="unifiedCode" th:text="*{unifiedCode}" class=" form-control-static" type="text" style="font-weight: bold"  >
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="form-group">
+					<label class=" control-label col-sm-3" >组织机构代码：</label>
+					<div class="col-sm-8">
+						<div name="organizationCode" th:text="*{organizationCode}" class=" form-control-static" type="text" style="font-weight: bold">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label class=" control-label col-sm-3" >工商注册号：</label>
+					<div class="col-sm-8">
+						<div name="business" th:text="*{business}" class="  form-control-static" type="text"style="font-weight: bold">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="form-group">
+					<label class=" control-label col-sm-3" >纳税人识别号：</label>
+					<div class="col-sm-8">
+						<div name="taxpayer" th:text="*{taxpayer}" class=" form-control-static" type="text" style="font-weight: bold">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label class=" control-label col-sm-3" style="float: left">登记机关：</label>
+					<div class="col-sm-8">
+						<div name="registrationAuthority" th:text="*{registrationAuthority}" class=" form-control-static" type="text" style="font-weight: bold" >
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">行政区划：</label>
+					<div class="col-sm-8">
+						<div name="administrativeDivision" th:text="*{administrativeDivision}" class="form-control-static" type="text" style="font-weight: bold">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">状态：</label>
+					<div class="col-sm-8">
+						<div name="status" th:text="*{status}" class=" form-control-static" type="text"style="font-weight: bold" >
+						</div>
+						<!--<p style="color: red">("0"代表未上报，"1"代表已上报)</p>-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="form-group">
+					<label class=" control-label col-sm-3">注册地址：</label>
+					<div class="col-sm-8">
+						<!--<div name="registeredAddress"   th:text="*{registeredAddress}" class="  form-control-static" id="input1" type="text" style="font-weight: bold" >
+						</div>-->
+						<input type="button" id="searchPoint" th:value="*{registeredAddress}"/>
+						<input type="button" class="btn btn-info" onClick="search();" value="查看地图"/>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group  ">
+					<label class=" control-label col-sm-3 ">经营范围：</label>
+					<div class="col-sm-8">
+						<p name="businessScope" th:text="*{businessScope}" class=" form-control-static" type="text" style="font-weight: bold">
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="button-b" style="margin-left: 70%" id="button-set">
+		<button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+	</div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+
+<script type="text/javascript" >
+	var prefix = ctx + "prevention/management";
+	var prefix1 = ctx + "caiji/management";
+	$("#form-management-edit").validate({
+		onkeyup:false,
+		focusCleanup: true,
+		showFullscreen:true
+	});
+
+	function submitHandler() {
+		if ($.validate.form()) {
+			$.operate.save(prefix + "/edit", $('#form-management-edit').serialize());
+			openFull();
+		}
+	}
+
+
+	$("input[name='time']").datetimepicker({
+		format: "yyyy-mm-dd",
+		minView: "month",
+		autoclose: true
+	});
+	function openFull (title, url, width, height) {
+		if ($.common.isEmpty(title)) {
+			title = false;
+		}
+		if ($.common.isEmpty(url)) {
+			url = "/404.html";
+		}
+		if ($.common.isEmpty(width)) {
+			width = 800;
+		}
+		if ($.common.isEmpty(height)) {
+			height = ($(window).height() - 50);
+		}
+		var index = layer.open({
+			type: 2,
+			area: [width + 'px', height + 'px'],
+			fix: false,
+			//不固定
+			maxmin: true,
+			shade: 0.3,
+			title: title,
+			content: url,
+			btn: ['确定', '关闭'],
+			// 弹层外区域关闭
+			shadeClose: true,
+			yes: function(index, layero) {
+				var iframeWin = layero.find('iframe')[0];
+				iframeWin.contentWindow.submitHandler(index, layero);
+			},
+			cancel: function(index) {
+				return true;
+			}
+		});
+		layer.full(index);
+	}
+
+
+
+	/* -地图页面 */
+	/*function map() {
+		var url = prefix + '/map/';
+		$.modal.openTab("地图页面", url);
+	}*/
+
+</script>
+
+<script type="text/javascript" src="http://api.tianditu.gov.cn/api?v=4.0&tk=3defde9e465f739e73513ce9e8595fe3"></script>
+<script>
+	var map;
+	var zoom = 10;
+	var geocoder;
+	function onLoad()
+	{
+		//初始化地图对象
+		map=new T.Map("mapDiv");
+		//设置显示地图的中心点和级别
+		map.centerAndZoom(new T.LngLat(116.40969,39.89945),zoom);
+		//创建对象
+		geocoder = new T.Geocoder();
+	}
+
+
+	function searchResult(result)
+	{
+		if(result.getStatus() == 0){
+			/*var searchPoint=document.getElementById("searchPoint").val();
+			var url=prefix + '/map/'+ searchPoint;
+			$.modal.open("地图查看", url, '880', '650');*/
+			map.panTo(result.getLocationPoint(), 16);
+			//创建标注对象
+			var marker = new T.Marker(result.getLocationPoint());
+			//向地图上添加标注
+			map.addOverLay(marker);
+		}else{
+			alert(result.getMsg());
+		}
+	}
+
+
+	function search(){
+		/*var url = prefix + '/map/';
+		$.modal.openTab("地图页面", url);*/
+		/*layer.open({
+			type:2,
+			fix:false,
+			maxmin:true,
+			area:["1000px","600px"],
+			shade:0.3,
+			title:"地图查看",
+			content: prefix + '/map',
+			btn:['确定','关闭'],
+		});*/
+		/*var searchPoint=document.getElementById("searchPoint").value;
+		var prefix=ctx + "system/select";
+		var url=prefix + '/map/' + searchPoint;
+		$.modal.open("地图查看", url, '880', '650');*/
+
+		map.clearOverLays();
+		geocoder.getPoint(document.getElementById("searchPoint").value, searchResult);
+	}
+
+</script>
+</head>
+<body onLoad="onLoad()">
+<div id="mapDiv"></div>
+</body>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('天然林资源保护工程建设情况统计列表')" />
+</head>
+<style>
+    .W100 .th-inner {
+        width:100px !important;
+    }
+    .W180 .th-inner {
+        width:180px !important;
+    }
+
+</style>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <p>年度：</p>
+                                <input type="text" name="annual" class="layui-layer-input" placeholder="请选择" id="annual"/>
+                            </li>
+                            <li>
+                                <p>地区：</p>
+                                <select name="area" th:with="type=${@dict.getType('sys_province')}">
+                                    <option value="">请选择地区</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <!--<li>
+                                <p>造林面积总计：</p>
+                                <input type="text" name="afforestionAreaTotal"/>
+                            </li>
+                            <li>
+                                <p>人工造林合计：</p>
+                                <input type="text" name="artificialAfforestionTotal"/>
+                            </li>
+                            <li>
+                                <p>灌木林面积：</p>
+                                <input type="text" name="shrubArea"/>
+                            </li>
+                            <li>
+                                <p>飞播造林：</p>
+                                <input type="text" name="airSendAfforest"/>
+                            </li>
+                            <li>
+                                <p>当年新封山：</p>
+                                <input type="text" name="newAfforestTotal"/>
+                            </li>
+                            <li>
+                                <p>无林地和疏林地新封山育林面积：</p>
+                                <input type="text" name="noNewAfforestArea"/>
+                            </li>
+                            <li>
+                                <p>有林地和灌木林地新封山育林面积：</p>
+                                <input type="text" name="haveNewAfforestArea"/>
+                            </li>
+                            <li>
+                                <p>退化林修复面积：</p>
+                                <input type="text" name="degraRepairArea"/>
+                            </li>
+                            <li>
+                                <p>森林抚育面积：</p>
+                                <input type="text" name="forestTendArea"/>
+                            </li>
+                            <li>
+                                <p>年末实有封山育林面积：</p>
+                                <input type="text" name="yearendAfforestArea"/>
+                            </li>
+                            <li>
+                                <p>年末实有森林管护面积合计：</p>
+                                <input type="text" name="manageAreaTotal"/>
+                            </li>
+                            <li>
+                                <p>国有林：</p>
+                                <input type="text" name="nationalForest"/>
+                            </li>
+                            <li>
+                                <p>集体和个人所有的国家级公益林：</p>
+                                <input type="text" name="nationalPublicForest"/>
+                            </li>
+                            <li>
+                                <p>集体和个人所有的地方公益林：</p>
+                                <input type="text" name="localPublicForest"/>
+                            </li>-->
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="eceas:projects:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="eceas:projects:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="eceas:projects:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="eceas:projects:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+<!--                <a class="btn btn-info single disabled" onclick="$.operate.eveal()" shiro:hasPermission="eceas:projects:eveal">
+                    <i class="fa fa-download"></i> 生态评价
+                </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('eceas:projects:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('eceas:projects:remove')}]];
+        var prefix = ctx + "eceas/projects";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                evealUrl: prefix + "eveal",
+                modalName: "天然林资源保护工程建设情况统计",
+                showFooter: true,
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : '天保生态工程ID',
+                    visible: false
+                },
+                {
+                    field : 'annual', 
+                    title : '年度',
+                    visible: false
+                },
+                {
+                    field : 'area', 
+                    title : '地区省份',
+                    class : 'W100',
+                    footerFormatter:function (value) {
+                        return "合计";
+                    }
+                },
+                {
+                    field : 'afforestionAreaTotal', 
+                    title : '造林面积总计',
+                    align : 'center',
+                    footerFormatter:function (value) {
+                        var afforestionAreaTotal = 0;
+                        for (var i in value) {
+                            afforestionAreaTotal += parseFloat(value[i].afforestionAreaTotal);
+                        }
+                        return afforestionAreaTotal;
+                    }
+                },
+                {
+                    field : 'artificialAfforestionTotal', 
+                    title : '人工造林合计',
+                    align : 'center',
+                    footerFormatter:function (value){
+                        var artificialAfforestionTotal = 0;
+                        for (var i in value){
+                            artificialAfforestionTotal += parseFloat(value[i].artificialAfforestionTotal);
+                        }
+                        return artificialAfforestionTotal;
+                    }
+                },
+/*                {
+                    field : 'shrubArea', 
+                    title : '灌木林面积'
+                },*/
+                {
+                    field : 'airSendAfforest', 
+                    title : '飞播造林',
+                    align : 'center',
+                    footerFormatter:function (value) {
+                        var airSendAfforest = 0;
+                        for (var i in value) {
+                            airSendAfforest += parseFloat(value[i].airSendAfforest);
+                        }
+                        return airSendAfforest.toFixed(2);
+                    }
+                },
+                {
+                    field : 'newAfforestTotal', 
+                    title : '当年新封山育林合计',
+                    align : 'center',
+                    footerFormatter:function (value) {
+                        var newAfforestTotal = 0;
+                        for (var i in value) {
+                            newAfforestTotal += parseFloat(value[i].newAfforestTotal);
+                        }
+                        return newAfforestTotal;
+                    }
+                },
+     /*           {
+                    field : 'noNewAfforestArea', 
+                    title : '无林地和疏林地新封山育林面积'
+                },
+                {
+                    field : 'haveNewAfforestArea', 
+                    title : '有林地和灌木林地新封山育林面积'
+                },*/
+                {
+                    field : 'degraRepairArea', 
+                    title : '退化林修复面积',
+                    align : 'center',
+                    footerFormatter:function (value) {
+                        var degraRepairArea = 0;
+                        for (var i in value) {
+                            degraRepairArea += parseFloat(value[i].degraRepairArea);
+                        }
+                        return degraRepairArea;
+                    }
+                },
+                {
+                    field : 'forestTendArea', 
+                    title : '森林抚育面积',
+                    align : 'center',
+                    footerFormatter:function (value) {
+                        var forestTendArea = 0;
+                        for (var i in value) {
+                            forestTendArea += parseFloat(value[i].forestTendArea);
+                        }
+                        return forestTendArea;
+                    }
+                },
+                {
+                    field : 'yearendAfforestArea', 
+                    title : '年末实有封山育林面积',
+                    align : 'center',
+                    footerFormatter:function (value) {
+                        var yearendAfforestArea = 0;
+                        for (var i in value) {
+                            yearendAfforestArea += parseFloat(value[i].yearendAfforestArea);
+                        }
+                        return yearendAfforestArea;
+                    }
+                },
+                {
+                    field : 'manageAreaTotal', 
+                    title : '年末实有森林管护面积合计',
+                    align: 'center',
+                    footerFormatter:function (value) {
+                        var manageAreaTotal = 0;
+                        for (var i in value) {
+                            manageAreaTotal += parseFloat(value[i].manageAreaTotal);
+                        }
+                        return manageAreaTotal;
+                    }
+                },
+     /*           {
+                    field : 'nationalForest', 
+                    title : '国有林'
+                },
+                {
+                    field : 'nationalPublicForest', 
+                    title : '集体和个人所有的国家级公益林'
+                },
+                {
+                    field : 'localPublicForest', 
+                    title : '集体和个人所有的地方公益林'
+                },*/
+                {
+                    title: '操作',
+                    class: 'W180',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('&nbsp;<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="eveal(\'' + row.id + '\')"><i class="fa fa-edit"></i>分析</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#annual',
+                type: 'year'
+            });
+        });
+
+        /* 评价 */
+        function eveal(id) {
+            var url = prefix + '/eveal/' + id;
+            $.modal.open("生态评价", url);
+        }
+
+    </script>
+</body>
+</html>

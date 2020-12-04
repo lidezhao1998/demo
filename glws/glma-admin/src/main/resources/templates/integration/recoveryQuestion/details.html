@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改物候调查数据')" />
+</head>
+<body class="white-bg">
+<div class="main-content">
+    <form class="form-horizontal" id="form-recoveryQuestion-edit" readonly="readonly" th:object="${recoveryQuestion}">
+        <input id="id" name="id" th:field="*{id}"  type="hidden">
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">物候现象：</label>
+                    <div class="col-sm-5">
+                        <select id="phenology" name="phenology"  disabled="disabled" class="form-control m-b-xs">
+                            <option value="1" th:selected="*{phenology==1?'selected':'false'}">返青期</option>
+                            <!--<option value="2">生长期</option>-->
+                            <option value="3" th:selected="*{phenology==3?'selected':'false'}">枯黄期</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">地点：</label>
+                    <div class="col-sm-5">
+                        <input id="address" name="address" readonly="readonly" th:field="*{address}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label id="wh" class="col-sm-5 control-label" readonly="readonly" th:switch="*{phenology}">
+                        <label th:case="1">
+                            返青日期：
+                        </label>
+                        <label th:case="3">
+                            枯黄日期：
+                        </label>
+                    </label>
+                    <div class="col-sm-5">
+                        <input name="greenDate" readonly="readonly" type="text" class="form-control"  th:value="${#dates.format(recoveryQuestion.greenDate,'yyyy-MM-dd')}" placeholder="yyyy-MM-dd" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">纬度：</label>
+                    <div class="col-sm-5">
+                        <input id="northrrnLatitude" readonly="readonly" name="northrrnLatitude" th:field="*{northrrnLatitude}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">经度：</label>
+                    <div class="col-sm-5">
+                        <input id="eastLongitude" readonly="readonly" name="eastLongitude" th:field="*{eastLongitude}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">调查人：</label>
+                    <div class="col-sm-5">
+                        <input id="surveyUser" readonly="readonly" name="surveyUser" th:field="*{surveyUser}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">海拔：</label>
+                    <div class="col-sm-5">
+                        <input id="altitude" readonly="readonly" name="altitude" th:field="*{altitude}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">草地类：</label>
+                    <div class="col-sm-5">
+                        <input readonly="readonly" id="grasslandClass" name="grasslandClass" th:field="*{grasslandClass}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">草地型：</label>
+                    <div class="col-sm-5">
+                        <input readonly="readonly" id="grasslandType" name="grasslandType" th:field="*{grasslandType}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">地形原貌：</label>
+                    <div class="col-sm-5">
+                        <input id="terrainOriginal" readonly="readonly" name="terrainOriginal" th:field="*{terrainOriginal}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">牧草种类：</label>
+                    <div class="col-sm-5">
+                        <input readonly="readonly" id="forageSpecies" name="forageSpecies" th:field="*{forageSpecies}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">与常年比较方式：</label>
+                    <div class="col-sm-5">
+                        <select name="compareWay" class="form-control m-b" disabled="disabled" th:with="type=${@dict.getType('compareWay')}" readonly="readonly">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" readonly="readonly" th:selected="${dict.dictValue==recoveryQuestion.compareWay?'selected':'false'}" ></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">与常年比较变化天数：</label>
+                    <div class="col-sm-5">
+                        <input id="compareDayss" name="compareDayss" th:field="*{compareDayss}" class="form-control" readonly="readonly" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </form>
+</div>
+<th:block th:include="include :: datetimepicker-js" />
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+    var prefix = ctx + "integration/recoveryQuestion";
+
+
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#greenDate',
+            type: 'date',
+            format: 'yyyy-MM-dd',
+            trigger: 'click'
+        });
+    })
+    // $("#form-config-edit").validate({
+    // 	onkeyup: false,
+    //     rules: {
+    //         configKey: {
+    //             remote: {
+    //                 url: prefix + "/checkConfigKeyUnique",
+    //                 type: "post",
+    //                 dataType: "json",
+    //                 data: {
+    //                     "configId": function() {
+    //                     	return $("#configId").val();
+    //                     },
+    //                     "configKey": function() {
+    //                     	return $.common.trim($("#configKey").val());
+    //                     }
+    //                 },
+    //                 dataFilter: function(data, type) {
+    //                     return $.validate.unique(data);
+    //                 }
+    //             }
+    //         },
+    //     },
+    //     messages: {
+    //         "configKey": {
+    //             remote: "参数键名已经存在"
+    //         }
+    //     },
+    //     focusCleanup: true
+    // });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-recoveryQuestion-edit').serialize());
+        }
+    }
+
+    $('#phenology').change(function () {
+        var phenology=$('#phenology option:selected').val();
+        if (phenology==3){
+            // document.getElementById('fq').style.display='none';
+            // document.getElementById('kh').style.display='block';
+            document.getElementById("wh").innerText="枯黄日期：";
+        }
+        if (phenology==1){
+            document.getElementById("wh").innerText="返青日期：";
+            // document.getElementById('fq').style.display='block';
+            // document.getElementById('kh').style.display='none';
+        }
+    })
+
+
+</script>
+</body>
+</html>

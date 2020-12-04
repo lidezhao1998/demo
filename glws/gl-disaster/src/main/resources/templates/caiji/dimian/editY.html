@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改地面调查数据')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+    <th:block th:include="include :: select2-css"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+    <style type="text/css">
+        .tg-0lax {
+            text-align: center;
+            vertical-align: middle;
+            color: #333;
+        }
+
+        table {
+            background-color: white;
+            margin-left: 35px;
+        }
+
+        .col-sm-3 {
+            color: #333;
+        }
+
+        .form-control {
+            color: #333;
+        }
+
+        .form-group1 {
+            margin-left: 80px;
+        }
+
+        .col-sm-pt {
+            width: 95%;
+        }
+
+        /*修改表头颜色*/
+        .table-striped table thead {
+            background-color: rgba(48, 146, 62, 0.9);
+            color: whitesmoke;
+            height: 55px;
+        }
+
+        .daohang {
+            float: right;
+            width: 120px;
+            margin-right: 20px;
+
+        }
+        .kv-file-content{
+            width: 100px;
+            height: 50px;
+        }
+        .file-footer-caption{
+            width: 100px;
+            height: 30px;
+            margin-bottom:10px;
+        }
+        .button-p{
+        margin-left: 65%;
+
+            display:inline;
+        }
+        .footeer{
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body class="white-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+
+    <form class="form-horizontal " id="form-survey-add" enctype="multipart/form-data" method="post" th:object="${cGroundSurvey}">
+        <input name="groundId" id="groundId" th:field="*{groundId}" th:type="hidden">
+        <input name="mapId" id="mapId" th:field="*{mapId}" th:type="hidden">
+        <input id="photoUrl" name="photoUrl"   th:field="*{photoUrl}" th:type="hidden">
+        <input id="addrProvince" name="provincialLevelName"  th:field="*{provincialLevelName}"  th:type="hidden">
+        <input id="addrCity" name="cityLevelName"  th:field="*{cityLevelName}" th:type="hidden">
+        <input id="addrArea" name="countyLevelName"  th:field="*{countyLevelName}" th:type="hidden">
+        <h4 class="form-header h4">样地基本信息（编号规则S：鼠、虫、病、毒害草首字母，YYYY：年份；XXXXXX：县级行政代码；1、2、3：顺序号）</h4>
+            <div class="yangdixinxi">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group" style="text-align: center;">
+                            <label class="col-sm-3 control-label">样地编号：</label>
+                            <div class="col-sm-8" style="display: inline-block">
+                                <input id="codeId" name="codeId" class="form-control" th:type="text"  th:field="*{codeId}"
+                                       readonly >
+
+                            </div>
+
+                            <!--<a class="btn1 btn-success btn-rounded" th:onclick="bianhao()">选择</a>-->
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">绘图：</label>
+                            <div class="col-sm-8">
+                                <a class="btn btn-success" id="ht" onclick="ht()">
+                                    <i class="fa fa-plus"></i> 样地绘图
+                                </a>
+                                <a class="btn btn-success" id="hiddenht" onclick="hiddenht()" style="display: none">
+                                    <i class="fa fa-plus"></i> 回显绘图
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="col-sm-6">
+                        <div class="form-group">
+                            &lt;!&ndash;
+                                                                        <label class="col-sm-3 control-label">*省级名称：</label>
+                            &ndash;&gt;
+                            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>省级名称：</label>
+
+                            <div class="col-sm-8">
+                                &lt;!&ndash; < select name="provincialLevelName" class="form-control noselect2 selectpicker" th:with="type=${@dict.getType('sys_province')}" >
+                                 <option value="">请选择</option>
+                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}">
+                                 </option>
+                                 </select>&ndash;&gt;
+                                <select id="addrProvince"
+                                        style="width: 360px;height: 34px;border:1px solid #e5e6e7"
+                                        name="provincialLevelName" onchange="getCities() "
+                                        required="required">
+                                    <option value="">-&#45;&#45;&#45;&#45; 所在省 -&#45;&#45;&#45;&#45;&#45;&#45;</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>-->
+
+                </div>
+               <!-- <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>地级名称：</label>
+
+                            <div class="col-sm-8">
+                                <select
+                                        id="addrCity" name="cityLevelName"
+                                        style="width: 360px;height: 34px;border:1px solid #e5e6e7"
+                                        onchange="getAreas()" required="required">
+                                    <option value="">-&#45;&#45;&#45;&#45; 所在市 -&#45;&#45;&#45;&#45;&#45;&#45;</option>
+
+                                </select></div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>县级名称：</label>
+
+                            <div class="col-sm-8">
+                                <select id="addrArea" name="countyLevelName"
+                                        style="width: 360px;height: 34px;border:1px solid #e5e6e7"
+                                        onchange="getlngLat()" required="required">
+                                    <option value="">-&#45;&#45;&#45;&#45; 所在区 -&#45;&#45;&#45;&#45;&#45;&#45;</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>-->
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">坡位：</label>
+                            <div class="col-sm-8">
+                                <input name="slopePositionType" class="form-control" type="text"  th:field="*{slopePositionType}"  placeholder="可填:上坡、中坡、下坡、全坡">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">坡向：</label>
+                            <div class="col-sm-8">
+                                <input name="asceptType" class="form-control" type="text"  th:field="*{asceptType}" placeholder="例如:东南、西南、西北">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">坡度：</label>
+                            <div class="col-sm-8">
+                                <input name="fallingGradient" class="form-control" type="text"  th:field="*{fallingGradient}" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')" placeholder="例如:0.5、1.2">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">地表特征：</label>
+                            <div class="col-sm-8">
+                                <select name="surfaceFeaturesType"
+                                        class="form-control noselect2 selectpicker"
+                                        data-none-selected-text="请选择" multiple
+                                        th:with="type=${@dict.getType('di_surface_features')}">
+                                    <option
+                                            th:each="dict:${type}"
+                                            th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}"
+                                            th:selected="${cGroundSurvey.surfaceFeaturesType.contains(dict.dictValue)}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">调查时间：</label>
+                            <div class="col-sm-8">
+                                <div class="input-group date">
+                                                    <span class="input-group-addon"><i
+                                                            class="fa fa-calendar"></i></span>
+                                    <input name="surveyTime"  th:value="${#dates.format(cGroundSurvey.surveyTime, 'yyyy-MM-dd HH:mm')}"  type="text" class="form-control"
+                                           id="laydate-demo-3" placeholder="yyyy-MM-dd HH:mm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">植被覆盖度：</label>
+                            <div class="col-sm-8">
+                                <input name="vegetationCoverage" class="form-control" type="text" th:field="*{vegetationCoverage}" >
+                            </div>
+                        </div>
+                    </div>
+                    <!--
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label class="col-sm-3 control-label">调查人：</label>
+                                                            <div class="col-sm-8">
+                                                                <input name="name" class="form-control" type="text">
+                                                            </div>
+                                                        </div>
+                                                    </div>-->
+
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">土壤类型：</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <input id="suggest-demo-1" name="soilType" class="form-control noselect2 selectpicker" type="text" th:field="*{soilType}" >
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        </ul>
+                                    </div>
+                                </div>
+
+
+
+                                <!--<select name="soilType" class="form-control noselect2 selectpicker"
+                                        th:with="type=${@dict.getType('di_soil')}">
+                                    <option value="">请选择</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}" th:field="*{soilType}">
+                                    </option>
+                                </select>-->
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">草地类型：</label>
+                            <div class="col-sm-8">
+                                <input name="grasslandType" id="grasslandType" class="form-control" type="text"  th:field="*{grasslandType}" placeholder="样地绘图自动回显值">
+                               <!-- <select name="grasslandType" class="form-control noselect2 selectpicker"
+                                        th:with="type=${@dict.getType('di_grassland')}">
+                                    <option value="">请选择</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}" th:field="*{grasslandType}">
+                                    </option>
+                                </select>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--   <div class="row">
+                     <div class="col-sm-6">
+                         <div class="form-group">
+                             <label class="col-sm-3 control-label">植被覆盖度：</label>
+                             <div class="col-sm-8">
+                                 <input name="vegetationCoverage" class="form-control" type="text">
+                             </div>
+                         </div>
+                     </div>
+                   <div class="col-sm-6">
+                         <div class="form-group">
+                             <label class="col-sm-3 control-label">地上生物量：</label>
+                             <div class="col-sm-8">
+                                 <input name="aboveGroundBiomass" class="form-control" type="text">
+                             </div>
+                         </div>
+                     </div>
+                </div>-->
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">天敌种类：</label>
+                            <div class="col-sm-8">
+                                <select name="naturalEnemyType"
+                                        class="form-control noselect2 selectpicker"
+                                        data-none-selected-text="请选择" multiple
+                                        th:with="type=${@dict.getType('di_natural_enemy')}">
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}" th:selected="${cGroundSurvey.naturalEnemyType.contains(dict.dictValue)}">
+                                    </option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">主要植物：</label>
+                            <div class="col-sm-8">
+
+                                <select name="mianBotanyType"
+                                        class="form-control noselect2 selectpicker"
+                                        data-none-selected-text="请选择" multiple
+                                        th:with="type=${@dict.getType('di_mian_botany')}">
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}" th:selected="${cGroundSurvey.mianBotanyType.contains(dict.dictValue)}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!--     <div class="row">
+                         <div class="col-sm-6">
+                             <div class="form-group">
+                                 <label class="col-sm-3 control-label">地表特征：</label>
+                                 <div class="col-sm-8">
+                                     <select name="surfaceFeaturesType"
+                                             class="form-control noselect2 selectpicker"
+                                             data-none-selected-text="请选择" multiple
+                                             th:with="type=${@dict.getType('di_surface_features')}">
+                                         <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                                 th:value="${dict.dictValue}" th:selected="${cGroundSurvey.surfaceFeaturesType.contains(dict.dictValue)}">
+                                         </option>
+                                     </select>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>-->
+                <input name="longitude" id="jd" class="form-control" type='hidden' placeholder="例:13.2" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')">
+                <input name="latitude" id="wd" class="form-control" type='hidden' placeholder="例:33.4" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')">
+
+               <!-- <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">经度：</label>
+                            <div class="col-sm-8">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">纬度：</label>
+                            <div class="col-sm-8">
+                                <input name="latitude" id="wd" class="form-control" type='hidden' placeholder="例:33.4" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')">
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">高程(米)：</label>
+                            <div class="col-sm-8">
+                                <input name="elevation" class="form-control" type="text" th:field="*{elevation}" onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="例如:32">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">地形：</label>
+                            <div class="col-sm-8">
+                                <input name="topographyType" class="form-control" type="text" th:field="*{topographyType}" placeholder="可填:高原、平原、山地、丘陵、盆地">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+
+
+
+                    <!--<div  style="padding-left: 255px;">
+                            <a class="btn btn-success" onclick="ht()" >
+                                <i class="fa fa-plus"></i> 添加绘图
+                            </a>
+                    </div>-->
+                </div>
+            </div>
+        <!-- <h1>样地位置信息</h1>
+         <fieldset>
+             <div class="row">
+
+                 <div class="col-sm-6">
+                     <div class="form-group">
+                         <label class="col-sm-3 control-label">经度：</label>
+                         <div class="col-sm-8">
+                             <input name="longitude" id="jd" class="form-control" type="text">
+                         </div>
+                     </div>
+                 </div>
+                 <div class="col-sm-6">
+                     <div class="form-group">
+                         <label class="col-sm-3 control-label">纬度：</label>
+                         <div class="col-sm-8">
+                             <input name="latitude" id="wd" class="form-control" type="text">
+                         </div>
+                     </div>
+                 </div>
+             </div>
+
+             <div class="row">
+                 <div class="col-sm-6">
+                     <div class="form-group">
+                         <label class="col-sm-3 control-label">高程：</label>
+                         <div class="col-sm-8">
+                             <input name="elevation" class="form-control" type="text">
+                         </div>
+                     </div>
+                 </div>
+                 <div class="col-sm-6">
+                     <div class="form-group">
+                         <label class="col-sm-3 control-label">地形：</label>
+                         <div class="col-sm-8">
+                             <input name="topographyType" class="form-control" type="text">
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             <div class="row">
+                 <div class="col-sm-6">
+                     <div class="form-group">
+                         <label class="col-sm-3 control-label">坡位：</label>
+                         <div class="col-sm-8">
+                             <input name="slopePositionType" class="form-control" type="text">
+                         </div>
+                     </div>
+                 </div>
+
+
+                 <div class="col-sm-6">
+                     <div class="form-group">
+                         <label class="col-sm-3 control-label">坡向：</label>
+                         <div class="col-sm-8">
+                             <input name="asceptType" class="form-control" type="text">
+                         </div>
+                     </div>
+                 </div>
+
+             </div>
+             <div class="row">
+
+                 <div class="col-sm-6">
+                     <div class="form-group">
+                         <label class="col-sm-3 control-label">坡度：</label>
+                         <div class="col-sm-8">
+                             <input name="fallingGradient" class="form-control" type="text">
+                         </div>
+                     </div>
+                 </div>
+
+
+
+
+                 &lt;!&ndash;<div  style="padding-left: 255px;">
+                         <a class="btn btn-success" onclick="ht()" >
+                             <i class="fa fa-plus"></i> 添加绘图
+                         </a>
+                 </div>&ndash;&gt;
+             </div>
+
+
+             &lt;!&ndash;<div class="row">
+             <div class="col-sm-6">
+                 <div class="form-group">
+                     <div class="btn-group-sm" id="toolbar" role="group">
+                         <a class="btn btn-success" onclick="bjht()" >
+                             <i class="fa fa-plus"></i> 编辑绘图
+                         </a>
+                     </div>
+                 </div>
+             </div>
+               </div>&ndash;&gt;
+         </fieldset>-->
+
+            <h4 class="form-header h4">样地照片</h4>
+
+            <div class="col-sm-pt">
+                <div class="form-group1"  >
+
+                    <div class="file-loading" style="height: 100px">
+                        <input id="fileinput-demo-2" name="photo" type="file"  accept="image/*" multiple >
+                    </div>
+
+              <!--  <div class="row">
+                    <div class="col-sm-11">
+                        <div class="form-group1" style="color: red">
+                            注：上传图片格式'jpg', 'gif', 'png','bmp','jpeg';<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 单次最多上传图片数量10个;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 单个图片限制大小10MB。
+
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+</div>
+            <!--<h4 class="form-header h4">取样信息</h4>-->
+           <!-- <div class="col-sm-12 search-collapse quyangAdd">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p class="Addtitle">请选择取样生物种类：</p>
+                                <select id="Addtitle" name="harmfulSpeciesType"
+                                        th:with="type=${@dict.getType('di_qu_Biological_species')}">
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                            th:value="${dict.dictValue}">
+                                    </option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-success" onclick="addTabQuy()"><i
+                                        class="fa fa-plus"></i> 添加</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>-->
+
+         <!--   <div class="col-sm-12 select-table table-striped">
+
+                <table id="bootstrap-table3"></table>
+
+            </div>-->
+
+
+    </form>
+    <div class="footeer">
+    <div class="button-p" >
+        <button type="button" class="btn btn-w-m btn-primary" th:onclick="saveYiQy()"  >保存并新增取样</button>&nbsp;
+         <button type="button" class="btn btn-w-m btn-primary" th:onclick="saveYi()"  ></i>保 存</button>&nbsp;
+
+        <button type="button" class="btn btn-w-m btn-danger" onclick="successCallback1()"></i>关 闭 </button>
+    </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<th:block th:include="include :: select2-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: uploadImg-js"/>
+<th:block th:include="include :: bootstrap-suggest-js" />
+<th:block th:include="include :: dimianCommon-js" />
+<script type="text/javascript">
+
+    var prefix = ctx + "caiji/survey";
+
+    var prefix2 = ctx + "caiji/plot";
+
+
+</script>
+<script th:inline="javascript">
+    // ===== 加载省列表 =====
+    //取样id值
+    var grounid = "";
+    function successCallback1() {
+
+        refreshItem("/caiji/survey");
+        closeItem();
+
+
+        $.modal.alertWarning(result.msg)
+
+        $.modal.alertError(result.msg);
+        $.modal.closeLoading();
+        $.modal.enable();
+    }
+
+    /** 刷新选项卡 */
+    function refreshItem(currentId) {
+        var topWindow = $(window.parent.parent.document);
+        var target = $('.RuoYi_iframe[data-id="' + currentId + '"]', topWindow);
+        var url = target.attr('src');
+        target.attr('src', url).ready();
+    };
+
+
+    //样地保存
+    function saveYi(){
+        if ($.validate.form('form-survey-add')) {
+
+            $.modal.confirm("确认要保存吗？", function () {
+                var formData = new FormData(document.getElementById("form-survey-add"));
+                if(savefiles.length>0){
+                    for(var i=0;i<savefiles.length;i++){
+                        formData.append("file", savefiles[i]);
+                    }
+                }
+
+
+                /*var files1=$("#fileinput-demo-2").get(0).files ;
+                for(var i=0;i<files1.length;i++){
+                    formData.append("file", document.getElementById("fileinput-demo-2").files[i]);
+                }*/
+                var  url=prefix+"/editY";
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    cache: false,
+                    data: formData,
+                    dataType:'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        $.operate.successCallback(result);
+                    }
+                });
+
+            })
+
+
+        }
+    }
+
+    //样地保存并新增取样信息
+    function saveYiQy() {
+        if ($.validate.form('form-survey-add')) {
+            //let gis_id = sessionStorage.getItem("gis_id");
+           // $("#mapId").val(gis_id);
+            $.modal.confirm("确认保存吗?", function () {
+                //saveTab(prefix + "/add", $('#form-sczj-add').serialize());
+            /*    $.operate.save(prefix + "/addYQ", $('#form-sczj-add').serialize());*/
+                var formData = new FormData(document.getElementById("form-survey-add"));
+                if(savefiles.length>0){
+                    for(var i=0;i<savefiles.length;i++){
+                        formData.append("file", savefiles[i]);
+                    }
+                }
+              /*  var files1=$("#fileinput-demo-2").get(0).files ;
+                for(var i=0;i<files1.length;i++){
+                    formData.append("file", document.getElementById("fileinput-demo-2").files[i]);
+                }*/
+                var  url=prefix+"/editY";
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    cache: false,
+                    data: formData,
+                    dataType:'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        //$.operate.successCallback(result);
+                        $.modal.parentTab("新增取样信息", prefix2+"/addY/"+result.groundId);
+                    }
+                });
+
+            });
+
+
+        }
+    }
+    var mapId = [[${cGroundSurvey.mapId}]];
+    ids = document.getElementById("photoUrl").value;
+    $(document).ready(function () {
+        mapIds();
+        //初始化上传方法
+        chush(null,null,true,[[${initialPreview}]],[[${initialPreviewConfig}]],document.getElementById("photoUrl"));
+
+        //行政代码
+        var testBsSuggest = $("#suggest-demo-1").bsSuggest({
+            url: prefix + "/dictdata/di_soil",
+            idField: "dictCode",
+            keyField: "dictLabel"
+        })
+
+
+        $("input[name='surveyTime']").datetimepicker({
+            format: "yyyy-mm-dd HH:mm",
+            minView: "month",
+            autoclose: true,
+            initialDate: new Date()
+        });
+
+    });
+
+
+    function mapIds() {
+        if(mapId!=null&&mapId!=""){
+            document.getElementById("ht").style.display="none";
+            document.getElementById("hiddenht").style.display="";
+        }
+    }
+
+    function ht() {
+        ///let gis_id = sessionStorage.getItem("gis_id");
+        var mapId = $("#mapId").val();
+        if (mapId == null||mapId=="") {
+            var addrArea = $("#addrArea").val();
+            if (addrArea == "") {
+                addrArea = '-1'
+            }
+            var addrCity = $("#addrCity").val();
+            if (addrCity == "") {
+                addrCity = '-1'
+            }
+            var prefix = ctx + "system/gisMap";
+            var url = prefix + '/getListCaoYuanGisMap/' + addrArea + '/' + addrCity;
+            $.modal.open("新建绘图", url, '850', '650');
+
+
+        } else {
+
+            hiddenht();
+
+        }
+
+    }
+
+    function hiddenht() {
+        var gis_id = $("#mapId").val();
+        if(gis_id ==null || gis_id ==''){
+            var prefix = ctx + "system/gisMap";
+            var url = prefix + '/getGisMap/' + 0;
+            $.modal.open("新建绘图", url, '850', '650');
+
+        }else{
+
+            var mapId = gis_id;
+            var prefix = ctx + "system/gisMap";
+            var url = prefix + '/getGisMap/' + mapId;
+            $.modal.open("编辑绘图", url, '850', '650');
+
+        }
+
+
+
+    }
+
+</script>
+
+</body>
+</html>

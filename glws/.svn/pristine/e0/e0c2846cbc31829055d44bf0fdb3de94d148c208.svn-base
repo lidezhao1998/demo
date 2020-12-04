@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CDiseaseKnowledgeMapper">
+    
+    <resultMap type="CDiseaseKnowledge" id="CDiseaseKnowledgeResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="middleName"    column="MIDDLE_NAME"    />
+        <result property="latinName"    column="LATIN_NAME"    />
+        <result property="byName"    column="BY_NAME"    />
+        <result property="byForm"    column="BY_FORM"    />
+        <result property="subgate"    column="SUBGATE"    />
+        <result property="genus"    column="GENUS"    />
+        <result property="host"    column="HOST"    />
+        <result property="distribution"    column="DISTRIBUTION"    />
+        <result property="damageLocation"    column="DAMAGE_LOCATION"    />
+        <result property="whSymptom"    column="WH_SYMPTOM"    />
+        <result property="symptom"    column="SYMPTOM"    />
+        <result property="disease"    column="DISEASE"    />
+        <result property="law"    column="LAW"    />
+        <result property="method"    column="METHOD"    />
+        <result property="byMorphology"    column="BY_MORPHOLOGY"    />
+        <result property="symptomMap"    column="SYMPTOM_MAP"    />
+        <result property="status"    column="STATUS"    />
+    </resultMap>
+
+    <sql id="selectCDiseaseKnowledgeVo">
+        select ID, CODE, MIDDLE_NAME, LATIN_NAME, BY_NAME, BY_FORM, SUBGATE, GENUS, HOST, DISTRIBUTION, DAMAGE_LOCATION, WH_SYMPTOM, SYMPTOM, DISEASE, LAW, METHOD, BY_MORPHOLOGY, SYMPTOM_MAP, STATUS from c_disease_knowledge
+    </sql>
+
+    <select id="selectCDiseaseKnowledgeList" parameterType="CDiseaseKnowledge" resultMap="CDiseaseKnowledgeResult">
+        <include refid="selectCDiseaseKnowledgeVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="middleName != null  and middleName != ''"> and MIDDLE_NAME like concat('%', #{middleName}, '%')</if>
+            <if test="latinName != null  and latinName != ''"> and LATIN_NAME like concat('%', #{latinName}, '%')</if>
+            <if test="byName != null  and byName != ''"> and BY_NAME like concat('%', #{byName}, '%')</if>
+            <if test="byForm != null  and byForm != ''"> and BY_FORM = #{byForm}</if>
+            <if test="subgate != null  and subgate != ''"> and SUBGATE = #{subgate}</if>
+            <if test="genus != null  and genus != ''"> and GENUS = #{genus}</if>
+            <if test="host != null  and host != ''"> and HOST = #{host}</if>
+            <if test="distribution != null  and distribution != ''"> and DISTRIBUTION like concat('%', #{distribution}, '%')</if>
+            <if test="damageLocation != null  and damageLocation != ''"> and DAMAGE_LOCATION = #{damageLocation}</if>
+            <if test="whSymptom != null  and whSymptom != ''"> and WH_SYMPTOM = #{whSymptom}</if>
+            <if test="symptom != null  and symptom != ''"> and SYMPTOM = #{symptom}</if>
+            <if test="disease != null  and disease != ''"> and DISEASE = #{disease}</if>
+            <if test="law != null  and law != ''"> and LAW = #{law}</if>
+            <if test="method != null  and method != ''"> and METHOD = #{method}</if>
+            <if test="byMorphology != null  and byMorphology != ''"> and BY_MORPHOLOGY = #{byMorphology}</if>
+            <if test="symptomMap != null  and symptomMap != ''"> and SYMPTOM_MAP = #{symptomMap}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+        </where>
+           order by CREATE_TIME desc
+
+    </select>
+    
+    <select id="selectCDiseaseKnowledgeById" parameterType="Long" resultMap="CDiseaseKnowledgeResult">
+        <include refid="selectCDiseaseKnowledgeVo"/>
+        where ID = #{id}
+    </select>
+    <select id="checkCode"  parameterType="string" resultType="java.lang.String">
+       select  CODE from c_disease_knowledge where code=#{code}
+
+    </select>
+
+    <insert id="insertCDiseaseKnowledge" parameterType="CDiseaseKnowledge">
+        insert into c_disease_knowledge
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="middleName != null  and middleName != ''">MIDDLE_NAME,</if>
+            <if test="latinName != null  and latinName != ''">LATIN_NAME,</if>
+            <if test="byName != null  and byName != ''">BY_NAME,</if>
+            <if test="byForm != null  and byForm != ''">BY_FORM,</if>
+            <if test="subgate != null  and subgate != ''">SUBGATE,</if>
+            <if test="genus != null  and genus != ''">GENUS,</if>
+            <if test="host != null  and host != ''">HOST,</if>
+            <if test="distribution != null  and distribution != ''">DISTRIBUTION,</if>
+            <if test="damageLocation != null  and damageLocation != ''">DAMAGE_LOCATION,</if>
+            <if test="whSymptom != null  and whSymptom != ''">WH_SYMPTOM,</if>
+            <if test="symptom != null  and symptom != ''">SYMPTOM,</if>
+            <if test="disease != null  and disease != ''">DISEASE,</if>
+            <if test="law != null  and law != ''">LAW,</if>
+            <if test="method != null  and method != ''">METHOD,</if>
+            <if test="byMorphology != null  and byMorphology != ''">BY_MORPHOLOGY,</if>
+            <if test="symptomMap != null  and symptomMap != ''">SYMPTOM_MAP,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="updateTime != null  and updateTime != ''">UPDATE_TIME,</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="middleName != null  and middleName != ''">#{middleName},</if>
+            <if test="latinName != null  and latinName != ''">#{latinName},</if>
+            <if test="byName != null  and byName != ''">#{byName},</if>
+            <if test="byForm != null  and byForm != ''">#{byForm},</if>
+            <if test="subgate != null  and subgate != ''">#{subgate},</if>
+            <if test="genus != null  and genus != ''">#{genus},</if>
+            <if test="host != null  and host != ''">#{host},</if>
+            <if test="distribution != null  and distribution != ''">#{distribution},</if>
+            <if test="damageLocation != null  and damageLocation != ''">#{damageLocation},</if>
+            <if test="whSymptom != null  and whSymptom != ''">#{whSymptom},</if>
+            <if test="symptom != null  and symptom != ''">#{symptom},</if>
+            <if test="disease != null  and disease != ''">#{disease},</if>
+            <if test="law != null  and law != ''">#{law},</if>
+            <if test="method != null  and method != ''">#{method},</if>
+            <if test="byMorphology != null  and byMorphology != ''">#{byMorphology},</if>
+            <if test="symptomMap != null  and symptomMap != ''">#{symptomMap},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null  and updateTime != ''">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCDiseaseKnowledge" parameterType="CDiseaseKnowledge">
+        update c_disease_knowledge
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="middleName != null  and middleName != ''">MIDDLE_NAME = #{middleName},</if>
+            <if test="latinName != null  and latinName != ''">LATIN_NAME = #{latinName},</if>
+            <if test="byName != null  and byName != ''">BY_NAME = #{byName},</if>
+            <if test="byForm != null  and byForm != ''">BY_FORM = #{byForm},</if>
+            <if test="subgate != null  and subgate != ''">SUBGATE = #{subgate},</if>
+            <if test="genus != null  and genus != ''">GENUS = #{genus},</if>
+            <if test="host != null  and host != ''">HOST = #{host},</if>
+            <if test="distribution != null  and distribution != ''">DISTRIBUTION = #{distribution},</if>
+            <if test="damageLocation != null  and damageLocation != ''">DAMAGE_LOCATION = #{damageLocation},</if>
+            <if test="whSymptom != null  and whSymptom != ''">WH_SYMPTOM = #{whSymptom},</if>
+            <if test="symptom != null  and symptom != ''">SYMPTOM = #{symptom},</if>
+            <if test="disease != null  and disease != ''">DISEASE = #{disease},</if>
+            <if test="law != null  and law != ''">LAW = #{law},</if>
+            <if test="method != null  and method != ''">METHOD = #{method},</if>
+            <if test="byMorphology != null  and byMorphology != ''">BY_MORPHOLOGY = #{byMorphology},</if>
+            <if test="symptomMap != null  and symptomMap != ''">SYMPTOM_MAP = #{symptomMap},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <!--<if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="create by != null  and create by != ''">CREATE_ BY = #{create by},</if>
+            <if test="updateTime != null  and updateTime != ''">UPDATE_TIME = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY = #{updateBy},</if>-->
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCDiseaseKnowledgeById" parameterType="Long">
+        delete from c_disease_knowledge where ID = #{id}
+    </delete>
+
+    <delete id="deleteCDiseaseKnowledgeByIds" parameterType="String">
+        delete from c_disease_knowledge where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <update id="CDiseaseKnowledgeUpdatesymptomMaps" parameterType="String">
+    update c_disease_knowledge set SYMPTOM_MAP="" where id=#{id}
+    </update>
+
+    <update id="CDiseaseKnowledgeUpdatebyMorphology" parameterType="String">
+    update c_disease_knowledge set BY_MORPHOLOGY="" where id=#{id}
+    </update>
+
+</mapper>

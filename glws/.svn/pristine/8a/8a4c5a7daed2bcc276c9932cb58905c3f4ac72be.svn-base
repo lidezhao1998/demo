@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TTaskIdeaMapper">
+    
+    <resultMap type="TTaskIdea" id="TTaskIdeaResult">
+        <result property="id"    column="id"    />
+        <result property="ideaContent"    column="idea_content"    />
+        <result property="ideaApplicant"    column="idea_applicant"    />
+        <result property="ideaCreateUser"    column="idea_create_user"    />
+        <result property="taskId"    column="task_id"    />
+        <result property="state"    column="state"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTTaskIdeaVo">
+        select id, idea_content, idea_applicant, idea_create_user, task_id, state, create_by, create_time, update_by, update_time, remark from t_task_idea
+    </sql>
+
+    <select id="selectTTaskIdeaList" parameterType="TTaskIdea" resultMap="TTaskIdeaResult">
+        <include refid="selectTTaskIdeaVo"/>
+        <where>  
+            <if test="ideaContent != null  and ideaContent != ''"> and idea_content = #{ideaContent}</if>
+            <if test="ideaApplicant != null  and ideaApplicant != ''"> and idea_applicant = #{ideaApplicant}</if>
+            <if test="ideaCreateUser != null "> and idea_create_user = #{ideaCreateUser}</if>
+            <if test="taskId != null "> and task_id = #{taskId}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+        </where>
+    </select>
+    
+    <select id="selectTTaskIdeaById" parameterType="Integer" resultMap="TTaskIdeaResult">
+        <include refid="selectTTaskIdeaVo"/>
+        where task_id = #{reportId}
+    </select>
+        
+    <insert id="insertTTaskIdea" parameterType="TTaskIdea" useGeneratedKeys="true" keyProperty="id">
+        insert into t_task_idea
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ideaContent != null  and ideaContent != ''">idea_content,</if>
+            <if test="ideaApplicant != null  and ideaApplicant != ''">idea_applicant,</if>
+            <if test="ideaCreateUser != null ">idea_create_user,</if>
+            <if test="taskId != null ">task_id,</if>
+            <if test="state != null  and state != ''">state,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ideaContent != null  and ideaContent != ''">#{ideaContent},</if>
+            <if test="ideaApplicant != null  and ideaApplicant != ''">#{ideaApplicant},</if>
+            <if test="ideaCreateUser != null ">#{ideaCreateUser},</if>
+            <if test="taskId != null ">#{taskId},</if>
+            <if test="state != null  and state != ''">#{state},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTTaskIdea" parameterType="TTaskIdea">
+        update t_task_idea
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ideaContent != null  and ideaContent != ''">idea_content = #{ideaContent},</if>
+            <if test="ideaApplicant != null  and ideaApplicant != ''">idea_applicant = #{ideaApplicant},</if>
+            <if test="ideaCreateUser != null ">idea_create_user = #{ideaCreateUser},</if>
+            <if test="taskId != null ">task_id = #{taskId},</if>
+            <if test="state != null  and state != ''">state = #{state},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTTaskIdeaById" parameterType="Integer">
+        delete from t_task_idea where id = #{id}
+    </delete>
+
+    <delete id="deleteTTaskIdeaByIds" parameterType="String">
+        delete from t_task_idea where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

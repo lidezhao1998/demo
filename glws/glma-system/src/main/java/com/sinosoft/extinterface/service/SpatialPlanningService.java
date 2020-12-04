@@ -1,0 +1,34 @@
+package com.sinosoft.extinterface.service;
+
+import com.sinosoft.extinterface.domain.SpatialPlanning;
+import com.sinosoft.integration.domain.SysShpFile;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+/**
+ * @author sunlei
+ * @description
+ * @date 2020/09/02/10:53
+ */
+public interface SpatialPlanningService {
+    List<SpatialPlanning> selectSpatialPlanningList(SpatialPlanning spatialPlanning);
+
+    SpatialPlanning selectShpFileById(Long parentId);
+
+    String checkShpFileNameUnique(SpatialPlanning spatialPlanning);
+
+    int insertShpFile(String filePath  ,String color);
+
+    int updateEditSpatialPlanning(SpatialPlanning shpFile);
+
+    int selectShpFileCount(Long shpFileId);
+
+    int deleteShpFileById(Long id);
+
+    Integer updateunexamine(Long id);
+
+    Integer examine(Long id);
+
+    void addFields(Long id, String geomData);
+}

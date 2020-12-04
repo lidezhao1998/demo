@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.ReserveManagement.mapper.KAllocationMapper">
+    
+    <resultMap type="KAllocation" id="KAllocationResult">
+        <result property="id"    column="ID"    />
+        <result property="oddnumber"    column="ODDNUMBER"    />
+        <result property="name"    column="NAME"    />
+        <result property="applicationArea"    column="APPLICATION_AREA"    />
+        <result property="allocationArea"    column="ALLOCATION_AREA"    />
+        <result property="allocationTime"    column="ALLOCATION_TIME"    />
+        <result property="receiver"    column="RECEIVER"    />
+        <result property="deliveryman"    column="DELIVERYMAN"    />
+        <result property="receiverNumber"    column="RECEIVER_NUMBER"    />
+        <result property="deliverymanNumber"    column="DELIVERYMAN_NUMBER"    />
+        <result property="cargoCode"    column="CARGO_CODE"    />
+        <result property="cargoNumber"    column="CARGO_NUMBER"    />
+        <result property="cargoMoney"    column="CARGO_MONEY"    />
+        <result property="cargoName"    column="CARGO_NAME"    />
+        <result property="status"    column="STATUS"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="updateBy"    column="UPDATE_BY"    />
+    </resultMap>
+
+    <sql id="selectKAllocationVo">
+        select ID, ODDNUMBER, NAME, APPLICATION_AREA, ALLOCATION_AREA, ALLOCATION_TIME, RECEIVER, DELIVERYMAN, RECEIVER_NUMBER, DELIVERYMAN_NUMBER, CARGO_CODE, CARGO_NUMBER, CARGO_MONEY, CARGO_NAME, STATUS, REMARK, CREATE_TIME, CREATE_BY, UPDATE_TIME, UPDATE_BY from k_allocation
+    </sql>
+
+    <select id="selectKAllocationList" parameterType="KAllocation" resultMap="KAllocationResult">
+        <include refid="selectKAllocationVo"/>
+        <where>  
+            <if test="oddnumber != null "> and ODDNUMBER like concat('%', #{oddnumber}, '%')</if>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="applicationArea != null  and applicationArea != ''"> and APPLICATION_AREA = #{applicationArea}</if>
+            <if test="allocationArea != null  and allocationArea != ''"> and ALLOCATION_AREA = #{allocationArea}</if>
+            <if test="allocationTime != null "> and ALLOCATION_TIME = #{allocationTime}</if>
+            <if test="receiver != null  and receiver != ''"> and RECEIVER = #{receiver}</if>
+            <if test="deliveryman != null  and deliveryman != ''"> and DELIVERYMAN = #{deliveryman}</if>
+            <if test="receiverNumber != null "> and RECEIVER_NUMBER = #{receiverNumber}</if>
+            <if test="deliverymanNumber != null "> and DELIVERYMAN_NUMBER = #{deliverymanNumber}</if>
+            <if test="cargoCode != null  and cargoCode != ''"> and CARGO_CODE = #{cargoCode}</if>
+            <if test="cargoNumber != null "> and CARGO_NUMBER = #{cargoNumber}</if>
+            <if test="cargoMoney != null  and cargoMoney != ''"> and CARGO_MONEY = #{cargoMoney}</if>
+            <if test="cargoName != null  and cargoName != ''"> and CARGO_NAME like concat('%', #{cargoName}, '%')</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="remark != null  and remark != ''"> and REMARK = #{remark}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="updateBy != null "> and UPDATE_BY = #{updateBy}</if>
+        </where>
+    </select>
+    
+    <select id="selectKAllocationById" parameterType="Long" resultMap="KAllocationResult">
+        <include refid="selectKAllocationVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertKAllocation" parameterType="KAllocation">
+        insert into k_allocation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">ID,</if>
+            <if test="oddnumber != null ">ODDNUMBER,</if>
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="applicationArea != null  and applicationArea != ''">APPLICATION_AREA,</if>
+            <if test="allocationArea != null  and allocationArea != ''">ALLOCATION_AREA,</if>
+            <if test="allocationTime != null ">ALLOCATION_TIME,</if>
+            <if test="receiver != null  and receiver != ''">RECEIVER,</if>
+            <if test="deliveryman != null  and deliveryman != ''">DELIVERYMAN,</if>
+            <if test="receiverNumber != null ">RECEIVER_NUMBER,</if>
+            <if test="deliverymanNumber != null ">DELIVERYMAN_NUMBER,</if>
+            <if test="cargoCode != null  and cargoCode != ''">CARGO_CODE,</if>
+            <if test="cargoNumber != null ">CARGO_NUMBER,</if>
+            <if test="cargoMoney != null  and cargoMoney != ''">CARGO_MONEY,</if>
+            <if test="cargoName != null  and cargoName != ''">CARGO_NAME,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="updateBy != null ">UPDATE_BY,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="oddnumber != null ">#{oddnumber},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="applicationArea != null  and applicationArea != ''">#{applicationArea},</if>
+            <if test="allocationArea != null  and allocationArea != ''">#{allocationArea},</if>
+            <if test="allocationTime != null ">#{allocationTime},</if>
+            <if test="receiver != null  and receiver != ''">#{receiver},</if>
+            <if test="deliveryman != null  and deliveryman != ''">#{deliveryman},</if>
+            <if test="receiverNumber != null ">#{receiverNumber},</if>
+            <if test="deliverymanNumber != null ">#{deliverymanNumber},</if>
+            <if test="cargoCode != null  and cargoCode != ''">#{cargoCode},</if>
+            <if test="cargoNumber != null ">#{cargoNumber},</if>
+            <if test="cargoMoney != null  and cargoMoney != ''">#{cargoMoney},</if>
+            <if test="cargoName != null  and cargoName != ''">#{cargoName},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null ">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKAllocation" parameterType="KAllocation">
+        update k_allocation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="oddnumber != null ">ODDNUMBER = #{oddnumber},</if>
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="applicationArea != null  and applicationArea != ''">APPLICATION_AREA = #{applicationArea},</if>
+            <if test="allocationArea != null  and allocationArea != ''">ALLOCATION_AREA = #{allocationArea},</if>
+            <if test="allocationTime != null ">ALLOCATION_TIME = #{allocationTime},</if>
+            <if test="receiver != null  and receiver != ''">RECEIVER = #{receiver},</if>
+            <if test="deliveryman != null  and deliveryman != ''">DELIVERYMAN = #{deliveryman},</if>
+            <if test="receiverNumber != null ">RECEIVER_NUMBER = #{receiverNumber},</if>
+            <if test="deliverymanNumber != null ">DELIVERYMAN_NUMBER = #{deliverymanNumber},</if>
+            <if test="cargoCode != null  and cargoCode != ''">CARGO_CODE = #{cargoCode},</if>
+            <if test="cargoNumber != null ">CARGO_NUMBER = #{cargoNumber},</if>
+            <if test="cargoMoney != null  and cargoMoney != ''">CARGO_MONEY = #{cargoMoney},</if>
+            <if test="cargoName != null  and cargoName != ''">CARGO_NAME = #{cargoName},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="updateBy != null ">UPDATE_BY = #{updateBy},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteKAllocationById" parameterType="Long">
+        delete from k_allocation where ID = #{id}
+    </delete>
+
+    <delete id="deleteKAllocationByIds" parameterType="String">
+        delete from k_allocation where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--上报改变状态-->
+    <update id="updateAllocation" parameterType="Long">
+        update  k_allocation set status='2' where ID=#{id}
+    </update>
+
+
+    <!--驳回改变状态-->
+    <update id="updateBhAllocation" parameterType="Long">
+        update  k_allocation set status='4' where ID=#{id}
+    </update>
+
+    <!--驳回改变状态-->
+    <update id="updateShAllocation" parameterType="Long">
+        update  k_allocation set status='3' where ID=#{id}
+    </update>
+
+
+</mapper>

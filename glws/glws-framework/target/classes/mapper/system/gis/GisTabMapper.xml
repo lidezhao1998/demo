@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.gis.GisTabMapper">
+    <resultMap type="com.ruoyi.system.domain.gis.GisTab" id="GisTabResult">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="remark" column="remark"/>
+        <result property="geo" column="geo"/>
+        <result property="is_visible" column="is_visible"/>
+        <result property="centre" column="centre"/>
+        <result property="area" column="area"/>
+        <result property="address" column="address"/>
+        <result property="type" column="type"/>
+        <result property="gid" column="gid"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <sql id="selectTabVo">
+        select id,name,remark,is_visible,centre,area,address,type,tid,create_by,create_time
+            from t_gis_tab
+    </sql>
+    <insert id="insertGisTab">
+        insert into t_gis_tab(
+        <if test="name != null and name != ''">name,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="geo != null and geo != ''">geo,</if>
+        <if test="type != null and type != ''">type,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        is_visible,
+        <if test="centre != null and centre != ''">centre,</if>
+        <if test="area != null and area != ''">area,</if>
+        <if test="address != null and address != ''">address,</if>
+        create_time,
+        tid
+        )values(
+        <if test="name != null and name != ''">#{name},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="geo != null and geo != ''">GeomFromText('${geo}'),</if>
+        <if test="type != null and type != ''">#{type},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+       #{is_visible},
+        <if test="centre != null and centre != ''">#{centre},</if>
+        <if test="area != null and area != ''">#{area},</if>
+        <if test="address != null and address != ''">#{address},</if>
+        sysdate(),
+        unix_timestamp(now())
+        )
+    </insert>
+    <update id="updataGisTab">
+        update t_gis_tab
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="geo != null and geo != ''">geo=ST_GeomFromText('${geo}'),</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            {is_visible},
+            <if test="centre != null and centre != ''">centre=#{centre},</if>
+            <if test="area != null and area != ''">area=#{area},</if>
+            <if test="address != null and address != ''">address=#{address},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="deleteGisTab">
+        delete from  t_gis_tab where id = #{id}
+    </delete>
+
+    <select id="GisTabByCerateBy" resultMap="GisTabResult">
+        <include refid="selectTabVo"/>
+        where create_by = #{createBy}
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+    <select id="getGisTabById" resultType="com.ruoyi.system.domain.gis.GisTab">
+        <include refid="selectTabVo"/>
+        where id = #{id}
+    </select>
+    <select id="getGisTabMaxId" resultType="java.lang.Long">
+        select ifnull(MAX(id),0) id from t_gis_tab where create_time >= now()-interval 3 minute;
+    </select>
+    <select id="getGisTabYear" resultType="java.util.HashMap">
+        select CONCAT(YEAR(create_time),'-草原生态绘图') title,YEAR(create_time) year  from t_gis_tab GROUP BY YEAR(create_time)
+    </select>
+    <select id="getListById" resultType="com.ruoyi.system.domain.gis.GisTab">
+        <include refid="selectTabVo"/>
+        where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="getArea" resultType="java.lang.String">
+        select AREA(ST_GeomFromText('${geo}'))
+    </select>
+</mapper>

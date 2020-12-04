@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改防治组织信息管理')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-management-edit" th:object="${cDataManagement}">
+        <input name="id" th:field="*{id}" type="hidden">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>组织名称：</label>
+                    <div class="col-sm-8">
+                        <input name="name" th:field="*{name}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>成立时间：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input name="time" th:value="${#dates.format(cDataManagement.time, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">人数：</label>
+                    <div class="col-sm-8">
+                        <input name="peopleNumber" th:field="*{peopleNumber}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">注册资金：</label>
+                    <div class="col-sm-8">
+                        <input name="registeredCapital" th:field="*{registeredCapital}" class="form-control" type="text">
+                    </div>
+                    <p style="margin-left: 2%;margin-top:1.5% ">万</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>负责人：</label>
+                    <div class="col-sm-8">
+                        <input name="personName" th:field="*{personName}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>防治地点：</label>
+                    <div class="col-sm-8">
+                        <input name="controlPlace" th:field="*{controlPlace}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">防治类型：</label>
+                    <div class="col-sm-8">
+                        <select name="controlType" th:field="*{controlType}"class="form-control m-b">
+                            <option value="0">虫害防治</option>
+                            <option value="1">鼠害防治</option>
+                        </select>
+                        <span class="help-block m-b-none"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">联系方式：</label>
+                    <div class="col-sm-8">
+                        <input name="phone" th:field="*{phone}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">法定代表人：</label>
+                    <div class="col-sm-8">
+                        <input name="legalRepresentative" th:field="*{legalRepresentative}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">曾用名：</label>
+                    <div class="col-sm-8">
+                        <input name="userName" th:field="*{userName}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">所属行业：</label>
+                    <div class="col-sm-8">
+                        <input name="industry" th:field="*{industry}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">统一社会信用代码：</label>
+                    <div class="col-sm-8">
+                        <input name="unifiedCode" th:field="*{unifiedCode}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">组织机构代码：</label>
+                    <div class="col-sm-8">
+                        <input name="organizationCode" th:field="*{organizationCode}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">工商注册号：</label>
+                    <div class="col-sm-8">
+                        <input name="business" th:field="*{business}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">纳税人识别号：</label>
+                    <div class="col-sm-8">
+                        <input name="taxpayer" th:field="*{taxpayer}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">登记机关：</label>
+                    <div class="col-sm-8">
+                        <input name="registrationAuthority" th:field="*{registrationAuthority}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">行政区划：</label>
+                    <div class="col-sm-8">
+                        <input name="administrativeDivision" th:field="*{administrativeDivision}" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-1 control-label" style="margin-top: 10px;margin-left: 3%">注册地址：</label>
+                <div class="col-sm-8">
+                    <input name="registeredAddress" th:field="*{registeredAddress}" class="col-sm-12 form-control" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-1 control-label" style="margin-top: 10px;margin-left: 3%">经营范围：</label>
+                <div class="col-sm-8">
+                    <textarea name="businessScope" th:field="*{businessScope}" class="col-sm-12 form-control" type="text"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="col-sm-1 control-label" style="margin-top: 10px;margin-left: 3%">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remarks" class="col-sm-12 form-control">[[*{remarks}]]</textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="button-b" style="margin-left: 50%;margin-top: 20%" id="button-set">
+        <button type="button" class="btn btn-w-m btn-primary" onclick="saveup()"id="saveup" >保存并上报</button>
+        <button type="button" class="btn btn-w-m btn-primary" onclick="save()" >保 存</button>
+    <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+</div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script type="text/javascript">
+    var prefix = ctx + "prevention/management";
+    $("#form-management-edit").validate({
+        focusCleanup: true
+    });
+
+    function save() {
+        if ($.validate.form()) {
+            $.modal.confirm("确认要点击确定吗?", function () {
+                saveTab(prefix + "/edit", $('#form-management-edit').serialize());
+            });
+        }
+    }
+
+    function saveup(){
+        if ($.validate.form()) {
+            $.modal.confirm("确认要点击确定吗?", function () {
+                saveModal(prefix + "/edit1", $('#form-management-edit').serialize());
+            });
+        }
+    }
+
+    // 保存信息 弹出提示框
+    function saveModal(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            success: function(result) {
+                if (typeof callback == "function" ) {
+                    callback(result);
+                }
+                if (result.code == web_status.SUCCESS) {
+                    confirmdemo(result.msg,function() {
+                        reload();
+                    });
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+
+            }
+        };
+        $.ajax(config)
+    }
+
+
+    function saveTab(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+            },
+            success: function(result) {
+                if (typeof callback == "function" ) {
+                    callback(result);
+                }
+                if (result.code == web_status.SUCCESS) {
+                    confirmdemo(result.msg,function() {
+                        reload();
+                    });
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            }
+        };
+        $.ajax(config)
+    }
+
+    function confirmdemo(content, callBack) {
+        layer.confirm(content, {
+            icon: 3,
+            title: "系统提示",
+            btn: ['确认']
+        },  function (index) {
+            layer.close(index);
+
+            callBack(true);
+
+        });
+    };
+
+    function reload () {
+        parent.location.reload();
+    }
+
+</script>
+</body>
+</html>

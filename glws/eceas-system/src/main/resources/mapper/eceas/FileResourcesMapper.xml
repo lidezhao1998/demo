@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FileResourcesMapper">
+    
+    <resultMap type="FileResources" id="FileResourcesResult">
+        <result property="fileId"    column="file_id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="fileDesc"    column="file_desc"    />
+        <result property="fileUrl"    column="file_url"    />
+        <result property="playUrl"    column="play_url"    />
+        <result property="fileType"    column="file_type"    />
+        <result property="auditStatus"    column="audit_status"    />
+    </resultMap>
+
+    <sql id="selectFileResourcesVo">
+        select file_id, file_name, file_desc, file_url, play_url, file_type, audit_status from file_resources
+    </sql>
+
+    <select id="selectFileResourcesList" parameterType="FileResources" resultMap="FileResourcesResult">
+        <include refid="selectFileResourcesVo"/>
+        <where>  
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="fileDesc != null  and fileDesc != ''"> and file_desc like concat('%', #{fileDesc}, '%')</if>
+            <if test="fileUrl != null  and fileUrl != ''"> and file_url = #{fileUrl}</if>
+            <if test="playUrl != null  and playUrl != ''"> and play_url = #{playUrl}</if>
+            <if test="fileType != null  and fileType != ''"> and file_type = #{fileType}</if>
+            <if test="auditStatus != null and auditStatus != ''"> and audit_status = #{auditStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectFileResourcesById" parameterType="Long" resultMap="FileResourcesResult">
+        <include refid="selectFileResourcesVo"/>
+        where file_id = #{fileId}
+    </select>
+        
+    <insert id="insertFileResources" parameterType="FileResources" useGeneratedKeys="true" keyProperty="fileId">
+        insert into file_resources
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">file_name,</if>
+            <if test="fileDesc != null  and fileDesc != ''">file_desc,</if>
+            <if test="fileUrl != null  and fileUrl != ''">file_url,</if>
+            <if test="playUrl != null  and playUrl != ''">play_url,</if>
+            <if test="fileType != null  and fileType != ''">file_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">#{fileName},</if>
+            <if test="fileDesc != null  and fileDesc != ''">#{fileDesc},</if>
+            <if test="fileUrl != null  and fileUrl != ''">#{fileUrl},</if>
+            <if test="playUrl != null  and playUrl != ''">#{playUrl},</if>
+            <if test="fileType != null  and fileType != ''">#{fileType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFileResources" parameterType="FileResources">
+        update file_resources
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">file_name = #{fileName},</if>
+            <if test="fileDesc != null  and fileDesc != ''">file_desc = #{fileDesc},</if>
+            <if test="fileUrl != null  and fileUrl != ''">file_url = #{fileUrl},</if>
+            <if test="playUrl != null  and playUrl != ''">play_url = #{playUrl},</if>
+            <if test="fileType != null  and fileType != ''">file_type = #{fileType},</if>
+            <if test="auditStatus != null  and auditStatus !=''">audit_status = #{auditStatus}</if>
+        </trim>
+        where file_id = #{fileId}
+    </update>
+
+    <delete id="deleteFileResourcesById" parameterType="Long">
+        delete from file_resources where file_id = #{fileId}
+    </delete>
+
+    <delete id="deleteFileResourcesByIds" parameterType="String">
+        delete from file_resources where file_id in 
+        <foreach item="fileId" collection="array" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
+    </delete>
+
+    <update id="updateFileResourcesByIds" parameterType="String">
+        update file_resources set audit_status = 1 WHERE file_id IN
+        <foreach collection="array" item="fileIds" open="("  separator=","  close=")">
+            #{fileIds}
+        </foreach>
+
+    </update>
+    
+</mapper>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('查询退牧还草工程任务列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <p>年份：</p>
+                            <input type="year" name="year" class="layui-layer-input" placeholder="所有" id="test2"/>
+                        </li>
+                        <li>
+                            省份：<select name="province" th:with="type=${@dict.getType('sys_province')}">
+                            <option value="">所有</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
+                        </li>
+<!--                        <li>-->
+<!--                            地点：<select name="address" th:with="type=${@dict.getType('sys_city')}">-->
+<!--                            <option value="">所有</option>-->
+<!--                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
+<!--                                    th:value="${dict.dictLabel}"></option>-->
+<!--                        </select>-->
+<!--                        </li>-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:report:view')}]];
+    var addFlag = [[${@permission.hasPermi('system:report:add')}]];
+    var prefix = ctx + "system/report";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            modalName: "退牧还草工程进度查看",
+            striped: true,
+            bordered: true,
+            columns: [
+                [
+                    {
+                        title: '选择上报',
+                        align: 'center',
+                        rowspan: 3,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        formatter: function (value, row, index) {
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.resolveId + '\')"><i class="fa fa-edit"></i>上报</a> ');
+                            return actions.join('');
+                        }
+                }, {
+                    field: 'address',
+                    title: '上报地区',
+                    rowspan: 3,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle'
+                }, {
+                    title: '围栏',
+                    align: 'center',
+                    valign: 'middle',
+                    colspan: 10,
+                    rowspan: 1,
+                }, {
+                    title: '其他',
+                    colspan: 12,
+                    rowspan: 1,
+                    align: 'center',
+                    valign: 'middle'
+                }, {
+                    field: 'totalScale',
+                    title: '规模合计',
+                    rowspan: 3,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle'
+                }, {
+                    field: 'totalInvestment',
+                    title: '投资合计',
+                    rowspan: 3,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle'
+                }
+                ],
+                [
+                    {
+                        title: '禁牧',
+                        colspan: 2,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '休牧',
+                        colspan: 2,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '划区轮休',
+                        colspan: 2,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '石漠化治理',
+                        colspan: 2,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '合计',
+                        colspan: 2,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '退化草原改良',
+                        colspan: 2,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '人工饲草地',
+                        colspan: 2,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '含饲棚圈',
+                        colspan: 2,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '黑土滩',
+                        colspan: 2,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '毒害草',
+                        colspan: 2,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '已垦草原治理',
+                        colspan: 2,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    }
+                ],
+                [
+                    {
+                        // 禁牧建设规模
+                        field: 'jmSize',
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'jmMoney',
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        // 休牧建设规模
+                        field: 'xmSize',
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'xmMoney',
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'hqlxSize',
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'hqlxMoney',
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'smhzlSize',
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'smhzlMoney',
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'wlScale',
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'wlInvestment',
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'thcyglSize',
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'thcyglMoney',
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'rgscdSize',
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'rgscdMoney',
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'hspjSize',
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'hspjMoney',
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'httSize',
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'httMoney',
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'dhcSize',
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'dhcMoney',
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'ykcyzlSize',
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'ykcyzlMoney',
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                ],
+            ]
+        };
+        $.table.init(options);
+    });
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+    // $("#button-open-5").click(function(){
+    //     $.modal.openFull('退牧还草工程进度查看', prefix + "/edit");
+    // });
+</script>
+</body>
+</html>

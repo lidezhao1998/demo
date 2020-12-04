@@ -1,0 +1,199 @@
+package com.ruoyi.zaihai.caiji.controller;
+
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.zaihai.caiji.domain.CTaskSczj;
+import com.ruoyi.zaihai.caiji.domain.CTaskSelectAll;
+import com.ruoyi.zaihai.caiji.service.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * 草原鼠害发生与防治情况Controller
+ *
+ * @author ruoyi
+ * @date 2020-04-23
+ */
+@Controller
+@RequestMapping("/caiji/sczjj")
+public class CPreventionController extends BaseController {
+    private String prefix = "caiji/prevention";
+
+    private String prefix1 = "system/fasheng";
+
+    @Autowired
+    private ICTaskSczjService cTaskSczjService;
+
+    @Autowired
+    private ICTaskSelectAllService icTaskSelectAllService;
+
+    @Autowired
+    private ICTaskSczjService icTaskSczjService;
+
+    @Autowired
+    private ICTaskScnyService icTaskScnyService;
+
+    @Autowired
+    private ICTaskChfzService icTaskChfzService;
+
+    @Autowired
+    private ICTaskFznbService icTaskFznbService;
+
+    @RequiresPermissions("caiji:sczjj:view")
+    @GetMapping()
+    public String sczj() {
+        return prefix + "/list";
+    }
+
+    @RequiresPermissions("caiji:fasheng:view")
+    @GetMapping("/list1")
+    public String sczj1() {
+        return prefix1 + "/button";
+    }
+
+    /**
+     * 查询草原鼠害发生与防治情况列表
+     */
+    @RequiresPermissions("caiji:sczjj:list")
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(CTaskSelectAll cTaskSelectAll) {
+        startPage();
+        Long  usrId= ShiroUtils.getSysUser().getUserId();
+        cTaskSelectAll.setCreateBy(String.valueOf(usrId));
+        List<CTaskSelectAll> list = icTaskSelectAllService.selectCTaskSelectAllList(cTaskSelectAll);
+
+        return getDataTable(list);
+    }
+
+    /**
+     * 导出草原鼠害发生与防治情况列表
+     */
+    @RequiresPermissions("caiji:sczjj:export")
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(CTaskSczj cTaskSczj) {
+        List<CTaskSczj> list = cTaskSczjService.selectCTaskSczjList(cTaskSczj);
+        ExcelUtil<CTaskSczj> util = new ExcelUtil<CTaskSczj>(CTaskSczj.class);
+        return util.exportExcel(list, "sczjj");
+    }
+
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        CTaskSczj cTaskSczj = cTaskSczjService.selectCTaskSczjById(id);
+        mmap.put("cTaskSczj",cTaskSczj);
+        return prefix + "/detail";
+    }
+
+    /**
+     * 新增草原鼠害发生与防治情况
+     */
+    @GetMapping("/add")
+    public String add() {
+        return prefix + "/add";
+    }
+
+    /**
+     * 新增保存草原鼠害发生与防治情况
+     */
+    @RequiresPermissions("caiji:sczjj:add")
+    @Log(title = "草原鼠害发生与防治情况", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(CTaskSelectAll cTaskSelectAll) {
+        cTaskSelectAll.setStatus("0");
+        return toAjax(icTaskSelectAllService.insertCTaskSelectAll(cTaskSelectAll));
+    }
+
+    /**
+     * 新增保存草原鼠害发生与防治情况
+     */
+    @RequiresPermissions("caiji:sczjj:add1")
+    @Log(title = "草原鼠害发生与防治情况", businessType = BusinessType.INSERT)
+    @PostMapping("/add1")
+    @ResponseBody
+    public AjaxResult addSave1(CTaskSelectAll cTaskSelectAll) {
+
+        cTaskSelectAll.setStatus("1");
+        return toAjax(icTaskSelectAllService.insertCTaskSelectAll(cTaskSelectAll));
+    }
+
+    /**
+     * 修改草原鼠害发生与防治情况
+     */
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+        CTaskSelectAll cTaskSelectAll = icTaskSelectAllService.selectCTaskSelectAllById(id);
+        mmap.put("cTaskSelectAll", cTaskSelectAll);
+        return prefix + "/edit";
+    }
+
+    /**
+     * 修改保存草原鼠害发生与防治情况
+     */
+    @RequiresPermissions("caiji:sczjj:edit")
+    @Log(title = "草原鼠害发生与防治情况", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(CTaskSelectAll cTaskSelectAll) {
+
+
+        cTaskSelectAll.setStatus("1");
+        return toAjax(icTaskSelectAllService.updateCTaskSelectAll(cTaskSelectAll));
+    }
+
+    /**
+     * 修改保存草原鼠害发生与防治情况
+     */
+    @RequiresPermissions("caiji:sczjj:edit1")
+    @Log(title = "草原鼠害发生与防治情况", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit1")
+    @ResponseBody
+    public AjaxResult editSave1(CTaskSelectAll cTaskSelectAll) {
+
+
+        cTaskSelectAll.setStatus("1");
+        return toAjax(icTaskSelectAllService.updateCTaskSelectAll(cTaskSelectAll));
+    }
+
+    /**
+     * 删除草原鼠害发生与防治情况
+     *
+     * @return
+     */
+    @RequiresPermissions("system:sczjj:remove")
+    @Log(title = "草原鼠害发生与防治情况", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(Long id) {
+
+        return toAjax(icTaskSelectAllService.deleteCTaskSelectAllById(id));
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原检测点数据')"/>
+    <link th:href="@{/css/gis.css}" rel="stylesheet"/>
+    <script>
+        var isHasPermissionPass = false;
+        var isHasPermissionDetails = false;
+        var isHasPermissionDelete = false;
+        var isHasPermissionEdit = false;
+        var isHasPermissionReject = false;
+    </script>
+</head>
+<body class="gray-bg" onLoad="load()">
+<div id="map">
+    <div class="header-r">
+        <div class="header-r-bg">
+            <strong></strong><a href="javascript:;" style="font-size: 16px;color:red" id="gisZoom"></a></strong>
+            <a href="javascript:;" id="comparison" onclick="comparison()">比对</a>
+            <a href="javascript:;" id="ranging" onclick="measurementGis('LineString')">测距</a>
+            <a href="javascript:;" id="measuringSurface" onclick="measurementGis('Polygon')">测面</a>
+            <a href="javascript:;" id="markPoint" onclick="drawGis('Point','tab')">标记点</a>
+            <a href="javascript:;" id="markingSurface" onclick="drawGis('Polygon','tab')">标记面</a>
+            <a href="javascript:;" onclick="drawGis('Point','stationTab')">新建</a>
+            <a href="javascript:;" id="markedList">标记列表</a>
+            <a href="javascript:;" id="pointSerch" onclick="pointQuery()">点查</a>
+            <a href="javascript:;" id="locationShow">定位</a>
+            <a href="javascript:;" id="conditionQuery">条件查询</a>
+            <div class="conditionQuery_sel" style="display: none">
+                <div class="triangle"></div>
+                <a href="javascript:;" id="business">业务查询</a>
+                <a href="javascript:;" id="special">专题查询</a>
+            </div>
+            <a href="javascript:;" id="grilleCalculator">格栅计算</a>
+            <a href="javascript:;" id="hideTableButton">隐藏列表</a>
+            <a href="javascript:;" id="showTableButton">显示列表</a>
+        </div>
+    </div>
+    <div id="menu">
+        <input type="button" id="off"/>
+    </div>
+    <div id="menu3">
+        <input id="type3" value="全国" onclick="updateCity()"readonly>
+    </div>
+    <div class="layer_tree_show" style="left: 48px">
+        <div class="layer_tree_show_map"></div>
+    </div>
+    <div class="layer_tree_hide">
+        <i class="fa fa-chevron-left"></i>
+    </div>
+    <div class="west">
+        <div class="box box-main">
+            <div class="ui-layout-content" style="height: 420px">
+                <div id="businessLayer" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                <div id="thematicLayer" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+            </div>
+        </div>
+    </div>
+    <div id="dist_positioning">
+        <p id="title_zq"><span>地区定位</span> <span onclick="cityDivDoneById('dist_positioning')"
+                                                 style="float: right;margin: 0 10px;cursor: pointer;">关闭</span>
+        </p>
+        <div id="zqdw"><p class="content_ul" style="color: #13c6ae;">全国</p></div>
+        <div style="height: 160px;overflow-y: scroll;float: left;width: 100%">
+            <ul class="zq_ul"></ul>
+        </div>
+    </div>
+    <div id="shpTitle" class="col-sm-12 select-table table-striped">
+        <table id="bootstrap-table">
+        </table>
+    </div>
+    <!--定位-->
+    <div class="coordinatePositioning">
+        <li class="clear li-dw selected" style="display: block;">
+            <span class="zs-left icon icon-dw"></span>
+            <div class="zs-left module" style="display: block;">
+
+                <div class="ori-module-content module-content" style="display: block;padding-left: 50px;">
+                    <table class="jwd tabls" style="display: table;">
+                        <tr>
+                            <td class="text">经度：</td>
+                            <td class="input"><input id="decimalLon" value="" class="form-control sea-input" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"  placeholder="例:11.1"></td>
+                        </tr>
+                        <tr>
+                            <td class="text">纬度：</td>
+                            <td class="input"><input id="decimalLat" value="" class="form-control sea-input" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"  placeholder="例:23.1"></td>
+                        </tr>
+                    </table>
+                    <div class="dw-box" style="margin-top: 15px;">
+                        <button type="button" class="btn btn-primary" id="positioning_btn">定位</button>
+                        <button type="button" class="btn btn-danger" id="closePositioning">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <div id="mouse-position">
+        </div>
+    </div>
+</div>
+<div id="map-left" style="display: none">
+    <div class="layer_tree_show">
+        <div class="layer_tree_show_map_left"></div>
+    </div>
+    <div class="layer_tree_hide_left">
+        <i class="fa fa-chevron-left"></i>
+    </div>
+    <div class="west-left">
+        <div class="box box-main">
+            <div class="ui-layout-content" style="height: 420px">
+                <div id="businessLayer_left" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                <div id="thematicLayer_left" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="map-right" style="display: none">
+    <div class="header-r">
+        <div class="header-r-bg">
+            <a href="javascript:;" id="gisQuit" onclick="gisQuit()">退出</a>
+        </div>
+    </div>
+    <div class="layer_tree_show">
+        <div class="layer_tree_show_map_right"></div>
+    </div>
+    <div class="layer_tree_hide_right">
+        <i class="fa fa-chevron-left"></i>
+    </div>
+    <div class="west-right">
+        <div class="box box-main">
+            <div class="ui-layout-content" style="height: 420px">
+                <div id="businessLayer_right" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                <div id="thematicLayer_right" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="reportList">
+    <!--专题列表-->
+    <div class="col-sm-12 select-table table-bordered" id="reportDiv" style="height: 350px;overflow: auto;">
+        <form id="reportForm">
+            <div class="row">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <p>年份：</p>
+                            <input type="year" name="year" class="layui-layer-input" placeholder="所有" id="test2" style="margin-top: 0px;" readonly="readonly" />
+                        </li>
+                        <li>
+                            省份：
+                            <select id="province" name="province" th:with="type=${@dict.getType('sys_province')}">
+                                <option value="">--全国--</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                            &nbsp;市级：
+                            <select id="city" name="city">
+                                <option value="">--请选择--</option>
+                            </select>
+                            &nbsp;区级：
+                            <select id="area" name="address">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeReportList()">关闭</button>
+                <a class="btn btn-warning btn-rounded btn-sm" onclick='$.form.reset("reportForm","reportTable")' style="float: right;margin-right: 10px;"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                <a class="btn btn-primary btn-rounded btn-sm" onclick='$.table.search("reportForm","reportTable")' style="float: right;margin-right: 10px;"><i class="fa fa-search"></i>&nbsp;搜索</a>
+            </div>
+        </form>
+        <table id="reportTable"></table>
+    </div>
+    <!--业务列表-->
+    <div class="col-sm-12 select-table table-bordered" id="businessDiv" style="height: 350px;overflow: auto;">
+        <form id="businessForm">
+            <div class="row">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            地区：
+                            <select name="province_name" th:with="type=${@dict.getProvince()}">
+                                <option value="">--请选择--</option>
+                                <option th:each="gresslandEcology : ${type}" th:text="${gresslandEcology.province_name}" th:value="${gresslandEcology.province_name}"></option>
+                            </select>
+                            目：
+                            <select id="section" name="section" onchange="sectionOncheng()">
+                                <option value="">--请选择--</option>
+                            </select>
+                            科：
+                            <select id="generic" name="generic" onchange="bundleOncheng()">
+                                <option value="">--请选择--</option>
+                            </select>
+                            从：
+                            <select id="bundle" name="bundle">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeReportList()">关闭</button>
+                <a class="btn btn-warning btn-rounded btn-sm" onclick='$.form.reset("businessForm","businessTable")' style="float: right;margin-right: 10px;"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                <a class="btn btn-primary btn-rounded btn-sm" onclick='$.table.search("businessForm")' style="float: right;margin-right: 10px;"><i class="fa fa-search"></i>&nbsp;搜索</a>
+            </div>
+        </form>
+        <table id="businessTable"></table>
+    </div>
+    <!--标记列表-->
+    <div class="col-sm-12 select-table table-bordered" id="tagDiv" style="height: 350px;overflow: auto;">
+        <div class="row">
+            <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeReportList()">关闭</button>
+        </div>
+        <table id="tagTable"></table>
+    </div>
+</div>
+<div class="row" id="initTable" style="height: 100%">
+<div style="position: fixed;bottom: 0px;background-color: white;left: 0px;width: 100%">
+    <div class="col-sm-12 search-collapse">
+
+        <form id="dept-form">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        地区：<input type="text" name="name"/>
+                    </li>
+                    <!--<li>-->
+                        <!--状态：-->
+                        <!--<select name="status" id="status">-->
+                            <!--<option value="-1">所有</option>-->
+                            <!--<option value="0">未审核</option>-->
+                            <!--<option value="1">已审核</option>-->
+                        <!--</select>-->
+                    <!--</li>-->
+                    <li>
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('dept-form','slsj')"><i
+                                class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('dept-form','slsj')"><i
+                                class="fa fa-refresh"></i>&nbsp;重置</a>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>
+    <div class="btn-group-sm" id="shptoolbar" role="group">
+         <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="extinterface:station:add">
+             <i class="fa fa-plus"></i> 新增
+         </a>
+        <!--<a class="btn btn-warning " onclick="auditAllshp()" shiro:hasPermission="extinterface:station:batchReview">-->
+        <!--<i class="fa fa-download"></i> 批量审核-->
+        <!--</a>-->
+    </div>
+    <div class="col-sm-12 select-table table-striped">
+        <table id="slsj"></table>
+    </div>
+    <div class="modal inmodal" id="myModal" align="center" tabindex="-1" role="dialog" aria-hidden="true">
+        <img id="img" name="img">
+    </div>
+</div>
+</div>
+</body>
+<!--通过-->
+<shiro:hasPermission name="extinterface:station:pass">
+    <script>
+        isHasPermissionPass = true;
+    </script>
+</shiro:hasPermission>
+<!--详情-->
+<shiro:hasPermission name="extinterface:station:details">
+    <script>
+        isHasPermissionDetails = true;
+    </script>
+</shiro:hasPermission>
+<!--编辑-->
+<shiro:hasPermission name="extinterface:station:edit">
+    <script>
+        isHasPermissionEdit = true;
+    </script>
+</shiro:hasPermission>
+<!--删除-->
+<shiro:hasPermission name="extinterface:station:delete">
+    <script>
+        isHasPermissionDelete = true;
+    </script>
+</shiro:hasPermission>
+<!--驳回-->
+<shiro:hasPermission name="extinterface:station:reject">
+    <script>
+        isHasPermissionReject = true;
+    </script>
+</shiro:hasPermission>
+<th:block th:include="include :: footer"/>
+<script th:src="@{/js/gis/glmaGis.js}"></script>
+<script th:src="@{/js/gis/gisComparison.js}"></script>
+<script th:inline="javascript">
+    var landsurveyPrefix = ctx + "extinterface/station";
+    $(function () {
+        $("#showTableButton").hide();
+        var landsurveyoptions = {
+            id: "slsj",
+            toolbar: "shptoolbar",
+            url: landsurveyPrefix + "/list",
+            createUrl: landsurveyPrefix + "/add/{id}",
+            updateUrl: landsurveyPrefix + "/edit/{id}",
+            removeUrl: landsurveyPrefix + "/remove/{id}",
+            detailUrl: landsurveyPrefix + "/details/{id}",
+            pageSize: 5,
+            pageList: [5, 10, 15, 20],//分页步进值
+            modalName: "移动设备数据",
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            columns: [{
+                checkbox: true,
+                formatter: function (value, row, index) {
+                    if (row.status == 1) {
+                        return {
+                            disabled: true//设置是否可用
+                        };
+                    }
+                }
+            },
+                {
+                    field: 'id',
+                    title: 'ID'
+                },
+                {
+                    field: 'name',
+                    title: '地区',
+                    align: 'center',
+                    valign: 'middle',
+                    class:true,
+                    formatter: function (value, row, index) {
+                        let ht = "<div onclick=drawPointRecovery('"+row.lon + "','" + row.lat + "','" + row.id +"')>";
+                        return ht+row.name +"</div>";
+                    }
+                },
+                {
+                    field: 'deviceType',
+                    title: '设备类型'
+                },
+
+                {
+                    field: 'lon',
+                    title: '经度',
+                    formatter: function (value, row, index) {
+                        let ht = "<div onclick=drawPointRecovery('"+row.lon + "','" + row.lat + "','" + row.id +"')>";
+                        return ht+row.lon +"</div>";
+                    }
+                },
+                {
+                    field: 'lat',
+                    title: '纬度',
+                    formatter: function (value, row, index) {
+                        let ht = "<div onclick=drawPointRecovery('"+row.lon + "','" + row.lat + "','" + row.id +"')>";
+                        return ht+row.lat +"</div>";
+                    }
+                },
+
+                // {
+                //     field: 'status',
+                //     title: '状态',
+                //     formatter: function (value, row, index) {
+                //         if (value == 1) {
+                //             return "已审核";
+                //         } else {
+                //             return "未审核";
+                //         }
+                //     }
+                // },
+                {
+                    title: '操作',
+                    align: 'left',
+                    formatter: function (value, row, index) {
+                        if (row.parentId != 0) {
+                            var actions = [];
+                            /*详情按钮*/
+                            if (isHasPermissionDetails) {
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-edit"></i>详情</a> ');
+                            }
+                            if (row.status != 1) {
+                                /*审核通过按钮*/
+                                if (isHasPermissionPass) {
+                                    actions.push('<a class="btn btn-info  btn-xs " href="javascript:void(0)" onclick="audit(\'' + row.id + '\')"><i class="fa fa-adjust"></i>审核</a> ');
+                                }
+                                /*编辑按钮*/
+                                if (isHasPermissionEdit) {
+                                    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                                }
+                                /*删除按钮*/
+                                if (isHasPermissionDelete) {
+                                    actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-trash"></i>删除</a>');
+                                }
+                            } else {
+                                /*驳回按钮*/
+                                if (isHasPermissionReject) {
+
+                                    actions.push('<a class="btn btn-info  btn-xs " href="javascript:void(0)" onclick="unaudit(\'' + row.id + '\')"><i class="fa fa-adn"></i>驳回</a> ');
+                                }
+                            }
+                            return actions.join('');
+                        } else {
+                            return "";
+                        }
+                    }
+                }]
+        };
+        $.table.init(landsurveyoptions);
+    });
+
+    function unaudit(id) {
+        $.modal.confirm("确定取消审核吗？", function () {
+            $.operate.post(landsurveyPrefix + "/updataStatus", {"id": id, status: 0});
+        })
+    }
+
+    function audit(id) {
+        $.modal.confirm("确定审核通过吗？", function () {
+            $.operate.post(landsurveyPrefix + "/updataStatus", {"id": id, status: 1});
+        })
+    }
+    $("#hideTableButton").click(function () {
+        //隐藏列表
+        $("#initTable").hide();
+        //隐藏隐藏列表按钮
+        $("#hideTableButton").hide();
+        //显示显示按钮
+        $("#showTableButton").show();
+
+    });
+    $("#business").click(function () {
+        //隐藏列表
+        $("#initTable").hide();
+        //隐藏隐藏列表按钮
+        $("#hideTableButton").hide();
+        //显示显示按钮
+        $("#showTableButton").show();
+
+    });
+   $("#special").click(function () {
+        //隐藏列表
+        $("#initTable").hide();
+        //隐藏隐藏列表按钮
+        $("#hideTableButton").hide();
+        //显示显示按钮
+        $("#showTableButton").show();
+
+    });
+    $("#showTableButton").click(function () {
+        //显示列表
+        $("#initTable").show();
+        //显示隐藏列表按钮
+        $("#hideTableButton").show();
+        //隐藏显示按钮
+        $("#showTableButton").hide();
+
+    });
+    //地图上的点的点击事件
+    function drawPointRecovery(lon,lat, id) {
+        var view=map.getView();
+        view.setCenter([parseFloat(lon), parseFloat(lat)]);
+        var point = new ol.Feature({
+            geometry: new ol.geom.Point([lon,lat])
+        });
+        //设置点1的样式信息
+        point.setStyle(new ol.style.Style({
+            //填充色
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)'
+            }),
+            //边线颜色
+            stroke: new ol.style.Stroke({
+                color: '#ff2c10',
+                width: 2
+            }),
+            // 形状
+            image: new ol.style.Circle({
+                radius: 6,
+                fill: new ol.style.Fill({
+                    color:  '#F12A07'
+                })
+            })
+        }));
+
+        //实例化一个矢量图层Vector作为绘制层
+        var source = new ol.source.Vector({
+            features: [point]
+        });
+        //创建一个图层
+        var vector = new ol.layer.Vector({
+            source: source
+        });
+
+        //将绘制层添加到地图容器中
+        map.addLayer(vector);
+        // 为地图注册鼠标移动事件的监听
+        point.on('click', function (e) {
+            $.operate.detail(id);
+        });
+
+    }
+
+
+</script>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改天然林资源保护工程建设情况统计')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-projects-edit" th:object="${evalTianbaoConstruction}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">年度：</label>
+                <div class="col-sm-8">
+                    <input type="text" name="annual" th:field="*{annual}" class="form-control" id="annual"/>
+                    <!--<input name="annual" th:field="*{annual}" class="form-control" type="text">-->
+                </div>
+            </div>
+<!--            <div class="form-group">
+                <label class="col-sm-3 control-label">地区省份：</label>
+                <div class="col-sm-8">
+                    <select class="form-control m-b" name="area" th:with="type=${@dict.getType('sys_province')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{area}"></option>
+                    </select>
+                </div>
+            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">地区省份：</label>
+                <div class="col-sm-8">
+                    <input name="area" th:field="*{area}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">造林面积总计：</label>
+                <div class="col-sm-8">
+                    <input name="afforestionAreaTotal" th:field="*{afforestionAreaTotal}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">人工造林合计：</label>
+                <div class="col-sm-8">
+                    <input name="artificialAfforestionTotal" th:field="*{artificialAfforestionTotal}" class="form-control" type="text">
+                </div>
+            </div>
+<!--            <div class="form-group">
+                <label class="col-sm-3 control-label">灌木林面积：</label>
+                <div class="col-sm-8">
+                    <input name="shrubArea" th:field="*{shrubArea}" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">飞播造林：</label>
+                <div class="col-sm-8">
+                    <input name="airSendAfforest" th:field="*{airSendAfforest}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">当年新封山育林合计：</label>
+                <div class="col-sm-8">
+                    <input name="newAfforestTotal" th:field="*{newAfforestTotal}" class="form-control" type="text">
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">无林地和疏林地新封山育林面积：</label>
+                <div class="col-sm-8">
+                    <input name="noNewAfforestArea" th:field="*{noNewAfforestArea}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">有林地和灌木林地新封山育林面积：</label>
+                <div class="col-sm-8">
+                    <input name="haveNewAfforestArea" th:field="*{haveNewAfforestArea}" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">退化林修复面积：</label>
+                <div class="col-sm-8">
+                    <input name="degraRepairArea" th:field="*{degraRepairArea}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">森林抚育面积：</label>
+                <div class="col-sm-8">
+                    <input name="forestTendArea" th:field="*{forestTendArea}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">年末实有封山育林面积：</label>
+                <div class="col-sm-8">
+                    <input name="yearendAfforestArea" th:field="*{yearendAfforestArea}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">年末实有森林管护面积合计：</label>
+                <div class="col-sm-8">
+                    <input name="manageAreaTotal" th:field="*{manageAreaTotal}" class="form-control" type="text">
+                </div>
+            </div>
+ <!--           <div class="form-group">
+                <label class="col-sm-3 control-label">国有林：</label>
+                <div class="col-sm-8">
+                    <input name="nationalForest" th:field="*{nationalForest}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">集体和个人所有的国家级公益林：</label>
+                <div class="col-sm-8">
+                    <input name="nationalPublicForest" th:field="*{nationalPublicForest}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">集体和个人所有的地方公益林：</label>
+                <div class="col-sm-8">
+                    <input name="localPublicForest" th:field="*{localPublicForest}" class="form-control" type="text">
+                </div>
+            </div>-->
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "eceas/projects";
+        $("#form-projects-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-projects-edit').serialize());
+            }
+        }
+
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#annual'
+                , type: 'year'
+            });
+        });
+
+    </script>
+</body>
+</html>

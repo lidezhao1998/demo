@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.gis.ISysCityMapper">
+    <resultMap type="com.ruoyi.system.domain.gis.SysCity" id="SysCityResult">
+        <id property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="ancestors" column="ancestors"/>
+        <result property="cityName" column="cityName"/>
+        <result property="geoStr" column="geoStr"/>
+        <result property="area" column="area"/>
+        <result property="perimeter" column="perimeter"/>
+        <result property="canter" column="canter"/>
+    </resultMap>
+    <select id="getCityById" resultType="com.ruoyi.system.domain.gis.SysCity">
+        select * from sys_city where id = #{id}
+    </select>
+    <select id="getDistrictSheng" resultType="com.ruoyi.system.domain.gis.SysCity">
+        select * from sys_city where pid = 100;
+    </select>
+    <select id="getDistrictShi" resultType="com.ruoyi.system.domain.gis.SysCity">
+        select * from sys_city where pid = #{id}
+    </select>
+</mapper>

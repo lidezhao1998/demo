@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('GIS详细')" />
+	<th:block th:include="include :: cropbox-css" />
+</head>
+<body >
+<img id="img" name="img" style="height: auto; width: auto">
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: cropbox-js" />
+<script type="text/javascript">
+    var cropper;
+    var avatar = '[[${imgUrl}]]';
+    $('#img').attr("src", avatar);
+    // $(window).load(function() {
+    //     var avatar = '[[${entity.imgUrl}]]';
+    //     var options = {
+    //         spinner: '.spinner',
+    //         imgSrc: $.common.isEmpty(avatar) ? ctx + '' : ctx + avatar.substr(1)
+    //     };
+    //     cropper = $('.imageBox').cropbox(options);
+    // })
+</script>
+</body>
+
+</html>

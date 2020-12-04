@@ -1,0 +1,365 @@
+package com.ruoyi.web.controller.system;
+
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.*;
+import com.ruoyi.system.mapper.TTaskReportMapper;
+import com.ruoyi.system.service.ISysDictDataService;
+import com.ruoyi.system.service.ITTaskAnalysisService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+/**
+ * 退牧还草工程进度管理-实施分析
+ *
+ * @author gk
+ * @date 2020-07-20 15:35
+ */
+@Controller
+@RequestMapping("/system/analysisZ")
+public class TTaskAnalysisZController extends BaseController {
+    private String prefix = "system/analysis";
+
+    @Autowired
+    private ISysDictDataService iSysDictDataService;
+
+    @Autowired
+    private ITTaskAnalysisService itTaskAnalysisService;
+
+    @Autowired
+    private TTaskReportMapper tTaskReportMapper;
+    /**
+     * 实施分析主页
+     */
+    @GetMapping()
+    public String analysis(ModelMap mmap) {
+        //获取登录用户的部门
+        String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+        Long deptid = ShiroUtils.getSysUser().getDeptId();//部门id
+        //获取角色
+        List<SysRole> roles = ShiroUtils.getSysUser().getRoles();
+        String roleNames="";
+        for (int i = 0; i < roles.size(); i++) {
+            SysRole sysRole = roles.get(i);
+            roleNames += sysRole.getRoleName()+",";
+        }
+
+        if(!roleNames.contains("超级管理员")){
+            if (roleNames.contains("国家级")) {
+                mmap.put("user","国家级");
+            } else if (roleNames.contains("省级")) {
+                String provinceCode = iSysDictDataService.selectDictCodeByDictLabel(deptName);
+                mmap.put("user","省级");
+                mmap.put("provinceName",deptName);
+                mmap.put("provinceCode",provinceCode);
+            } else if(roleNames.contains("市级")) {
+                SysDictData sysDictData = iSysDictDataService.selectProvinceByCity(deptName);
+                String provinceName = sysDictData.getDictLabel();
+                String provinceCode = sysDictData.getDictValue();
+                String cityCode = iSysDictDataService.selectDictCodeByDictLabel(deptName);;
+                mmap.put("user","市级");
+                mmap.put("provinceName",provinceName);
+                mmap.put("provinceCode",provinceCode);
+                mmap.put("cityName",deptName);
+                mmap.put("cityCode",cityCode);
+            }
+        }
+
+        return prefix + "/analysisZ";
+    }
+
+    /**
+     * 提取方法计算列表展示合计
+     */
+    private TTaskReport getSumReport(TTaskReport newTTaskReport) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        /** 围栏规模合计 */
+        Double jmgm = newTTaskReport.getJmSize();
+        Double xmgm = newTTaskReport.getXmSize();
+        Double hqmgm = newTTaskReport.getHqlxSize();
+        Double smhgm = newTTaskReport.getSmhzlSize();
+        Double wlscale = newTTaskReport.getWlScale();
+        if (jmgm == null) {
+            jmgm = 0.0;
+        }
+        if (xmgm == null) {
+            xmgm = 0.0;
+        }
+        if (hqmgm == null) {
+            hqmgm = 0.0;
+        }
+        if (smhgm == null) {
+            smhgm = 0.0;
+        }
+        if (wlscale == null) {
+            wlscale = 0.0;
+        }
+        Double wlmj = jmgm + xmgm + hqmgm + smhgm + wlscale;
+        newTTaskReport.setWlmjCount(Double.parseDouble(df.format(wlmj)));
+        /** 围栏投资合计 */
+        Double jmtz = newTTaskReport.getJmMoney();
+        Double xmtz = newTTaskReport.getXmMoney();
+        Double hqmtz = newTTaskReport.getHqlxMoney();
+        Double smhtz = newTTaskReport.getSmhzlMoney();
+        Double wlinvestment = newTTaskReport.getWlInvestment();
+        if (jmtz == null) {
+            jmtz = 0.0;
+        }
+        if (xmtz == null) {
+            xmtz = 0.0;
+        }
+        if (hqmtz == null) {
+            hqmtz = 0.0;
+        }
+        if (smhtz == null) {
+            smhtz = 0.0;
+        }
+        if (wlinvestment == null) {
+            wlinvestment = 0.0;
+        }
+        Double wlje = jmtz + xmtz + hqmtz + smhtz + wlinvestment;
+        newTTaskReport.setWljeCount(Double.parseDouble(df.format(wlje)));
+        /** 其他规模合计 */
+        Double thcgm = newTTaskReport.getThcyglSize();
+        Double rgsgm = newTTaskReport.getRgscdSize();
+        Double hspgm = newTTaskReport.getHspjSize();
+        Double httgm = newTTaskReport.getHttSize();
+        Double dhcgm = newTTaskReport.getDhcSize();
+        if (thcgm == null) {
+            thcgm = 0.0;
+        }
+        if (rgsgm == null) {
+            rgsgm = 0.0;
+        }
+        if (hspgm == null) {
+            hspgm = 0.0;
+        }
+        if (httgm == null) {
+            httgm = 0.0;
+        }
+        if (dhcgm == null) {
+            dhcgm = 0.0;
+        }
+        Double totalScale = thcgm + rgsgm + hspgm + httgm + dhcgm;
+        newTTaskReport.setQtmjCount(Double.parseDouble(df.format(totalScale)));
+        /** 其他投资合计 */
+        Double thctz = newTTaskReport.getThcyglMoney();
+        Double rgstz = newTTaskReport.getRgscdMoney();
+        Double hsptz = newTTaskReport.getHspjMoney();
+        Double htttz = newTTaskReport.getHttMoney();
+        Double dhctz = newTTaskReport.getDhcMoney();
+        if (thctz == null) {
+            thctz = 0.0;
+        }
+        if (rgstz == null) {
+            rgstz = 0.0;
+        }
+        if (hsptz == null) {
+            hsptz = 0.0;
+        }
+        if (htttz == null) {
+            htttz = 0.0;
+        }
+        if (dhctz == null) {
+            dhctz = 0.0;
+        }
+
+        Double totalInvestment = thctz + rgstz + hsptz + htttz + dhctz;
+        newTTaskReport.setQtjeCount(Double.parseDouble(df.format(totalInvestment)));
+        /** 总合计 */
+        newTTaskReport.setZgmCount(Double.parseDouble(df.format(wlmj + totalScale)));
+        newTTaskReport.setZjeCount(Double.parseDouble(df.format(wlje + totalInvestment)));
+        return newTTaskReport;
+    }
+
+
+    /**
+     * 实施分析数据列表查询
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(TTaskReport tTaskReport) {
+        //判断值是否为空
+        if (!"".equals(tTaskReport.getProvince()) && tTaskReport.getProvince() != null) {
+            tTaskReport.setProvince(iSysDictDataService.selectDictDataById(Long.parseLong(tTaskReport.getProvince())).getDictLabel());
+        }
+        if (!"".equals(tTaskReport.getCity()) && tTaskReport.getCity() != null) {
+            tTaskReport.setCity(iSysDictDataService.selectDictDataById(Long.parseLong(tTaskReport.getCity())).getDictLabel());
+        }
+        if (!"".equals(tTaskReport.getAddress()) && tTaskReport.getAddress() != null) {
+            tTaskReport.setAddress(iSysDictDataService.selectDictDataById(Long.parseLong(tTaskReport.getAddress())).getDictLabel());
+        }
+        startPage();
+        List<TTaskReport> tTaskReports = new ArrayList<>();
+        if(!"".equals(tTaskReport.getProvince()) && tTaskReport.getProvince() != null){
+            tTaskReports = itTaskAnalysisService.selectAnalysisList(tTaskReport);
+        }else{
+            tTaskReports = tTaskReportMapper.selectReportCountryZ(tTaskReport);
+        }
+//            List<TTaskReport> newlist = new ArrayList<>();
+        for (int i = 0; i < tTaskReports.size(); i++) {
+            TTaskReport newTTaskReport = tTaskReports.get(i);
+            newTTaskReport = getSumReport(newTTaskReport);
+            //市级
+            if (newTTaskReport.getReportLevel() == 1) {
+                newTTaskReport.setAddress(newTTaskReport.getCity());
+            }
+            //省级
+            if (newTTaskReport.getReportLevel() == 2) {
+                newTTaskReport.setAddress(newTTaskReport.getProvince());
+            }
+            if (newTTaskReport.getReportLevel() == 2 && ("".equals(tTaskReport.getProvince()) || tTaskReport.getProvince() == null)) {
+                newTTaskReport.setAddress("全国");
+                newTTaskReport.setConcreteTime(null);
+            }
+            //全国
+        }
+        return getDataTable(tTaskReports);
+    }
+
+    /**
+     * 跳转实施分析比对折线图
+     */
+    @GetMapping(value = "/EcharsLineChart")
+    public String EcharsLineChart() {
+        return prefix + "/EcharsLineChart";
+    }
+
+    /**
+     * 横向比对数据查询
+     */
+    @RequestMapping("/horizontalAlignment")
+    @ResponseBody
+    public AjaxResult horizontalAlignment(TTaskReport tTaskReport) {
+        //判断值是否为空
+        if (tTaskReport.getProvince().equals("null")) {
+            tTaskReport.setProvince("");
+        }
+        if (tTaskReport.getCity().equals("null")) {
+            tTaskReport.setCity("");
+        }
+        if (tTaskReport.getAddress().equals("null")) {
+            tTaskReport.setAddress("");
+        }
+        //业务处理
+        List<TTaskReport> tTaskReports = itTaskAnalysisService.selectTransverseList(tTaskReport);
+        AjaxResult ajax = new AjaxResult();
+        ajax.put("code", 200);
+        ajax.put("data", tTaskReports);
+        return ajax;
+    }
+
+    /**
+     * 纵向比对数据查询
+     */
+    @RequestMapping("/longitudinalComparison")
+    @ResponseBody
+    public AjaxResult longitudinalComparison(TTaskReport tTaskReport) {
+        //判断值是否为空
+        if (tTaskReport.getProvince().equals("null")) {
+            tTaskReport.setProvince("");
+        }
+        if (tTaskReport.getCity().equals("null")) {
+            tTaskReport.setCity("");
+        }
+        if (tTaskReport.getAddress().equals("null")) {
+            tTaskReport.setAddress("");
+        }
+        List<TTaskReport> tTaskReports = itTaskAnalysisService.selectPortraitList(tTaskReport);
+        AjaxResult ajax = new AjaxResult();
+        ajax.put("code", 200);
+        ajax.put("data", tTaskReports);
+        return ajax;
+    }
+
+    /**
+     * 三级联动省级
+     */
+    @RequestMapping("/getProvinces")
+    @ResponseBody
+    public List<SysDictData> getProvinces() {
+        return iSysDictDataService.selectDictDataByType("sys_province");
+    }
+
+    /**
+     * 三级联动市级
+     */
+    @RequestMapping("/getCities")
+    @ResponseBody
+    public List<SysDictData> getCities(String provinceCode) {
+        return iSysDictDataService.getCities(provinceCode);
+    }
+
+    /**
+     * 三级联动曲县级
+     */
+    @RequestMapping("/getAreas")
+    @ResponseBody
+    public List<SysDictData> getAreas(String cityCode) {
+        return iSysDictDataService.getAreas(cityCode);
+    }
+
+    /**
+     * 任务统计-横向统计图表
+     */
+    @RequestMapping("/analysisZHistogram")
+    @ResponseBody
+    public List analysisZHistogram(TTaskReport tTaskReport) {
+        tTaskReport = codeConversionName(tTaskReport);
+        List<TTaskReport> tTaskReports = new ArrayList<>();
+        if(!"".equals(tTaskReport.getProvince()) && tTaskReport.getProvince() != null){
+            tTaskReports = itTaskAnalysisService.selectAnalysisList(tTaskReport);
+        }else{
+            tTaskReports = tTaskReportMapper.selectReportCountryZ(tTaskReport);
+        }
+        for (int i = 0; i < tTaskReports.size(); i++) {
+            TTaskReport newTTaskReport = tTaskReports.get(i);
+            newTTaskReport = getSumReport(newTTaskReport);
+            //市级
+            if (newTTaskReport.getReportLevel() == 1) {
+                newTTaskReport.setAddress(newTTaskReport.getCity());
+            }
+            //省级
+            if (newTTaskReport.getReportLevel() == 2) {
+                newTTaskReport.setAddress(newTTaskReport.getProvince());
+            }
+            if (newTTaskReport.getReportLevel() == 2 && ("".equals(tTaskReport.getProvince()) || tTaskReport.getProvince() == null)) {
+                newTTaskReport.setAddress("全国");
+                newTTaskReport.setConcreteTime(null);
+            }
+            //全国
+        }
+        return tTaskReports;
+    }
+
+    /**
+     *  地区code转换为地区名称
+     */
+    private TTaskReport codeConversionName(TTaskReport tTaskReport){
+        //判断值是否为空
+        if (!"".equals(tTaskReport.getProvince()) && tTaskReport.getProvince() != null) {
+            tTaskReport.setProvince(iSysDictDataService.selectDictDataById(Long.parseLong(tTaskReport.getProvince())).getDictLabel());
+        }
+        if (!"".equals(tTaskReport.getCity()) && tTaskReport.getCity() != null) {
+            tTaskReport.setCity(iSysDictDataService.selectDictDataById(Long.parseLong(tTaskReport.getCity())).getDictLabel());
+        }
+        if (!"".equals(tTaskReport.getAddress()) && tTaskReport.getAddress() != null) {
+            tTaskReport.setAddress(iSysDictDataService.selectDictDataById(Long.parseLong(tTaskReport.getAddress())).getDictLabel());
+        }
+        return tTaskReport;
+    }
+}

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhz.spider.mapper.SpiderMapper">
+
+    <insert id="addDetails">
+        insert into ${table}(district, concrete, weather, temperature, wind_direction, weather_date)
+        values (#{baseArticle.district}, #{baseArticle.concrete}, #{baseArticle.weather}, #{baseArticle.temperature},
+                #{baseArticle.wind_direction}, #{baseArticle.weather_date})
+
+    </insert>
+    <delete id="deleteById">
+        delete
+        from ${table}
+        where id = #{id}
+    </delete>
+    <select id="findIsNull" resultType="com.xhz.spider.pojo.BaseWeather">
+        select *
+        from ${table}
+        where (district = #{district}
+           and concrete = #{concrete})
+           and (weather = ''
+           or temperature = ''
+           or wind_direction = '')
+        limit 1
+    </select>
+    <select id="findByDistrictAndConcrete" resultType="com.xhz.spider.pojo.BaseWeather">
+        select *
+        from ${table}
+        where district = #{district}
+          and concrete = #{concrete}
+          and weather = #{weather}
+
+    </select>
+    <select id="queryById" resultType="com.xhz.spider.pojo.BaseChannel">
+        select *
+        from spider_information_channel
+        where id = #{id}
+
+    </select>
+    <select id="getAreaNameBylevel" resultType="com.xhz.spider.pojo.BaseTArea">
+        select *
+        from t_area
+        where level = #{level}
+
+    </select>
+
+</mapper> 

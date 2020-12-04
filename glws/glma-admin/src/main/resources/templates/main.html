@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+    <title>草原监测数据分析子系统</title>
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+    <th:block th:include="include :: header('首页')" />
+    <link th:href="@{/css/gis.css}" rel="stylesheet"/>
+
+</head>
+
+<body class="gray-bg#006400" style="background:#3c763d" onLoad="onLoadMap()">
+<div id="map">
+    <div id="layerControl" class="layerControl">
+        <ul id="layerTree" class="layerTree" style="padding: 15px;"></ul>
+    </div>
+    <div class="header-r">
+        <div class="header-r-bg">
+            <strong></strong><a href="javascript:;" style="font-size: 16px;color:red" id="gisZoom"></a></strong>
+            <a href="javascript:;" id="comparison" onclick="comparison()">比对</a>
+            <a href="javascript:;" id="ranging" onclick="measurementGis('LineString')">测距</a>
+            <a href="javascript:;" id="measuringSurface" onclick="measurementGis('Polygon')">测面</a>
+            <a href="javascript:;" id="markPoint" onclick="drawGis('Point','tab')">标记点</a>
+            <a href="javascript:;" id="markingSurface" onclick="drawGis('Polygon','tab')">标记面</a>
+            <a href="javascript:;" id="markedList">标记列表</a>
+            <a href="javascript:;" id="pointSerch" onclick="pointQuery()">点查</a>
+            <a href="javascript:;" id="locationShow">定位</a>
+            <a href="javascript:;" id="conditionQuery">条件查询</a>
+            <div class="conditionQuery_sel" style="display: none">
+                <div class="triangle"></div>
+                <a href="javascript:;" id="business">业务查询</a>
+                <a href="javascript:;" id="special">专题查询</a>
+            </div>
+            <a href="javascript:;" id="grilleCalculator">格栅计算</a>
+        </div>
+    </div>
+    <div id="menu">
+        <input type="button" id="off"/>
+    </div>
+    <div id="menu3">
+        <input id="type3" value="全国" onclick="updateCity()"readonly>
+    </div>
+    <div class="layer_tree_show" style="left: 48px">
+        <div class="layer_tree_show_map"></div>
+    </div>
+    <div class="layer_tree_hide">
+        <i class="fa fa-chevron-left"></i>
+    </div>
+    <div class="west">
+        <div class="box box-main">
+            <div class="ui-layout-content" style="height: 420px">
+                <div id="businessLayer" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                <div id="thematicLayer" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+            </div>
+        </div>
+    </div>
+    <div id="dist_positioning">
+        <p id="title_zq"><span>地区定位</span> <span onclick="cityDivDoneById('dist_positioning')"
+                                                 style="float: right;margin: 0 10px;cursor: pointer;">关闭</span>
+        </p>
+        <div id="zqdw"><p class="content_ul" style="color: #13c6ae;">全国</p></div>
+        <div style="height: 160px;overflow-y: scroll;float: left;width: 100%">
+            <ul class="zq_ul"></ul>
+        </div>
+    </div>
+    <div id="shpTitle" class="col-sm-12 select-table table-striped">
+        <table id="bootstrap-table">
+        </table>
+    </div>
+    <!--定位-->
+    <div class="coordinatePositioning">
+        <li class="clear li-dw selected" style="display: block;">
+            <span class="zs-left icon icon-dw"></span>
+            <div class="zs-left module" style="display: block;">
+
+                <div class="ori-module-content module-content" style="display: block;padding-left: 50px;">
+                    <table class="jwd tabls" style="display: table;">
+                        <tr>
+                            <td class="text">经度：</td>
+                            <td class="input"><input id="decimalLon" value="" class="form-control sea-input" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"  placeholder="例:11.1"></td>
+                        </tr>
+                        <tr>
+                            <td class="text">纬度：</td>
+                            <td class="input"><input id="decimalLat" value="" class="form-control sea-input" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"  placeholder="例:23.1"></td>
+                        </tr>
+                    </table>
+                    <div class="dw-box" style="margin-top: 15px;">
+                        <button type="button" class="btn btn-primary" id="positioning_btn">定位</button>
+                        <button type="button" class="btn btn-danger" id="closePositioning">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <div id="mouse-position">
+        </div>
+    </div>
+</div>
+<div id="map-left" style="display: none">
+    <div class="layer_tree_show">
+        <div class="layer_tree_show_map_left"></div>
+    </div>
+    <div class="layer_tree_hide_left">
+        <i class="fa fa-chevron-left"></i>
+    </div>
+    <div class="west-left">
+        <div class="box box-main">
+            <div class="ui-layout-content" style="height: 420px">
+                <div id="businessLayer_left" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                <div id="thematicLayer_left" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="map-right" style="display: none">
+    <div class="header-r">
+        <div class="header-r-bg">
+            <a href="javascript:;" id="gisQuit" onclick="gisQuit()">退出</a>
+        </div>
+    </div>
+    <div class="layer_tree_show">
+        <div class="layer_tree_show_map_right"></div>
+    </div>
+    <div class="layer_tree_hide_right">
+        <i class="fa fa-chevron-left"></i>
+    </div>
+    <div class="west-right">
+        <div class="box box-main">
+            <div class="ui-layout-content" style="height: 420px">
+                <div id="businessLayer_right" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                <div id="thematicLayer_right" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="reportList">
+    <!--专题列表-->
+    <div class="col-sm-12 select-table table-bordered" id="reportDiv" style="height: 350px;overflow: auto;">
+        <form id="reportForm">
+            <div class="row">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <p>年份：</p>
+                            <input type="year" name="year" class="layui-layer-input" placeholder="所有" id="test2" style="margin-top: 0px;" readonly="readonly" />
+                        </li>
+                        <li>
+                            省份：
+                            <select id="province" name="province" th:with="type=${@dict.getType('sys_province')}">
+                                <option value="">--全国--</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                            &nbsp;市级：
+                            <select id="city" name="city">
+                                <option value="">--请选择--</option>
+                            </select>
+                            &nbsp;区级：
+                            <select id="area" name="address">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeReportList()">关闭</button>
+                <a class="btn btn-warning btn-rounded btn-sm" onclick='$.form.reset("reportForm","reportTable")' style="float: right;margin-right: 10px;"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                <a class="btn btn-primary btn-rounded btn-sm" onclick='$.table.search("reportForm","reportTable")' style="float: right;margin-right: 10px;"><i class="fa fa-search"></i>&nbsp;搜索</a>
+            </div>
+        </form>
+        <table id="reportTable"></table>
+    </div>
+    <!--业务列表-->
+    <div class="col-sm-12 select-table table-bordered" id="businessDiv" style="height: 350px;overflow: auto;">
+        <form id="businessForm">
+            <div class="row">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            地区：
+                            <select name="province_name" th:with="type=${@dict.getProvince()}">
+                                <option value="">--请选择--</option>
+                                <option th:each="gresslandEcology : ${type}" th:text="${gresslandEcology.province_name}" th:value="${gresslandEcology.province_name}"></option>
+                            </select>
+                            目：
+                            <select id="section" name="section" onchange="sectionOncheng()">
+                                <option value="">--请选择--</option>
+                            </select>
+                            科：
+                            <select id="generic" name="generic" onchange="bundleOncheng()">
+                                <option value="">--请选择--</option>
+                            </select>
+                            从：
+                            <select id="bundle" name="bundle">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeReportList()">关闭</button>
+                <a class="btn btn-warning btn-rounded btn-sm" onclick='$.form.reset("businessForm","businessTable")' style="float: right;margin-right: 10px;"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                <a class="btn btn-primary btn-rounded btn-sm" onclick='$.table.search("businessForm")' style="float: right;margin-right: 10px;"><i class="fa fa-search"></i>&nbsp;搜索</a>
+            </div>
+        </form>
+        <table id="businessTable"></table>
+    </div>
+    <!--标记列表-->
+    <div class="col-sm-12 select-table table-bordered" id="tagDiv" style="height: 350px;overflow: auto;">
+        <div class="row">
+            <button type="button" class="btn btn-primary btn-rounded btn-sm" style="float: right;margin-right: 20px;" onclick="closeReportList()">关闭</button>
+        </div>
+        <table id="tagTable"></table>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight" >
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <div class="echarts" id="echarts-line-chart"></div>
+        </div>
+
+        <div class="ibox-content">
+            <div class="echarts" id="echarts-bar-chart"></div>
+        </div>
+    </div>
+</div>
+</body>
+
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<th:block th:include="include :: ztree-css"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:src="@{/js/gis/glmaGis.js}"></script>
+<script th:src="@{/js/gis/gisComparison.js}"></script>
+<script type="text/javascript">
+
+    var prefix = ctx + "analyze/production";
+    $.ajax({
+        type: "post",
+        async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+        url: prefix + "/indexShow",    //请求发送到dataActiont处
+        dataType: "json",        //返回数据形式为json
+        success: function (result) {
+
+            var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+            var lineoption = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['草原生产力', '草原生产力预测']
+                },
+                grid: {
+                    x: 40,
+                    x2: 40,
+                    y2: 24
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: result.years
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '万吨',
+                        axisLabel: {
+                            margin: -3,
+                            formatter: '{value}'
+                        },
+                        grid: {
+                            left: 35
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '草原生产力',
+                        type: 'line',
+                        data: result.values,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                        ,
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name: '草原生产力预测',
+                        type: 'line',
+                        color: "#14d146",
+                        data: result.anaData
+                    }
+
+
+                ]
+            };
+            lineChart.setOption(lineoption);
+            $(window).resize(lineChart.resize);
+        }
+    });
+//各省产草量
+    var prefix = ctx + "analyze/province";
+    $.ajax({
+        type: "post",
+        async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+        url: prefix + "/indexShow",    //请求发送到dataActiont处
+        dataType: "json",        //返回数据形式为json
+        success: function (result) {
+            var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+            var years=result.years;
+            var mapValue=result.mapValue;
+            var categoryCount = result.provinces;
+            var xAxisData = [];
+            var customData = [];
+            var legendData = [];
+            var dataList = [];
+            for (var i = 0; i < years.length; i++) {
+                legendData.push(years[i]);
+                dataList.push([]);
+            }
+            for (var i = 0; i <categoryCount.length; i++) {
+                var pro=categoryCount[i];
+                xAxisData.push(pro);
+                for (var j = 0; j < dataList.length; j++) {
+                    if (mapValue[pro]==""){
+                        dataList[j].push(0);
+                    }else{
+                        //根据省份获取年份的数据列表
+                        var listyears=mapValue[pro];
+                        for (var m=0;m<listyears.length;m++){
+                            if(legendData[j]==listyears[m].year){
+                                var sum=(listyears[m].sum);
+                                dataList[j].push(sum);
+                            }
+                        }
+                    }
+                }
+            }
+            function renderItem(params, api) {
+                var xValue = api.value(0);
+                var currentSeriesIndices = api.currentSeriesIndices();
+                var barLayout = api.barLayout({
+                    barGap: '20%', barCategoryGap: '10%', count: currentSeriesIndices.length - 1
+                });
+
+                var points = [];
+                for (var i = 0; i < currentSeriesIndices.length; i++) {
+                    var seriesIndex = currentSeriesIndices[i];
+                    if (seriesIndex !== params.seriesIndex) {
+                        var point = api.coord([xValue, api.value(seriesIndex)]);
+                        point[0] += barLayout[i - 1].offsetCenter;
+                        point[1] -= 20;
+                        points.push(point);
+                    }
+                }
+                var style = api.style({
+                    stroke: api.visual('color'),
+                    fill: null
+                });
+
+                return {
+                    type: 'polyline',
+                    shape: {
+                        points: points
+                    },
+                    style: style
+                };
+            }
+
+            baroption = {
+                tooltip: {
+                    trigger: 'axis',
+                    confine: true
+                },
+                legend: {
+                    data: legendData
+                },
+                dataZoom: [{
+                    type: 'slider',
+                    start: 50,
+                    end: 70
+                }, {
+                    type: 'inside',
+                    start: 50,
+                    end: 70
+                }],
+                xAxis: {
+                    data: xAxisData,
+                    axisTick:{
+                        alignWithLabel:true
+                    }
+                },
+                yAxis: {},
+                series: [{
+                    type: 'custom',
+                    name: 'trend',
+                    renderItem: renderItem,
+                    itemStyle: {
+                        borderWidth: 2
+                    },
+                    data: customData,
+                    z: 100
+                }].concat(echarts.util.map(dataList, function (data, index) {
+                    return {
+                        type: 'bar',
+                        animation: false,
+                        name: legendData[index],
+                        itemStyle: {
+                            opacity: 0.5
+                        },
+                        data: data
+                    };
+                }))
+            };
+            barChart.setOption(baroption);
+            window.onresize = barChart.resize;
+        }
+    })
+
+
+    $('#search').click(function () {
+        var xs=$("#xs").val();
+        if(!isNaN(xs)){
+            if(0>=xs){
+                alert("请输入0到1之间的数");
+            }else if(xs>=1){
+                alert("请输入0到1之间的数");
+            }else{
+                window.location.href=prefix+"?xs="+xs;
+            }
+        }else{
+            alert("请输入0到1之间的数");
+        }
+    })
+
+</script>
+
+
+
+</html>

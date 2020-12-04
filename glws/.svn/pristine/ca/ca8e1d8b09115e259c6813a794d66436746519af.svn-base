@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<style type="text/css">
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin: 16px;
+    }
+
+    .tg td {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: #FFFFFF;
+        color: black;
+    }
+
+    .tg td input{
+        border: 0px;
+        text-align: center;
+        background-color: #e5f7f6;
+    }
+
+    .tg th {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: #FFFFFF;
+        color: white;
+    }
+
+    .tg .tg-lboi {
+        border-color: inherit;
+        text-align: left;
+        vertical-align: middle
+    }
+
+    .tg .tg-0pky {
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+    /*表头背景色 00b5a5*/
+    #tr1>th,#tr2>td,#tr3>td{
+        background: #50c2c1;
+        color: white;
+    }
+    /*表头 每行第一个td背景色*/
+    tr td:first-child{
+        background: #50c2c1;
+        color: white;
+    }
+    tr:nth-of-type(odd) {
+        background: #ffffff;
+    }
+    tr:nth-of-type(odd) input{
+        background: #e5f7f6;
+    }
+
+    .fun_btn button{
+        color: #fff;
+        background-color: #5cb85c;
+        border-color: #4cae4c;
+        margin-left: 15px;
+        border-radius: 5px;
+    }
+    .fun_btn button:hover{
+        background-color: #50c2c1;
+        border-color: #50c2c1;
+    }
+</style>
+<head>
+    <th:block th:include="include :: header('退牧还草工程任务创建')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="form-publish-add" class="form-horizontal">
+                <div class="row">
+                    <div class="select-list">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>年份：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="year" style="height: 30px;border:1px solid #f7f7f7;text-align:center;width: 70px" placeholder="请选择" id="test2"/>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="tableSearch()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                    </div>
+                </div>
+                <span style="font-size: 16px;">任务信息</span>
+                <span style="font-size: 16px;float: right">单位：建设(万亩)/投资(万元)</span>
+                <table id="mytable" class="tg" name="mytable">
+                    <tr id="tr1">
+                        <th class="tg-0lax" rowspan="3" style="text-align: center; width: 120px;">省份</th>
+                        <th class="tg-0lax" colspan="2" style="text-align: center">围栏部分</th>
+                        <th class="tg-0lax" colspan="10" style="text-align: center">其他部分</th>
+                        <th class="tg-0lax" rowspan="3" style="text-align: center;">中央资金</th>
+                        <th class="tg-0lax" rowspan="3" style="text-align: center;">地方资金</th>
+                    </tr>
+                    <tr id="tr2">
+                        <td class="tg-0lax" colspan="2" style="text-align: center;width: 171px;">围栏合计</td>
+                        <td class="tg-0lax" colspan="2" style="text-align: center;width: 171px;">退化草原改良</td>
+                        <td class="tg-0lax" colspan="2" style="text-align: center;width: 171px;">人工种草地</td>
+                        <td class="tg-0lax" colspan="2" style="text-align: center;width: 171px;">含饲棚围</td>
+                        <td class="tg-0lax" colspan="2" style="text-align: center;width: 171px;">黑土滩</td>
+                        <td class="tg-0lax" colspan="2" style="text-align: center;width: 171px;">毒害草</td>
+                    </tr>
+                    <tr id="tr3">
+                        <td class="tg-0lax" style="text-align: center">建设</td>
+                        <td class="tg-0lax" style="text-align: center">投资</td>
+                        <td class="tg-0lax" style="text-align: center">建设</td>
+                        <td class="tg-0lax" style="text-align: center">投资</td>
+                        <td class="tg-0lax" style="text-align: center">建设</td>
+                        <td class="tg-0lax" style="text-align: center">投资</td>
+                        <td class="tg-0lax" style="text-align: center">建设</td>
+                        <td class="tg-0lax" style="text-align: center">投资</td>
+                        <td class="tg-0lax" style="text-align: center">建设</td>
+                        <td class="tg-0lax" style="text-align: center">投资</td>
+                        <td class="tg-0lax" style="text-align: center">建设</td>
+                        <td class="tg-0lax" style="text-align: center">投资</td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-offset-5 col-sm-10">
+                <button type="button" class="btn btn-sm btn-primary" onclick="btnyizhu()"><i class="fa fa-check"></i>重新发布</button>
+                <button type="button" class="btn btn-sm btn-danger" onclick="closeAdjust()"><i class="fa fa-reply-all"></i>关 闭</button>
+            </div>
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<script src="layer/layer.js"></script>
+<script src="layer/extend/layer.ext.js"></script>
+<script type="text/javascript">
+    $("#form-publish-add").validate({
+        rules: {
+            onkeyup: false,
+            min: true,
+        },
+        errorPlacement:function(error,element) {
+            $.modal.alert('请输入不小于0的数字！');
+        },
+        focusCleanup: true
+    });
+
+    function save() {
+        $.post(prefix + "/publishList", $('#form-publish-add').serialize(), function (data) {
+            //data中是服务端返回的数据
+            //这里进行成功后的渲染。。。。。。
+        });
+        return false;//在这里返回false
+    }
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2',
+            type: 'year',
+        });
+    });
+
+    function btnyizhu() {
+        if ($.validate.form()) {
+            let flag = true;
+            $('.pulish input[type=text]').each(function () {
+                var name = $(this).val();
+                if(name){
+                    flag = false;
+                    return false;
+                }
+            });
+            if(flag){
+                $.modal.confirm("信息未填写成,请填写后提交", function () {})
+            }else if ($("#test2").val() == '') {
+                $.modal.confirm("年份未填写,请填写后提交", function () {})
+            } else {
+                var orderItemArray = new Array();
+                $("#form-publish-add tr").each(function () {
+                    //this代表当前dom对象tr
+                    var that = this;
+                    var orderItemObj = new Object();
+                    let flag = true;
+                    $(that).find("select,input").each(function () {
+                        let val = $(this).val();
+                        if(val == '总合计'){
+                            flag = false;
+                        }
+                        var name = $(this).attr("name");
+                        orderItemObj[name] = $(this).val();
+                    });
+                    orderItemObj['year'] = $("#test2").val();
+                    if(flag){
+                        orderItemArray.push(orderItemObj);
+                    }
+                });
+                var url = ctx + "system/publish/updatePublishList";
+                $.ajax({
+                    url: url,
+                    dataType: "json",
+                    contentType: "application/json;charsetset=UTF-8",//必须
+                    type: "post",
+                    cache: false,
+                    data: JSON.stringify(orderItemArray),//必须
+                    success: function (obj) {
+                        if (obj == "400") {
+                            layer.alert('任务发布成功！', function (index) {
+                                $.modal.close();
+                                var parent = window.parent;
+                                parent.$.table.refresh();
+                            });
+                        } else {
+                            layer.alert("发布失败，请查看网络！！！");
+                        }
+                    },
+                    error: function (textStatus, e) {
+                        layer.alert("系统ajax交互错误: ");
+                    }
+                });
+            }
+        }
+    }
+
+    function closeAdjust() {
+        $.modal.close();
+    }
+</script>
+<script>
+    var searchinput = $("input");
+    var textWidth = function (text) {
+        var sensor = $('<pre>' + text + '</pre>').css({display: 'none'});
+        $('body').append(sensor);
+        var width = sensor.width();
+        sensor.remove();
+        return width;
+    };
+    searchinput.unbind('keyup').bind('keyup', function () {
+        $(this).width(textWidth($(this).val() + 20));
+    });
+</script>
+<script>
+    function tableSearch(){
+        let year = $("#test2").val();
+        if(year == ""){
+            $.modal.alertSuccess("请选择年份！");
+            return;
+        }
+        var url = ctx + "system/publish/releaseList";
+        $.ajax({
+            url: url,
+            data: {"year":year},
+            type: 'post',
+            dataType: 'json',
+            success: function (data) {
+                let thead = '<tr id="tr1">\n' +
+                    '    <th class="tg-0lax" rowspan="3" style="text-align: center; width: 120px;">省份</th>\n' +
+                    '    <th class="tg-0lax" colspan="2" style="text-align: center">围栏部分</th>\n' +
+                    '    <th class="tg-0lax" colspan="10" style="text-align: center">其他部分</th>\n' +
+                    '    <th class="tg-0lax" rowspan="3" style="text-align: center;">中央资金</th>\n' +
+                    '    <th class="tg-0lax" rowspan="3" style="text-align: center;">地方资金</th>\n' +
+                    '</tr>\n' +
+                    '<tr id="tr2">\n' +
+                    '    <td class="tg-0lax" colspan="2" style="text-align: center;width: 171px;">围栏合计</td>\n' +
+                    '    <td class="tg-0lax" colspan="2" style="text-align: center;width: 171px;">退化草原改良</td>\n' +
+                    '    <td class="tg-0lax" colspan="2" style="text-align: center;width: 171px;">人工种草地</td>\n' +
+                    '    <td class="tg-0lax" colspan="2" style="text-align: center;width: 171px;">含饲棚围</td>\n' +
+                    '    <td class="tg-0lax" colspan="2" style="text-align: center;width: 171px;">黑土滩</td>\n' +
+                    '    <td class="tg-0lax" colspan="2" style="text-align: center;width: 171px;">毒害草</td>\n' +
+                    '</tr>\n' +
+                    '<tr id="tr3">\n' +
+                    '    <td class="tg-0lax" style="text-align: center">建设</td>\n' +
+                    '    <td class="tg-0lax" style="text-align: center">投资</td>\n' +
+                    '    <td class="tg-0lax" style="text-align: center">建设</td>\n' +
+                    '    <td class="tg-0lax" style="text-align: center">投资</td>\n' +
+                    '    <td class="tg-0lax" style="text-align: center">建设</td>\n' +
+                    '    <td class="tg-0lax" style="text-align: center">投资</td>\n' +
+                    '    <td class="tg-0lax" style="text-align: center">建设</td>\n' +
+                    '    <td class="tg-0lax" style="text-align: center">投资</td>\n' +
+                    '    <td class="tg-0lax" style="text-align: center">建设</td>\n' +
+                    '    <td class="tg-0lax" style="text-align: center">投资</td>\n' +
+                    '    <td class="tg-0lax" style="text-align: center">建设</td>\n' +
+                    '    <td class="tg-0lax" style="text-align: center">投资</td>\n' +
+                    '</tr>';
+                $("#mytable").html(thead);
+                if(data.length > 0){
+                    $.each(data, function (index, item) {
+                        var tr;
+                        if(item.wlScale == 0){
+                            item.wlScale = "";
+                        }
+                        if(item.wlInvestment == 0){
+                            item.wlInvestment = "";
+                        }
+                        if(item.thzyglSize == 0){
+                            item.thzyglSize = "";
+                        }
+                        if(item.thzyglMoney == 0){
+                            item.thzyglMoney = "";
+                        }
+                        if(item.rgscdSize == 0){
+                            item.rgscdSize = "";
+                        }
+                        if(item.rgscdMoney == 0){
+                            item.rgscdMoney = "";
+                        }
+                        if(item.hspjSize == 0){
+                            item.hspjSize = "";
+                        }
+                        if(item.hspjMoney == 0){
+                            item.hspjMoney = "";
+                        }
+                        if(item.httSize == 0){
+                            item.httSize = "";
+                        }
+                        if(item.httMoney == 0){
+                            item.httMoney = "";
+                        }
+                        if(item.dhcSize == 0){
+                            item.dhcSize = "";
+                        }
+                        if(item.dhcMoney == 0){
+                            item.dhcMoney = "";
+                        }
+                        if(item.zyMoney == 0){
+                            item.zyMoney = "";
+                        }
+                        if(item.dfMoney == 0){
+                            item.dfMoney = "";
+                        }
+                        tr = '<td style="text-align: center;">' + item.province  + '<input name="province" style="display: none;" type="text" maxlength="8"' + '"  value="'+ item.province +'">'
+                            + '<input name="publishId" style="display: none;" type="text" maxlength="8"' + '"  value="'+ item.publishId +'">' +'</td>'
+                            + '<td >' + '<input name="wlScale" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.wlScale +'">' + '</td>'
+                            + '<td >' + '<input name="wlInvestment" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.wlInvestment +'">' + '</td>'
+                            + '<td >' + '<input name="thzyglSize" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.thzyglSize +'">' + '</td>'
+                            + '<td >' + '<input name="thzyglMoney" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.thzyglMoney +'">' + '</td>'
+                            + '<td >' + '<input name="rgscdSize" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.rgscdSize +'">' + '</td>'
+                            + '<td >' + '<input name="rgscdMoney" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.rgscdMoney +'">' + '</td>'
+                            + '<td >' + '<input name="hspjSize" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.hspjSize +'">' + '</td>'
+                            + '<td >' + '<input name="hspjMoney" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.hspjMoney +'">' + '</td>'
+                            + '<td >' + '<input name="httSize" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.httSize +'">' + '</td>'
+                            + '<td >' + '<input name="httMoney" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.httMoney +'">' + '</td>'
+                            + '<td >' + '<input name="dhcSize" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.dhcSize +'">' + '</td>'
+                            + '<td >' + '<input name="dhcMoney" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.dhcMoney +'">' + '</td>'
+                            + '<td >' + '<input name="zyMoney" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.zyMoney +'">' + '</td>'
+                            + '<td >' + '<input name="dfMoney" type="text" maxlength="8"' + 'style="width: 100%; height: 100%" min value="'+ item.dfMoney +'">' + '</td>';
+                        $("#mytable").append('<tr class="pulish" id="tr4">' + tr + '</tr>');
+                    })
+                    let total = '<td style="text-align: center;">总合计<input name="province" style="display: none;" type="text" maxlength="8"' + '"  value="总合计">' +'</td>'
+                        + '<td style="text-align: center;"><input id="wlScale"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="wlInvestment"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="thzyglSize"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="thzyglMoney"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="rgscdSize"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="rgscdMoney"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="hspjSize"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="hspjMoney"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="httSize"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="httMoney"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="dhcSize"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="dhcMoney"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="zyMoney"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>'
+                        + '<td style="text-align: center;"><input id="dfMoney"  type="text" style="width: 100%; height: 100%" readonly="readonly">' + '</td>';
+                    $("#mytable").append('<tr class="pulish">' + total + '</tr>');
+                    dataValidation();
+                    $('input').blur(function () {
+                        dataValidation();
+                    })
+                }else{
+                    let noSerch = '<td class="tg-0lax" style="text-align: center;background-color: white;color: black;" colspan="15">暂无搜索记录</td>';
+                    $("#mytable").append('<tr class="pulish">' + noSerch + '</tr>');
+                }
+            }
+        })
+    }
+
+    /* 数据校验 */
+    function dataValidation() {
+        let list = ['wlScale','wlInvestment','jmSize','jmMoney','xmSize','xmMoney','hqlxSize','hqlxMoney','smhzlSize','smhzlMoney','thzyglSize','thzyglMoney','rgscdSize','rgscdMoney','hspjSize','hspjMoney','httSize','httMoney','dhcSize','dhcMoney','zyMoney','dfMoney'];
+        for(var i = 0; i < list.length; i++){
+            let current = $('input[name="'+list[i]+'"]');
+            let sum = 0;
+            for(var y = 0; y < current.length; y++){
+                if(current[y].value!=''&&current[y].value!=null){
+                    sum += parseInt(current[y].value);
+                }
+            }
+            $('#' + list[i]).val(sum);
+        }
+    }
+</script>
+</body>
+</html>

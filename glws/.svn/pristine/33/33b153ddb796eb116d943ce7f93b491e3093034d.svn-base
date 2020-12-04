@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.ReserveManagement.mapper.ReserveMapper">
+    
+    <resultMap type="reserve" id="ReserveResult">
+        <result property="id"    column="ID"    />
+        <result property="instockId"    column="INSTOCK_ID"    />
+        <result property="outboundId"    column="OUTBOUND_ID"    />
+        <result property="stockId"    column="STOCK_ID"    />
+        <result property="librayName"    column="LIBRAY_NAME"    />
+        <result property="librayAdmin"    column="LIBRAY_ADMIN"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="latitude"    column="LATITUDE"    />
+        <result property="longitde"    column="LONGITDE"    />
+        <result property="status"    column="STATUS"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="updateBy"    column="UPDATE_BY"    />
+    </resultMap>
+
+    <sql id="selectReserveVo">
+        select ID,INSTOCK_ID,OUTBOUND_ID,STOCK_ID,LATITUDE,LONGITDE, LIBRAY_NAME, LIBRAY_ADMIN, ADDRESS, STATUS, CREATE_TIME, CREATE_BY, UPDATE_TIME, UPDATE_BY from k_reserve
+    </sql>
+
+    <sql id="selectReserveVoo">
+        select ID,INSTOCK_ID,OUTBOUND_ID,STOCK_ID,LATITUDE,LONGITDE, LIBRAY_NAME, LIBRAY_ADMIN, ADDRESS, STATUS, CREATE_TIME, CREATE_BY, UPDATE_TIME, UPDATE_BY from k_reserve
+    </sql>
+
+    <select id="selectReserveList" parameterType="reserve" resultMap="ReserveResult">
+        <include refid="selectReserveVo"/>
+        <where>  
+            <if test="librayName != null  and librayName != ''"> and LIBRAY_NAME like concat('%', #{librayName}, '%')</if>
+            <if test="librayAdmin != null  and librayAdmin != ''"> and LIBRAY_ADMIN = #{librayAdmin}</if>
+            <if test="address != null  and address != ''"> and ADDRESS = #{address}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY like concat('%', #{createBy}, '%')</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and UPDATE_BY like concat('%', #{updateBy}, '%')</if>
+            <if test="params != null">
+                <if test="params.beginCreateTime!=null and params.beginCreateTime!=''">
+                    and    CREATE_TIME &gt;=#{params.beginCreateTime}
+                </if>
+                <if test="params.endCreateTime!=null and params.endCreateTime!=''">
+                    and   CREATE_TIME &lt;=DATE_ADD(#{params.endCreateTime},INTERVAL 1 DAY)
+                </if>
+            </if>
+        </where>
+        order by CREATE_TIME desc
+    </select>
+    
+    <select id="selectReserveById" parameterType="Long" resultMap="ReserveResult">
+        <include refid="selectReserveVoo"/>
+        where ID = #{id}
+    </select>
+
+    <select id="selectReserveByLatitude" parameterType="String" resultMap="ReserveResult">
+        <include refid="selectReserveVoo"/>
+        where LATITUDE = #{splitCoord}
+    </select>
+        
+    <insert id="insertReserve" parameterType="reserve">
+        insert into k_reserve
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">ID,</if>
+            <if test="librayName != null  and librayName != ''">LIBRAY_NAME,</if>
+            <if test="librayAdmin != null  and librayAdmin != ''">LIBRAY_ADMIN,</if>
+            <if test="address != null  and address != ''">ADDRESS,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            CREATE_TIME,
+            <if test="createBy != null  and createBy != ''">createBy,</if>
+            <if test="updateTime != null ">updateTime,</if>
+            <if test="updateBy != null  and updateBy != ''">updateBy,</if>
+            <if test="latitude != null ">latitude,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="librayName != null  and librayName != ''">#{librayName},</if>
+            <if test="librayAdmin != null  and librayAdmin != ''">#{librayAdmin},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            sysdate(),
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="latitude != null ">#{latitude},</if>
+
+        </trim>
+    </insert>
+
+    <update id="updateReserve" parameterType="reserve">
+        update k_reserve
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="librayName != null  and librayName != ''">LIBRAY_NAME = #{librayName},</if>
+            <if test="librayAdmin != null  and librayAdmin != ''">LIBRAY_ADMIN = #{librayAdmin},</if>
+            <if test="address != null  and address != ''">ADDRESS = #{address},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="createTime != null ">createTime = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">createBy = #{createBy},</if>
+            <if test="updateTime != null ">UPDATETIME = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">updateBy = #{updateBy},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteReserveById" parameterType="Long">
+        delete from k_reserve where ID = #{id}
+    </delete>
+
+    <delete id="deleteReserveByIds" parameterType="String">
+        delete from k_reserve where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

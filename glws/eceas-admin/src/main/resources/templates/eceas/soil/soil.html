@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('保育土壤列表')" />
+</head>
+<style>
+    .W100 .th-inner {
+        width:100px !important;
+    }
+    .W180 .th-inner {
+        width:180px !important;
+    }
+
+</style>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+  <!--          <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>林分面积(单位：hm2)：</p>
+                                <input type="text" name="standArea"/>
+                            </li>
+                            <li>
+                                <p>林地土壤侵蚀模数(单位：t/hm2)：</p>
+                                <input type="text" name="woodlandSoil"/>
+                            </li>
+                            <li>
+                                <p>无林地土壤侵蚀模数(单位：t/hm2)：</p>
+                                <input type="text" name="woodlandNotsoil"/>
+                            </li>
+                            <li>
+                                <p>林地土壤容重(单位：t/m3)：</p>
+                                <input type="text" name="soilDensity"/>
+                            </li>
+                            <li>
+                                <p>林地土壤含氮量(单位：%)：</p>
+                                <input type="text" name="soilNitrogenContent"/>
+                            </li>
+                            <li>
+                                <p>林地土壤含磷量(单位：%)：</p>
+                                <input type="text" name="soilPhosphorusContent"/>
+                            </li>
+                            <li>
+                                <p>林地土壤含钾量(单位：%)：</p>
+                                <input type="text" name="potassiumContentSoil"/>
+                            </li>
+                            <li>
+                                <p>林地土壤有机质含量(单位：%)：</p>
+                                <input type="text" name="soilOrganicMatter"/>
+                            </li>
+                            <li>
+                                <p>林分年固土量(单位：t)：</p>
+                                <input type="text" name="soilConsolidation"/>
+                            </li>
+                            <li>
+                                <p>林分年固土价值(单位：元)：</p>
+                                <input type="text" name="soilConsolidationValue"/>
+                            </li>
+                            <li>
+                                <p>林分年保持氮量(单位：t)：</p>
+                                <input type="text" name="maintainingNitrogen"/>
+                            </li>
+                            <li>
+                                <p>林分年保持磷量(单位：t)：</p>
+                                <input type="text" name="maintainingPhosphorus"/>
+                            </li>
+                            <li>
+                                <p>林分年保持钾量(单位：t)：</p>
+                                <input type="text" name="maintainingPotassium"/>
+                            </li>
+                            <li>
+                                <p>林分年保持有机质量(单位：t)：</p>
+                                <input type="text" name="organicQuality"/>
+                            </li>
+                            <li>
+                                <p>林分年保肥价值(单位：元)：</p>
+                                <input type="text" name="protectFertilizerValue"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>-->
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="eceas:soil:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="eceas:soil:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="eceas:soil:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="eceas:soil:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('eceas:soil:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('eceas:soil:remove')}]];
+        var prefix = ctx + "eceas/soil";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "保育土壤",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'soilId', 
+                    title : '土壤 ID',
+                    visible: false
+                },
+                {
+                    field : 'standArea', 
+                    title : '林分面积'
+                },
+                {
+                    field : 'woodlandSoil', 
+                    title : '林地土壤侵蚀模数'
+                },
+                {
+                    field : 'woodlandNotsoil', 
+                    title : '无林地土壤侵蚀模数'
+                },
+                {
+                    field : 'soilDensity', 
+                    title : '林地土壤容重'
+                },
+                {
+                    field : 'soilNitrogenContent', 
+                    title : '林地土壤含氮量'
+                },
+                {
+                    field : 'soilPhosphorusContent', 
+                    title : '林地土壤含磷量'
+                },
+                {
+                    field : 'potassiumContentSoil', 
+                    title : '林地土壤含钾量'
+                },
+                {
+                    field : 'soilOrganicMatter', 
+                    title : '林地土壤有机质含量'
+                },
+                {
+                    field : 'soilConsolidation', 
+                    title : '林分年固土量'
+                },
+                {
+                    field : 'soilConsolidationValue', 
+                    title : '林分年固土价值'
+                },
+                {
+                    field : 'maintainingNitrogen', 
+                    title : '林分年保持氮量'
+                },
+                {
+                    field : 'maintainingPhosphorus', 
+                    title : '林分年保持磷量'
+                },
+                {
+                    field : 'maintainingPotassium', 
+                    title : '林分年保持钾量'
+                },
+                {
+                    field : 'organicQuality', 
+                    title : '林分年保持有机质量'
+                },
+                {
+                    field : 'protectFertilizerValue', 
+                    title : '林分年保肥价值'
+                },
+                {
+                    title: '操作',
+                    class: 'W180',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.soilId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.soilId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('&nbsp;<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="eveal(\'' + row.id + '\')"><i class="fa fa-edit"></i>评价</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

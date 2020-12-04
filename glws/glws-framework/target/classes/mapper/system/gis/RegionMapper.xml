@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.gis.RegionMapper">
+    <resultMap type="com.ruoyi.system.domain.gis.Region" id="region">
+        <id property="id" column="id"/>
+        <result property="gid" column="gid"/>
+        <result property="name" column="name"/>
+        <result property="pac" column="pac"/>
+        <result property="userid" column="userid"/>
+        <result property="city" column="city"/>
+        <result property="city_code" column="city_code"/>
+        <result property="province" column="province"/>
+        <result property="province_code" column="province_code"/>
+        <result property="type" column="type"/>
+        <result property="lon_lat" column="lon_lat"/>
+    </resultMap>
+    <update id="updateById">
+        update xian set
+           lon_lat=#{lon_lat}
+        where id = #{id}
+    </update>
+    <select id="countyList" resultType="com.ruoyi.system.domain.gis.Region">
+        select distinct name,pac,min(gid) gid,min(lon_lat) lon_lat from xian where city_code=#{cityCode} group by name,pac
+    </select>
+    <select id="cityList" resultType="com.ruoyi.system.domain.gis.Region">
+        select distinct city,city_code,min(gid) gid,min(lon_lat) lon_lat from xian where province_code=#{provinceCode} group by city, city_code
+    </select>
+    <select id="provinceList" resultType="com.ruoyi.system.domain.gis.Region">
+        select distinct province,province_code ,min(gid) gid,min(lon_lat) lon_lat from xian where province!='' group by province, province_code
+    </select>
+    <select id="getRegionList" resultType="com.ruoyi.system.domain.gis.Region">
+        select id,
+               gid,
+               name,
+               pac,
+               userid,
+               city,
+               city_code,
+               province,
+               province_code,
+               type,
+               lon_lat
+        from xian
+    </select>
+    <select id="getRegionById" resultType="com.ruoyi.system.domain.gis.Region">
+        select id,
+               gid,
+               name,
+               pac,
+               userid,
+               city,
+               city_code,
+               province,
+               province_code,
+               type,
+               lon_lat
+        from xian
+        where id = #{id}
+    </select>
+</mapper>

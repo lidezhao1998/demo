@@ -1,0 +1,259 @@
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改非工程样地')" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="white-bg">
+<div class="main-content">
+    <form class="form-horizontal" id="form-nprojectSampleData-edit" th:object="${nprojectSampleData}" enctype="multipart/form-data">
+        <input id="id" name="id" th:field="*{id}"  type="hidden">
+        <input id="photoUrl" name="photoUrl" type="text" hidden>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">调查时间：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input readonly="readonly" name="surveyTime" type="text" class="form-control" id="surveyTime" th:value="${#dates.format(nprojectSampleData.surveyTime,'yyyy-MM-dd HH:mm:ss')}" placeholder="yyyy-MM-dd HH:mm:ss" required>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">样地编号：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input readonly="readonly" id="sampleNumber" name="sampleNumber" th:field="*{sampleNumber}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">调查地区：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input readonly="readonly" id="surveyArea" name="surveyArea" th:field="*{surveyArea}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">灌木或高大草木：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input readonly="readonly" id="shrubTallPlants" name="shrubTallPlants" th:field="*{shrubTallPlants}" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">草地类：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <select class="form-control noselect2 selectpicker" disabled="disabled" id="grasslandClass" name="grasslandClass" th:with="type=${@dict.getType('di_grassland')}" required>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictCode}" th:field="*{grasslandClass}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">草地型：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <select class="form-control noselect2 selectpicker" disabled="disabled" id="grasslandType" name="grasslandType"  th:with="type=${@dict.getType('di_terrain')}" required>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictCode}" th:field="*{grasslandType}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="font-noraml">样方照片</label>
+            <div class="file-loading">
+                <input class="file"  type="file" readonly="readonly"  id="file" name="photo" accept=".jpg,.png,.gif,.jpeg">
+            </div>
+        </div>
+
+    </form>
+</div>
+<th:block th:include="include :: datetimepicker-js" />
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: bootstrap-fileinput-js" />
+<script type="text/javascript">
+    var prefix = ctx + "integration/nprojectSampleData";
+    var prefixnormalInspection = ctx + "integration/normalInspection";
+
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#surveyTime',
+            type: 'datetime',
+            trigger: 'click'
+        });
+    });
+    var obj = document.getElementById("photoUrl");//储存图图片id
+    var ids = [];
+    var initial = ("[[${initialPreview}]]").replace(/&quot;/g,"'");
+    var initialPreview=eval(initial);
+    var config = "[[${initialPreviewConfig}]]".replace(/&quot;/g,"'");
+    var initialPreviewConfig=eval(config);
+    for (var i = 0; i < initialPreviewConfig.length; i++) {
+        ids.push(initialPreviewConfig[i].key)
+    }
+    for (var initialPreviewElement of initialPreview) {
+
+    }
+    // var codeId = $("#codeId").val();
+    $("#file").fileinput({
+        'theme': 'explorer-fas',
+        // uploadExtraData: {
+        //     codeId: codeId
+        // },
+        // 'uploadUrl':prefixnormalInspection+'/upload',
+        // deleteUrl:prefixnormalInspection+"/delete",
+        overwriteInitial: false,
+        uploadIcon: "<i class=\"glyphicon glyphicon-upload\"></i>",
+        initialPreviewAsData: true,
+        uploadAsync: true,
+        showCancel: false,
+        showUpload:false,
+        showRemove:false,
+        allowedFileExtensions: ['jpg', 'gif', 'png', 'bmp', 'jpeg'],//指出带有哪些后缀名的文件才是被接受上传的
+        previewFileIcon: '',//当文件无法被预览时出现在缩略图中的图标，默认是
+        maxFileCount: 10,
+        layoutTemplates: {
+            actionUpload: ""
+        },
+        deleteExtraData: {
+            files: "111111111"
+        },
+        initialPreview: initialPreview,
+        initialPreviewConfig: initialPreviewConfig,
+
+
+    }).on('filebatchuploaderror', function (event, data, msg) {
+        alert("上传失败");
+    }).on("filepredelete", function (event, key, jax, data) {
+        return !confirm("确定删除？");
+    }).on('filedeleted', function (event, key) {
+        removearry(ids, key)
+        alert("删除成功");
+        obj.value = ids;
+    });
+    $(".kv-file-remove").click(function () {
+
+        // alert("target"+JSON.stringify( $(this).target));
+    });
+    /*$('#file').on('filepredelete', function(event,data,jax,key) {
+         alert("key"+JSON.stringify(key));
+         alert("data"+JSON.stringify(data));
+         alert("jax"+JSON.stringify(jax));
+         alert("event"+JSON.stringify(event));
+         console.log('Key = ' + key);
+
+     });*/
+
+
+    $("#file").on("fileuploaded", function (event, data, previewId, index) {
+        //alert("data"+JSON.stringify(data));
+        initialPreview.push(data.response.initialPreview)
+        var obj = {
+            caption: data.response.filename,
+            size: data.response.size,
+            url: prefixnormalInspection + '/delete',
+            key: data.response.id,
+        }
+        // alert(JSON.stringify(obj));
+        initialPreviewConfig.push(obj);
+        //alert(JSON.stringify(initialPreview));
+        ids=[];
+        for (var i = 0; i < initialPreviewConfig.length; i++) {
+            ids.push(initialPreviewConfig[i].key)
+        }
+        //alert("ids"+ids);
+        $("#photoUrl").val(ids);
+        // alert("obj"+$("#photoUrl").val())
+        $('#file').fileinput('destroy');
+        $("#file").fileinput({
+            'theme': 'explorer-fas',
+            // 'uploadUrl': prefixnormalInspection + '/upload',
+            overwriteInitial: false,
+            showUpload:false,
+            showRemove:false,
+            uploadIcon: "<i class=\"glyphicon glyphicon-upload\"></i>",
+            initialPreviewAsData: true,
+            // uploadAsync: true,
+            showCancel: false,
+            allowedFileExtensions: ['jpg', 'gif', 'png', 'bmp', 'jpeg'],//指出带有哪些后缀名的文件才是被接受上传的
+            previewFileIcon: '',//当文件无法被预览时出现在缩略图中的图标，默认是
+            maxFileCount: 10,
+            layoutTemplates: {
+                actionUpload: ""
+            },
+            deleteExtraData: {
+                files: "111111111"
+            },
+            initialPreview: initialPreview,
+            initialPreviewConfig: initialPreviewConfig,
+
+
+        })
+        $('#file').fileinput('enable');
+
+    });
+
+    function dianji() {
+        //  alert(initialPreview);
+        // alert(JSON.stringify(initialPreviewConfig));
+        // alert($("#photoUrl").val());
+    }
+
+    //数组排序方法
+    function evlabc(a) { //排序大小
+        var i = j = t = 0;
+        for (i = 0; i < a.length; i++) {
+            for (j = 0; j < a.length; j++) {
+                if (a[i] < a[j]) {// 相邻元素两两对比
+                    t = a[i];
+                    a[i] = a[j];
+                    a[j] = t;
+                }
+            }
+        }
+        return a;
+    }
+
+    //取值在数组中的下标
+    function indexOfArry(arry, val) {
+        for (var i = 0; i < arry.length; i++) {
+            if (arry[i] == val) return i;
+        }
+        return -1;
+    };
+
+    //删除数组中固定的值
+    function removearry(arry, val) {
+        var index = indexOfArry(arry, val);
+        if (index > -1) {
+            arry.splice(index, 1);
+        }
+    };
+
+    // $("#file").fileinput('_initFileActions');//这行代码就是调用绑定删除事件的
+    function submitHandler() {
+        if ($.validate.form()) {
+            // var formData = new FormData(document.getElementById("form-nprojectSampleData-edit"));
+            // formData.append('file', $("#file")[0].files[0]);
+            $.operate.save(prefix + "/edit", $('#form-nprojectSampleData-edit').serialize());
+            // $.operate.save(prefix + "/edit", $('#form-nprojectSampleData-edit').serialize());
+        }
+    }
+
+
+</script>
+</body>
+</html>

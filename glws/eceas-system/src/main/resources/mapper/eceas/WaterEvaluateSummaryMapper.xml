@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.WaterEvaluateSummaryMapper">
+    
+    <resultMap type="WaterEvaluateSummary" id="WaterEvaluateSummaryResult">
+        <result property="id"    column="id"    />
+        <result property="address"    column="address"    />
+        <result property="area"    column="area"    />
+        <result property="waterconservation"    column="waterConservation"    />
+        <result property="conservewatervalue"    column="conserveWaterValue"    />
+        <result property="rcdci"    column="rcdci"    />
+        <result property="ecologyType"    column="ecology_type"    />
+        <result property="annulprecipitation"    column="annulPrecipitation"    />
+        <result property="evapotranspiration"    column="evapotranspiration"    />
+        <result property="surfaceannualrunoff"    column="surfaceAnnualRunoff"    />
+        <result property="createBy"      column="create_by"     />
+        <result property="createTime"    column="create_time"   />
+        <result property="updateBy"      column="update_by"     />
+        <result property="updateTime"    column="update_time"   />
+    </resultMap>
+
+    <sql id="selectWaterEvaluateSummaryVo">
+        select id, address, area, waterConservation, conserveWaterValue, rcdci, ecology_type, annulPrecipitation, evapotranspiration, surfaceAnnualRunoff, create_by, create_time from water_evaluate_summary
+    </sql>
+
+    <select id="selectWaterEvaluateSummaryList" parameterType="WaterEvaluateSummary" resultMap="WaterEvaluateSummaryResult">
+        <include refid="selectWaterEvaluateSummaryVo"/>
+        <where>  
+            <if test="address != null  and address != ''"> and address like concat('%', #{address}, '%')</if>
+            <if test="area != null "> and area = #{area}</if>
+            <if test="waterconservation != null "> and waterConservation = #{waterconservation}</if>
+            <if test="conservewatervalue != null "> and conserveWaterValue = #{conservewatervalue}</if>
+            <if test="rcdci != null "> and rcdci = #{rcdci}</if>
+            <if test="ecologyType != null  and ecologyType != ''"> and ecology_type = #{ecologyType}</if>
+            <if test="annulprecipitation != null "> and annulPrecipitation = #{annulprecipitation}</if>
+            <if test="evapotranspiration != null "> and evapotranspiration = #{evapotranspiration}</if>
+            <if test="surfaceannualrunoff != null "> and surfaceAnnualRunoff = #{surfaceannualrunoff}</if>
+        </where>
+    </select>
+    
+    <select id="selectWaterEvaluateSummaryById" parameterType="Long" resultMap="WaterEvaluateSummaryResult">
+        <include refid="selectWaterEvaluateSummaryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertWaterEvaluateSummary" parameterType="WaterEvaluateSummary" useGeneratedKeys="true" keyProperty="id">
+        insert into water_evaluate_summary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="address != null  and address != ''">address,</if>
+            <if test="area != null ">area,</if>
+            <if test="waterconservation != null ">waterConservation,</if>
+            <if test="conservewatervalue != null ">conserveWaterValue,</if>
+            <if test="rcdci != null ">rcdci,</if>
+            <if test="ecologyType != null  and ecologyType != ''">ecology_type,</if>
+            <if test="annulprecipitation != null ">annulPrecipitation,</if>
+            <if test="evapotranspiration != null ">evapotranspiration,</if>
+            <if test="surfaceannualrunoff != null ">surfaceAnnualRunoff,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="area != null ">#{area},</if>
+            <if test="waterconservation != null ">#{waterconservation},</if>
+            <if test="conservewatervalue != null ">#{conservewatervalue},</if>
+            <if test="rcdci != null ">#{rcdci},</if>
+            <if test="ecologyType != null  and ecologyType != ''">#{ecologyType},</if>
+            <if test="annulprecipitation != null ">#{annulprecipitation},</if>
+            <if test="evapotranspiration != null ">#{evapotranspiration},</if>
+            <if test="surfaceannualrunoff != null ">#{surfaceannualrunoff},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateWaterEvaluateSummary" parameterType="WaterEvaluateSummary">
+        update water_evaluate_summary
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="area != null ">area = #{area},</if>
+            <if test="waterconservation != null ">waterConservation = #{waterconservation},</if>
+            <if test="conservewatervalue != null ">conserveWaterValue = #{conservewatervalue},</if>
+            <if test="rcdci != null ">rcdci = #{rcdci},</if>
+            <if test="ecologyType != null  and ecologyType != ''">ecology_type = #{ecologyType},</if>
+            <if test="annulprecipitation != null ">annulPrecipitation = #{annulprecipitation},</if>
+            <if test="evapotranspiration != null ">evapotranspiration = #{evapotranspiration},</if>
+            <if test="surfaceannualrunoff != null ">surfaceAnnualRunoff = #{surfaceannualrunoff},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWaterEvaluateSummaryById" parameterType="Long">
+        delete from water_evaluate_summary where id = #{id}
+    </delete>
+
+    <delete id="deleteWaterEvaluateSummaryByIds" parameterType="String">
+        delete from water_evaluate_summary where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

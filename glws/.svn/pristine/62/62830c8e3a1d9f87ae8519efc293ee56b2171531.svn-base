@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.extinterface.mapper.MobileDeviceDataMapper">
+    <resultMap type="com.ruoyi.system.domain.gis.SysCity" id="SysCityResult">
+   <id property="id" column="id"/>
+   <result property="pid" column="pid"/>
+   <result property="ancestors" column="ancestors"/>
+   <result property="cityName" column="cityName"/>
+   <result property="geoStr" column="geoStr"/>
+   <result property="area" column="area"/>
+   <result property="perimeter" column="perimeter"/>
+   <result property="canter" column="canter"/>
+</resultMap>
+   <resultMap type="com.sinosoft.extinterface.domain.A5gInterface" id="A5gInterface">
+      <id property="id" column="id"/>
+      <result property="name" column="name"/>
+      <result property="url" column="url"/>
+      <result property="dictDataCode" column="dictDataCode"/>
+   </resultMap>
+   <select id="getCityById" resultType="com.ruoyi.system.domain.gis.SysCity">
+        select dict_code id,dict_label cityName from sys_dict_data where dict_code = #{id}
+    </select>
+   <select id="getDistrictSheng" resultType="com.ruoyi.system.domain.gis.SysCity">
+       SELECT dict_code id,dict_label cityName FROM sys_dict_data WHERE dict_type="sys_province"
+    </select>
+   <select id="getDistrictShi" resultType="com.ruoyi.system.domain.gis.SysCity">
+        SELECT dict_code id,dict_label cityName FROM sys_dict_data so WHERE dict_parent= #{id}
+    </select>
+   <select id="getA5gInterface" resultType="com.sinosoft.extinterface.domain.A5gInterface">
+       SELECT id,name,url,dict_data_code dictDataCode FROM a_5g_interface WHERE dict_data_code=#{code}
+
+    </select>
+</mapper>

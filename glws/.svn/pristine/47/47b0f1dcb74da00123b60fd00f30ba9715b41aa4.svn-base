@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CRatKnowledgeMapper">
+    
+    <resultMap type="CRatKnowledge" id="CRatKnowledgeResult">
+        <result property="id"    column="ID"    />
+        <result property="chineseName"    column="CHINESE_NAME"    />
+        <result property="pinyin"    column="PINYIN"    />
+        <result property="pinyinjx"    column="PINYINJX"    />
+        <result property="code"    column="CODE"    />
+        <result property="oldCode"    column="OLD_CODE"    />
+        <result property="latinName"    column="LATIN_NAME"    />
+        <result property="alias"    column="ALIAS"    />
+        <result property="grade"    column="GRADE"    />
+        <result property="gbName"    column="GB_NAME"    />
+        <result property="gbCode"    column="GB_CODE"    />
+        <result property="hazardousParts"    column="HAZARDOUS_PARTS"    />
+        <result property="harmfulSymptoms"    column="HARMFUL_SYMPTOMS"    />
+        <result property="pathogenicEnvironment"    column="PATHOGENIC_ENVIRONMENT"    />
+        <result property="parasiticPlants"    column="PARASITIC_PLANTS"    />
+        <result property="surveyMethods"    column="SURVEY_METHODS"    />
+        <result property="fashionTime"    column="FASHION_TIME"    />
+        <result property="loop"    column="LOOP"    />
+        <result property="distribution"    column="DISTRIBUTION"    />
+        <result property="domesticDistribution"    column="DOMESTIC_DISTRIBUTION"    />
+        <result property="distributionAbroad"    column="DISTRIBUTION_ABROAD"    />
+        <result property="areaType"    column="AREA_TYPE"    />
+        <result property="quarantineMeasures"    column="QUARANTINE_MEASURES"    />
+        <result property="preventiveMeasures"    column="PREVENTIVE_MEASURES"    />
+        <result property="picture"    column="PICTURE"    />
+        <result property="remark"    column="REMARK"    />
+    </resultMap>
+
+    <sql id="selectCRatKnowledgeVo">
+        select ID, CHINESE_NAME, PINYIN, PINYINJX, CODE, OLD_CODE, LATIN_NAME, ALIAS, GRADE, GB_NAME, GB_CODE, HAZARDOUS_PARTS, HARMFUL_SYMPTOMS, PATHOGENIC_ENVIRONMENT, PARASITIC_PLANTS, SURVEY_METHODS, FASHION_TIME, DISTRIBUTION, DOMESTIC_DISTRIBUTION, DISTRIBUTION_ABROAD, AREA_TYPE, QUARANTINE_MEASURES, PREVENTIVE_MEASURES, PICTURE, REMARK from c_rat_knowledge
+    </sql>
+
+    <select id="selectCRatKnowledgeList" parameterType="CRatKnowledge" resultMap="CRatKnowledgeResult">
+        <include refid="selectCRatKnowledgeVo"/>
+        <where>  
+            <if test="chineseName != null  and chineseName != ''"> and CHINESE_NAME like concat('%', #{chineseName}, '%')</if>
+            <if test="pinyin != null  and pinyin != ''"> and PINYIN = #{pinyin}</if>
+            <if test="pinyinjx != null  and pinyinjx != ''"> and PINYINJX = #{pinyinjx}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="oldCode != null  and oldCode != ''"> and OLD_CODE = #{oldCode}</if>
+            <if test="latinName != null  and latinName != ''"> and LATIN_NAME like concat('%', #{latinName}, '%')</if>
+            <if test="alias != null  and alias != ''"> and ALIAS = #{alias}</if>
+            <if test="grade != null  and grade != ''"> and GRADE = #{grade}</if>
+            <if test="gbName != null  and gbName != ''"> and GB_NAME like concat('%', #{gbName}, '%')</if>
+            <if test="gbCode != null  and gbCode != ''"> and GB_CODE = #{gbCode}</if>
+            <if test="hazardousParts != null  and hazardousParts != ''"> and HAZARDOUS_PARTS like concat('%', #{hazardousParts}, '%') </if>
+            <if test="harmfulSymptoms != null  and harmfulSymptoms != ''"> and HARMFUL_SYMPTOMS = #{harmfulSymptoms}</if>
+            <if test="pathogenicEnvironment != null  and pathogenicEnvironment != ''"> and PATHOGENIC_ENVIRONMENT = #{pathogenicEnvironment}</if>
+            <if test="parasiticPlants != null  and parasiticPlants != ''"> and PARASITIC_PLANTS = #{parasiticPlants}</if>
+            <if test="surveyMethods != null  and surveyMethods != ''"> and SURVEY_METHODS = #{surveyMethods}</if>
+            <if test="fashionTime != null "> and FASHION_TIME = #{fashionTime}</if>
+            <if test="loop != null  and loop != ''"> and LOOP = #{loop}</if>
+            <if test="distribution != null  and distribution != ''"> and DISTRIBUTION = #{distribution}</if>
+            <if test="domesticDistribution != null  and domesticDistribution != ''"> and DOMESTIC_DISTRIBUTION = #{domesticDistribution}</if>
+            <if test="distributionAbroad != null  and distributionAbroad != ''"> and DISTRIBUTION_ABROAD = #{distributionAbroad}</if>
+            <if test="areaType != null  and areaType != ''"> and AREA_TYPE = #{areaType}</if>
+            <if test="quarantineMeasures != null  and quarantineMeasures != ''"> and QUARANTINE_MEASURES = #{quarantineMeasures}</if>
+            <if test="preventiveMeasures != null  and preventiveMeasures != ''"> and PREVENTIVE_MEASURES = #{preventiveMeasures}</if>
+            <if test="picture != null  and picture != ''"> and PICTURE = #{picture}</if>
+            <if test="remark != null  and remark != ''"> and REMARK = #{remark}</if>
+        </where>
+    </select>
+    
+    <select id="selectCRatKnowledgeById" parameterType="Long" resultMap="CRatKnowledgeResult">
+        <include refid="selectCRatKnowledgeVo"/>
+        where ID = #{id}
+    </select>
+    <select id="checkCode" parameterType="string" resultType="java.lang.String">
+        select code from   c_rat_knowledge where  code=#{code}
+    </select>
+
+    <insert id="insertCRatKnowledge" parameterType="CRatKnowledge" useGeneratedKeys="true" keyProperty="id">
+        insert into c_rat_knowledge
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chineseName != null  and chineseName != ''">CHINESE_NAME,</if>
+            <if test="pinyin != null  and pinyin != ''">PINYIN,</if>
+            <if test="pinyinjx != null  and pinyinjx != ''">PINYINJX,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="oldCode != null  and oldCode != ''">OLD_CODE,</if>
+            <if test="latinName != null  and latinName != ''">LATIN_NAME,</if>
+            <if test="alias != null  and alias != ''">ALIAS,</if>
+            <if test="grade != null  and grade != ''">GRADE,</if>
+            <if test="gbName != null  and gbName != ''">GB_NAME,</if>
+            <if test="gbCode != null  and gbCode != ''">GB_CODE,</if>
+            <if test="hazardousParts != null  and hazardousParts != ''">HAZARDOUS_PARTS,</if>
+            <if test="harmfulSymptoms != null  and harmfulSymptoms != ''">HARMFUL_SYMPTOMS,</if>
+            <if test="pathogenicEnvironment != null  and pathogenicEnvironment != ''">PATHOGENIC_ENVIRONMENT,</if>
+            <if test="parasiticPlants != null  and parasiticPlants != ''">PARASITIC_PLANTS,</if>
+            <if test="surveyMethods != null  and surveyMethods != ''">SURVEY_METHODS,</if>
+            <if test="fashionTime != null ">FASHION_TIME,</if>
+            <if test="loop != null  and loop != ''">LOOP,</if>
+            <if test="distribution != null  and distribution != ''">DISTRIBUTION,</if>
+            <if test="domesticDistribution != null  and domesticDistribution != ''">DOMESTIC_DISTRIBUTION,</if>
+            <if test="distributionAbroad != null  and distributionAbroad != ''">DISTRIBUTION_ABROAD,</if>
+            <if test="areaType != null  and areaType != ''">AREA_TYPE,</if>
+            <if test="quarantineMeasures != null  and quarantineMeasures != ''">QUARANTINE_MEASURES,</if>
+            <if test="preventiveMeasures != null  and preventiveMeasures != ''">PREVENTIVE_MEASURES,</if>
+            <if test="picture != null  and picture != ''">PICTURE,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chineseName != null  and chineseName != ''">#{chineseName},</if>
+            <if test="pinyin != null  and pinyin != ''">#{pinyin},</if>
+            <if test="pinyinjx != null  and pinyinjx != ''">#{pinyinjx},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="oldCode != null  and oldCode != ''">#{oldCode},</if>
+            <if test="latinName != null  and latinName != ''">#{latinName},</if>
+            <if test="alias != null  and alias != ''">#{alias},</if>
+            <if test="grade != null  and grade != ''">#{grade},</if>
+            <if test="gbName != null  and gbName != ''">#{gbName},</if>
+            <if test="gbCode != null  and gbCode != ''">#{gbCode},</if>
+            <if test="hazardousParts != null  and hazardousParts != ''">#{hazardousParts},</if>
+            <if test="harmfulSymptoms != null  and harmfulSymptoms != ''">#{harmfulSymptoms},</if>
+            <if test="pathogenicEnvironment != null  and pathogenicEnvironment != ''">#{pathogenicEnvironment},</if>
+            <if test="parasiticPlants != null  and parasiticPlants != ''">#{parasiticPlants},</if>
+            <if test="surveyMethods != null  and surveyMethods != ''">#{surveyMethods},</if>
+            <if test="fashionTime != null ">#{fashionTime},</if>
+            <if test="loop != null  and loop != ''">#{loop},</if>
+            <if test="distribution != null  and distribution != ''">#{distribution},</if>
+            <if test="domesticDistribution != null  and domesticDistribution != ''">#{domesticDistribution},</if>
+            <if test="distributionAbroad != null  and distributionAbroad != ''">#{distributionAbroad},</if>
+            <if test="areaType != null  and areaType != ''">#{areaType},</if>
+            <if test="quarantineMeasures != null  and quarantineMeasures != ''">#{quarantineMeasures},</if>
+            <if test="preventiveMeasures != null  and preventiveMeasures != ''">#{preventiveMeasures},</if>
+            <if test="picture != null  and picture != ''">#{picture},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCRatKnowledge" parameterType="CRatKnowledge">
+        update c_rat_knowledge
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="chineseName != null  and chineseName != ''">CHINESE_NAME = #{chineseName},</if>
+            <if test="pinyin != null  and pinyin != ''">PINYIN = #{pinyin},</if>
+            <if test="pinyinjx != null  and pinyinjx != ''">PINYINJX = #{pinyinjx},</if>
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="oldCode != null  and oldCode != ''">OLD_CODE = #{oldCode},</if>
+            <if test="latinName != null  and latinName != ''">LATIN_NAME = #{latinName},</if>
+            <if test="alias != null  and alias != ''">ALIAS = #{alias},</if>
+            <if test="grade != null  and grade != ''">GRADE = #{grade},</if>
+            <if test="gbName != null  and gbName != ''">GB_NAME = #{gbName},</if>
+            <if test="gbCode != null  and gbCode != ''">GB_CODE = #{gbCode},</if>
+            <if test="hazardousParts != null  and hazardousParts != ''">HAZARDOUS_PARTS = #{hazardousParts},</if>
+            <if test="harmfulSymptoms != null  and harmfulSymptoms != ''">HARMFUL_SYMPTOMS = #{harmfulSymptoms},</if>
+            <if test="pathogenicEnvironment != null  and  pathogenicEnvironment != ''">PATHOGENIC_ENVIRONMENT = #{pathogenicEnvironment},</if>
+            <if test="parasiticPlants != null  and parasiticPlants != ''">PARASITIC_PLANTS = #{parasiticPlants},</if>
+            <if test="surveyMethods != null  and surveyMethods != ''">SURVEY_METHODS = #{surveyMethods},</if>
+            <if test="fashionTime != null ">FASHION_TIME = #{fashionTime},</if>
+            <if test="loop != null  and loop != ''">LOOP = #{loop},</if>
+            <if test="distribution != null  and distribution != ''">DISTRIBUTION = #{distribution},</if>
+            <if test="domesticDistribution != null  and domesticDistribution != ''">DOMESTIC_DISTRIBUTION = #{domesticDistribution},</if>
+            <if test="distributionAbroad != null  and distributionAbroad != ''">DISTRIBUTION_ABROAD = #{distributionAbroad},</if>
+            <if test="areaType != null  and areaType != ''">AREA_TYPE = #{areaType},</if>
+            <if test="quarantineMeasures != null  and quarantineMeasures != ''">QUARANTINE_MEASURES = #{quarantineMeasures},</if>
+            <if test="preventiveMeasures != null  and preventiveMeasures != ''">PREVENTIVE_MEASURES = #{preventiveMeasures},</if>
+            <if test="picture != null  and picture != ''">PICTURE = #{picture},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCRatKnowledgeById" parameterType="Long">
+        delete from c_rat_knowledge where ID = #{id}
+    </delete>
+
+    <delete id="deleteCRatKnowledgeByIds" parameterType="String">
+        delete from c_rat_knowledge where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateCRatKnowledgePicture" parameterType="String">
+    update c_rat_knowledge set PICTURE="" where id=#{id}
+    </update>
+    
+</mapper>

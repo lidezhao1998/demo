@@ -1,0 +1,121 @@
+package com.ruoyi.zaihai.ReserveManagement.service.impl;
+
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.zaihai.ReserveManagement.domain.Reserve;
+import com.ruoyi.zaihai.ReserveManagement.mapper.ReserveMapper;
+import com.ruoyi.zaihai.ReserveManagement.service.IReserveService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * 储备库Service业务层处理
+ *
+ * @author ruoyi
+ * @date 2020-06-02
+ */
+@Service
+public class ReserveServiceImpl implements IReserveService
+{
+    @Autowired
+    private ReserveMapper reserveMapper;
+
+    /**
+     * 查询储备库
+     *
+     * @param id 储备库ID
+     * @return 储备库
+     */
+    @Override
+    public Reserve selectReserveById(Long id)
+    {
+        return reserveMapper.selectReserveById(id);
+    }
+
+    /**
+     * 查询储备库列表
+     *
+     * @param reserve 储备库
+     * @return 储备库
+     */
+    @Override
+    public List<Reserve> selectReserveList(Reserve reserve)
+    {
+        return reserveMapper.selectReserveList(reserve);
+    }
+
+    /**
+     * 新增储备库
+     *
+     * @param reserve 储备库
+     * @return 结果
+     */
+    @Override
+    public int insertReserve(Reserve reserve)
+    {
+        return reserveMapper.insertReserve(reserve);
+    }
+
+    /**
+     * 修改储备库
+     *
+     * @param reserve 储备库
+     * @return 结果
+     */
+    @Override
+    public int updateReserve(Reserve reserve)
+    {
+        return reserveMapper.updateReserve(reserve);
+    }
+
+    /**
+     * 删除储备库对象
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    @Override
+    public int deleteReserveByIds(String ids)
+    {
+        return reserveMapper.deleteReserveByIds(Convert.toStrArray(ids));
+    }
+
+    /**
+     * 删除储备库信息
+     *
+     * @param id 储备库ID
+     * @return 结果
+     */
+    @Override
+    public int deleteReserveById(Long id)
+    {
+        return reserveMapper.deleteReserveById(id);
+    }
+
+
+    /**
+     * 修改储备库状态
+     *
+     * @param reserve 储备库ID
+     * @return 结果
+     */
+    @Override
+    public int changeStatus(Reserve reserve) {
+        return reserveMapper.updateReserve(reserve);
+    }
+
+    /**
+     * 根据坐标储备库
+     *
+     * @param reserve 储备库ID
+     * @return 结果
+     */
+    @Override
+    public Reserve selectReserveByLatitude(String splitCoord) {
+        return reserveMapper.selectReserveByLatitude(splitCoord);
+    }
+
+
+}

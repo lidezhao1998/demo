@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('地面调查数据列表')" />
+    <th:block th:include="include :: jquery-steps-css" />
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-striped table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: whitesmoke;
+        height: 55px;
+    }
+
+    /*按钮背景色*/
+    .btn-success{
+
+        background-color:rgba(48,146,62, 0.9);
+
+    }
+    .labename{
+        position:absolute;
+    }
+</style>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <div >
+                                <label class="col-sm-3 control-label" style="margin-top: 7px;width: 30%">样地编号：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="codeId"/>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div id="province">
+                                <em class="i-bit"></em><span>省：</span>
+                                <select id="addrProvince" name="provincialLevelName" onchange="getCities(this.value)"
+                                        style="width: 150px;height:30px; "></select>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div id="city">
+                                <em class="i-bit"></em><span>市：</span>
+                                <select id="addressCity" name="cityLevelName" onchange="getAreas(this.value)"
+                                        style="width: 150px;height:30px; "></select>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div id="area">
+                            <input id="valuearea" type="hidden"/>
+                                <em class="i-bit"></em><span>县/区：</span>
+
+                                <select id="addrArea" name="countyLevelName"
+                                        style="width: 150px;height:30px; ">
+                                </select>
+                            </div>
+                        </li>
+
+
+
+
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="caiji:surveyselect:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var detailFlag = [[${@permission.hasPermi('caiji:surveyselect:gd')}]];
+
+    var editFlag = [[${@permission.hasPermi('caiji:surveyselect:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('caiji:surveyselect:remove')}]];
+    var prefix = ctx + "caiji/surveyselect";
+
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            detailUrl: prefix + "/detail/{id}",
+            exportUrl: prefix + "/export",
+            showRefresh:false,
+            showColumns:false,
+            showToggle:false,
+            showExport:false,
+            showSearch:false,
+            modalName: "地面调查数据",
+            columns: [
+                {
+                    field : 'codeId',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '样地编号'
+                },
+                {
+                    field : 'provincialLevelName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '省级名称'
+                },
+                {
+                    field : 'cityLevelName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '地级名称'
+                },
+                {
+                    field : 'countyLevelName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '县级名称'
+                },
+                {
+                    field : 'surveyTime',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '调查时间'
+                },
+                {
+                    field : 'createBy',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '填报人'
+                },
+                {
+                    field : 'staute',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '状态'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        if(row.staute=="草稿"){
+                            var actions = [];
+                            actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.groundId + '\')"><i class="fa fa-search"></i>详情</a>  ');
+                            return actions.join('');
+                        }
+                        if(row.staute=="退回"){
+                            var actions = [];
+                            actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.groundId + '\')"><i class="fa fa-search"></i>详情</a>  ');
+                            return actions.join('');
+                        }
+                        if(row.staute=="审核中"){
+                            var actions = [];
+                            actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.groundId + '\')"><i class="fa fa-search"></i>详情</a> ');
+                            return actions.join('');
+                        }
+                        if(row.staute=="审核完成"){
+                            var actions = [];
+                            actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.groundId + '\')"><i class="fa fa-search"></i>详情</a> ');
+                            return actions.join('');
+                        }
+                    }
+                }],
+            onLoadSuccess: function (row) {
+                if (row.rows!=null && row.rows.length>=0){
+                    var roleName = row.rows[0].params.roleName;
+                    var codeAddess = row.rows[0].params.codeAddess;
+
+                    if(roleName=='省级' ||roleName=="省级审核员"){
+                        getCities(codeAddess)
+                        $('#province').hide();
+
+                    }else if(roleName=='市级'){
+
+                        getAreas(codeAddess)
+                        $('#city').hide();
+                        $('#province').hide();
+                    }
+
+                }
+
+            }
+        };
+        $.table.init(options);
+    });
+
+    function detail( id) {
+        $.modal.openTab("查看地面调查数据页面",prefix + "/detail/"+id);
+    }
+
+    //省市区三级联动
+    $(function () {
+        var prefix = ctx + "caiji/survey";
+
+        getProvinces();
+        var op1 = document.createElement("option");
+        op1.value = '';
+        document.getElementById("addrCity").appendChild(op1);
+        var op2 = document.createElement("option");
+        op2.value = '';
+        document.getElementById("addrArea").appendChild(op2);
+        var op3 = document.createElement("option");
+
+    });
+
+    function getProvinces() {
+        //  var url = "<%=basePath%>dict/getProvinces";
+        var url = ctx + "caiji/survey/getProvinces";
+        $.ajax({
+            "url": url,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                //alert(JSON.stringify(data))
+                var op = document.createElement("option");
+                op.value = '';
+                op.text = "----- 请选择 -------";
+                document.getElementById("addrProvince").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrProvince").appendChild(op);
+                }
+            }
+        });
+        getCities();
+    }
+
+    // ===== 加载市列表 =====
+    function getCities(value) {
+        $("#addressCity").empty();
+        $("#addrArea").empty();
+        var url = ctx + "caiji/survey/getCities";
+        var data = "provinceCode=" + value;
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = '';
+                document.getElementById("addressCity").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addressCity").appendChild(op);
+                }
+            }
+        });
+        getAreas();
+        var op2 = document.createElement("option");
+        op2.value = '';
+        document.getElementById("addrArea").appendChild(op2);
+    }
+
+    // ===== 加载区列表 =====
+    function getAreas(value) {
+        $("#addrArea").empty();
+        $("#addrdz").empty();
+        //var url = "<%=basePath%>dict/getAreas";
+        var url = ctx + "caiji/survey/getAreas";
+        var data = "cityCode=" + value;
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = '';
+                document.getElementById("addrArea").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrArea").appendChild(op);
+                }
+            }
+        });
+
+    }
+</script>
+</body>
+</html>

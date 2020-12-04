@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('退牧还草工程进度管理任务统计')"/>
+</head>
+<style>
+    .table-striped .table > thead > tr > th, .table-striped .table > tbody > tr > th {
+        border: 1px solid #fff;
+        border-top: 0px;
+    }
+
+    .table-striped table thead {
+        background-color: #50c2c1;
+        color: white;
+    }
+    .sel_p_c_a ul {
+        min-height: 60px;
+    }
+    .sel_p_c_a p {
+        margin: 0px;
+    }
+    .btn-success {
+        background-color: #50c2c1;
+        border-color: #50c2c1;
+        color: #FFFFFF;
+    }
+</style>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <p>年份：</p>
+                            <input type="text" style="width: 70px;text-align: center;" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                        </li>
+                        <li>
+                            省份：
+                            <select id="province" name="province" th:with="type=${@dict.getType('sys_province')}">
+                                <option value="">--全国--</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                            &nbsp;市级：
+                            <select id="city" name="city">
+                                <option value="">--请选择--</option>
+                            </select>
+                            &nbsp;区级：
+                            <select id="area" name="address">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <!-- 选项卡 -->
+        <div class="col-sm-12 search-collapse">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 统计表</a>
+                    </li>
+                    <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">统计图</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="col-sm-12 select-table table-striped">
+                            <table id="bootstrap-table"></table>
+                        </div>
+                    </div>
+                    <div id="tab-2" class="tab-pane">
+                        <div class="ibox-content">
+                            <div style="width: 1000px;height: 400px"id="echarts-pillar-chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 选项卡end -->
+
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script th:inline="javascript">
+    /* 日期组件 */
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2',
+            type: 'year',
+            value:new Date()
+        });
+    });
+    /* 省市区三级联动 */
+    // ===== 切换省份 =====
+    $("#province").change(function () {
+        let provinceCode = $('#province option:selected').val();
+        $("#city").empty();
+        $("#area").empty();
+        //获取所属市级
+        getCitiess(provinceCode);
+    });
+    // ===== 切换市级 =====
+    $("#city").change(function () {
+        let cityCode = $('#city option:selected').val();
+        $("#area").empty();
+        //获取区县级
+        getAreass(cityCode);
+    });
+
+    // ===== 加载市列表 =====
+    function getCitiess(provinceCode) {
+        var url = ctx + "system/statisticsZ/getCities";
+        $.ajax({
+            "url": url,
+            "data": {"provinceCode": provinceCode},
+            "type": "post",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = "";
+                op.text = "-- 请选择地址 --";
+                document.getElementById("city").appendChild(op);
+                let cityHtml = '';
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("city").appendChild(op);
+                    cityHtml += '<li dictCode="' + data[i].dictCode + '">' + data[i].dictLabel + '</li>';
+                }
+                $('#sel_city').html(cityHtml);
+            }
+        });
+        var op2 = document.createElement("option");
+        op2.value = "";
+        op2.text = "-- 请选择地址 --";
+        document.getElementById("area").appendChild(op2);
+        $('#sel_area').html('');
+    }
+
+    // ===== 加载区列表 =====
+    function getAreass(cityCode) {
+        var url = ctx + "system/statisticsZ/getAreas";
+        $.ajax({
+            "url": url,
+            "data": {"cityCode": cityCode},
+            "type": "post",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = "";
+                op.text = "-- 请选择地址 --";
+                document.getElementById("area").appendChild(op);
+                let areaHtml = '';
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictCode;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("area").appendChild(op);
+                    areaHtml += '<li dictCode="' + data[i].dictCode + '">' + data[i].dictLabel + '</li>';
+                }
+                $('#sel_area').html(areaHtml);
+            }
+        });
+    }
+
+    /* 省市区三级联动end */
+
+
+    /*列表数据查询*/
+    var prefix = ctx + "system/statisticsZ";
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            modalName: "退牧还草工程进度管理实施分析",
+            columns: [
+                [
+                    {
+                        field: 'index',
+                        title: '序号',
+                        rowspan: 3,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        formatter: function (value, row, index) {
+                            return index + 1;
+                        }
+                    },
+                    {
+                        title: '年份',
+                        field: 'year',
+                        rowspan: 3,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '任务地区',
+                        field: 'address',
+                        rowspan: 3,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        width:'100px'
+                    },
+                    {
+                        title: '围栏部分',
+                        rowspan: 1,
+                        colspan: 10,
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        title: '其他部分',
+                        rowspan: 1,
+                        colspan: 10,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'zgmCount',
+                        title: '规模合计' + '</br>' + '(万亩)',
+                        rowspan: 3,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'zjeCount',
+                        title: '投资计划' + '</br>' + '(万元)',
+                        rowspan: 3,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                ],
+                [
+                    {
+                        //围栏合计
+                        title: '围栏合计',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 1,
+                        colspan: 2,
+                    },
+                    {
+                        //禁牧
+                        title: '禁牧',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 1,
+                        colspan: 2,
+                    },
+                    {
+
+                        //休牧
+                        title: '休牧',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 1,
+                        colspan: 2,
+                    },
+                    {
+                        //划区轮休建设
+                        title: '划区轮休',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 1,
+                        colspan: 2,
+                    },
+                    {
+                        //石漠化治理建设
+                        title: '石漠化治理',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 1,
+                        colspan: 2,
+                    },
+                    {
+                        //退化草原改良建设
+                        title: '退化草原改良',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 1,
+                        colspan: 2,
+                    },
+                    {
+
+                        //人工种草地建设
+                        title: '人工种草地',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 1,
+                        colspan: 2,
+                    },
+                    {
+                        //含饲棚圈建设
+                        title: '含饲棚圈',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 1,
+                        colspan: 2,
+                    },
+                    {
+                        //黑土滩建设
+                        title: '黑土滩',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 1,
+                        colspan: 2,
+                    },
+                    {
+                        //毒害草
+                        title: '毒害草',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 1,
+                        colspan: 2,
+                    },
+                ],
+                [
+                    {
+                        //围栏合计
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'wlScale',
+                    },
+                    {
+                        //围栏合计
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'wlInvestment',
+                    },
+                    {
+                        //禁牧
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'jmSize',
+                    },
+                    {
+                        //禁牧
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'jmMoney',
+                    },
+                    {
+                        //休牧
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'xmSize',
+                    },
+                    {
+                        //休牧
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'xmMoney',
+                    },
+                    {
+                        //划区轮休
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'hqlxSize',
+                    },
+                    {
+                        //划区轮休
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'hqlxMoney',
+                    },
+                    {
+                        //石漠化治理
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'smhzlSize',
+                    },
+                    {
+                        //石漠化治理
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'smhzlMoney',
+                    },
+                    {
+                        //退化草原改良
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'thzyglSize',
+                    },
+                    {
+                        //退化草原改良
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'thzyglMoney',
+                    },
+                    {
+                        //人工种草地
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'rgscdSize',
+                    },
+                    {
+                        //人工种草地
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'rgscdMoney',
+                    },
+                    {
+                        //含饲棚圈
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'hspjSize',
+                    },
+                    {
+                        //含饲棚圈
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'hspjMoney',
+                    },
+                    {
+                        //黑土滩
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'httSize',
+                    },
+                    {
+                        //黑土滩
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'httMoney',
+                    },
+                    {
+                        //毒害草
+                        title: '规模',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'dhcSize',
+                    },
+                    {
+                        //毒害草
+                        title: '投资',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'dhcMoney',
+                    },
+                ],
+            ]
+        };
+        $.table.init(options);
+    });
+
+    let user = [[${user}]];
+    if(user != ''){
+        if(user == '省级'){
+            let provinceName = [[${provinceName}]];
+            let provinceCode = [[${provinceCode}]];
+            let pro_ht = '<option value='+ provinceCode +'>'+ provinceName +'</option>';
+            $("#province").html(pro_ht);
+            $("#city").empty();
+            getCitiess(provinceCode);
+        }else if(user == '市级'){
+            let provinceName = [[${provinceName}]];
+            let provinceCode = [[${provinceCode}]];
+            let cityName = [[${cityName}]];
+            let cityCode = [[${cityCode}]];
+            let pro_ht = '<option value='+ provinceCode +'>'+ provinceName +'</option>';
+            $("#province").html(pro_ht);
+            let city_ht = '<option value='+ cityCode +'>'+ cityName +'</option>';
+            $("#city").html(city_ht);
+            $("#area").empty();
+            getAreass(cityCode);
+        }
+    }
+
+    /* 纵向统计图 */
+    var pillarChart = echarts.init(document.getElementById("echarts-pillar-chart"));
+    let option = {
+        legend: {},
+        tooltip: {},
+        dataset: {
+            source: [
+                ['product', '2015', '2016', '2017'],
+                ['Matcha Latte', 43.3, 85.8, 93.7],
+                ['Milk Tea', 83.1, 73.4, 55.1],
+                ['Cheese Cocoa', 86.4, 65.2, 82.5],
+                ['Walnut Brownie', 72.4, 53.9, 39.1]
+            ]
+        },
+        xAxis: {type: 'category'},
+        yAxis: {},
+
+        series: [
+            {type: 'bar'},
+            {type: 'bar'},
+            {type: 'bar'}
+        ]
+    };
+    pillarChart.hideLoading();    //隐藏加载动画
+    pillarChart.setOption(option);        //加载数据图表
+</script>
+</body>
+</html>

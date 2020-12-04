@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原鼠虫害防治农药使用况列表')"/>
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-bordered table thead {
+        background-color: rgba(48, 146, 62, 0.9);
+        color: white;
+    }
+
+</style>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input type="hidden" id="provinceHidden"/>
+                <input type="hidden" id="cityHidden"/>
+                <div class="select-list">
+                    <ul>
+
+
+                        <!-- <li>
+                             <div id="province">
+                             <label class="col-sm-3 control-label" style="margin-top: 7px">省：</label>
+                             <div class="col-sm-8">
+                                 <select id="addrProvince"
+                                         style="width: 130px;height: 34px;border:1px solid #e5e6e7"
+                                         name="province" onchange="getCities(this.value) "
+                                         required="required"></select>
+                             </div>
+                             </div>
+                         </li>-->
+
+                        <li>
+                            <div id="province">
+                                <span>省份：</span>
+                                <select id="addrProvince" name="province" onchange="getCities()"
+                                        style="width: 150px;height:30px; "></select>
+                            </div>
+                        </li>
+
+
+                        <li>
+                            <div id="city">
+
+
+                                <!--  <label class="col-sm-3 control-label" style="margin-top: 7px">市：</label>
+
+                                  <div class="col-sm-8">
+                                      <select
+                                              id="addrCity" name="city"
+                                              style="width: 130px;height: 34px;border:1px solid #e5e6e7"
+                                              onchange="getAreas(this.value)" required="required"> </select>
+                                  </div>-->
+                                <span>市：</span>
+
+                                <select
+                                        id="addrCity" name="city" onchange="getAreas()"
+                                        style="width: 150px;height:30px; ">
+                                </select>
+                            </div>
+                        </li>
+                        <li class="select-time">
+                            <p>年度：</p>
+                            <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                        </li>
+                        <!--<li>-->
+                        <!--<label class="col-sm-3 control-label" style="margin-top: 7px;width: 75px;margin-right: -23px;">县/区：</label>-->
+
+                        <!--<div class="col-sm-8">-->
+                        <!--<select id="addrArea" name="countyLevelName"-->
+                        <!--style="width: 130px;height: 34px;border:1px solid #e5e6e7"-->
+                        <!--onchange="getlngLat()" required="required">-->
+                        <!--</select>-->
+                        <!--</div>-->
+                        <!--</li>-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+
+            <!-- <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="zaihai:scny:export">
+                 <i class="fa fa-download"></i> 导出
+              </a>-->
+            <a class="btn btn-warning" onclick="Echars()" >
+                <i class="fa fa-download"></i> 图表展示
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('zaihai:scnytj:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('zaihai:scnytj:remove')}]];
+    var prefix = ctx + "zaihai/scnytj";
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            pagination: false,
+            showExport: true,
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            modalName: "草原鼠虫害防治农药使用况",
+            detailView: true,
+            onExpandRow: function (index, row, $detail) {
+                // if(row.roleName =='区级'){
+                // }
+                // else
+                if (row.roleName == '市级') {
+                    //市级用户查看
+                    initChildTable2(index, row, $detail);
+                }
+                else if (row.roleName == '省级'||row.roleName == '省级审核员') {
+                    //省级用户查看
+                    initChildTable2(index, row, $detail);
+                }else{
+                    //国际级用户
+                    initChildTable(index, row, $detail);
+
+                }
+            },
+            columns: [
+
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'year',
+                    title: '年度'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'province',
+                    title: '所属省'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'city',
+                    title: '所属市'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'county',
+                    title: '所属县'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'pesticide',
+                    title: '农药名称'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'manufacturer',
+                    title: '生产厂家'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'pesticidePrice',
+                    title: '农药价格(万元)'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'orderQuantity',
+                    title: '订购数量(万瓶)'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'fundsUsed',
+                    title: '所用资金(万元)'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'controlDosage',
+                    title: '当年防治用量'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'muDosage',
+                    title: '亩用量'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'chemistryControl',
+                    title: '化学防治(万亩)'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'total',
+                    title: '合计'
+                },
+                {
+                    rowspan: 1,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'remarks',
+                    title: '备注'
+                }
+            ],
+            onLoadSuccess: function (row) {
+                var roleName= [[${roleName}]];
+                var code = row.rows[0].code;
+                var length= row.rows.length;
+
+
+                if (roleName=='国家级') {
+                    $('#city').hide();
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'city');
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'county');
+                    document.getElementById("bootstrap-table").rows[length].cells[0].innerHTML="-";
+                }else if(roleName=='省级'){
+                    if (code!=null &&code!=''){
+                        $("#provinceHidden").val(code);
+                    }
+                    getCities(code)
+                    $('#province').hide();
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'province');
+
+                  //  $('#bootstrap-table').bootstrapTable('hideColumn', 'city');
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'county');
+                    document.getElementById("bootstrap-table").rows[length].cells[0].innerHTML="-";
+                }else if(roleName=='市级'){
+                    row.rows.pop()
+                    if (code!=null &&code!=''){
+                        $("#addrCity").val(code);
+                    }
+
+                    getAreas(code)
+                    $('#city').hide();
+                    $('#province').hide();
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'province');
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'county');
+                }else if(roleName=='区级'){
+                    row.rows.pop()
+                    $('#search').hide();
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'city');
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'province');
+                }else if(roleName=='省级审核员'){
+                    if (code!=null &&code!=''){
+                        $("#provinceHidden").val(code);
+                    }
+
+                    getCities(code)
+                    $('#province').hide();
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'province');
+                    //$('#bootstrap-table').bootstrapTable('hideColumn', 'city');
+                    $('#bootstrap-table').bootstrapTable('hideColumn', 'county');
+                    document.getElementById("bootstrap-table").rows[length].cells[0].innerHTML="-";
+                }
+
+            }
+        };
+        $.table.init(options);
+    });
+    $(function () {
+        getProvinces();
+    });
+
+    //子表列表
+    initChildTable = function (index, row, $detail) {
+        // alert(JSON.stringify(row))
+        var province = row.province;
+        var cur_table = $detail.html('<div><table style="background:#E6E6FA" ></table></div>').find('table');
+        $(cur_table).bootstrapTable({
+            url: prefix + "/ParentList",
+            method: 'post',
+            sidePagination: "server",
+            contentType: "application/x-www-form-urlencoded",   // 编码类型
+            detailView: true,
+            onExpandRow: function (index, row, $detail) {
+                initChildTable2(index, row, $detail);
+            },
+            queryParams: {
+                province: province,
+
+
+            },
+            columns: [
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'year',
+                    width: '5%'
+                },
+                {
+
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'city',
+                    width: '10%'
+                },
+                // {
+                //     align: 'center',
+                //     valign: 'middle',
+                //     field: 'projectType',
+                //     width: '8%'
+                // },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'pesticide',
+                    width: '7.5%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'manufacturer',
+                    width: '7.5%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'pesticidePrice',
+                    width: '7%'
+
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'orderQuantity',
+                    width: '7.5%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'fundsUsed',
+                    width: '7.5%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'controlDosage',
+                    width: '10.5%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'muDosage',
+                    width: '6.5%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'chemistryControl',
+                    width: '8%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'total',
+                    width: '8.5%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'remarks',
+                    width: '5.5%'
+                },
+            ],
+        });
+    };
+    //三级表列表
+    initChildTable2 = function (index, row, $detail) {
+        // alert(JSON.stringify(row))
+        var city = row.city;
+        var cur_table = $detail.html('<div style="padding-left:21px;"><table style="background:#D4F2E7" ></table></div>').find('table');
+        $(cur_table).bootstrapTable({
+            url: prefix + "/ParentList",
+            method: 'post',
+            sidePagination: "server",
+            contentType: "application/x-www-form-urlencoded",   // 编码类型
+            queryParams: {
+                city: city,
+
+            },
+            columns: [
+
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'year',
+                    width: '4.5%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'county',
+                    width: '8.5%'
+                },
+                // {
+                //     align: 'center',
+                //     valign: 'middle',
+                //     field: 'projectType',
+                //     width: '7%'
+                // },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'pesticide',
+                    width: '6.5%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'manufacturer',
+                    width: '7%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'pesticidePrice',
+                    width: '6.7%'
+
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'orderQuantity',
+                    width: '6.8%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'fundsUsed',
+                    width: '6.8%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'controlDosage',
+                    width: '9.2%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'muDosage',
+                    width: '5.3%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'chemistryControl',
+                    width: '7.2%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'total',
+                    width: '7.6%'
+                },
+                {
+                    align: 'center',
+                    valign: 'middle',
+                    field: 'remarks',
+                    width: '4.5%'
+                },
+            ],
+        });
+    };
+
+    function getProvinces() {
+        //  var url = "<%=basePath%>dict/getProvinces";
+        var url = ctx + "caiji/survey/getProvinces";
+        $.ajax({
+            "url": url,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                //alert(JSON.stringify(data))
+                var op = document.createElement("option");
+                op.value = '';
+                op.text = "----- 请选择省 -------";
+                document.getElementById("addrProvince").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictLabel;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrProvince").appendChild(op);
+                }
+            }
+        });
+        getCities();
+    }
+
+    // ===== 加载市列表 =====
+    function getCities(value) {
+        $("#addrCity").empty();
+        $("#addrArea").empty();
+        var url = ctx + "caiji/survey/getCities";
+        var data = "provinceCode=" + $("#provinceHidden").val();;
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = '';
+                op.text = "----- 请选择市 -------";
+                document.getElementById("addrCity").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictLabel;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrCity").appendChild(op);
+                }
+            }
+        });
+        getAreas();
+        // var op2 = document.createElement("option");
+        // op2.value = '';
+        // document.getElementById("addrArea").appendChild(op2);
+    }
+    // ===== 加载区列表 =====
+    function getAreas(value) {
+        $("#addrArea").empty();
+        $("#addrdz").empty();
+        //var url = "<%=basePath%>dict/getAreas";
+        var url = ctx + "caiji/survey/getAreas";
+        var data = "cityCode=" +  $("#addrCity").val();
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                op.value = '';
+                op.text = "----- 请选择县/区 -------";
+                document.getElementById("addrArea").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].dictLabel;
+                    op.text = data[i].dictLabel;
+                    document.getElementById("addrArea").appendChild(op);
+                }
+            }
+        });
+
+    }
+
+
+
+    function Echars() {
+        var url = prefix + '/Echars';
+        $.modal.openFull("鼠虫害农药统计图", url);
+    }
+
+</script>
+</body>
+</html>

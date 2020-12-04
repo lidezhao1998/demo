@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+    <th:block th:include="include :: header('地图')"/>
+    <link th:href="@{/css/gis.css}" rel="stylesheet"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="天地图"/>
+    <title>天地图－地图API－范例－海量密集点</title>
+    <script src=" http://api.tianditu.gov.cn/api?v=4.0&tk=3defde9e465f739e73513ce9e8595fe3"
+            type="text/javascript"></script>
+    <script src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/data/points-sample-data.js"></script>
+    <style type="text/css">body, html {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        font-family: "Microsoft YaHei"
+    }
+
+    #mapDiv {
+        width: 100%;
+        height: 400px
+    }
+
+    input, b, p {
+        margin-left: 5px;
+        font-size: 14px
+    }</style>
+    <style type="text/css">
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+
+        #mapDiv {
+            height: 90%;
+            width: 100%;
+        }
+
+        p, input {
+            margin-top: 10px;
+            margin-left: 5px;
+            font-size: 14px;
+        }
+    </style>
+    <th:block th:include="include :: footer"/>
+    <script>
+        var prefix = ctx + "analyze/gis";
+        var prefixGisMap = ctx + "analyze/gis";
+        var map, zoom = 12, handler;
+        var points = [];//斑点信息
+        var spotinfos = "";//坐标点
+        var spotid = "";//要保存的斑点id
+        var localsearch;
+        var infoWin;
+
+        function onLoad() {
+            map = new T.Map('map');
+            map.centerAndZoom(new T.LngLat(116.40969, 39.94940), zoom);
+            //创建对象
+            var ctrl = new T.Control.MapType();
+            //添加控件
+            map.addControl(ctrl);
+            //创建右键菜单对象
+            var menu = new T.ContextMenu({width: 140});
+            var config = {
+                onSearchComplete: localSearchResult,
+                showLabel: true,
+                color: "red", weight: 3, opacity: 0.5, fillColor: "#FFFFFF", fillOpacity: 0.5
+            };
+            //创建比例尺控件对象
+            var scale = new T.Control.Scale();
+            //添加比例尺控件
+            map.addControl(scale);
+            //创建标注工具对象
+            polygonTool = new T.PolygonTool(map, config);
+            lineTool = new T.PolylineTool(map, config);
+            map.disableDoubleClickZoom();//禁用双击放大
+            map.setMapType(TMAP_HYBRID_MAP);//默认卫星混合图
+            //添加右键菜单
+            var txtMenuItem = [
+                {
+                    text: '测距',
+                    callback: function () {
+                        lineTool.open();
+                    }
+                },
+                {
+                    text: '测面',
+                    callback: function () {
+                        polygonTool.open();
+                    }
+                },
+                {
+                    text: '绘图',
+                    callback: function () {
+                        openPolygonTool();
+                    }
+                }
+                , {
+                    text: '标点',
+                    callback: function () {
+                        if (handler) handler.close();
+                        handler = new T.MarkTool(map, {follow: true});
+                        handler.open();
+                        map.addEventListener("mouseup", mouseupPoint);
+                    }
+                },
+                {
+                    text: '清除图层',
+                    callback: function () {
+                        map.clearOverLays();
+                    }
+                },
+                {
+                    text: '获取此坐标',
+                    isDisable: false,
+                    callback: function (lnglat) {
+                        layer.msg("经度:" + lnglat.getLng() + ", 纬度: " + lnglat.getLat(), {icon: 6, time: 2000});
+                    }
+                }
+            ];
+            for (var i = 0; i < txtMenuItem.length; i++) {
+                //添加菜单项
+                var item = new T.MenuItem(txtMenuItem[i].text, txtMenuItem[i].callback);
+                //item.disable();
+                menu.addItem(item);
+                if (i == 1 || i == 3) {
+                    //添加分割线
+                    menu.addSeparator();
+                }
+            }
+            map.addContextMenu(menu);
+            map.enableInertia();//惯性移动
+            //创建标注工具对象
+            polygonTool = new T.PolygonTool(map, config);
+            localsearch = new T.LocalSearch(map, config);
+            spotInfo();
+        }
+
+        function localSearchResult(result) {
+            //根据返回类型解析搜索结果
+            switch (parseInt(result.getResultType())) {
+                case 1:
+                    //解析点数据结果
+                    pois(result.getPois());
+                    break;
+            }
+        }
+
+        //解析点数据结果
+        function pois(obj) {
+            if (obj) {
+                //显示搜索列表
+                var divMarker = document.createElement("div");
+                //坐标数组，设置最佳比例尺时会用到
+                var zoomArr = [];
+                for (var i = 0; i < obj.length; i++) {
+                    //闭包
+                    (function (i) {
+                        //名称
+                        var name = obj[i].name;
+                        //地址
+                        var address = obj[i].address;
+                        //坐标
+                        var lnglatArr = obj[i].lonlat.split(" ");
+                        var lnglat = new T.LngLat(lnglatArr[0], lnglatArr[1]);
+
+                        var winHtml = "地址:" + address;
+
+                        //创建标注对象
+                        var marker = new T.Marker(lnglat);
+                        //地图上添加标注点
+                        map.addOverLay(marker);
+                        //注册标注点的点击事件
+                        marker.addEventListener("click", function () {
+                            this.showPosition(marker, name, winHtml);
+
+                        }, this);
+                        zoomArr.push(lnglat);
+                        divMarker.appendChild(document.createTextNode((i + 1) + "."));
+                        divMarker.appendChild(a);
+                        divMarker.appendChild(document.createElement("br"));
+                    })(i);
+                }
+                //显示地图的最佳级别
+                map.setViewport(zoomArr);
+
+            }
+        }
+
+        //显示信息框
+        function showPosition(marker, name) {
+            if (infoWin) {
+                map.removeOverLay(infoWin);
+                infoWin = null;
+            }
+            var html = "<h5>" + name + "</h5>";
+            infoWin = new T.InfoWindow(html, new T.Point([0, 0]));
+            marker.openInfoWindow(infoWin);
+        }
+
+
+        //绘图
+        function openPolygonTool() {
+            if (handler) handler.close();
+            handler = new T.PolygonTool(map);
+            handler.open();
+            map.addEventListener("click", MapClick);
+            handler.addEventListener("draw", function () {
+                addGisMap(0, 2, spotinfos);
+            });
+        }
+
+        //把绘图的坐标保存到页面
+        function MapClick(e) {
+            $("#spotinfos").attr("value", e.lnglat.getLng() + "," + e.lnglat.getLat());
+            spotinfos = spotinfos + $("#spotinfos").val() + ";";
+        }
+
+        function mouseupPoint(e) {
+            $("#spotinfos").attr("value", e.lnglat.getLng() + "," + e.lnglat.getLat());
+            spotinfos = $("#spotinfos").val();
+            addGisMap(0, 1, spotinfos);
+            map.removeEventListener("mouseup", mouseupPoint);
+        }
+
+        function addGisMap(id, type, coordinates) {
+            map.removeEventListener("dblclick", addGisMap);
+            $.modal.open("添加Gis信息", prefixGisMap + "/addGisMap?id=" + id + "&type=" + type + "&coordinates=" + coordinates, 400, 450);
+        }
+
+        //查询坐标向页面进行绘图
+        function spotInfo() {
+            $.ajax({
+                type: "get",
+                async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                url: prefixGisMap + "/getList",    //请求发送到dataActiont处
+                dataType: "json",        //返回数据形式为json
+                success: function (result) {
+                    if (result.data != null || result.data.length > 0) {
+                        for (var i = 0; i < result.data.length; i++) {
+                            var type = result.data[i].type;
+                            var color = result.data[i].color;
+                            if (color == null || color == undefined)
+                                var id = result.data[i].id;
+                            var content = "<div>标题: " + result.data[i].name + "  <br>详情: " + result.data[i].remark + "" +
+                                "</div>";
+                            if (type == 1) {
+                                type1(result.data[i].coordinates, content);
+                            } else if (type == 2) {
+                                type2(result.data[i].coordinates, color, content, id);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function type1(data, content) {
+            var splitCoord = data.split(",");
+            var marker = new T.Marker(new T.LngLat(splitCoord[0], splitCoord[1]));
+            map.addOverLay(marker);               // 将标注添加到地图中
+            addClickHandler(content, marker);
+        }
+
+        function type2(data, color, content, id) {
+            if(color == null || color == '')
+                color='red';
+            var pointss = [];
+            var coordinates = data.split(";");
+            for (var j = 0; j < coordinates.length - 1; j++) {
+                var zbs = coordinates[j].split(",");
+                pointss.push(new T.LngLat(zbs[0], zbs[1]));
+            }
+            polygon = new T.Polygon(pointss, {
+                color: color, weight: 2, opacity: 0.3, fillColor: color, fillOpacity: 0.3
+            });
+            polygon.addEventListener("mouseover", function () {
+                layer.msg("此区域为 : " + content, {icon: 6, time: 1000});
+            });
+            polygon.addEventListener("dblclick",
+                function (e) {
+                    overlay_style(e, id)
+                }
+            );
+            //向地图上添加面
+            map.addOverLay(polygon);
+        }
+
+        function addClickHandler(content, marker) {
+            marker.addEventListener("click", function (e) {
+                    openInfo(content, e)
+                }
+            );
+        }
+
+        function openInfo(content, e) {
+            var point = e.lnglat;
+            marker = new T.Marker(point);// 创建标注
+            var markerInfoWin = new T.InfoWindow(content, {offset: new T.Point(0, -30)}); // 创建信息窗口对象
+            map.openInfoWindow(markerInfoWin, point); //开启信息窗口
+        }
+
+        //监听双击事件进行绘图编辑
+        function overlay_style(e, spoid) {
+            $("#del").show();
+            var spotinfos = "";
+            var p = e.target;
+            if (p instanceof T.Polygon) {
+                if (p.isEditable()) {
+                    p.disableEdit()
+                    var a = p.getLngLats();
+                    for (var i = 0; i < a.length; i++) {
+                        var aa = a[i];
+                        for (var j = 0; j < aa.length; j++) {
+                            spotinfos = spotinfos + aa[j].lng + "," + aa[j].lat + ";";
+                        }
+                    }
+                    updateSpot(spoid, spotinfos);
+                } else {
+                    p.enableEdit();
+                    var sid = $("#spotid").val();
+                    if (sid != "") {
+                        spotid = sid + spoid + ",";
+                        $("#spotid").attr("value", spotid);
+                    } else {
+                        $("#spotid").attr("value", spoid + ",");
+                    }
+                }
+                $("#spotinfos").attr("value", spotinfos);
+            }
+        }
+
+        //根据监听双击事件更新绘图坐标
+        function updateSpot(spoid, spotinfo) {
+            addGisMap(spoid, 2, spotinfo);
+        }
+
+        //删除斑点
+        function deleteSpot() {
+            var sid = $("#spotid").val();
+            if (sid == null || sid == '' || sid == " ") {
+                layer.msg("删除绘图失败", {icon: 2, time: 1500});
+                return;
+            }
+            $.ajax({
+                type: "post",
+                async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                url: prefixGisMap + "/delete",    //请求发送到dataActiont处
+                data: {
+                    "gisId": sid
+                },
+                dataType: "json",        //返回数据形式为json
+                success: function (result) {
+                    layer.msg("删除绘图成功", {icon: 1, time: 1500}, function () {
+                        location.reload()
+                    });
+                },
+                error: function (errorMsg) {
+                    layer.msg("删除绘图失败", {icon: 2, time: 1500});
+                }
+            });
+        };
+
+        //加载生态系统shp图层
+        function stxt(bdzb) {
+            var shpName;
+            for (var i = 0; i < bdzb.shpData.length; i++) {
+                var shpList = bdzb.shpData[i].shpList[0];
+                var wipeOffList = []
+                if (bdzb.shpData[i].wipeOffList.length > 0) {
+                    wipeOffList = bdzb.shpData[i].wipeOffList[0];
+                }
+                var pon = [];
+                var shpPolygon = [];
+                var wipeOffPolygon = [];
+
+                for (var j = 0; j < shpList.length; j++) {
+                    var zbs = shpList[j].split(" ");
+                    shpPolygon.push(new T.LngLat(zbs[0], zbs[1]));
+                }
+                pon.push(shpPolygon);
+                if (wipeOffList.length > 1) {
+                    for (var j = 0; j < wipeOffList.length; j++) {
+                        var zbs = wipeOffList[j].split(" ");
+                        wipeOffPolygon.push(new T.LngLat(zbs[0], zbs[1]));
+                    }
+                    pon.push(wipeOffPolygon);
+                }
+                //创建面对象
+                var polygon = new T.Polygon(pon, {
+                    color: bdzb.shpColor, weight: 2, opacity: 0.3, fillColor: bdzb.shpColor, fillOpacity: 0.3
+                });
+                shpName = bdzb.shpName;
+                polygon.addEventListener("click", function () {
+                    layer.msg("此草种为 : " + shpName, {icon: 6, time: 2000});
+                });
+                //向地图上添加面
+                map.addOverLay(polygon);
+            }
+        };
+    </script>
+</head>
+<body onLoad="onLoad()">
+<div class="ui-layout-center">
+    <div class="container-div" style="padding: 0px 2px;">
+
+        <div id="map">
+            <div class="header-r">
+                <div class="header-r-bg">
+                    <strong></strong><a href="javascript:;" style="font-size: 16px;color:red" id="gisZoom"></a></strong>
+                    <a href="javascript:;" id="comparison" onclick="comparison()">比对</a>
+                    <a href="javascript:;" id="ranging" onclick="measurementGis('LineString')">测距</a>
+                    <a href="javascript:;" id="measuringSurface" onclick="measurementGis('Polygon')">测面</a>
+                    <a href="javascript:;" id="markPoint" onclick="drawGis('Point','tab')">标记点</a>
+                    <a href="javascript:;" id="markingSurface" onclick="drawGis('Polygon','tab')">标记面</a>
+                    <a href="javascript:;" id="markedList">标记列表</a>
+                    <a href="javascript:;" id="pointSerch" onclick="pointQuery()">点查</a>
+                    <a href="javascript:;" id="locationShow">定位</a>
+                    <a href="javascript:;" id="conditionQuery">条件查询</a>
+                    <div class="conditionQuery_sel" style="display: none">
+                        <div class="triangle"></div>
+                        <a href="javascript:;" id="business">业务查询</a>
+                        <a href="javascript:;" id="special">专题查询</a>
+                    </div>
+                </div>
+            </div>
+            <div id="menu">
+                <input type="button" id="off"/>
+            </div>
+            <div id="menu3">
+                <input id="type3" value="全国" onclick="updateCity()"readonly>
+            </div>
+            <div class="layer_tree_show" style="left: 48px">
+                <div class="layer_tree_show_map"></div>
+            </div>
+            <div class="layer_tree_hide">
+                <i class="fa fa-chevron-left"></i>
+            </div>
+            <div class="west">
+                <div class="box box-main">
+                    <div class="ui-layout-content" style="height: 420px">
+                        <div id="businessLayer" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                        <div id="thematicLayer" class="ztree" style="overflow-x: scroll;height: 200px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="dist_positioning">
+                <p id="title_zq"><span>地区定位</span> <span onclick="cityDivDoneById('dist_positioning')"
+                                                         style="float: right;margin: 0 10px;cursor: pointer;">关闭</span>
+                </p>
+                <div id="zqdw"><p class="content_ul" style="color: #13c6ae;">全国</p></div>
+                <ul class="zq_ul"></ul>
+            </div>
+            <div id="shpTitle" class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table">
+                </table>
+            </div>
+            <!--定位-->
+            <div class="coordinatePositioning">
+                <li class="clear li-dw selected" style="display: block;">
+                    <span class="zs-left icon icon-dw"></span>
+                    <div class="zs-left module" style="display: block;">
+
+                        <div class="ori-module-content module-content" style="display: block;padding-left: 50px;">
+                            <table class="jwd tabls" style="display: table;">
+                                             <tr>
+                                        <td class="text">经度：</td>
+                                        <td class="input"><input id="decimalLon" value="" class="form-control sea-input" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"  placeholder="如:11.1"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text">纬度：</td>
+                                        <td class="input"><input id="decimalLat" value="" class="form-control sea-input" onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1')"  placeholder="例:23.1"></td>
+                                    </tr>
+                            </table>
+                            <div class="dw-box" style="margin-top: 15px;">
+                                <button type="button" class="btn btn-primary" id="positioning_btn">定位</button>
+                                <button type="button" class="btn btn-danger" id="closePositioning">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <div id="mouse-position">
+                </div>
+            </div>
+        </div>
+        <!-- <div id="mapDiv"></div>-->
+    </div>
+</div>
+</div>
+
+
+</body>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: ztree-css"/>
+<script th:src="@{/js/gis/glmaGis.js}"></script>
+<script th:src="@{/js/gis/gisComparison.js}"></script>
+<script th:inline="javascript">
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        queryDeptTree();
+    });
+
+    function queryDeptTree() {
+        var url = ctx + "integration/remoteSensing/treeData";
+        var options = {
+            url: url,
+            expandLevel: 2,
+            check: {enable: true},
+            onCheck: zOnClick
+        };
+        $.tree.init(options);
+
+        function zOnClick(event, tree) {
+            map.clearOverLays();
+            var ids = $.tree.getCheckedNodes();
+            if (ids != undefined && ids != null && ids != '') {
+                $.post(prefix + "/getSpot",
+                    {shpIds: ids}, function (res) {
+                        for (var i = 0; i < res.length; i++) {
+                            stxt(res[i]);
+                        }
+                    })
+            }
+        }
+
+    }
+
+    function shpFile() {
+        var url = ctx + "integration/remoteSensing";
+        $.modal.openTab("shpFile管理", url);
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+    $('#btnRefresh').click(function () {
+        queryDeptTree();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+</script>
+</html>

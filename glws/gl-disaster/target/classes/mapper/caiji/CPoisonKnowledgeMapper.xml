@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CPoisonKnowledgeMapper">
+    
+    <resultMap type="CPoisonKnowledge" id="CPoisonKnowledgeResult">
+        <result property="id"    column="ID"    />
+        <result property="chineseName"    column="CHINESE_NAME"    />
+        <result property="scientificName"    column="SCIENTIFIC_NAME"    />
+        <result property="alias"    column="ALIAS"    />
+        <result property="commonName"    column="COMMON_NAME"    />
+        <result property="divisionSubfamily"    column="DIVISION_SUBFAMILY"    />
+        <result property="genusSubgenus"    column="GENUS_SUBGENUS"    />
+        <result property="morphologicalCharacter"    column="MORPHOLOGICAL_CHARACTER"    />
+        <result property="morphologyName"    column="MORPHOLOGY_NAME"    />
+        <result property="ecologicalMapName"    column="ECOLOGICAL_MAP_NAME"    />
+        <result property="distributionDomestic"    column="DISTRIBUTION_DOMESTIC"    />
+        <result property="distributionAbroad"    column="DISTRIBUTION_ABROAD"    />
+        <result property="habitat"    column="HABITAT"    />
+        <result property="distributionmapName"    column="DISTRIBUTIONMAP_NAME"    />
+        <result property="toxicParts"    column="TOXIC_PARTS"    />
+        <result property="toxicIngredients"    column="TOXIC_INGREDIENTS"    />
+        <result property="harmfulAnimals"    column="HARMFUL_ANIMALS"    />
+        <result property="harm"    column="HARM"    />
+        <result property="poisoningMechanism"    column="POISONING_MECHANISM"    />
+        <result property="poisoningSymptoms"    column="POISONING_SYMPTOMS"    />
+        <result property="diagnosis"    column="DIAGNOSIS"    />
+        <result property="controlMethods"    column="CONTROL_METHODS"    />
+        <result property="status"    column="STATUS"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateBy"    column="UPDATE_BY"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+    </resultMap>
+
+    <sql id="selectCPoisonKnowledgeVo">
+        select ID, CHINESE_NAME, SCIENTIFIC_NAME, ALIAS, COMMON_NAME, DIVISION_SUBFAMILY, GENUS_SUBGENUS, MORPHOLOGICAL_CHARACTER, MORPHOLOGY_NAME, ECOLOGICAL_MAP_NAME, DISTRIBUTION_DOMESTIC, DISTRIBUTION_ABROAD, HABITAT, DISTRIBUTIONMAP_NAME, TOXIC_PARTS, TOXIC_INGREDIENTS, HARMFUL_ANIMALS, HARM, POISONING_MECHANISM, POISONING_SYMPTOMS, DIAGNOSIS, CONTROL_METHODS, STATUS, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME from c_poison_knowledge
+    </sql>
+
+    <select id="selectCPoisonKnowledgeList" parameterType="CPoisonKnowledge" resultMap="CPoisonKnowledgeResult">
+        <include refid="selectCPoisonKnowledgeVo"/>
+        <where>  
+            <if test="chineseName != null  and chineseName != ''"> and CHINESE_NAME like concat('%', #{chineseName}, '%')</if>
+            <if test="scientificName != null  and scientificName != ''"> and SCIENTIFIC_NAME like concat('%', #{scientificName}, '%')</if>
+            <if test="alias != null  and alias != ''"> and ALIAS = #{alias}</if>
+            <if test="commonName != null  and commonName != ''"> and COMMON_NAME like concat('%', #{commonName}, '%')</if>
+            <if test="divisionSubfamily != null  and divisionSubfamily != ''"> and DIVISION_SUBFAMILY = #{divisionSubfamily}</if>
+            <if test="genusSubgenus != null  and genusSubgenus != ''"> and GENUS_SUBGENUS = #{genusSubgenus}</if>
+            <if test="morphologicalCharacter != null  and morphologicalCharacter != ''"> and MORPHOLOGICAL_CHARACTER = #{morphologicalCharacter}</if>
+            <if test="morphologyName != null  and morphologyName != ''"> and MORPHOLOGY_NAME like concat('%', #{morphologyName}, '%')</if>
+            <if test="ecologicalMapName != null  and ecologicalMapName != ''"> and ECOLOGICAL_MAP_NAME like concat('%', #{ecologicalMapName}, '%')</if>
+            <if test="distributionDomestic != null  and distributionDomestic != ''"> and DISTRIBUTION_DOMESTIC like concat('%', #{distributionDomestic}, '%')</if>
+            <if test="distributionAbroad != null  and distributionAbroad != ''"> and DISTRIBUTION_ABROAD like concat('%', #{distributionAbroad}, '%')</if>
+            <if test="habitat != null  and habitat != ''"> and HABITAT = #{habitat}</if>
+            <if test="distributionmapName != null  and distributionmapName != ''"> and DISTRIBUTIONMAP_NAME like concat('%', #{distributionmapName}, '%')</if>
+            <if test="toxicParts != null  and toxicParts != ''"> and TOXIC_PARTS = #{toxicParts}</if>
+            <if test="toxicIngredients != null  and toxicIngredients != ''"> and TOXIC_INGREDIENTS = #{toxicIngredients}</if>
+            <if test="harmfulAnimals != null  and harmfulAnimals != ''"> and HARMFUL_ANIMALS = #{harmfulAnimals}</if>
+            <if test="harm != null  and harm != ''"> and HARM = #{harm}</if>
+            <if test="poisoningMechanism != null  and poisoningMechanism != ''"> and POISONING_MECHANISM = #{poisoningMechanism}</if>
+            <if test="poisoningSymptoms != null  and poisoningSymptoms != ''"> and POISONING_SYMPTOMS = #{poisoningSymptoms}</if>
+            <if test="diagnosis != null  and diagnosis != ''"> and DIAGNOSIS = #{diagnosis}</if>
+            <if test="controlMethods != null  and controlMethods != ''"> and CONTROL_METHODS = #{controlMethods}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectCPoisonKnowledgeById" parameterType="Long" resultMap="CPoisonKnowledgeResult">
+        <include refid="selectCPoisonKnowledgeVo"/>
+        where ID = #{id}
+    </select>
+    <select id="checkCode" resultType="java.lang.String">
+
+    </select>
+
+    <insert id="insertCPoisonKnowledge" parameterType="CPoisonKnowledge">
+        insert into c_poison_knowledge
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">ID,</if>
+            <if test="chineseName != null  and chineseName != ''">CHINESE_NAME,</if>
+            <if test="scientificName != null  and scientificName != ''">SCIENTIFIC_NAME,</if>
+            <if test="alias != null  and alias != ''">ALIAS,</if>
+            <if test="commonName != null  and commonName != ''">COMMON_NAME,</if>
+            <if test="divisionSubfamily != null  and divisionSubfamily != ''">DIVISION_SUBFAMILY,</if>
+            <if test="genusSubgenus != null  and genusSubgenus != ''">GENUS_SUBGENUS,</if>
+            <if test="morphologicalCharacter != null  and morphologicalCharacter != ''">MORPHOLOGICAL_CHARACTER,</if>
+            <if test="morphologyName != null  and morphologyName != ''">MORPHOLOGY_NAME,</if>
+            <if test="ecologicalMapName != null  and ecologicalMapName != ''">ECOLOGICAL_MAP_NAME,</if>
+            <if test="distributionDomestic != null  and distributionDomestic != ''">DISTRIBUTION_DOMESTIC,</if>
+            <if test="distributionAbroad != null  and distributionAbroad != ''">DISTRIBUTION_ABROAD,</if>
+            <if test="habitat != null  and habitat != ''">HABITAT,</if>
+            <if test="distributionmapName != null  and distributionmapName != ''">DISTRIBUTIONMAP_NAME,</if>
+            <if test="toxicParts != null  and toxicParts != ''">TOXIC_PARTS,</if>
+            <if test="toxicIngredients != null  and toxicIngredients != ''">TOXIC_INGREDIENTS,</if>
+            <if test="harmfulAnimals != null  and harmfulAnimals != ''">HARMFUL_ANIMALS,</if>
+            <if test="harm != null  and harm != ''">HARM,</if>
+            <if test="poisoningMechanism != null  and poisoningMechanism != ''">POISONING_MECHANISM,</if>
+            <if test="poisoningSymptoms != null  and poisoningSymptoms != ''">POISONING_SYMPTOMS,</if>
+            <if test="diagnosis != null  and diagnosis != ''">DIAGNOSIS,</if>
+            <if test="controlMethods != null  and controlMethods != ''">CONTROL_METHODS,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != '' ">#{id},</if>
+            <if test="chineseName != null  and chineseName != ''">#{chineseName},</if>
+            <if test="scientificName != null  and scientificName != ''">#{scientificName},</if>
+            <if test="alias != null  and alias != ''">#{alias},</if>
+            <if test="commonName != null  and commonName != ''">#{commonName},</if>
+            <if test="divisionSubfamily != null  and divisionSubfamily != ''">#{divisionSubfamily},</if>
+            <if test="genusSubgenus != null  and genusSubgenus != ''">#{genusSubgenus},</if>
+            <if test="morphologicalCharacter != null  and morphologicalCharacter != ''">#{morphologicalCharacter},</if>
+            <if test="morphologyName != null  and morphologyName != ''">#{morphologyName},</if>
+            <if test="ecologicalMapName != null  and ecologicalMapName != ''">#{ecologicalMapName},</if>
+            <if test="distributionDomestic != null  and distributionDomestic != ''">#{distributionDomestic},</if>
+            <if test="distributionAbroad != null  and distributionAbroad != ''">#{distributionAbroad},</if>
+            <if test="habitat != null  and habitat != ''">#{habitat},</if>
+            <if test="distributionmapName != null  and distributionmapName != ''">#{distributionmapName},</if>
+            <if test="toxicParts != null  and toxicParts != ''">#{toxicParts},</if>
+            <if test="toxicIngredients != null  and toxicIngredients != ''">#{toxicIngredients},</if>
+            <if test="harmfulAnimals != null  and harmfulAnimals != ''">#{harmfulAnimals},</if>
+            <if test="harm != null  and harm != ''">#{harm},</if>
+            <if test="poisoningMechanism != null  and poisoningMechanism != ''">#{poisoningMechanism},</if>
+            <if test="poisoningSymptoms != null  and poisoningSymptoms != ''">#{poisoningSymptoms},</if>
+            <if test="diagnosis != null  and diagnosis != ''">#{diagnosis},</if>
+            <if test="controlMethods != null  and controlMethods != ''">#{controlMethods},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCPoisonKnowledge" parameterType="CPoisonKnowledge">
+        update c_poison_knowledge
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="chineseName != null  and chineseName != ''">CHINESE_NAME = #{chineseName},</if>
+            <if test="scientificName != null  and scientificName != ''">SCIENTIFIC_NAME = #{scientificName},</if>
+            <if test="alias != null  and alias != ''">ALIAS = #{alias},</if>
+            <if test="commonName != null  and commonName != ''">COMMON_NAME = #{commonName},</if>
+            <if test="divisionSubfamily != null  and divisionSubfamily != ''">DIVISION_SUBFAMILY = #{divisionSubfamily},</if>
+            <if test="genusSubgenus != null  and genusSubgenus != ''">GENUS_SUBGENUS = #{genusSubgenus},</if>
+            <if test="morphologicalCharacter != null  and morphologicalCharacter != ''">MORPHOLOGICAL_CHARACTER = #{morphologicalCharacter},</if>
+            <if test="morphologyName != null  and morphologyName != ''">MORPHOLOGY_NAME = #{morphologyName},</if>
+            <if test="ecologicalMapName != null  and ecologicalMapName != ''">ECOLOGICAL_MAP_NAME = #{ecologicalMapName},</if>
+            <if test="distributionDomestic != null  and distributionDomestic != ''">DISTRIBUTION_DOMESTIC = #{distributionDomestic},</if>
+            <if test="distributionAbroad != null  and distributionAbroad != ''">DISTRIBUTION_ABROAD = #{distributionAbroad},</if>
+            <if test="habitat != null  and habitat != ''">HABITAT = #{habitat},</if>
+            <if test="distributionmapName != null  and distributionmapName != ''">DISTRIBUTIONMAP_NAME = #{distributionmapName},</if>
+            <if test="toxicParts != null  and toxicParts != ''">TOXIC_PARTS = #{toxicParts},</if>
+            <if test="toxicIngredients != null  and toxicIngredients != ''">TOXIC_INGREDIENTS = #{toxicIngredients},</if>
+            <if test="harmfulAnimals != null  and harmfulAnimals != ''">HARMFUL_ANIMALS = #{harmfulAnimals},</if>
+            <if test="harm != null  and harm != ''">HARM = #{harm},</if>
+            <if test="poisoningMechanism != null  and poisoningMechanism != ''">POISONING_MECHANISM = #{poisoningMechanism},</if>
+            <if test="poisoningSymptoms != null  and poisoningSymptoms != ''">POISONING_SYMPTOMS = #{poisoningSymptoms},</if>
+            <if test="diagnosis != null  and diagnosis != ''">DIAGNOSIS = #{diagnosis},</if>
+            <if test="controlMethods != null  and controlMethods != ''">CONTROL_METHODS = #{controlMethods},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY = #{updateBy},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <update id="CPoisonKnowledgeUpdateEcoloPhotos" parameterType="String">
+    update c_poison_knowledge set ECOLOGICAL_MAP_NAME="" where id=#{id}
+    </update>
+
+    <update id="CPoisonKnowledgeUpdateDistrPhotos" parameterType="String">
+    update c_poison_knowledge set DISTRIBUTIONMAP_NAME="" where id=#{id}
+    </update>
+
+    <update id="CPoisonKnowledgeUpdateMorphPhotos" parameterType="String">
+    update c_poison_knowledge set MORPHOLOGY_NAME="" where id=#{id}
+    </update>
+
+    <delete id="deleteCPoisonKnowledgeById" parameterType="Long">
+        delete from c_poison_knowledge where ID = #{id}
+    </delete>
+
+    <delete id="deleteCPoisonKnowledgeByIds" parameterType="String">
+        delete from c_poison_knowledge where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

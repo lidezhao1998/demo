@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增草原鼠虫害知识库信息')" />
+    <th:block th:include="include :: jasny-bootstrap-css" />
+    <link rel="stylesheet" href="//res.layui.com/layui/dist/css/layui.css"  media="all">
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-knowledge-add" enctype="multipart/form-data" method="post">
+            <div class="row m-b-lg">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class=""><a data-toggle="tab" href="#tab-1" aria-expanded="false"> 基本信息</a>
+                            </li>
+                            <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">成长信息</a>
+                            </li>
+                            <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">生态环境信息</a>
+                            </li>
+                            <li class=""><a data-toggle="tab" href="#tab-4" aria-expanded="false">分布信息</a>
+                            </li>
+                            <li class=""><a data-toggle="tab" href="#tab-5" aria-expanded="false">预测模型算法信息</a>
+                            </li>
+                            <li class=""><a data-toggle="tab" href="#tab-6" aria-expanded="false">图片专区</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">编码：</label>
+                                                <div class="col-sm-8" id="col-sm-8">
+                                                    <input id="code" name="code" class="form-control" type="text" required>
+                                                    <div id="spanCode"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">中名：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="middleName" id="middleName" class="form-control" type="text" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">别名：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="alias" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">俗名：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="commonName" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">目：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="order" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">科：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="section" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">属：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="genus" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">近缘种：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="relatedSpecie" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">成虫形态特征：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="features" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">头部：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="head" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">胸部：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="chest" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">翅：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="wing" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">足：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="foot" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">腹部：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="abdomen" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">生殖器：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="genitals" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div id="tab-2" class="tab-pane">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">一龄：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="oneAge" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">二龄：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="twoAge" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">三龄：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="threeAge" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">四龄：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="foreAge" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">五龄：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="fiveAge" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">六龄：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="sixAge" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">生物学：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="biology" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">蛹的形态：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="pupaMorphology" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">生活史：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="lifeHistory" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">世代数：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="generationNumber" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">越冬虫态及场所：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="winteringPlace" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">发育历期：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="developmentalStage" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="tab-3" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">植物群落描述：</label>
+                                            <div class="col-sm-8">
+                                                <input name="planDecription" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">天敌：</label>
+                                            <div class="col-sm-8">
+                                                <input name="naturalEnemy" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">气候：</label>
+                                            <div class="col-sm-8">
+                                                <input name="climate" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">气候带：</label>
+                                            <div class="col-sm-8">
+                                                <input name="climaticZone" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">水分条件：</label>
+                                            <div class="col-sm-8">
+                                                <input name="moistureCondition" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">温度：</label>
+                                            <div class="col-sm-8">
+                                                <input name="temperature" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">卵发育起点的温度：</label>
+                                            <div class="col-sm-8">
+                                                <input name="eggTemperature" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">卵发育起点土壤含水量：</label>
+                                            <div class="col-sm-8">
+                                                <input name="eggWater" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">产卵地识别：</label>
+                                            <div class="col-sm-8">
+                                                <input name="ovipositionRecognition" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">土壤特征：</label>
+                                            <div class="col-sm-8">
+                                                <input name="soilCharacteristics" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">地面覆盖状况：</label>
+                                            <div class="col-sm-8">
+                                                <input name="groundCoverage" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">土壤紧实度：</label>
+                                            <div class="col-sm-8">
+                                                <input name="soilCompactness" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">pH值：</label>
+                                            <div class="col-sm-8">
+                                                <input name="phValue" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">盐分：</label>
+                                            <div class="col-sm-8">
+                                                <input name="salinity" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">含水量：</label>
+                                            <div class="col-sm-8">
+                                                <input name="waterContent" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">扩散与传播：</label>
+                                            <div class="col-sm-8">
+                                                <input name="spread" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">产卵地：</label>
+                                            <div class="col-sm-8">
+                                                <input name="spawningGround" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">刺激：</label>
+                                            <div class="col-sm-8">
+                                                <input name="stimulate" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">危害程度：</label>
+                                            <div class="col-sm-8">
+                                                <input name="damageDegree" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">三龄前摄食量：</label>
+                                            <div class="col-sm-8">
+                                                <input name="threeIntake" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">三龄至成虫前摄食量：</label>
+                                            <div class="col-sm-8">
+                                                <input name="threeBigIntake" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">成虫期摄食量：</label>
+                                            <div class="col-sm-8">
+                                                <input name="adultFoodIntake" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">成虫期摄食量：</label>
+                                            <div class="col-sm-8">
+                                                <input name="foodRation" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">三龄前损失量：</label>
+                                            <div class="col-sm-8">
+                                                <input name="threeLoss" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">灾害程度预测及损失估计模型：</label>
+                                            <div class="col-sm-8">
+                                                <input name="zhcdycModel" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">防治指标：</label>
+                                            <div class="col-sm-8">
+                                                <input name="controlIndex" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">经济阈值：</label>
+                                            <div class="col-sm-8">
+                                                <input name="economicThreshold" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">生态阈值：</label>
+                                            <div class="col-sm-8">
+                                                <input name="ecologicalThreshold" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">经济生态阈值：</label>
+                                            <div class="col-sm-8">
+                                                <input name="economicEcologicalThreshold" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">防治方法_转至防治方法子表：</label>
+                                            <div class="col-sm-8">
+                                                <input name="fzffTable" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">化学防治方法概述：</label>
+                                            <div class="col-sm-8">
+                                                <input name="hxfzSetUp" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">生物防治方法概述：</label>
+                                            <div class="col-sm-8">
+                                                <input name="swfzSetUp" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">生态治理方法概述：</label>
+                                            <div class="col-sm-8">
+                                                <input name="stzlSetUp" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">物理防治方法概述：</label>
+                                            <div class="col-sm-8">
+                                                <input name="wlfzSetUp" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">寄生植物：</label>
+                                            <div class="col-sm-8">
+                                                <input name="hostPlant" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">草原类型：</label>
+                                            <div class="col-sm-8">
+                                                <input name="grasslandType" class="form-control" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                            <div id="tab-4" class="tab-pane">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">国外行政分布：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="gwDistribution" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">国内行政分布：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="gnDistribution" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">迁飞的定义：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="definitionRelocation" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">迁飞主导因素：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="migrationFactors" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">迁飞能力：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="migrationAbility" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">迁移：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="transfer" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">迁移的定义：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="migrationDefinition" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">迁移主导因素：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="transferFactors" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">自然扩散：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="naturalDiffusion" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">食物：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="food" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">迁移能力：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="migrationPower" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">传播途径：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="spreadChannel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div id="tab-5" class="tab-pane">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">三龄至成虫前损失量：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="threeBigLoss" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">成虫期损失量：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="bigLoss" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">历史数据回归模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="historicalModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">发生期预测模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="occurrenceModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">发育进度预测法模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="developmentModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">发育历期预测法模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="calendarModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">虫态分级预测法模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="ctfjycfModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">平均发育进度预测法模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="pjfyjdycfModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">卵巢发育分级预测法模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="lcfyfjycfModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">期距预测模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="qjycModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">有效积温预测模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="yxjwycModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">各虫态有效积温与发育速度基本模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="gctyxjwModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">物候期预测模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="whqycModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">相关统计预测：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="xgtjyc" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">发生量预测模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="fslycModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">有效基数预测法：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="yxjsycf" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">气候图预测法：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="qhtycf" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">积温_土壤含水量预测孵化可能性模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="jwtrhslModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">地面植被_气象因子预测迁移扩散几率模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="dmzbqxyzModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">经验指数预测法：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="jyzsycf" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">形态指标预测法：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="xtzbycf" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">迁飞害虫预测模型：</label>
+                                                <div class="col-sm-8">
+                                                    <input name="qfhcycModel" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="tab-6" class="tab-pane ">
+                                <div class="panel-body">
+                                    <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">成虫模式图：</label>
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 80px; height: 60px;"></div>
+                                                <div>
+                                                    <span class="btn btn-white btn-file"><span class="fileinput-new">选择图片</span><span class="fileinput-exists">更改</span><input type="file" class="" name="file"  id="adultPattern" accept="image/*"/></span>
+                                                    <a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">各龄期模式图及照片：</label>
+                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 80px; height: 60px;"></div>
+                                                    <div>
+                                                        <span class="btn btn-white btn-file"><span class="fileinput-new">选择图片</span><span class="fileinput-exists">更改</span><input type="file" class="" name="file2"  id="sixPhotos" accept="image/*"/></span>
+                                                        <a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">蛹的模式图及照片：</label>
+
+                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 80px; height: 60px;"></div>
+                                                    <div>
+                                                        <span class="btn btn-white btn-file"><span class="fileinput-new">选择图片</span><span class="fileinput-exists">更改</span><input type="file" class="" name="file3"  id="pupaPhotos" accept="image/*"/></span>
+                                                        <a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">危害照片：</label>
+                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 80px; height: 60px;"></div>
+                                                    <div>
+                                                        <span class="btn btn-white btn-file"><span class="fileinput-new">选择图片</span><span class="fileinput-exists">更改</span><input type="file" class="" name="file4"  id="hazardPhotos" accept="image/*"/></span>
+                                                        <a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">全国图：</label>
+                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 80px; height: 60px;"></div>
+                                                    <div>
+                                                        <span class="btn btn-white btn-file"><span class="fileinput-new">选择图片</span><span class="fileinput-exists">更改</span><input type="file" class="" name="file5"  id="nationalMap" accept="image/*"/></span>
+                                                        <a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">分省图：</label>
+
+                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 80px; height: 60px;"></div>
+                                                    <div>
+                                                        <span class="btn btn-white btn-file"><span class="fileinput-new">选择图片</span><span class="fileinput-exists">更改</span><input type="file" class="" name="file6"  id="provincialMap" accept="image/*"/></span>
+                                                        <a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+
+
+
+
+        </form>
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandler()"  ><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+
+        </div>
+
+    </div>
+    <th:block th:include="include :: footer" />
+    <script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>
+    <script type="text/javascript">
+       /* $(function () {
+            alert(22)
+            document.getElementById("typediv1").style.display="none";//隐藏
+
+        })
+        function resetPwd(){
+            alert(123)
+            document.getElementById("typediv1").style.display="";//显示
+
+        }*/
+        var prefix = ctx + "system/Ratpestknowledge";
+        $("#form-knowledge-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+              var code= $("#code").val();
+                var data= {"code":code}
+                $.ajax({
+                    url: prefix+"/checkCode",
+                    type: 'post',
+                    async:false,
+                    data: data,
+                    success: function(data) {
+                        if (data){
+                            $("#spanCode").html("<span id='spanCode' class=\"btn btn-white fileinput-exists\" style=\"color: red;margin-top: -56px; margin-left: 338px;\">编码重复</span>")
+                             return
+                        }else {
+                            $("#spanCode").html("");
+                            if ($.validate.form()) {
+
+                                $.modal.confirm("确认要提交信息吗？", function () {
+                                    //alert($('#sixPhotos').val())
+                                    // alert($('#form-knowledge-add').serialize())
+                                    uploadFile();
+
+                                    //$.operate.save(prefix + "/add", $('#form-knowledge-add').serialize());
+
+                                })
+                            }
+                        }
+                    }
+                });
+
+        }
+
+        /*document.getElementById("typediv1").style.display="none";//隐藏
+
+        document.getElementById("typediv1").style.display="";//显示*/
+
+
+       //图片上传功能
+
+       function uploadFile() {
+           var url = ctx + "system/Ratpestknowledge/add";
+
+           var formData = new FormData(document.getElementById("form-knowledge-add"));
+        /*   formData.append('file', $("#adultPattern")[0].files[0]);
+           formData.append('file2', $("#sixPhotos")[0].files[0]);
+           formData.append('file3', $("#pupaPhotos")[0].files[0]);
+           formData.append('file4', $("#hazardPhotos")[0].files[0]);
+           formData.append('file5', $("#nationalMap")[0].files[0]);
+           formData.append('file6', $("#provincialMap")[0].files[0]);*/
+
+
+
+           if ($("#adultPattern").val().length <= 0) {
+/*
+               alert("没图1片")
+*/
+           }else if($("#adultPattern")[0].files[0] ==null && $("#adultPattern").val() !=null){
+/*
+               alert("有原始图片，没有做修改")
+*/
+           }else{
+/*
+               alert("修改后的图片")
+*/
+               formData.append('file', $("#adultPattern")[0].files[0]);
+
+           }
+
+           if ($('#sixPhotos').val() ==null) {
+
+           }else{
+               formData.append('file2', $("#sixPhotos")[0].files[0]);
+
+           }
+           if ($('#pupaPhotos').val() ==null) {
+
+           }else{
+               formData.append('file3', $("#pupaPhotos")[0].files[0]);
+
+           }if ($('#hazardPhotos').val() ==null) {
+
+           }else{
+               formData.append('file4', $("#hazardPhotos")[0].files[0]);
+
+           }if ($('#nationalMap').val() ==null) {
+
+           }else{
+               formData.append('file5', $("#nationalMap")[0].files[0]);
+
+           }if ($('#provincialMap').val() ==null) {
+               //alert($("#symptomMap")[0].files[0])
+               //formData.append('file2', $("#symptomMap")[0].files[0]);
+
+           }else{
+               formData.append('file6', $("#provincialMap")[0].files[0]);
+
+           }
+
+
+           /* if ($('#sixPhotos')[0].files[0] == null) {
+                $.modal.alertWarning("请先选择文件路径");
+                return false;
+            }*/
+           $.ajax({
+               url: url,
+               type: 'post',
+               cache: false,
+               data: formData,
+               contentType: false,
+               processData: false,
+               success: function(result) {
+                   $.operate.successCallback(result);
+               }
+           });
+       }
+
+    </script>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: jasny-bootstrap-js" />
+</body>
+</html>

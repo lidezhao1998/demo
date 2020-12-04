@@ -1,0 +1,22 @@
+package com.sinosoft.extinterface.service;
+
+
+import com.ruoyi.system.domain.gis.SysCity;
+
+import java.util.HashMap;
+import java.util.List;
+
+/**
+ * @author sunlei
+ * @description
+ * @date 2020/08/26/9:40
+ */
+public interface MobileDeviceDataServer {
+    List<SysCity> getDistrictSheng();
+
+    HashMap<String,Object> getDistrictShi(Long id);
+
+    HashMap<String,Object> getDistrictQu(Long id);
+
+    HashMap<String,Object> getVideo(Long code);
+}

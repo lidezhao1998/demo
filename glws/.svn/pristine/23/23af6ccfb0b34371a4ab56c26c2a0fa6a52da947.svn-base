@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CGroundSurveyMapper">
+    
+    <resultMap type="CGroundSurvey" id="CGroundSurveyResult">
+        <result property="groundId"    column="GROUND_ID"    />
+        <result property="codeId"    column="CODE_ID"    />
+        <result property="sampleNumber"    column="SAMPLE_NUMBER"    />
+        <result property="provincialLevelName"    column="PROVINCIAL_LEVEL_NAME"    />
+        <result property="cityLevelName"    column="CITY_LEVEL_NAME"    />
+        <result property="countyLevelName"    column="COUNTY_LEVEL_NAME"    />
+        <result property="surveyTime"    column="SURVEY_TIME"    />
+        <result property="longitude"    column="LONGITUDE"    />
+        <result property="latitude"    column="LATITUDE"    />
+        <result property="elevation"    column="ELEVATION"    />
+        <result property="topographyType"    column="TOPOGRAPHY_TYPE"    />
+        <result property="slopePositionType"    column="SLOPE_POSITION_TYPE"    />
+        <result property="asceptType"    column="ASCEPT_TYPE"    />
+        <result property="fallingGradient"    column="FALLING_GRADIENT"    />
+        <result property="soilType"    column="SOIL_TYPE"    />
+        <result property="grasslandType"    column="GRASSLAND_TYPE"    />
+        <result property="vegetationCoverage"    column="VEGETATION_COVERAGE"    />
+        <result property="aboveGroundBiomass"    column="ABOVE_GROUND_BIOMASS"    />
+        <result property="surfaceFeaturesType"    column="SURFACE_FEATURES_TYPE"    />
+        <result property="mianBotanyType"    column="MIAN_BOTANY_TYPE"    />
+        <result property="naturalEnemyType"    column="NATURAL_ENEMY_TYPE"    />
+        <result property="name"    column="NAME"    />
+        <result property="photoUrl"    column="PHOTO_URL"    />
+        <result property="staute"    column="STAUTE"    />
+        <result property="mapId"    column="MAP_ID"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateBy"    column="UPDATE_BY"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="dept"    column="DEPT" />
+        <result property="code"    column="CODE" />
+
+        <collection  property="cPlotList"   javaType="java.util.List"        resultMap="cPlotListResult" />
+    </resultMap>
+    <resultMap id="cPlotListResult" type="CPlot">
+        <result property="plotId"    column="PLOT_ID"    />
+        <result property="groundId"    column="GROUND_ID"    />
+        <result property="samplingNumber"    column="SAMPLING_NUMBER"    />
+        <result property="samplingArea"    column="SAMPLING_AREA"    />
+        <result property="harmfulSpeciesType"    column="HARMFUL_SPECIES_TYPE"    />
+        <result property="detailedType"    column="DETAILED_TYPE"    />
+        <result property="quantityDetermination"    column="QUANTITY_DETERMINATION"    />
+        <result property="photo"    column="PHOTO"    />
+        <result property="standardDensity"    column="STANDARD_DENSITY"    />
+        <result property="samplingTime"    column="SAMPLING_TIME"    />
+    </resultMap>
+
+
+    <sql id="selectCGroundSurveyVo">
+SELECT
+	g.GROUND_ID,
+	g.CODE_ID,
+	g.MAP_ID,
+	g.SAMPLE_NUMBER,
+	g.PROVINCIAL_LEVEL_NAME,
+	g.CITY_LEVEL_NAME,
+	g.COUNTY_LEVEL_NAME,
+	g.SURVEY_TIME,
+	g.LONGITUDE,
+	g.LATITUDE,
+	g.ELEVATION,
+	IFNULL(g.TOPOGRAPHY_TYPE ,"") TOPOGRAPHY_TYPE,
+	IFNULL(g.SLOPE_POSITION_TYPE,"") SLOPE_POSITION_TYPE,
+	IFNULL(g.ASCEPT_TYPE,"") ASCEPT_TYPE,
+	g.FALLING_GRADIENT,
+	IFNULL(g.SOIL_TYPE,"") SOIL_TYPE,
+	IFNULL(g.GRASSLAND_TYPE,"") GRASSLAND_TYPE,
+	g.VEGETATION_COVERAGE,
+	g.ABOVE_GROUND_BIOMASS,
+	IFNULL(g.SURFACE_FEATURES_TYPE,"") SURFACE_FEATURES_TYPE,
+	IFNULL(g.MIAN_BOTANY_TYPE,"") MIAN_BOTANY_TYPE,
+	IFNULL(g.NATURAL_ENEMY_TYPE,"") NATURAL_ENEMY_TYPE,
+	g.NAME,
+	g.PHOTO_URL,
+	g.DEPT,
+	g.CODE,
+CASE
+	g.STAUTE
+	WHEN '00' THEN
+	'草稿'
+	WHEN '01' THEN
+	'审核中'
+	WHEN '02' THEN
+	'审核完成'
+	WHEN '03' THEN
+	'撤回'
+	WHEN '04' THEN
+	'退回'
+	END AS STAUTE,
+	g.CREATE_BY,
+	g.CREATE_TIME,
+	g.UPDATE_BY,
+	g.UPDATE_TIME,
+	p.PLOT_ID,
+	p.GROUND_ID,
+	p.SAMPLING_NUMBER,
+	p.SAMPLING_AREA,
+	p.HARMFUL_SPECIES_TYPE,
+	p.DETAILED_TYPE,
+	p.QUANTITY_DETERMINATION,
+	p.PHOTO_URL,
+	p.STANDARD_DENSITY,
+	p.SAMPLING_TIME
+FROM
+	c_ground_survey g
+	LEFT JOIN c_plot p ON g.GROUND_ID = p.GROUND_ID
+    </sql>
+    <sql id="selectCGroundSurveyVoS">
+        select g.GROUND_ID, g.CODE_ID,g.MAP_ID, g.SAMPLE_NUMBER, g.PROVINCIAL_LEVEL_NAME, g.CITY_LEVEL_NAME,
+        g.COUNTY_LEVEL_NAME, g.SURVEY_TIME, g.LONGITUDE, g.LATITUDE, g.ELEVATION, g.TOPOGRAPHY_TYPE,
+        g.SLOPE_POSITION_TYPE, g.ASCEPT_TYPE, g.FALLING_GRADIENT, g.SOIL_TYPE, g.GRASSLAND_TYPE,
+        g.VEGETATION_COVERAGE, g.ABOVE_GROUND_BIOMASS, g.SURFACE_FEATURES_TYPE, g.MIAN_BOTANY_TYPE,
+         g.NATURAL_ENEMY_TYPE, g.NAME, g.PHOTO_URL,g.DEPT,g.CODE,
+         CASE g.STAUTE when '00' then '草稿' when '01'
+         then '审核中'  when '02'
+         then '审核完成' when '03' then '撤回'when'04'
+         then '退回' END AS STAUTE, g.CREATE_BY, g.CREATE_TIME, g.UPDATE_BY, g.UPDATE_TIME from c_ground_survey g
+    </sql>
+
+    <sql id="selectCGroundSurveyVoSS">
+        select g.GROUND_ID, g.CODE_ID,g.MAP_ID, g.SAMPLE_NUMBER, g.PROVINCIAL_LEVEL_NAME, g.CITY_LEVEL_NAME,
+        g.COUNTY_LEVEL_NAME, g.SURVEY_TIME, g.LONGITUDE, g.LATITUDE, g.ELEVATION, g.TOPOGRAPHY_TYPE,
+        g.SLOPE_POSITION_TYPE, g.ASCEPT_TYPE, g.FALLING_GRADIENT, g.SOIL_TYPE, g.GRASSLAND_TYPE,
+        g.VEGETATION_COVERAGE, g.ABOVE_GROUND_BIOMASS, g.SURFACE_FEATURES_TYPE, g.MIAN_BOTANY_TYPE,
+         g.NATURAL_ENEMY_TYPE, g.NAME, g.PHOTO_URL,g.DEPT,g.CODE,
+         CASE g.STAUTE when '00' then '草稿' when '01'
+         then '审核中'  when '02'
+         then '审核完成' when '03' then '撤回'when'04'
+         then '退回' END AS STAUTE, g.CREATE_BY, g.CREATE_TIME,g.UPDATE_BY, g.UPDATE_TIME from c_ground_survey g
+
+    </sql>
+    <select id="selectCGroundSurveyList" parameterType="CGroundSurvey" resultMap="CGroundSurveyResult">
+        <include refid="selectCGroundSurveyVoS"/>
+        <where>
+            <if test="codeId != null  and codeId != ''"> and g.CODE_ID like concat('%', #{codeId}, '%')</if>
+            <if test="sampleNumber != null "> and g.SAMPLE_NUMBER = #{sampleNumber}</if>
+            <if test="provincialLevelName != null  and provincialLevelName != ''"> and g.PROVINCIAL_LEVEL_NAME like concat('%', #{provincialLevelName}, '%')</if>
+            <if test="cityLevelName != null  and cityLevelName != ''"> and g.CITY_LEVEL_NAME like concat('%', #{cityLevelName}, '%')</if>
+            <if test="countyLevelName != null  and countyLevelName != ''"> and g.COUNTY_LEVEL_NAME like concat('%', #{countyLevelName}, '%')</if>
+            <if test="surveyTime != null "> and g.SURVEY_TIME = #{surveyTime}</if>
+            <if test="longitude != null  and longitude != ''"> and g.LONGITUDE = #{longitude}</if>
+            <if test="latitude != null  and latitude != ''"> and g.LATITUDE = #{latitude}</if>
+            <if test="elevation != null  and elevation != ''"> and g.ELEVATION = #{elevation}</if>
+            <if test="topographyType != null  and topographyType != ''"> and g.TOPOGRAPHY_TYPE = #{topographyType}</if>
+            <if test="slopePositionType != null  and slopePositionType != ''"> and g.SLOPE_POSITION_TYPE = #{slopePositionType}</if>
+            <if test="asceptType != null  and asceptType != ''"> and g.ASCEPT_TYPE = #{asceptType}</if>
+            <if test="fallingGradient != null  and fallingGradient != ''"> and g.FALLING_GRADIENT = #{fallingGradient}</if>
+            <if test="soilType != null  and soilType != ''"> and g.SOIL_TYPE = #{soilType}</if>
+            <if test="grasslandType != null  and grasslandType != ''"> and g.GRASSLAND_TYPE = #{grasslandType}</if>
+            <if test="vegetationCoverage != null  and vegetationCoverage != ''"> and g.VEGETATION_COVERAGE = #{vegetationCoverage}</if>
+            <if test="aboveGroundBiomass != null  and aboveGroundBiomass != ''"> and g.ABOVE_GROUND_BIOMASS = #{aboveGroundBiomass}</if>
+            <if test="surfaceFeaturesType != null  and surfaceFeaturesType != ''"> and g.SURFACE_FEATURES_TYPE = #{surfaceFeaturesType}</if>
+            <if test="mianBotanyType != null  and mianBotanyType != ''"> and g.MIAN_BOTANY_TYPE = #{mianBotanyType}</if>
+            <if test="naturalEnemyType != null  and naturalEnemyType != ''"> and g.NATURAL_ENEMY_TYPE = #{naturalEnemyType}</if>
+            <if test="name != null  and name != ''"> and g.NAME like concat('%', #{name}, '%')</if>
+            <if test="photoUrl != null  and photoUrl != ''"> and g.PHOTO_URL = #{photoUrl}</if>
+            <if test="staute != null  and staute != ''"> and g.STAUTE = #{staute}</if>
+            <if test="createBy != null  and createBy != ''"> and g.CREATE_BY = #{createBy}</if>
+            <if test="createTime != null "> and g.CREATE_TIME = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and g.UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null "> and g.UPDATE_TIME = #{updateTime}</if>
+            <if test="dept != null "> and g.DEPT = #{dept}</if>
+            <if test="code != null "> and g.CODE = #{code}</if>
+        </where>
+        order by g.CREATE_TIME desc
+
+    </select>
+
+
+    <sql id="selectCGroundSurveyVoSSS">
+        select g.GROUND_ID, g.CODE_ID,g.MAP_ID, g.SAMPLE_NUMBER, g.PROVINCIAL_LEVEL_NAME, g.CITY_LEVEL_NAME,
+        g.COUNTY_LEVEL_NAME, g.SURVEY_TIME, g.LONGITUDE, g.LATITUDE, g.ELEVATION, g.TOPOGRAPHY_TYPE,
+        g.SLOPE_POSITION_TYPE, g.ASCEPT_TYPE, g.FALLING_GRADIENT, g.SOIL_TYPE, g.GRASSLAND_TYPE,
+        g.VEGETATION_COVERAGE, g.ABOVE_GROUND_BIOMASS, g.SURFACE_FEATURES_TYPE, g.MIAN_BOTANY_TYPE,
+        g.NATURAL_ENEMY_TYPE, g.NAME, g.PHOTO_URL,g.DEPT,g.CODE,
+        CASE g.STAUTE when '00' then '草稿' when '01'
+        then '审核中'  when '02'
+        then '审核完成' when '03' then '撤回'when'04'
+        then '退回' END AS STAUTE, g.CREATE_BY, g.CREATE_TIME,g.UPDATE_BY, g.UPDATE_TIME from c_ground_survey g
+        <where>
+            <if test="code != null "> g.CODE LIKE   concat('%', #{code}, '%') and g.STAUTE !=00 </if>
+            <if test="codeId != null "> g.CODE_ID LIKE   concat('%', #{codeId}, '%') and g.STAUTE !=00 </if>
+            <if test="sampleNumber != null "> and g.SAMPLE_NUMBER = #{sampleNumber}</if>
+            <if test="provincialLevelName != null  and provincialLevelName != ''"> and g.PROVINCIAL_LEVEL_NAME like concat('%', #{provincialLevelName}, '%')</if>
+            <if test="cityLevelName != null  and cityLevelName != ''"> and g.CITY_LEVEL_NAME like concat('%', #{cityLevelName}, '%')</if>
+            <if test="countyLevelName != null  and countyLevelName != ''"> and g.COUNTY_LEVEL_NAME like concat('%', #{countyLevelName}, '%')</if>
+        </where>
+    </sql>
+
+
+    <select id="selectCGroundSurveyList1" parameterType="CGroundSurvey" resultMap="CGroundSurveyResult">
+        select g.GROUND_ID, g.CODE_ID,g.MAP_ID, g.SAMPLE_NUMBER, g.PROVINCIAL_LEVEL_NAME, g.CITY_LEVEL_NAME,
+        g.COUNTY_LEVEL_NAME, g.SURVEY_TIME, g.LONGITUDE, g.LATITUDE, g.ELEVATION, g.TOPOGRAPHY_TYPE,
+        g.SLOPE_POSITION_TYPE, g.ASCEPT_TYPE, g.FALLING_GRADIENT, g.SOIL_TYPE, g.GRASSLAND_TYPE,
+        g.VEGETATION_COVERAGE, g.ABOVE_GROUND_BIOMASS, g.SURFACE_FEATURES_TYPE, g.MIAN_BOTANY_TYPE,
+        g.NATURAL_ENEMY_TYPE, g.NAME, g.PHOTO_URL,g.DEPT,g.CODE,
+        CASE g.STAUTE when '00' then '草稿' when '01'
+        then '审核中'  when '02'
+        then '审核完成' when '03' then '撤回'when'04'
+        then '退回' END AS STAUTE, g.CREATE_BY, g.CREATE_TIME,g.UPDATE_BY, g.UPDATE_TIME from c_ground_survey g
+        <where>
+            g.STAUTE ='02'
+            <if test="code != null and code!='' "> and  g.CODE LIKE   concat( #{code}, '%')  </if>
+            <if test="codeId != null and codeId!='' "> and  g.CODE_ID LIKE   concat('%', #{codeId}, '%')   </if>
+            <if test="sampleNumber != null and sampleNumber !='' "> and g.SAMPLE_NUMBER = #{sampleNumber}</if>
+            <if test="provincialLevelName != null  and provincialLevelName != ''"> and g.PROVINCIAL_LEVEL_NAME  =#{provincialLevelName}</if>
+            <if test="cityLevelName != null  and cityLevelName != ''"> and g.CITY_LEVEL_NAME= #{cityLevelName}</if>
+            <if test="countyLevelName != null  and countyLevelName != ''"> and g.COUNTY_LEVEL_NAME= #{countyLevelName}</if>
+        </where>
+     </select>
+
+
+
+     <select id="selectCGroundSurveyById" parameterType="Long" resultMap="CGroundSurveyResult">
+         <include refid="selectCGroundSurveyVo"/>
+         where g.GROUND_ID = #{groundId}
+     </select>
+
+    <select id="countCGroundSurvey"  resultType="int" >
+        select Count(*) from  c_ground_survey  where COUNTY_LEVEL_NAME= #{code} and CREATE_TIME>=#{data};
+    </select>
+
+     <insert id="insertCGroundSurvey" parameterType="CGroundSurvey" useGeneratedKeys="true" keyProperty="groundId">
+         insert into c_ground_survey
+         <trim prefix="(" suffix=")" suffixOverrides=",">
+             <if test="codeId != null  and codeId != ''">CODE_ID,</if>
+             <if test="sampleNumber != null ">SAMPLE_NUMBER,</if>
+             <if test="provincialLevelName != null  and provincialLevelName != ''">PROVINCIAL_LEVEL_NAME,</if>
+             <if test="cityLevelName != null  and cityLevelName != ''">CITY_LEVEL_NAME,</if>
+             <if test="countyLevelName != null  and countyLevelName != ''">COUNTY_LEVEL_NAME,</if>
+             <if test="surveyTime != null ">SURVEY_TIME,</if>
+             <if test="longitude != null  and longitude != ''">LONGITUDE,</if>
+             <if test="latitude != null  and latitude != ''">LATITUDE,</if>
+             <if test="elevation != null  and elevation != ''">ELEVATION,</if>
+             <if test="topographyType != null  and topographyType != ''">TOPOGRAPHY_TYPE,</if>
+             <if test="slopePositionType != null  and slopePositionType != ''">SLOPE_POSITION_TYPE,</if>
+             <if test="asceptType != null  and asceptType != ''">ASCEPT_TYPE,</if>
+             <if test="fallingGradient != null  and fallingGradient != ''">FALLING_GRADIENT,</if>
+             <if test="soilType != null  and soilType != ''">SOIL_TYPE,</if>
+             <if test="grasslandType != null  and grasslandType != ''">GRASSLAND_TYPE,</if>
+             <if test="vegetationCoverage != null  and vegetationCoverage != ''">VEGETATION_COVERAGE,</if>
+             <if test="aboveGroundBiomass != null  and aboveGroundBiomass != ''">ABOVE_GROUND_BIOMASS,</if>
+             <if test="surfaceFeaturesType != null  and surfaceFeaturesType != ''">SURFACE_FEATURES_TYPE,</if>
+             <if test="mianBotanyType != null  and mianBotanyType != ''">MIAN_BOTANY_TYPE,</if>
+             <if test="naturalEnemyType != null  and naturalEnemyType != ''">NATURAL_ENEMY_TYPE,</if>
+             <if test="name != null  and name != ''">NAME,</if>
+             <if test="photoUrl != null  and photoUrl != ''">PHOTO_URL,</if>
+             <if test="staute != null  and staute != ''">STAUTE,</if>
+             <if test="mapId != null  and mapId != ''">MAP_ID,</if>
+             <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+             <if test="createTime != null ">CREATE_TIME,</if>
+             <if test="updateBy != null  and updateBy != ''">UPDATE_BY,</if>
+             <if test="updateTime != null ">UPDATE_TIME,</if>
+             <if test="dept != null ">DEPT,</if>
+             <if test="code != null ">CODE,</if>
+          </trim>
+         <trim prefix="values (" suffix=")" suffixOverrides=",">
+             <if test="codeId != null  and codeId != ''">#{codeId},</if>
+             <if test="sampleNumber != null ">#{sampleNumber},</if>
+             <if test="provincialLevelName != null  and provincialLevelName != ''">#{provincialLevelName},</if>
+             <if test="cityLevelName != null  and cityLevelName != ''">#{cityLevelName},</if>
+             <if test="countyLevelName != null  and countyLevelName != ''">#{countyLevelName},</if>
+             <if test="surveyTime != null ">#{surveyTime},</if>
+             <if test="longitude != null  and longitude != ''">#{longitude},</if>
+             <if test="latitude != null  and latitude != ''">#{latitude},</if>
+             <if test="elevation != null  and elevation != ''">#{elevation},</if>
+             <if test="topographyType != null  and topographyType != ''">#{topographyType},</if>
+             <if test="slopePositionType != null  and slopePositionType != ''">#{slopePositionType},</if>
+             <if test="asceptType != null  and asceptType != ''">#{asceptType},</if>
+             <if test="fallingGradient != null  and fallingGradient != ''">#{fallingGradient},</if>
+             <if test="soilType != null  and soilType != ''">#{soilType},</if>
+             <if test="grasslandType != null  and grasslandType != ''">#{grasslandType},</if>
+             <if test="vegetationCoverage != null  and vegetationCoverage != ''">#{vegetationCoverage},</if>
+             <if test="aboveGroundBiomass != null  and aboveGroundBiomass != ''">#{aboveGroundBiomass},</if>
+             <if test="surfaceFeaturesType != null  and surfaceFeaturesType != ''">#{surfaceFeaturesType},</if>
+             <if test="mianBotanyType != null  and mianBotanyType != ''">#{mianBotanyType},</if>
+             <if test="naturalEnemyType != null  and naturalEnemyType != ''">#{naturalEnemyType},</if>
+             <if test="name != null  and name != ''">#{name},</if>
+             <if test="photoUrl != null  and photoUrl != ''">#{photoUrl},</if>
+             <if test="staute != null  and staute != ''">#{staute},</if>
+             <if test="mapId != null  and mapId != ''">#{mapId},</if>
+             <if test="createBy != null  and createBy != ''">#{createBy},</if>
+             <if test="createTime != null ">#{createTime},</if>
+             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+             <if test="updateTime != null ">#{updateTime},</if>
+             <if test="dept != null ">#{dept},</if>
+             <if test="code != null ">#{code},</if>
+          </trim>
+     </insert>
+
+     <update id="updateCGroundSurvey" parameterType="CGroundSurvey">
+         update c_ground_survey
+         <trim prefix="SET" suffixOverrides=",">
+             <if test="codeId != null  and codeId != ''">CODE_ID = #{codeId},</if>
+             <if test="sampleNumber != null ">SAMPLE_NUMBER = #{sampleNumber},</if>
+             <if test="provincialLevelName != null  and provincialLevelName != ''">PROVINCIAL_LEVEL_NAME = #{provincialLevelName},</if>
+             <if test="cityLevelName != null  and cityLevelName != ''">CITY_LEVEL_NAME = #{cityLevelName},</if>
+             <if test="countyLevelName != null  and countyLevelName != ''">COUNTY_LEVEL_NAME = #{countyLevelName},</if>
+             <if test="surveyTime != null ">SURVEY_TIME = #{surveyTime},</if>
+             <if test="longitude != null  and longitude != ''">LONGITUDE = #{longitude},</if>
+             <if test="latitude != null  and latitude != ''">LATITUDE = #{latitude},</if>
+             <if test="elevation != null  and elevation != ''">ELEVATION = #{elevation},</if>
+             <if test="topographyType != null  and topographyType != ''">TOPOGRAPHY_TYPE = #{topographyType},</if>
+             <if test="slopePositionType != null  and slopePositionType != ''">SLOPE_POSITION_TYPE = #{slopePositionType},</if>
+             <if test="asceptType != null  and asceptType != ''">ASCEPT_TYPE = #{asceptType},</if>
+             <if test="fallingGradient != null  and fallingGradient != ''">FALLING_GRADIENT = #{fallingGradient},</if>
+             <if test="soilType != null  and soilType != ''">SOIL_TYPE = #{soilType},</if>
+             <if test="grasslandType != null  and grasslandType != ''">GRASSLAND_TYPE = #{grasslandType},</if>
+             <if test="vegetationCoverage != null  and vegetationCoverage != ''">VEGETATION_COVERAGE = #{vegetationCoverage},</if>
+             <if test="aboveGroundBiomass != null  and aboveGroundBiomass != ''">ABOVE_GROUND_BIOMASS = #{aboveGroundBiomass},</if>
+             <if test="surfaceFeaturesType != null  and surfaceFeaturesType != ''">SURFACE_FEATURES_TYPE = #{surfaceFeaturesType},</if>
+             <if test="mianBotanyType != null  and mianBotanyType != ''">MIAN_BOTANY_TYPE = #{mianBotanyType},</if>
+             <if test="naturalEnemyType != null  and naturalEnemyType != ''">NATURAL_ENEMY_TYPE = #{naturalEnemyType},</if>
+             <if test="name != null  and name != ''">NAME = #{name},</if>
+             <if test="photoUrl != null  and photoUrl != ''">PHOTO_URL =#{photoUrl},</if>
+             <if test="staute != null  and staute != ''">STAUTE = #{staute},</if>
+             <if test="mapId != null  and mapId != ''">MAP_ID = #{mapId},</if>
+             <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+             <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+             <if test="updateBy != null  and updateBy != ''">UPDATE_BY = #{updateBy},</if>
+             <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+             <if test="dept != null ">DEPT = #{dept},</if>
+             <if test="code != null ">CODE = #{code},</if>
+         </trim>
+         where GROUND_ID = #{groundId}
+     </update>
+     <update id="updateCGroundSurveyStaute" parameterType="CGroundSurvey">
+         update c_ground_survey
+         <trim prefix="SET" suffixOverrides=",">
+             <if test="staute != null  and staute != ''">STAUTE = #{staute},</if>
+         </trim>
+         where GROUND_ID = #{groundId}
+     </update>
+     <delete id="deleteCGroundSurveyById" parameterType="Long">
+         delete from c_ground_survey where GROUND_ID = #{groundId}
+     </delete>
+
+     <delete id="deleteCGroundSurveyByIds" parameterType="String">
+         delete from c_ground_survey where GROUND_ID in
+         <foreach item="groundId" collection="array" open="(" separator="," close=")">
+             #{groundId}
+         </foreach>
+     </delete>
+
+ </mapper>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改shp文件')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-shpFile-edit" th:object="${shpFile}">
+        <input name="id" type="hidden" th:field="*{id}" />
+        <input id="treeId" name="parentId" type="hidden" th:field="*{id}" />
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">目：<span style="color: red; ">*</span></label>
+            <div class="col-sm-8">
+
+                <input class="form-control" type="text" name="item"  readonly="readonly" th:field="*{item}"  id="shpFileName" required>
+
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">科：<span style="color: red; ">*</span></label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" readonly="readonly" name="name" th:field="*{section}" id="shpFileName" required>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">属：</label>
+            <div class="col-sm-8">
+                <input class="form-control" readonly="readonly" type="text" name="name" th:field="*{generic}" id="shpFileName" >
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">从：</label>
+            <div class="col-sm-8">
+                <input class="form-control" readonly="readonly" type="text" name="shpFilePath" th:field="*{bundle}" id="shpFilePath" >
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">土地类型：</label>
+            <div class="col-sm-8">
+                <input class="form-control" readonly="readonly" type="text" name="shpFilePath" th:field="*{grassType}" id="shpFilePath" >
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">面积：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="shpFilePath" th:field="*{area}" readonly="readonly" id="shpFilePath" >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">分布：</label>
+            <div class="col-sm-8">
+                <input class="form-control" readonly="readonly" type="text" name="orderNum" th:field="*{provinceName}" >
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">图层颜色：</label>
+            <div class="col-sm-8">
+                <div class="jumbotron">
+
+                    选择的颜色：<span id="color"></span>
+                    <input id="colorpicker"  type="color" th:field="*{color}" style="width: 20px;
+			height: 20px;
+			border: 1px solid #fff;
+			border-radius: 4px;
+			background-color:#fff;
+			text-indent: 20px;;" readonly="readonly"/>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<link href="/ajax/libs/bootstrap-colorpicker/css/bootstrap-colorpicker.css" type="text/css" rel="stylesheet">
+<script src="/ajax/libs/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script>
+    $(function () {
+        // 基本实例化:
+        $('#colorpicker').colorpicker();
+
+        // Example using an event, to change the color of the .jumbotron background:
+        $('#colorpicker').on('change', function (event) {
+            $('#colorpicker').css('background-color', event.color.toString()).val('');
+            $("#color").text(event.color.toString());
+            $("#shpColor").val();
+            $("#shpColor").val(event.color.toString());
+        });
+    });
+</script>
+</body>
+</html>

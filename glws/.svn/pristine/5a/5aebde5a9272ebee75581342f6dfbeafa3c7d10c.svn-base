@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增草原病害草知识库信息')"/>
+    <th:block th:include="include :: jasny-bootstrap-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-knowledge-add">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">中文名：</label>
+                    <div class="col-sm-8">
+                        <input name="middleName" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病原拉丁名：</label>
+                    <div class="col-sm-8">
+                        <input name="latinName" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病原中名：</label>
+                    <div class="col-sm-8">
+                        <input name="byName" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病原形态：</label>
+                    <div class="col-sm-8">
+                        <input name="byForm" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">亚门：</label>
+                    <div class="col-sm-8">
+                        <input name="subgate" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">属：</label>
+                    <div class="col-sm-8">
+                        <input name="genus" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">寄生：</label>
+                    <div class="col-sm-8">
+                        <input name="host" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">分布：</label>
+                    <div class="col-sm-8">
+                        <input name="distribution" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">危害部位：</label>
+                    <div class="col-sm-8">
+                        <input name="damageLocation" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">危害症状：</label>
+                    <div class="col-sm-8">
+                        <input name="whSymptom" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">症状：</label>
+                    <div class="col-sm-8">
+                        <input name="symptom" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病症：</label>
+                    <div class="col-sm-8">
+                        <input name="disease" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">发生规律：</label>
+                    <div class="col-sm-8">
+                        <input name="law" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">防治方法：</label>
+                    <div class="col-sm-8">
+                        <input name="method" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">编码：</label>
+                    <div class="col-sm-8">
+                        <input id="code" name="code" class="form-control" type="text" required>
+                        <div id="spanCode"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <!--<label class="col-sm-4 control-label">病原拉丁名：</label>-->
+                    <div class="col-sm-8">
+                        <!--<input name="latinName" class="form-control" type="text">-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">病原形态图：</label>
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <div class="fileinput-preview thumbnail" data-trigger="fileinput"
+                             style="width: 120px; height: 60px;"></div>
+                        <div>
+                  <span class="btn btn-white btn-file"><span class="fileinput-new">选择图片</span><span
+                          class="fileinput-exists">更改</span><input type="file" class="" name="file"
+                                                                   id="byMorphology" accept="image/*"/></span>
+                            <a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">症状图：</label>
+
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <div class="fileinput-preview thumbnail" data-trigger="fileinput"
+                             style="width: 120px; height: 60px;"></div>
+                        <div>
+                            <span class="btn btn-white btn-file"><span class="fileinput-new">选择图片</span><span
+                                    class="fileinput-exists">更改</span><input type="file" class="" name="file2"
+                                                                             id="symptomMap" accept="image/*"/></span>
+                            <a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandler()"><i class="fa fa-check"></i>保 存
+        </button>&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭
+        </button>
+        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('form-publish-add', 'bootstrap-table1')"><i
+                class="fa fa-refresh"></i>&nbsp;重置</a>
+
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: jasny-bootstrap-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "library/knowledge";
+    $("#form-knowledge-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        var code = $("#code").val();
+        var data = {"code": code}
+        $.ajax({
+            url: prefix + "/checkCode",
+            type: 'post',
+            async: false,
+            data: data,
+            success: function (data) {
+                if (data) {
+                    $("#spanCode").html("<span id='spanCode' class=\"btn btn-white fileinput-exists\" style=\"color: red;margin-top: -56px; margin-left: 338px;\">编码重复</span>")
+                    return
+
+                } else {
+                    $("#spanCode").html("");
+                    if ($.validate.form()) {
+                        $.modal.confirm("确认要提交信息吗？", function () {
+//alert($('#sixPhotos').val())
+// alert($('#form-knowledge-add').serialize())
+                            uploadFile();
+
+//$.operate.save(prefix + "/add", $('#form-knowledge-add').serialize());
+                        })
+                    }
+
+                }
+
+
+            }
+        });
+
+
+    }
+
+    //图片上传功能
+    function uploadFile() {
+        var url = ctx + "library/knowledge/add";
+
+        var formData = new FormData(document.getElementById("form-knowledge-add"));
+        /* formData.append('file', $("#byMorphology")[0].files[0]);
+        formData.append('file2', $("#symptomMap")[0].files[0]);*/
+
+        if ($("#byMorphology").val().length <= 0) {
+            /*
+            alert("没图1片")
+            */
+        } else {
+            /*
+            alert("添加的的图片")
+            */
+            formData.append('file', $("#byMorphology")[0].files[0]);
+
+        }
+
+        if ($("#symptomMap").val().length <= 0) {
+            /*
+            alert("没图2片")
+            */
+        } else {
+            /*
+            alert("添加的的图片")
+            */
+            formData.append('file2', $("#symptomMap")[0].files[0]);
+
+        }
+
+        /*if ($('#test2').val() ==null) {
+        alert(666)
+        //alert($("#symptomMap")[0].files[0])
+        //formData.append('file2', $("#symptomMap")[0].files[0]);
+
+        }else if($("#symptomMap")[0].files[0] ==null && $("#symptomMap").val() !=null){
+        alert("有原始图片，没有做修改")
+        }else{
+        alert("修改后的图片")
+        formData.append('file2', $("#symptomMap")[0].files[0]);
+
+        }*/
+
+
+        /* if ($('#sixPhotos')[0].files[0] == null) {
+        $.modal.alertWarning("请先选择文件路径");
+        return false;
+        }*/
+        $.ajax({
+            url: url,
+            type: 'post',
+            cache: false,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                $.operate.successCallback(result);
+            }
+        });
+    }
+</script>
+</body>
+</html>

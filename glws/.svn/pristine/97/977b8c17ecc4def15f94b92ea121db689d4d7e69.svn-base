@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('调拨单列表')" />
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-striped table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: whitesmoke;
+        height: 55px;
+    }
+    /*按钮背景色*/
+    .btn-success{
+        background-color: #30923E;
+    }
+
+</style>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>调拨单号：</p>
+                                <input type="text" name="oddnumber"/>
+                            </li>
+                            <li>
+                                <p>物资名称：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <p>申请地区：</p>
+                                <input type="text" name="applicationArea"/>
+                            </li>
+                            <li>
+                                <p>调拨地区：</p>
+                                <input type="text" name="allocationArea"/>
+                            </li>
+                           <!-- <li class="select-time">
+                                <p>调出时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginAllocationTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endAllocationTime]"/>
+                            </li>
+
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+
+                            -->
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+          <!--  <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:allocation:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:allocation:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+            </div>-->
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:allocationSh:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:allocationSh:remove')}]];
+        var prefix = ctx + "system/allocationSh";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "调拨单",
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+                showExport: true,
+                columns: [
+
+                    {
+                        field : 'id',
+                        title : 'id',
+                        align: 'center',
+                        valign: 'middle',
+                        visible: false
+
+                    },
+                {
+                    field : 'oddnumber',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '调拨单号'
+                },
+                {
+                    field : 'name',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '物资名称'
+                },
+                {
+                    field : 'applicationArea',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '申请地区'
+                },
+                {
+                    field : 'allocationArea',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '调拨地区'
+                },
+                {
+                    field : 'allocationTime',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '调出时间'
+                },
+                {
+                    field : 'receiver',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '接货人'
+                },
+                {
+                    field : 'deliveryman',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '送货人'
+                },
+               /* {
+                    field : 'receiverNumber', 
+                    title : '接货人联系方式'
+                },
+                {
+                    field : 'deliverymanNumber', 
+                    title : '送货人联系方式'
+                },
+                {
+                    field : 'cargoCode', 
+                    title : '货物编码'
+                },
+                {
+                    field : 'cargoNumber', 
+                    title : '货物数量'
+                },
+                {
+                    field : 'cargoMoney', 
+                    title : '货物金额'
+                },
+                {
+                    field : 'cargoName', 
+                    title : '货物名称'
+                },*/
+                    {
+                        field : 'status',
+                        title : '状态',
+                        align: 'center',
+                        valign: 'middle',
+                        visible: editFlag == 'hidden' ? false : true,
+                        formatter: function (value, row, index) {
+                            return statusTools(row);
+                        },
+                    },
+               /* {
+                    field : 'remark', 
+                    title : '备注'
+                },
+                {
+                    field : 'createTime', 
+                    title : '创建时间'
+                },
+                {
+                    field : 'createBy', 
+                    title : '创建人'
+                },
+                {
+                    field : 'updateTime', 
+                    title : '修改时间'
+                },
+                {
+                    field : 'updateBy', 
+                    title : '修改人'
+                },*/
+                {
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="authUser(\'' + row.id + '\')">审核</a> ');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+
+        function cancelAuthUser(id) {
+            $.modal.confirm("确认要上报吗？", function () {
+                $.operate.post(prefix + "/cancel", {"id": id});
+            })
+        }
+
+
+        /* -详情展开 */
+        function authUser(id) {
+            var url = prefix + '/detailSh/' + id;
+            $.modal.openTab("详情展开", url);
+        }
+
+
+        /* 上报状态显示 */
+        function statusTools(row) {
+            if (row.status=='1') {
+                return '<p>待上报</p> ';
+            } else if (row.status=='2') {
+                //return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.roleId + '\')"></i> ';
+                return '<p>审核中</p> ';
+            }else if (row.status=='3'){
+                return '<p>已上报</p> ';
+
+            }else{
+                return '<p>已驳回 </p> ';
+
+            }
+        }
+    </script>
+</body>
+</html>

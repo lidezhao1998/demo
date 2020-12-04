@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('退牧还草工程任务领取分解列表')" />
+</head>
+<body class="gray-bg">
+<style>
+    /*修改表头颜色*/
+    .table-striped table thead{
+        background-color: #50c2c1;
+        color: white;
+    }
+    /*按钮背景色*/
+    .btn-success{
+        background-color: #50c2c1;
+    }
+</style>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <p>年份：</p>
+                            <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:resolve:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+            <a class="btn btn-success" onclick="toRecords()">
+                <i class="fa fa-plus"></i> 分解记录
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:resolve:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:resolve:remove')}]];
+    var prefix = ctx + "system/resolve";
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            detailUrl: prefix + "/detail/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            modalName: "退牧还草工程任务分解",
+            columns: [[
+                {
+                    field : 'index',
+                    title : '序号',
+                    rowspan: 2,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    formatter:function(value, row, index){
+                        return index+1;
+                    }
+
+                },
+                {
+                    title : '任务地区',
+                    field : 'dz',
+                    rowspan: 2,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle'
+
+                },
+
+                {
+                    title : '围栏建设部分',
+                    rowspan: 1,
+                    colspan: 2,
+                    align: 'center',
+                    valign: 'middle',
+                    border: 1
+                },
+                {
+                    title : '其他建设部分',
+                    rowspan: 1,
+                    colspan: 2,
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    title : '总合计',
+                    rowspan: 1,
+                    colspan: 2,
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    title: '任务状态',
+                    rowspan: 2,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    visible: editFlag == 'hidden' ? false : true,
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    },
+                },
+                {
+                    title : '操作',
+                    rowspan: 2,
+                    colspan: 1,
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        if(row.status==4){
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.publishId + '\',\'' + row.status + '\')"><i class="fa fa-edit"></i>查看详情</a> ');
+                            return actions.join('');
+                        }
+                        else{
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFul(\'' + row.publishId+ '\')"><i class="fa fa-edit"></i>查看详情</a> ');
+                            return actions.join('');
+                        }
+                    }
+                },
+
+            ],
+                [
+                    {
+                        field : 'wlmjCount',
+                        title : '规模合计(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field : 'wljeCount',
+                        title : '投资合计(万元)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+
+                        field : 'qtmjCount',
+                        title : '其他规模合计(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field : 'qtjeCount',
+                        title : '其他投资合计(万元)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field : 'zgmCount',
+                        title : '总规模(万亩)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field : 'zjeCount',
+                        title : '总投资(万元)',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+
+                ],
+
+            ]
+
+        };
+        $.table.init(options);
+    });
+
+
+    /* 发布状态显示 */
+    function statusTools(row) {
+        if (row.status == '0') {
+            return '<p>未领取</p> ';
+        } else if (row.status == '1') {
+            //return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.roleId + '\')"></i> ';
+            return '<p>已领取</p> ';
+        } else if (row.status == '2') {
+            //return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.roleId + '\')"></i> ';
+            return '<p>进行中</p> ';
+        } else if (row.status == '3') {
+            //return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.roleId + '\')"></i> ';
+            return '<p>已分解</p> ';
+        } else if (row.status == '4') {
+            //return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.roleId + '\')"></i> ';
+            return '<p>待发布</p> ';
+        }
+    }
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+    //验证查看详情时状态
+    function remove(publishId,status) {
+        if(status=='4'){
+            $.modal.confirm("该任务未发布,不能进行查看", function() {
+            })
+        }
+
+    }
+
+    /* 分解记录列表 */
+    function toRecords() {
+        var url = prefix + '/records';
+        $.modal.openFul('分解记录列表',url);
+    }
+</script>
+</body>
+</html>

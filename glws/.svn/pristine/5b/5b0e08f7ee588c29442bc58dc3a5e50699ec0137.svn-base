@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+    <title>草原监测数据分析子系统</title>
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+    <!--<script th:src="@{/js/jquery.min.js}"></script>-->
+    <!--<script th:src="@{/js/bootstrap.min.js}"></script>-->
+    <!--<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>-->
+    <th:block th:include="include :: header('首页')" />
+</head>
+
+<body class="gray-bg#006400" style="background:#3c763d">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <!--<div class="col-sm-10 search-collapse">-->
+        <!--<div class="select-list">-->
+            <!--<ul>-->
+                <!--<li>-->
+                    <!--系数：<input type="text" id="xs" name="xs" th:value="${xs}"/>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a id="search" name="search" class="btn btn-primary btn-rounded btn-sm">&nbsp;设置</a>-->
+                    <!--<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('recoveryquestion-form')"><i class="fa fa-refresh"></i>&nbsp;重置</a>-->
+                <!--</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+    <!--</div>-->
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <div class="echarts" id="echarts-line-chart"></div>
+        </div>
+
+        <div class="ibox-content">
+            <div class="echarts" id="echarts-bar-chart"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+
+<script type="text/javascript">
+
+    var prefix = ctx + "analyze/production";
+    $.ajax({
+        type: "post",
+        async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+        url: prefix + "/indexShow",    //请求发送到dataActiont处
+        dataType: "json",        //返回数据形式为json
+        success: function (result) {
+
+            var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+            var lineoption = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['草原生产力', '草原生产力预测']
+                },
+                grid: {
+                    x: 40,
+                    x2: 40,
+                    y2: 24
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: result.years
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '万吨',
+                        axisLabel: {
+                            margin: -3,
+                            formatter: '{value}'
+                        },
+                        grid: {
+                            left: 35
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '草原生产力',
+                        type: 'line',
+                        data: result.values,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                        ,
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name: '草原生产力预测',
+                        type: 'line',
+                        color: "#14d146",
+                        data: result.anaData
+                    }
+
+
+                ]
+            };
+            lineChart.setOption(lineoption);
+            $(window).resize(lineChart.resize);
+        }
+    });
+//各省产草量
+    var prefix = ctx + "analyze/province";
+    $.ajax({
+        type: "post",
+        async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+        url: prefix + "/indexShow",    //请求发送到dataActiont处
+        dataType: "json",        //返回数据形式为json
+        success: function (result) {
+            var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+            var years=result.years;
+            var mapValue=result.mapValue;
+            var categoryCount = result.provinces;
+            var xAxisData = [];
+            var customData = [];
+            var legendData = [];
+            var dataList = [];
+            for (var i = 0; i < years.length; i++) {
+                legendData.push(years[i]);
+                dataList.push([]);
+            }
+            for (var i = 0; i <categoryCount.length; i++) {
+                var pro=categoryCount[i];
+                xAxisData.push(pro);
+                for (var j = 0; j < dataList.length; j++) {
+                    if (mapValue[pro]==""){
+                        dataList[j].push(0);
+                    }else{
+                        //根据省份获取年份的数据列表
+                        var listyears=mapValue[pro];
+                        for (var m=0;m<listyears.length;m++){
+                            if(legendData[j]==listyears[m].year){
+                                var sum=(listyears[m].sum);
+                                dataList[j].push(sum);
+                            }
+                        }
+                    }
+                }
+            }
+            function renderItem(params, api) {
+                var xValue = api.value(0);
+                var currentSeriesIndices = api.currentSeriesIndices();
+                var barLayout = api.barLayout({
+                    barGap: '20%', barCategoryGap: '10%', count: currentSeriesIndices.length - 1
+                });
+
+                var points = [];
+                for (var i = 0; i < currentSeriesIndices.length; i++) {
+                    var seriesIndex = currentSeriesIndices[i];
+                    if (seriesIndex !== params.seriesIndex) {
+                        var point = api.coord([xValue, api.value(seriesIndex)]);
+                        point[0] += barLayout[i - 1].offsetCenter;
+                        point[1] -= 20;
+                        points.push(point);
+                    }
+                }
+                var style = api.style({
+                    stroke: api.visual('color'),
+                    fill: null
+                });
+
+                return {
+                    type: 'polyline',
+                    shape: {
+                        points: points
+                    },
+                    style: style
+                };
+            }
+
+            baroption = {
+                tooltip: {
+                    trigger: 'axis',
+                    confine: true
+                },
+                legend: {
+                    data: legendData
+                },
+                dataZoom: [{
+                    type: 'slider',
+                    start: 50,
+                    end: 70
+                }, {
+                    type: 'inside',
+                    start: 50,
+                    end: 70
+                }],
+                xAxis: {
+                    data: xAxisData,
+                    axisTick:{
+                        alignWithLabel:true
+                    }
+                },
+                yAxis: {},
+                series: [{
+                    type: 'custom',
+                    name: 'trend',
+                    renderItem: renderItem,
+                    itemStyle: {
+                        borderWidth: 2
+                    },
+                    data: customData,
+                    z: 100
+                }].concat(echarts.util.map(dataList, function (data, index) {
+                    return {
+                        type: 'bar',
+                        animation: false,
+                        name: legendData[index],
+                        itemStyle: {
+                            opacity: 0.5
+                        },
+                        data: data
+                    };
+                }))
+            };
+            barChart.setOption(baroption);
+            window.onresize = barChart.resize;
+        }
+    })
+
+
+    $('#search').click(function () {
+        var xs=$("#xs").val();
+        if(!isNaN(xs)){
+            if(0>=xs){
+                alert("请输入0到1之间的数");
+            }else if(xs>=1){
+                alert("请输入0到1之间的数");
+            }else{
+                window.location.href=prefix+"?xs="+xs;
+            }
+        }else{
+            alert("请输入0到1之间的数");
+        }
+    })
+
+</script>
+
+
+
+</html>

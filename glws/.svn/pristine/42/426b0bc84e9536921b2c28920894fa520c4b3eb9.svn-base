@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改保育土壤')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-soil-edit" th:object="${soil}">
+            <input name="soilId" th:field="*{soilId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林分面积(单位：hm2)：</label>
+                <div class="col-sm-8">
+                    <input name="standArea" th:field="*{standArea}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林地土壤侵蚀模数(单位：t/hm2)：</label>
+                <div class="col-sm-8">
+                    <input name="woodlandSoil" th:field="*{woodlandSoil}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">无林地土壤侵蚀模数(单位：t/hm2)：</label>
+                <div class="col-sm-8">
+                    <input name="woodlandNotsoil" th:field="*{woodlandNotsoil}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林地土壤容重(单位：t/m3)：</label>
+                <div class="col-sm-8">
+                    <input name="soilDensity" th:field="*{soilDensity}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林地土壤含氮量(单位：%)：</label>
+                <div class="col-sm-8">
+                    <input name="soilNitrogenContent" th:field="*{soilNitrogenContent}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林地土壤含磷量(单位：%)：</label>
+                <div class="col-sm-8">
+                    <input name="soilPhosphorusContent" th:field="*{soilPhosphorusContent}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林地土壤含钾量(单位：%)：</label>
+                <div class="col-sm-8">
+                    <input name="potassiumContentSoil" th:field="*{potassiumContentSoil}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林地土壤有机质含量(单位：%)：</label>
+                <div class="col-sm-8">
+                    <input name="soilOrganicMatter" th:field="*{soilOrganicMatter}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林分年固土量(单位：t)：</label>
+                <div class="col-sm-8">
+                    <input name="soilConsolidation" th:field="*{soilConsolidation}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林分年固土价值(单位：元)：</label>
+                <div class="col-sm-8">
+                    <input name="soilConsolidationValue" th:field="*{soilConsolidationValue}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林分年保持氮量(单位：t)：</label>
+                <div class="col-sm-8">
+                    <input name="maintainingNitrogen" th:field="*{maintainingNitrogen}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林分年保持磷量(单位：t)：</label>
+                <div class="col-sm-8">
+                    <input name="maintainingPhosphorus" th:field="*{maintainingPhosphorus}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林分年保持钾量(单位：t)：</label>
+                <div class="col-sm-8">
+                    <input name="maintainingPotassium" th:field="*{maintainingPotassium}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林分年保持有机质量(单位：t)：</label>
+                <div class="col-sm-8">
+                    <input name="organicQuality" th:field="*{organicQuality}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">林分年保肥价值(单位：元)：</label>
+                <div class="col-sm-8">
+                    <input name="protectFertilizerValue" th:field="*{protectFertilizerValue}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "eceas/soil";
+        $("#form-soil-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-soil-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

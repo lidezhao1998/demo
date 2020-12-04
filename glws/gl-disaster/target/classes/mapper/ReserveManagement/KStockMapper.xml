@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.ReserveManagement.mapper.KStockMapper">
+    
+    <resultMap type="KStock" id="KStockResult">
+        <result property="id"    column="id"    />
+        <result property="allocation"    column="ALLOCATION"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="itemno"    column="ITEMNO"    />
+        <result property="name"    column="NAME"    />
+        <result property="specifications"    column="SPECIFICATIONS"    />
+        <result property="brand"    column="BRAND"    />
+        <result property="inventory"    column="INVENTORY"    />
+        <result property="replenishment"    column="REPLENISHMENT"    />
+        <result property="storageLocation"    column="STORAGE_LOCATION"    />
+        <result property="emergencyType"    column="EMERGENCY_TYPE"    />
+        <result property="remarks"    column="REMARKS"    />
+        <result property="status"    column="STATUS"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="createName"    column="CREATE_NAME"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="updateName"    column="UPDATE_NAME"    />
+        <result property="reserveId"    column="RESERVE_ID"    />
+        <result property="instockId"    column="INSTOCK_ID"    />
+        <result property="outbound"    column="OUTBOUND"    />
+    </resultMap>
+
+    <sql id="selectKStockVo">
+        select id, ALLOCATION, ADDRESS, ITEMNO, NAME, SPECIFICATIONS, BRAND, INVENTORY, REPLENISHMENT, STORAGE_LOCATION, EMERGENCY_TYPE, REMARKS, STATUS, CREATE_TIME, CREATE_NAME, UPDATE_TIME, UPDATE_NAME, RESERVE_ID, INSTOCK_ID, OUTBOUND from k_stock
+    </sql>
+
+    <select id="selectKStockList" parameterType="KStock" resultMap="KStockResult">
+        <include refid="selectKStockVo"/>
+        <where>  
+            <if test="allocation != null "> and ALLOCATION = #{allocation}</if>
+            <if test="address != null  and address != ''"> and ADDRESS = #{address}</if>
+            <if test="itemno != null "> and ITEMNO = #{itemno}</if>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="specifications != null  and specifications != ''"> and SPECIFICATIONS = #{specifications}</if>
+            <if test="brand != null  and brand != ''"> and BRAND like concat('%', #{brand}, '%')</if>
+            <if test="inventory != null  and inventory != ''"> and INVENTORY = #{inventory}</if>
+            <if test="replenishment != null  and replenishment != ''"> and REPLENISHMENT = #{replenishment}</if>
+            <if test="storageLocation != null  and storageLocation != ''"> and STORAGE_LOCATION = #{storageLocation}</if>
+            <if test="emergencyType != null  and emergencyType != ''"> and EMERGENCY_TYPE = #{emergencyType}</if>
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="createName != null  and createName != ''"> and CREATE_NAME like concat('%', #{createName}, '%')</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="updateName != null "> and UPDATE_NAME like concat('%', #{updateName}, '%')</if>
+            <if test="reserveId != null "> and RESERVE_ID = #{reserveId}</if>
+            <if test="instockId != null "> and INSTOCK_ID = #{instockId}</if>
+            <if test="outbound != null  and outbound != ''"> and OUTBOUND = #{outbound}</if>
+        </where>
+    </select>
+    
+    <select id="selectKStockById" parameterType="Long" resultMap="KStockResult">
+        <include refid="selectKStockVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKStock" parameterType="KStock">
+        insert into k_stock
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="allocation != null ">ALLOCATION,</if>
+            <if test="address != null  and address != ''">ADDRESS,</if>
+            <if test="itemno != null ">ITEMNO,</if>
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="specifications != null  and specifications != ''">SPECIFICATIONS,</if>
+            <if test="brand != null  and brand != ''">BRAND,</if>
+            <if test="inventory != null  and inventory != ''">INVENTORY,</if>
+            <if test="replenishment != null  and replenishment != ''">REPLENISHMENT,</if>
+            <if test="storageLocation != null  and storageLocation != ''">STORAGE_LOCATION,</if>
+            <if test="emergencyType != null  and emergencyType != ''">EMERGENCY_TYPE,</if>
+            <if test="remarks != null  and remarks != ''">REMARKS,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+            <if test="createName != null  and createName != ''">CREATE_NAME,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="updateName != null ">UPDATE_NAME,</if>
+            <if test="reserveId != null ">RESERVE_ID,</if>
+            <if test="instockId != null ">INSTOCK_ID,</if>
+            <if test="outbound != null  and outbound != ''">OUTBOUND,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="allocation != null ">#{allocation},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="itemno != null ">#{itemno},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="specifications != null  and specifications != ''">#{specifications},</if>
+            <if test="brand != null  and brand != ''">#{brand},</if>
+            <if test="inventory != null  and inventory != ''">#{inventory},</if>
+            <if test="replenishment != null  and replenishment != ''">#{replenishment},</if>
+            <if test="storageLocation != null  and storageLocation != ''">#{storageLocation},</if>
+            <if test="emergencyType != null  and emergencyType != ''">#{emergencyType},</if>
+            <if test="remarks != null  and remarks != ''">#{remarks},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createName != null  and createName != ''">#{createName},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateName != null ">#{updateName},</if>
+            <if test="reserveId != null ">#{reserveId},</if>
+            <if test="instockId != null ">#{instockId},</if>
+            <if test="outbound != null  and outbound != ''">#{outbound},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKStock" parameterType="KStock">
+        update k_stock
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="allocation != null ">ALLOCATION = #{allocation},</if>
+            <if test="address != null  and address != ''">ADDRESS = #{address},</if>
+            <if test="itemno != null ">ITEMNO = #{itemno},</if>
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="specifications != null  and specifications != ''">SPECIFICATIONS = #{specifications},</if>
+            <if test="brand != null  and brand != ''">BRAND = #{brand},</if>
+            <if test="inventory != null  and inventory != ''">INVENTORY = #{inventory},</if>
+           REPLENISHMENT = #{replenishment},
+            <if test="storageLocation != null  and storageLocation != ''">STORAGE_LOCATION = #{storageLocation},</if>
+            <if test="emergencyType != null  and emergencyType != ''">EMERGENCY_TYPE = #{emergencyType},</if>
+            <if test="remarks != null  and remarks != ''">REMARKS = #{remarks},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="createName != null  and createName != ''">CREATE_NAME = #{createName},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="updateName != null ">UPDATE_NAME = #{updateName},</if>
+            <if test="reserveId != null ">RESERVE_ID = #{reserveId},</if>
+            <if test="instockId != null ">INSTOCK_ID = #{instockId},</if>
+            <if test="outbound != null  and outbound != ''">OUTBOUND = #{outbound},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKStockById" parameterType="Long">
+        delete from k_stock where id = #{id}
+    </delete>
+
+    <delete id="deleteKStockByIds" parameterType="String">
+        delete from k_stock where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <!--入库信息添加进库存信息-->
+    <insert id="insertKInstock"  parameterType="kInstock">
+        insert into k_stock(name,address,inventory,RESERVE_ID) values (#{name},#{address},#{goodsNumber},#{reserveId})
+
+    </insert>
+    <!--修改入库信息库存数量-->
+    <update id="updateKInstock" parameterType="KStock">
+        update k_stock set inventory=#{inventory} where  id = #{id}
+    </update>
+
+    <select id="getNumber" parameterType="String" resultMap="KStockResult">
+        <include refid="selectKStockVo"/>
+        where name = #{provinceCode}
+    </select>
+
+</mapper>

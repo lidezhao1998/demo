@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增Gis信息')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-config-add">
+        <input type="hidden" name="geo" th:value="${gisMap.geo}">
+        <input type="hidden" name="type" th:value="${gisMap.type}">
+        <input type="hidden" name="id" th:value="${gisMap.id}">
+        <input type="hidden" name="centre" th:value="${gisMap.centre}">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">绘制标题：</label>
+            <div class="col-sm-8">
+                <input name="name" class="form-control" type="text" th:value="${gisMap.name}" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">绘制类型：
+                <label th:if="${gisMap.type}==1">
+                    标点
+                </label>
+                <label th:if="${gisMap.type}==2">
+                    图层
+                </label>
+            </label>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">专题类型：</label>
+            <div class="col-sm-8">
+                <select name="project_type" th:with="type=${@dict.getGisFeatures()}" class="form-control">
+                    <option th:each="dict : ${type}" th:text="${dict.name}" th:value="${dict.id}" th:field="${gisMap.project_type}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">危害等级：</label>
+            <div class="col-sm-8">
+                <select name="hazard_rating" th:with="type=${@dict.getType('sys_hazard_rating')}" class="form-control">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="${gisMap.hazard_rating}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">所占面积(km²)：</label>
+            <div class="col-sm-8">
+                <input name="area" class="form-control" th:value="${gisMap.area}" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">所在地区：</label>
+            <div class="col-sm-8">
+                <input name="address" class="form-control" th:value="${gisMap.address}" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注详情：</label>
+            <div class="col-sm-8">
+                <textarea name="remark" class="form-control">[[${gisMap.remark}]]</textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script th:src="@{/js/gis/glwsGis.js}"></script>
+<script th:inline="javascript">
+    var view =new ol.View({
+        //地图初始中心点
+        center: [105, 35],
+        projection: "EPSG:4326",
+        //地图初始显示级别
+        zoom: 5,
+        minZoom: 5,
+        maxZoom: 19
+    });
+    // 创建第一个地图
+     var map= new ol.Map({
+        logo:false,
+        layers: [TiandiMap_vec, TiandiMap_cva, TiandiMap_img, TiandiMap_cia,Provinces],
+        view: view,
+    });
+    var centre=[[${gisMap.centre}]];
+    var prefix = ctx + "system/gisMap"
+    $("#form-config-add").validate({
+        focusCleanup: true
+    });
+    function submitHandler() {
+        var  grtype="";
+        if ($.validate.form()) {
+            $.post(prefix + "/insertOrUpdate",
+                $('#form-config-add').serialize(),
+                function (res) {
+                    if(centre!=null&&centre!=""){
+                        var centreArr=centre.split(",");
+                        var tiled = new ol.layer.Tile({
+                            source: new ol.source.TileWMS({
+                                url: gisUrl + baseUrlLayer,
+                                params: {
+                                    FORMAT: 'image/png',
+                                    VERSION: '1.1.1',
+                                    tiled: true,
+                                    exceptions: 'application/vnd.ogc.se_inimage',
+                                    LAYERS: gisGrass,
+                                }
+                            })
+                        });
+                        var view = map.getView();
+                        var viewResolution = view.getResolution();
+                        var source = tiled.getSource();
+                        var url = source.getGetFeatureInfoUrl(
+                            [centreArr[0],centreArr[1]], viewResolution, view.getProjection(),
+                            {'INFO_FORMAT': 'application/json', 'FEATURE_COUNT': 50});
+                        $.getJSON(url,function(data){
+                            console.log(data);
+                            var feature = data.features;
+                            if(feature==[] || feature.length==0 ||feature==null){
+                                return ;
+                            }
+                            for (var i = 0; i < feature.length; i++) {
+                                var jsonstr = feature[i].properties;
+                                console.log(jsonstr)
+                                if(i==0){
+                                    grtype=jsonstr.generic;
+                                }
+                               // parent.parent.parent.layer.document.getElementById('grasslandType').value(grtype);
+
+                            }
+                           // sessionStorage.setItem("gis_id",JSON.stringify(res.data));
+                            window.parent.parent.document.getElementById("grasslandType").value=grtype;
+                            window.parent.parent.document.getElementById("mapId").value=res.data;
+                            window.parent.parent.document.getElementById("ht").style.display="none";
+                            window.parent.parent.document.getElementById("hiddenht").style.display="";
+                            parent.parent.layer.closeAll();
+                        });
+                       // grtype=queryGressByPoint(centreArr[0],centreArr[1]);
+                    }
+
+
+                }
+            )
+        }
+    }
+</script>
+</body>
+</html>

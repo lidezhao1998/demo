@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原虫害发生与防治情况列表详情页面')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <style type="text/css">
+        .daohang{
+            float: right;
+            width: 120px;
+            margin-right: 20px;
+
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <div class="container-div">
+        <div class="row">
+         <!--   <div class="col-sm-12 search-collapse">
+                <button type="button" class="btn btn-outline btn-primary daohang" onclick="tuihui()">审核意见</button>
+                <button type="button" class="btn btn-outline btn-primary daohang" onclick="jilu()">审核记录</button>
+                <a class="btn btn-success" onclick="bjht()" >
+                    <i class="fa fa-plus"></i> 查看绘图
+                </a>
+            </div>
+-->
+        </div>
+    </div>
+
+    <form class="form-horizontal m" id="form-chfz-add" th:object="${cTaskChfz}">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">编号：</label>
+                    <div class="col-sm-8">
+                        <div name="number" class="form-control-static" th:text="*{number}" style="font-weight: bold" >
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">年度：</label>
+                        <div class="col-sm-8">
+                            <div name="year" th:text="*{year}" class="form-control-static" placeholder="yyyy-MM-dd"  style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">周：</label>
+                        <div class="col-sm-8">
+                            <div name="week" th:text="*{week}" class="form-control-static"  style="font-weight: bold " >
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">省：</label>
+                        <div class="col-sm-8">
+                            <div name="province" th:text="*{province}" class="form-control-static"  style="font-weight: bold " >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">市：</label>
+                        <div class="col-sm-8">
+                            <div name="city" class="form-control-static"  th:text="*{city}" style="font-weight: bold " >
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">县区：</label>
+                        <div class="col-sm-8">
+                            <div name="county" class="form-control-static" th:text="*{county}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">类型：</label>
+                        <div class="col-sm-8">
+                            <div name="type" class="form-control-static" style="font-weight: bold"  th:text="*{type}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">危害总面积：</label>
+                        <div class="col-sm-8">
+                            <div name="harmTotalarea" class="form-control-static" th:text="*{harmTotalarea}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工程区危害面积：</label>
+                        <div class="col-sm-8">
+                            <div name="engineeringhazard" class="form-control-static" th:text="*{engineeringhazard}" style="font-weight: bold " >
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">严重危害总面积：</label>
+                        <div class="col-sm-8">
+                            <div name="seriousArea" class="form-control-static" th:text="*{seriousArea}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">工程区严重危害面积：</label>
+                        <div class="col-sm-8">
+                            <div name="engineeringSeriousArea" class="form-control-static" th:text="*{engineeringSeriousArea}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">化学防治：</label>
+                        <div class="col-sm-8">
+                            <div name="chemistryControl" class="form-control-static" th:text="*{chemistryControl}" style="font-weight: bold ">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">招募椋鸟：</label>
+                        <div class="col-sm-8">
+                            <div name="attractStarlings" class="form-control-static" th:text="*{attractStarlings}" style="font-weight: bold " >
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">牧鸡：</label>
+                        <div class="col-sm-8">
+                            <div name="pastureChicken" class="form-control-static" th:text="*{pastureChicken}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">牧鸭：</label>
+                        <div class="col-sm-8">
+                            <div name="pastureDuck" class="form-control-static" th:text="*{pastureDuck}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">苦参碱：</label>
+                        <div class="col-sm-8">
+                            <div name="matrine" class="form-control-static" th:text="*{matrine}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">烟碱：</label>
+                        <div class="col-sm-8">
+                            <div name="nicotine" class="form-control-static" th:text="*{nicotine}" style="font-weight: bold " >
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">绿僵菌：</label>
+                        <div class="col-sm-8">
+                            <div name="greenMuscardineFungus" class="form-control-static" th:text="*{greenMuscardineFungus}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">印楝素：</label>
+                        <div class="col-sm-8">
+                            <div name="azadirachtin" class="form-control-static" th:text="*{azadirachtin}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">阿维菌素：</label>
+                        <div class="col-sm-8">
+                            <div name="avermectin" class="form-control-static" th:text="*{avermectin}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">短稳杆菌：</label>
+                        <div class="col-sm-8">
+                            <div name="empedobacterBrevis" class="form-control-static" th:text="*{empedobacterBrevis}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">蛇床子素：</label>
+                        <div class="col-sm-8">
+                            <div name="osthole" class="form-control-static" th:text="*{osthole}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">阿维苏：</label>
+                        <div class="col-sm-8">
+                            <div name="weiSu" class="form-control-static" th:text="*{weiSu}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">微孢子虫：</label>
+                        <div class="col-sm-8">
+                            <div name="enterocytozoonBieneusi" class="form-control-static" th:text="*{enterocytozoonBieneusi}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">管理技术干部（人/天）：</label>
+                        <div class="col-sm-8">
+                            <div name="expatriateManagers" class="form-control-static" th:text="*{expatriateManagers}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">出工（人/天）：</label>
+                        <div class="col-sm-8">
+                            <div name="work" class="form-control-static" th:text="*{work}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">飞机（架/次）：</label>
+                        <div class="col-sm-8">
+                            <div name="plane" class="form-control-static" th:text="*{plane}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">大型喷雾器（台/套/天）：</label>
+                        <div class="col-sm-8">
+                            <div name="bigSprayer" class="form-control-static" th:text="*{bigSprayer}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">中小型喷雾器（台/套/天）：</label>
+                        <div class="col-sm-8">
+                            <div name="smallSprayer" class="form-control-static" th:text="*{smallSprayer}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">车辆（辆/天）：</label>
+                        <div class="col-sm-8">
+                            <div name="car" class="form-control-static" th:text="*{car}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">牧鸡（万只）：</label>
+                        <div class="col-sm-8">
+                            <div name="pastureChickenNum" class="form-control-static" th:text="*{car}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">牧鸭（万只）：</label>
+                        <div class="col-sm-8">
+                            <div name="pastureDuckNum" class="form-control-static" th:text="*{pastureDuckNum}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">椋鸟巢（立方米）：</label>
+                        <div class="col-sm-8">
+                            <div name="starlingNest" class="form-control-static" th:text="*{starlingNest}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">备注：</label>
+                        <div class="col-sm-8">
+                            <div name="remarks" class="form-control-static" th:text="*{remarks}" style="font-weight: bold ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="button-e" style="margin-left: 70%">
+        <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+
+
+<script type="text/javascript">
+    var prefixa = ctx + "system/survey";
+    var prefix = ctx + "caiji/chfz";
+    //地面调查数据提交
+    function tuihui() {
+        var id=$("#groundId").val();
+        // alert(id);
+        layer.open({
+            type: 2,
+            area: ["900px",  '600px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "填写意见",
+            content:  prefixa + "/idea/"+id,
+            btn: ['确定', '关闭'],
+            yes: function(index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                /*  var code=iframeWin.contentWindow.chuanzhi();
+                  if(code==false){
+
+                  }else{
+                      $("#codeId").val(code);
+                      layer.close(index);
+                  }*/
+                layer.close(index);
+            },
+            cancel: function(index) {
+                return true;
+            }
+        });
+        //$.operate.save(prefix + "/back", $('#form-survey-add').serialize());
+
+    }
+    function jilu() {
+        var id=$("#groundId").val();
+        // alert(id);
+        layer.open({
+            type: 2,
+            area: ["900px",  '600px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "流程记录",
+            content:  prefix + "/flowlog/"+id+"/1",
+            btn: ['确定', '关闭'],
+            yes: function(index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                /*  var code=iframeWin.contentWindow.chuanzhi();
+                  if(code==false){
+
+                  }else{
+                      $("#codeId").val(code);
+                      layer.close(index);
+                  }*/
+                layer.close(index);
+            },
+            cancel: function(index) {
+                return true;
+            }
+        });
+        //$.operate.save(prefix + "/back", $('#form-survey-add').serialize());
+
+    }
+
+    function bjht() {
+        var mapId = $("#mapId").val();
+        if(mapId==""){
+            layer.alert("本条信息无绘图")
+        }else{
+            var prefix = ctx + "system/gisMap";
+
+            var url = prefix + '/getckListCaoYuanGisMap/' + mapId;
+            $.modal.open("查看绘图", url, '680', '550');
+        }
+
+    }
+</script>
+</body>
+</html>

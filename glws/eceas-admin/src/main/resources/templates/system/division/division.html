@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('改良分省报表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+
+                        <li class="select-time">
+                            <p>年度：</p>
+                            <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                        </li>
+                        <li>
+                            <select name="province" th:with="type=${@dict.getType('sys_province')}">
+                                <option value="">请选择任务省份</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            <button class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</button>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:build:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+            <a class="btn btn-warning" onclick="Echars()" shiro:hasPermission="system:build:export">
+                <i class="fa fa-download"></i> 图表展示
+            </a>
+        </div>
+        <div>
+            <div class="col-sm-12 select-table table-bordered">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script src="/static/js/bootstrap-table-export.js"></script>
+<script src="/static/js/tableExport.js"></script>
+<script src="/static/js/jquery.base64.js"></script>
+<script src="/static/js/html2canvas.js"></script>
+<script src="/static/js/base64.js"></script>
+<script src="/static/js/sprintf.js"></script>
+<script src="/static/js/jspdf.js"></script>
+
+<script th:inline="javascript">
+    var prefix = ctx + "system/division";
+    var year= [[${year}]];
+    var province= [[${province}]];
+    $(function () {
+        $.post(prefix + "/list",{yea:year,provinc:province}, function(response) {
+            let datas = response.datas;
+            let yearCols = response.yearCols;
+            let provinceRows = response.provinceRows;
+            yearCols = yearCols.map((year) => ({
+                field: String(year),
+                title: String(year),
+                rowspan: 2,
+                colspan: 1,
+                align: 'division',
+                valign: 'middle',
+                width: '10%',
+                visible: true,
+                footerFormatter:function (value) {
+                    var sumBalance = 0;
+                    for (var i in value) {
+                        sumBalance += parseFloat(value[i].year);
+                    }
+                    return sumBalance;
+                }
+            }));
+
+
+            var options = {
+                exportUrl: prefix + "/export",
+                striped: true,
+                modalName: "改良分省报表",
+                columns: [
+                    [
+                        {
+                            field: 'province',
+                            title: '省份/年份',
+                            rowspan: 2,
+                            colspan: 1,
+                            align: 'division',
+                            valign: 'middle',
+                            width: '10%'
+                        },
+                    ].concat(yearCols),
+                    [
+
+                    ]
+                ],
+                data: datas.concat([datas.reduce((x, y) => { // 在原来的datas里面添加上合计后的结果
+                    console.log(x,y);
+            let sumObject = {}; // 所有合计的内容全部添加到这个对象中
+            Object.keys(y).forEach(z => { // 遍历所有的键，例如2014,2015...
+                if (z === "province") { // 给城市字段变为合计
+                sumObject[z] = "合计";
+                return;
+            }
+            // 每次让对象的中的值变成相加后的结果
+            sumObject[z] = String((Number(x[z]) || 0) + (Number(y[z]) || 0));
+        });
+            // 返回相加后的对象
+            return sumObject;
+        }, {})])
+        };
+            console.dir(options);
+            $.table.init(options);
+        });
+    });
+
+
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+    function Echars(){
+        var url = prefix + '/Echars';
+        $.modal.openFull("改良分省报表", url);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+
+
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('黑土滩、毒害草、已垦草原治理列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <!--搜索条件-->
+        <!--<div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+
+                        <li class="select-time">
+                            <p>年度：</p>
+                            <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                        </li>
+&lt;!&ndash;                        <li>&ndash;&gt;
+&lt;!&ndash;                            <select name="province" th:with="type=${@dict.getType('sys_province')}">&ndash;&gt;
+&lt;!&ndash;                                <option value="">请选择任务省份</option>&ndash;&gt;
+&lt;!&ndash;                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>&ndash;&gt;
+&lt;!&ndash;                            </select>&ndash;&gt;
+&lt;!&ndash;                        </li>&ndash;&gt;
+                        <li>
+                            <button class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</button>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>-->
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="EcharsLineChart()" shiro:hasPermission="system:build:export">
+                <i class="fa fa-download"></i> 折线图展示
+            </a>
+            <a class="btn btn-warning" onclick="EcharsHistogram()" shiro:hasPermission="system:build:export">
+                <i class="fa fa-download"></i> 柱状图展示
+            </a>
+        </div>
+        <div>
+            <div class="col-sm-12 select-table table-bordered">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+
+<script th:inline="javascript">
+    var prefix = ctx + "system/poison";
+    var year= [[${year}]];
+    var province= [[${province}]];
+    $(function () {
+
+        $.post(prefix + "/list",{yea:year,provinc:province}, function(response) {
+            let datas = response.datas;
+            let yearCols = response.yearCols;
+            let provinceRows = response.provinceRows;
+            yearCols = yearCols.map((year) => ({
+                field: String(year),
+                title: String(year),
+                rowspan: 2,
+                colspan: 1,
+                align: 'center',
+                valign: 'middle',
+                width: '10%',
+                footerFormatter:function (value) {
+                    var sumBalance = 0;
+                    for (var i in value) {
+                        sumBalance += parseFloat(value[i].year);
+                    }
+                    return sumBalance;
+                }
+            }));
+            var options = {
+                exportUrl: prefix + "/export",
+                striped: true,
+                pagination:false,
+                showExport: true,
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+                exportOptions: {
+                    fileName:"舍饲棚围栏建设任务报表列表",
+                    worksheetName:"舍饲棚围栏建设任务报表列表",
+                    tableName:"舍饲棚围栏建设任务报表列表",
+                    ignoreColumn: []  //忽略第一列和最后一列,默认忽略第一列
+                },
+                columns: [
+                    [
+                        {
+                            field: 'province',
+                            title: '省份',
+                            rowspan: 2,
+                            colspan: 1,
+                            align: 'center',
+                            valign: 'middle',
+                            width: '10%'
+                        },
+                    ].concat(yearCols),
+                    [
+
+                    ]
+                ],
+                data: datas.concat([datas.reduce((x, y) => { // 在原来的datas里面添加上合计后的结果
+                    console.log(x,y);
+            let sumObject = {}; // 所有合计的内容全部添加到这个对象中
+            Object.keys(y).forEach(z => { // 遍历所有的键，例如2014,2015...
+                if (z === "province") { // 给城市字段变为合计
+                sumObject[z] = "合计";
+                return;
+            }
+            // 每次让对象的中的值变成相加后的结果
+            sumObject[z] = String(((Number(x[z]) || 0) + (Number(y[z]) || 0)).toFixed(2));
+        });
+            // 返回相加后的对象
+            return sumObject;
+        }, {})])
+        };
+            console.dir(options);
+            $.table.init(options);
+        });
+    });
+   /* $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "舍饲棚围建设任务分省报表",
+            columns: [
+                             {
+                    checkbox: true
+                },
+                {
+                    field : 'resolveId',
+                    title : '上报ID'
+                },
+                {
+                    field : 'province',
+                    title : '省份'
+                },
+
+                {
+                    field : 'userBalance',
+                    title : '测试1'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试2'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试3'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试4'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试5'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试6'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试7'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试8'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试9'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试10'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试11'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试12'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试13'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试14'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试15'
+                },
+                {
+                    field : 'userBalance',
+                    title : '测试16'
+                }]
+        };
+        $.table.init(options);
+    });*/
+
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+
+
+   /* $("#table").bootstrapTable({
+        ajax:function(request) {
+            $.ajax({
+                type: "GET",
+                url: prefix + "/list",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                json: 'callback',
+                success: function (json) {
+                   // alert(JSON.stringify(json))
+                    //alert(json.rows);
+                    var object=json.rows;
+                   // alert(JSON.stringify(object))
+                    var a=Object.keys(object).length;
+                    /!* alert(Object.keys(object))
+                     for (var i = 0; i < (Object.keys(object)).length; i++) {//Object.keys(obj) 获取key名称
+                         alert(66)
+                         var property = object[i];//id   username
+                             alert(property)
+                     }*!/
+                    var columnsArray = [];
+                    for(var i in object){  //通过定义一个局部变量k遍历获取到了map中所有的key值
+
+                        var docList=object[i]; //获取到了key所对应的value的值！
+                        for(var i in docList){  //通过定义一个局部变量k遍历获取到了map中所有的key值
+                            //alert(i)
+                            var key=i;
+
+                            var key =i;
+                            var doc=docList[i]; //获取到了key所对应的value的值！
+                            //alert(doc+"------2111----")
+                            //  alert(JSON.stringify(doc)+"++++233322222++++++++")
+
+                        }
+                        // alert(docList+"----------")
+                        //alert(JSON.stringify(docList)+"++++++++++++")
+
+                    }
+
+                    // columnsArray.push({field: "PROVINCE",  title : '省份'});
+                    for (var i = 0; i < (Object.keys(object)).length; i++) {//Object.keys(obj) 获取key名称
+
+                        // var property = (Object.keys(json))[i];//id   username
+                        // var property = json[i]["PROVINCE"];//id   username
+                        var property = object[i]["PROVINCE"];//id   username
+
+
+                       // alert(JSON.stringify(property))
+
+                        columnsArray.push({
+                            "title": property,
+                            "field": property,
+                            switchable: true,
+                            sortable: true
+                        });
+                    }
+
+                    $('#table').bootstrapTable('destroy').bootstrapTable({
+                        data: json,
+                        toolbar: '#toolbar',
+                        singleSelect: true,
+                        clickToSelect: true,
+                        sortName: "create_time",
+                        sortOrder: "desc",
+                        pageSize: 15,
+                        pageNumber: 1,
+                        pageList: "[10, 25, 50, 100, All]",
+                        showToggle: true,
+                        showRefresh: true,
+                        showColumns: true,
+                        search: true,
+                        pagination: true,
+                        columns: columnsArray
+                    });
+                },
+                error: function () {
+                    alert("错误");
+                }
+            });
+        }
+    });*/
+
+
+
+    function EcharsLineChart(){
+        var url = prefix + '/EcharsLineChart';
+        $.modal.openFull("黑土滩、毒害草、已垦草原治理报表", url);
+    }
+
+    function EcharsHistogram(){
+        var url = prefix + '/EcharsHistogram';
+        $.modal.openFull("黑土滩、毒害草、已垦草原治理报表", url);
+    }
+</script>
+</body>
+</html>

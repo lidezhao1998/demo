@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CTaskTechnologyMapper">
+
+    <resultMap type="CTaskTechnology" id="CTaskTechnologyResult">
+        <result property="id"    column="ID"    />
+        <result property="sumbitter"    column="SUMBITTER"    />
+        <result property="name"    column="NAME"    />
+        <result property="technicalField"    column="TECHNICAL_FIELD"    />
+        <result property="email"    column="EMAIL"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="phone"    column="PHONE"    />
+        <result property="fax"    column="FAX"    />
+        <result property="technologyMaturity"    column="TECHNOLOGY_MATURITY"    />
+        <result property="rdmethods"    column="RDMETHODS"    />
+        <result property="cooperationMethod"    column="COOPERATION_METHOD"    />
+        <result property="resultsApplication"    column="RESULTS_APPLICATION"    />
+        <result property="demand"    column="DEMAND"    />
+        <result property="industry"    column="INDUSTRY"    />
+        <result property="awardCategory"    column="AWARD_CATEGORY"    />
+        <result property="awardLevel"    column="AWARD_LEVEL"    />
+        <result property="creatTime"    column="CREAT_TIME"    />
+        <result property="inputTime"    column="INPUT_TIME"    />
+        <result property="reportTime"    column="REPORT_TIME"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="status"    column="STATUS"    />
+    </resultMap>
+
+
+
+    <sql id="selectCTaskTechnologyVo">
+        select ID, SUMBITTER, NAME, TECHNICAL_FIELD, EMAIL, ADDRESS, PHONE, FAX, TECHNOLOGY_MATURITY, RDMETHODS, COOPERATION_METHOD, RESULTS_APPLICATION, DEMAND, INDUSTRY, AWARD_CATEGORY, AWARD_LEVEL, CREAT_TIME,REPORT_TIME,INPUT_TIME, CREATE_BY, STATUS from c_task_technology
+    </sql>
+
+    <select id="selectCTaskTechnologyList" parameterType="CTaskTechnology" resultMap="CTaskTechnologyResult">
+        <include refid="selectCTaskTechnologyVo"/>
+        <where>
+            <if test="sumbitter != null  and sumbitter != ''"> and SUMBITTER = #{sumbitter}</if>
+            <if test="name != null  and name != ''">and NAME like concat('%', #{name}, '%')</if>
+            <if test="technicalField != null  and technicalField != ''"> and TECHNICAL_FIELD = #{technicalField}</if>
+            <if test="email != null  and email != ''"> and EMAIL = #{email}</if>
+            <if test="address != null  and address != ''"> and ADDRESS = #{address}</if>
+            <if test="phone != null "> and PHONE = #{phone}</if>
+            <if test="fax != null  and fax != ''"> and FAX = #{fax}</if>
+            <if test="technologyMaturity != null  and technologyMaturity != ''"> and TECHNOLOGY_MATURITY = #{technologyMaturity}</if>
+            <if test="rdmethods != null  and rdmethods != ''"> and RDMETHODS = #{rdmethods}</if>
+            <if test="cooperationMethod != null  and cooperationMethod != ''"> and COOPERATION_METHOD = #{cooperationMethod}</if>
+            <if test="resultsApplication != null  and resultsApplication != ''"> and RESULTS_APPLICATION = #{resultsApplication}</if>
+            <if test="demand != null  and demand != ''"> and DEMAND = #{demand}</if>
+            <if test="industry != null  and industry != ''"> and INDUSTRY = #{industry}</if>
+            <if test="awardCategory != null  and awardCategory != ''"> and AWARD_CATEGORY = #{awardCategory}</if>
+            <if test="awardLevel != null  and awardLevel != ''"> and AWARD_LEVEL = #{awardLevel}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="reportTime != null "> and REPORT_TIME = #{reportTime}</if>
+            <if test="inputTime != null "> and INPUT_TIME = #{inputTime}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+        </where>
+        order by CREAT_TIME desc
+
+    </select>
+
+    <select id="selectCTaskTechnologyById" parameterType="Long" resultMap="CTaskTechnologyResult">
+        <include refid="selectCTaskTechnologyVo"/>
+        where ID = #{id}
+    </select>
+
+    <sql id="selectCTaskTechnologyVo1">
+        select ID, SUMBITTER, NAME, TECHNICAL_FIELD, EMAIL, ADDRESS, PHONE, FAX, TECHNOLOGY_MATURITY, RDMETHODS, COOPERATION_METHOD, RESULTS_APPLICATION, DEMAND, INDUSTRY, AWARD_CATEGORY, AWARD_LEVEL, CREAT_TIME,REPORT_TIME,INPUT_TIME, CREATE_BY, STATUS from c_task_technology
+        <where>
+            STATUS=1
+            <if test="sumbitter != null  and sumbitter != ''"> and SUMBITTER = #{sumbitter}</if>
+            <if test="name != null  and name != ''"> and NAME = #{name}</if>
+            <if test="technicalField != null  and technicalField != ''"> and TECHNICAL_FIELD = #{technicalField}</if>
+            <if test="email != null  and email != ''"> and EMAIL = #{email}</if>
+            <if test="address != null  and address != ''"> and ADDRESS = #{address}</if>
+            <if test="phone != null "> and PHONE = #{phone}</if>
+            <if test="fax != null  and fax != ''"> and FAX = #{fax}</if>
+            <if test="technologyMaturity != null  and technologyMaturity != ''"> and TECHNOLOGY_MATURITY = #{technologyMaturity}</if>
+            <if test="rdmethods != null  and rdmethods != ''"> and RDMETHODS = #{rdmethods}</if>
+            <if test="cooperationMethod != null  and cooperationMethod != ''"> and COOPERATION_METHOD = #{cooperationMethod}</if>
+            <if test="resultsApplication != null  and resultsApplication != ''"> and RESULTS_APPLICATION = #{resultsApplication}</if>
+            <if test="demand != null  and demand != ''"> and DEMAND = #{demand}</if>
+            <if test="industry != null  and industry != ''"> and INDUSTRY = #{industry}</if>
+            <if test="awardCategory != null  and awardCategory != ''"> and AWARD_CATEGORY = #{awardCategory}</if>
+            <if test="awardLevel != null  and awardLevel != ''"> and AWARD_LEVEL = #{awardLevel}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="reportTime != null "> and REPORT_TIME = #{reportTime}</if>
+            <if test="inputTime != null "> and INPUT_TIME = #{inputTime}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+        </where>
+    </sql>
+
+    <select id="selectCTaskTechnologyList1" parameterType="CTaskTechnology" resultMap="CTaskTechnologyResult">
+        <include refid="selectCTaskTechnologyVo1"/>
+        <!--<where>
+            <if test="sumbitter != null  and sumbitter != ''"> and SUMBITTER = #{sumbitter}</if>
+            <if test="name != null  and name != ''"> and NAME = #{name}</if>
+            <if test="technicalField != null  and technicalField != ''"> and TECHNICAL_FIELD = #{technicalField}</if>
+            <if test="email != null  and email != ''"> and EMAIL = #{email}</if>
+            <if test="address != null  and address != ''"> and ADDRESS = #{address}</if>
+            <if test="phone != null "> and PHONE = #{phone}</if>
+            <if test="fax != null  and fax != ''"> and FAX = #{fax}</if>
+            <if test="technologyMaturity != null  and technologyMaturity != ''"> and TECHNOLOGY_MATURITY = #{technologyMaturity}</if>
+            <if test="rdmethods != null  and rdmethods != ''"> and RDMETHODS = #{rdmethods}</if>
+            <if test="cooperationMethod != null  and cooperationMethod != ''"> and COOPERATION_METHOD = #{cooperationMethod}</if>
+            <if test="resultsApplication != null  and resultsApplication != ''"> and RESULTS_APPLICATION = #{resultsApplication}</if>
+            <if test="demand != null  and demand != ''"> and DEMAND = #{demand}</if>
+            <if test="industry != null  and industry != ''"> and INDUSTRY = #{industry}</if>
+            <if test="awardCategory != null  and awardCategory != ''"> and AWARD_CATEGORY = #{awardCategory}</if>
+            <if test="awardLevel != null  and awardLevel != ''"> and AWARD_LEVEL = #{awardLevel}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="reportTime != null "> and REPORT_TIME = #{reportTime}</if>
+            <if test="inputTime != null "> and INPUT_TIME = #{inputTime}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+        </where>-->
+
+
+
+    </select>
+
+
+
+
+
+    <insert id="insertCTaskTechnology" parameterType="CTaskTechnology" useGeneratedKeys="true" keyProperty="id">
+        insert into c_task_technology
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sumbitter != null  and sumbitter != ''">SUMBITTER,</if>
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="technicalField != null  and technicalField != ''">TECHNICAL_FIELD,</if>
+            <if test="email != null  and email != ''">EMAIL,</if>
+            <if test="address != null  and address != ''">ADDRESS,</if>
+            <if test="phone != null ">PHONE,</if>
+            <if test="fax != null  and fax != ''">FAX,</if>
+            <if test="technologyMaturity != null  and technologyMaturity != ''">TECHNOLOGY_MATURITY,</if>
+            <if test="rdmethods != null  and rdmethods != ''">RDMETHODS,</if>
+            <if test="cooperationMethod != null  and cooperationMethod != ''">COOPERATION_METHOD,</if>
+            <if test="resultsApplication != null  and resultsApplication != ''">RESULTS_APPLICATION,</if>
+            <if test="demand != null  and demand != ''">DEMAND,</if>
+            <if test="industry != null  and industry != ''">INDUSTRY,</if>
+            <if test="awardCategory != null  and awardCategory != ''">AWARD_CATEGORY,</if>
+            <if test="awardLevel != null  and awardLevel != ''">AWARD_LEVEL,</if>
+            <if test="creatTime != null ">CREAT_TIME,</if>
+            <if test="reportTime != null ">REPORT_TIME,</if>
+            <if test="inputTime != null ">INPUT_TIME,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sumbitter != null  and sumbitter != ''">#{sumbitter},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="technicalField != null  and technicalField != ''">#{technicalField},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="phone != null ">#{phone},</if>
+            <if test="fax != null  and fax != ''">#{fax},</if>
+            <if test="technologyMaturity != null  and technologyMaturity != ''">#{technologyMaturity},</if>
+            <if test="rdmethods != null  and rdmethods != ''">#{rdmethods},</if>
+            <if test="cooperationMethod != null  and cooperationMethod != ''">#{cooperationMethod},</if>
+            <if test="resultsApplication != null  and resultsApplication != ''">#{resultsApplication},</if>
+            <if test="demand != null  and demand != ''">#{demand},</if>
+            <if test="industry != null  and industry != ''">#{industry},</if>
+            <if test="awardCategory != null  and awardCategory != ''">#{awardCategory},</if>
+            <if test="awardLevel != null  and awardLevel != ''">#{awardLevel},</if>
+            <if test="creatTime != null ">#{creatTime},</if>
+            <if test="reportTime != null ">#{reportTime},</if>
+            <if test="inputTime != null ">#{inputTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCTaskTechnology" parameterType="CTaskTechnology">
+        update c_task_technology
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sumbitter != null  and sumbitter != ''">SUMBITTER = #{sumbitter},</if>
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="technicalField != null  and technicalField != ''">TECHNICAL_FIELD = #{technicalField},</if>
+            <if test="email != null  and email != ''">EMAIL = #{email},</if>
+            <if test="address != null  and address != ''">ADDRESS = #{address},</if>
+            <if test="phone != null ">PHONE = #{phone},</if>
+            FAX = #{fax},
+            TECHNOLOGY_MATURITY = #{technologyMaturity},
+            RDMETHODS = #{rdmethods},
+            COOPERATION_METHOD = #{cooperationMethod},
+            RESULTS_APPLICATION = #{resultsApplication},
+            DEMAND = #{demand},
+            INDUSTRY = #{industry},
+            AWARD_CATEGORY = #{awardCategory},
+            AWARD_LEVEL = #{awardLevel},
+           CREAT_TIME = #{creatTime},
+            REPORT_TIME = #{reportTime},
+            <if test="inputTime != null ">INPUT_TIME = #{inputTime},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCTaskTechnologyById" parameterType="Long">
+        delete from c_task_technology where ID = #{id}
+    </delete>
+
+    <delete id="deleteCTaskTechnologyByIds" parameterType="String">
+        delete from c_task_technology where ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

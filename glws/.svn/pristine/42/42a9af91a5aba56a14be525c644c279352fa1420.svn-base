@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增标题信息')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-config-add">
+        <input type="hidden" name="geo" th:value="${gisTab.geo}">
+        <input type="hidden" name="type" th:value="${gisTab.type}">
+        <input type="hidden" name="id" th:value="${gisTab.id}">
+        <input type="hidden" name="centre" th:value="${gisTab.centre}">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">标签标题：</label>
+            <div class="col-sm-8">
+                <input name="name" class="form-control" type="text" th:value="${gisTab.name}" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">标签类型：
+                <label th:if="${gisTab.type}==1">
+                    标点
+                </label>
+                <label th:if="${gisTab.type}==2">
+                    图层
+                </label>
+            </label>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">面积(km²)：</label>
+            <div class="col-sm-8">
+                <input name="area" class="form-control" type="text" th:value="${gisTab.area}" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">地区：</label>
+            <div class="col-sm-8">
+                <input name="address" class="form-control" type="text" th:value="${gisTab.address}" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">标签备注：</label>
+            <div class="col-sm-8">
+                <textarea name="remark" class="form-control">[[${gisTab.remark}]]</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">仅个人可见: <label><input type="checkbox" name="is_visible" id ="is_visible"checked></label></label>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var prefix = ctx + "system/gisTab"
+    $("#form-config-add").validate({
+        focusCleanup: true
+    });
+    function submitHandler() {
+        if ($.validate.form()) {
+            var isChecked = $('#is_visible').prop('checked');
+            if(isChecked){
+                $('#is_visible').val(1);
+            }else{
+                $('#is_visible').val(0);
+            }
+            $.operate.save(prefix + "/insertOrUpdate", $('#form-config-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

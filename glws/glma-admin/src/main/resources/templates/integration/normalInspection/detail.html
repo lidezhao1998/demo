@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<script src=" http://api.tianditu.gov.cn/api?v=4.0&tk=3defde9e465f739e73513ce9e8595fe3" type="text/javascript"></script>
+	<script src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/data/points-sample-data.js"></script>
+	<style type="text/css">body,html{width:100%;height:100%;margin:0;font-family:"Microsoft YaHei"}#mapDiv{width:100%;height:400px}input,b,p{margin-left:5px;font-size:14px}</style>
+
+	<style type="text/css">
+		body, html {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			font-family: "微软雅黑";
+		}
+
+		#mapDiv {
+			height: 90%;
+			width: 100%;
+		}
+
+		p,input {
+			margin-top: 10px;
+			margin-left: 5px;
+			font-size: 14px;
+		}
+	</style>
+	<th:block th:include="include :: header('GIS详细')" />
+</head>
+<body class="white-bg"  onLoad="onLoad()">
+<div id="mapDiv" ></div>
+<th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+	    	var entity = [[${entity}]];
+            var map;
+            var zoom = 12;
+            var center;
+            function onLoad() {
+                center = new T.LngLat(entity.eastLongitude ,entity.northrrnLatitude);
+                //初始化地图对象
+                map = new T.Map("mapDiv");
+                //设置显示地图的中心点和级别
+                map.centerAndZoom(center, zoom);
+                map.setMinZoom(7);
+                //创建信息窗口对象
+                marker = new T.Marker(center);// 创建标注
+                map.addOverLay(marker);
+                var infoWin1 = new T.InfoWindow();
+                var sContent ="<br style='margin:0px;'>监测点名称："+entity.area+"</br>样方编号:"+entity.sampleNumber+"</br>样方面积:"+entity.sampleArea+"平方米</div>";
+                infoWin1.setContent(sContent);
+                marker.addEventListener("click", function () {
+                    marker.openInfoWindow(infoWin1);
+                });// 将标注添加到地图中
+                marker.openInfoWindow(infoWin1);
+            }
+    </script>
+</body>
+</html>

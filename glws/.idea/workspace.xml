@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="aa88eee3-e6cf-4e37-8617-dec91d7b6543" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/gl-disaster/gl-disaster.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glma-admin/glma-admin.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glma-system/glma-system.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glws-admin/glws-admin.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glws-generator/glws-generator.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/glws-system/glws-system.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KAllocationController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KAllocationController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KAllocationShController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KAllocationShController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KInstockController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KInstockController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KManufactorController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KManufactorController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KMaterialTypeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KMaterialTypeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KOutboundController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KOutboundController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KOutboundController1.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KOutboundController1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KStockController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/KStockController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/ReserveController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/controller/ReserveController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/domain/KAllocation.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/domain/KAllocation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/domain/KInstock.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/domain/KInstock.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/domain/KOutbound.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/domain/KOutbound.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/domain/Reserve.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/domain/Reserve.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/mapper/KAllocationMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/mapper/KAllocationMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/mapper/KInstockMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/mapper/KInstockMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/mapper/KMaterialTypeMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/mapper/KMaterialTypeMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/mapper/KOutboundMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/mapper/KOutboundMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/mapper/KStockMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/mapper/KStockMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/IKAllocationService.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/IKAllocationService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/IKInstockService.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/IKInstockService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/IKMaterialTypeService.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/IKMaterialTypeService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/IKOutboundService.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/IKOutboundService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/impl/KAllocationServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/impl/KAllocationServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/impl/KInstockServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/impl/KInstockServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/impl/KMaterialTypeServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/impl/KMaterialTypeServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/impl/KOutboundServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/ReserveManagement/service/impl/KOutboundServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CDataManagementController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CDataManagementController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CDataManagementSelectController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CDataManagementSelectController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CDiseaseKnowledgeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CDiseaseKnowledgeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CDiseaseKnowledgeViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CDiseaseKnowledgeViewController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CGroundSurveyAssessController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CGroundSurveyAssessController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CGroundSurveyController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CGroundSurveyController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CGroundSurveySelectController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CGroundSurveySelectController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CPlotController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CPlotController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CPoisonKnowledgeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CPoisonKnowledgeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CPreventionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CPreventionController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CRatpestKnowledgeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CRatpestKnowledgeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CRatpestKnowledgeViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CRatpestKnowledgeViewController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskChfzController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskChfzController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskFznbController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskFznbController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskScnyController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskScnyController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskSczjController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskSczjController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskSczjjAssessController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskSczjjAssessController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskSczjjSelectController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskSczjjSelectController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskTechnologyAssessController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskTechnologyAssessController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskTechnologyController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskTechnologyController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskTechnologySelectController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/CTaskTechnologySelectController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/KnowledgeBaseController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/controller/KnowledgeBaseController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CPlot.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CPlot.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CPoisonKnowledge.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CPoisonKnowledge.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CRatpestKnowledge.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CRatpestKnowledge.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CTaskChfz.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CTaskChfz.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CTaskFznb.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CTaskFznb.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CTaskScny.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CTaskScny.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CTaskSczj.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CTaskSczj.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CTaskTechnology.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/domain/CTaskTechnology.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/mapper/CGroundSurveyMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/mapper/CGroundSurveyMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/mapper/CPoisonKnowledgeMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/mapper/CPoisonKnowledgeMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/mapper/CTaskChfzMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/mapper/CTaskChfzMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/mapper/CTaskFznbMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/mapper/CTaskFznbMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/mapper/CTaskScnyMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/mapper/CTaskScnyMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/mapper/CTaskSczjMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/mapper/CTaskSczjMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/ICGroundSurveyService.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/ICGroundSurveyService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/ICPoisonKnowledgeService.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/ICPoisonKnowledgeService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/ICTaskChfzService.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/ICTaskChfzService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/ICTaskFznbService.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/ICTaskFznbService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/ICTaskSczjService.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/ICTaskSczjService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CGroundSurveyServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CGroundSurveyServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CPlotServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CPlotServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CPoisonKnowledgeServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CPoisonKnowledgeServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CTaskChfzServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CTaskChfzServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CTaskFznbServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CTaskFznbServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CTaskScnyServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CTaskScnyServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CTaskSczjServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/caiji/service/impl/CTaskSczjServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/statistics/controller/CTaskChfzCountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/statistics/controller/CTaskChfzCountController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/statistics/controller/CTaskFznbCountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/statistics/controller/CTaskFznbCountController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/statistics/controller/CTaskScnyCountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/statistics/controller/CTaskScnyCountController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/statistics/controller/CTaskSczjCountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/com/ruoyi/zaihai/statistics/controller/CTaskSczjCountController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/ReserveManagement/KAllocationMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/ReserveManagement/KAllocationMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/ReserveManagement/KInstockMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/ReserveManagement/KInstockMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/ReserveManagement/KMaterialTypeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/ReserveManagement/KMaterialTypeMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/ReserveManagement/KOutboundMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/ReserveManagement/KOutboundMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/ReserveManagement/KStockMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/ReserveManagement/KStockMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/ReserveManagement/ReserveMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/ReserveManagement/ReserveMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CDataManagementMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CDataManagementMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CDiseaseKnowledgeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CDiseaseKnowledgeMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CGroundSurveyMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CGroundSurveyMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CPlotMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CPlotMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CPoisonKnowledgeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CPoisonKnowledgeMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CRatpestKnowledgeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CRatpestKnowledgeMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CTaskChfzMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CTaskChfzMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CTaskFznbMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CTaskFznbMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CTaskScnyMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CTaskScnyMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CTaskSczjMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CTaskSczjMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CTaskSelectAllMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CTaskSelectAllMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CTaskTechnologyMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/mapper/caiji/CTaskTechnologyMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/allocation/ShLook.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/allocation/ShLook.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/allocation/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/allocation/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/allocation/allocation.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/allocation/allocation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/allocation/allocationSh.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/allocation/allocationSh.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/allocation/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/allocation/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/allocation/look.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/allocation/look.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/instock/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/instock/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/instock/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/instock/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/instock/instock.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/instock/instock.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/instock/look.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/instock/look.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/manufactor/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/manufactor/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/manufactor/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/manufactor/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/manufactor/manufactor.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/manufactor/manufactor.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/outbound/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/outbound/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/outbound/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/outbound/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/outbound/look.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/outbound/look.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/outbound/outbound.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/outbound/outbound.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/reserve/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/reserve/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/reserve/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/reserve/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/reserve/reserve.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/reserve/reserve.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/stock/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/stock/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/stock/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/stock/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/stock/stock.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/stock/stock.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/type/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/type/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/type/data.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/type/data.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/type/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/type/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/type/manufactor.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/ReserveManagement/type/manufactor.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/chfz/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/chfz/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/chfz/chfz.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/chfz/chfz.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/chfz/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/chfz/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/chfz/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/chfz/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/dimian/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/dimian/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/dimian/addview.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/dimian/addview.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/dimian/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/dimian/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/dimian/survey.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/dimian/survey.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/dimian/surveyassess.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/dimian/surveyassess.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/dimian/surveyselect.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/dimian/surveyselect.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fangzhi/sczjjassess.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fangzhi/sczjjassess.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fangzhi/sczjjselect.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fangzhi/sczjjselect.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fasheng/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fasheng/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fasheng/sczj.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fasheng/sczj.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fznb/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fznb/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fznb/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fznb/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fznb/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/fznb/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/management/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/management/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/management/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/management/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/management/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/management/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/management/management.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/management/management.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/prevention/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/prevention/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/scny/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/scny/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/scny/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/scny/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/scny/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/scny/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/sczj/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/sczj/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/sczj/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/sczj/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/sczj/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/sczj/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/select/select.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/caiji/select/select.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/statistics/chfz/Echars2.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/statistics/chfz/Echars2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/statistics/chfz/chfz.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/statistics/chfz/chfz.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/statistics/fznb/fznb.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/statistics/fznb/fznb.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/statistics/scny/scny.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/statistics/scny/scny.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/statistics/sczj/Echars.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/statistics/sczj/Echars.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/statistics/sczj/sczj.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/statistics/sczj/sczj.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/Ratpestknowledge/Ratpestknowledge.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/Ratpestknowledge/Ratpestknowledge.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/Ratpestknowledge/RatpestknowledgeView.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/Ratpestknowledge/RatpestknowledgeView.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/Ratpestknowledge/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/Ratpestknowledge/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/Ratpestknowledge/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/Ratpestknowledge/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/Ratpestknowledge/look.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/Ratpestknowledge/look.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/knowledge/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/knowledge/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/knowledge/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/knowledge/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/knowledge/knowledge.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/knowledge/knowledge.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/knowledge/knowledgeView.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/knowledge/knowledgeView.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/knowledgeBase/knowledgeBase.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/knowledgeBase/knowledgeBase.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/poisonknowledge/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/poisonknowledge/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/poisonknowledge/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/poisonknowledge/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/poisonknowledge/knowledge.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/poisonknowledge/knowledge.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/poisonknowledge/look.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/poisonknowledge/look.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/sselect/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/sselect/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/sselect/sselect.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/sselect/sselect.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technology/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technology/add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technology/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technology/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technology/report.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technology/report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technology/technology.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technology/technology.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technology/upload.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technology/upload.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technologyassess/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technologyassess/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technologyassess/technologyassess.html" beforeDir="false" afterPath="$PROJECT_DIR$/gl-disaster/target/classes/templates/system/technologyassess/technologyassess.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glws-common/glws-common.iml" beforeDir="false" afterPath="$PROJECT_DIR$/glws-common/glws-common.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glws-framework/glws-framework.iml" beforeDir="false" afterPath="$PROJECT_DIR$/glws-framework/glws-framework.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glws-framework/src/main/java/com/ruoyi/system/service/impl/SysDeptServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/glws-framework/src/main/java/com/ruoyi/system/service/impl/SysDeptServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glws-generator/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/glws-generator/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/glws.iml" beforeDir="false" afterPath="$PROJECT_DIR$/glws.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sinosoft-admin/sinosoft-admin.iml" beforeDir="false" afterPath="$PROJECT_DIR$/sinosoft-admin/sinosoft-admin.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sinosoft-system/sinosoft-system.iml" beforeDir="false" afterPath="$PROJECT_DIR$/sinosoft-system/sinosoft-system.iml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="$APPLICATION_HOME_DIR$/plugins/maven/lib/maven3" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="vmOptionsForImporter" value="-Xmx768m" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1jrhSC6bO1d7SoHGMI1a1yGXQJk" />
+  <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="GlwsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="glws-admin" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ruoyi.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ruoyi.GlwsApplication" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.GlwsApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration" cleanupOnStartRun="true">
+    <configuration>C:\Users\Administrator\AppData\Roaming\Subversion</configuration>
+    <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="SvnFileUrlMappingImpl">
+    <option name="myMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\lyj_workr\病虫害\glws" />
+          <option name="myCopyRoot" value="D:\lyj_workr\病虫害\glws" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+    <option name="myMoreRealMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\lyj_workr\病虫害\glws" />
+          <option name="myCopyRoot" value="D:\lyj_workr\病虫害\glws" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="aa88eee3-e6cf-4e37-8617-dec91d7b6543" name="Default Changelist" comment="" />
+      <created>1604568115421</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1604568115421</updated>
+      <workItem from="1604568120642" duration="2746000" />
+      <workItem from="1604643217703" duration="10857000" />
+      <workItem from="1604885076286" duration="2975000" />
+      <workItem from="1606889737431" duration="2576000" />
+      <workItem from="1606961142491" duration="3305000" />
+      <workItem from="1606992409145" duration="202000" />
+    </task>
+    <task id="LOCAL-00001">
+      <created>1604655609883</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1604655609883</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/glws-framework/src/main/java/com/ruoyi/system/service/impl/SysDeptServiceImpl.java</url>
+          <line>275</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

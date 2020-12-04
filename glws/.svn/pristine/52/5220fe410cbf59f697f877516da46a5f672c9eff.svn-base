@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('退牧还草工程资金汇总报表')" />
+</head>
+<body class="gray-bg">
+<div class="col-sm-18 select-table">
+   <!-- <div class="col-sm-12 search-collapse">
+        <form id="formId">
+            <div class="select-list">
+                <ul>
+                    <li>
+                        <select name="province" th:with="type=${@dict.getType('sys_province')}">
+                            <option value="">请选择任务省份</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                    </li>
+                    <li>
+                        <button class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</button>
+                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </div>-->
+    <!--<div class="col-sm-12 select-table">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>图形列表</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="echarts" id="echarts-line-chart"></div>
+            </div>
+        </div>
+    </div>
+-->
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>中国地图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="graph_flot.html#">选项1</a>
+                            </li>
+                            <li><a href="graph_flot.html#">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div style="height:700px" id="echarts-map-chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+
+<script th:inline="javascript">
+    //var prefix = ctx + "system/summary";
+    var prefix = ctx + "zaihai/chfztj";
+
+    $(function () {
+        alert(11)
+        var mapChart = echarts.init(document.getElementById("echarts-map-chart"));
+        var mapoption = {
+            title : {
+                text: '虫害发生情况',
+                subtext: '纯属12虚构',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                x:'left',
+                data:['虫22害','化学防治','生物灾害']
+            },
+            dataRange: {
+                min: 0,
+                max: 2500,
+                x: 'left',
+                y: 'bottom',
+                text:['高','低'],           // 文本，默认为数值文本
+                calculable : true
+            },
+            toolbox: {
+                show: true,
+                orient : 'vertical',
+                x: 'right',
+                y: 'center',
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            roamController: {
+                show: true,
+                x: 'right',
+                mapTypeControl: {
+                    'china': true
+                }
+            },
+            series : [
+                {
+                    name: '虫害',
+                    type: 'map',
+                    mapType: 'china',
+                    roam: false,
+                    itemStyle:{
+                        normal:{label:{show:true}},
+                        emphasis:{label:{show:true}}
+                    },
+
+                },
+               {
+                    name: '鼠害',
+                    type: 'map',
+                    mapType: 'china',
+                    itemStyle:{
+                        normal:{label:{show:true}},
+                        emphasis:{label:{show:true}}
+                    },
+                    data:[
+
+                    ]
+                },
+                {
+                    name: '防治',
+                    type: 'map',
+                    mapType: 'china',
+                    itemStyle:{
+                        normal:{label:{show:true}},
+                        emphasis:{label:{show:true}}
+                    },
+                    data:[
+
+                    ]
+                }
+            ]
+        };
+        mapChart.setOption(mapoption);//先渲染出空地图
+        $(window).resize(mapChart.resize);
+
+        //后端获取json数据
+        alert(22226)
+        //请求地图数据
+        $.ajax({
+            url : prefix + "/getOption",    //请求发送到dataActiont处
+            type: 'post',
+            dataType:'json',
+            success: function(data) {
+                alert(33334)
+                alert(data)
+                var options=mapChart.getOption();
+                console.log(options);
+               /* for (var tt = 0; tt < data.length; tt++) {
+
+                    dataslef.push({name: data[tt]['province'], value: '11111', fivecancer: data[tt].data});
+                    for(var i=0;i<data[tt].data.length;i++){
+                        names.push({name:data[tt].data[i].product});
+                    }
+                }
+                option.legend.data = names;
+                option.series[0].data = dataslef;*/
+                if(data.success){
+                    dataList = data.dataList;
+                }else{
+                    console.log("getRequestCount 加载失败")
+                }
+            },
+            error:function(jqXHR){
+                alert("getRequestCount发生错误："+ jqXHR.status);
+            // }
+
+
+                // JSON.parse(data.result.areaData);这里至关重要！必须要把后台传的string转化为array才能渲染数据
+              /*  options.series[0].data = JSON.parse(data.result.areaData);//把数据渲染进去
+                options.dataRange.max = data.result.max;
+                options.dataRange.min = data.result.min;
+                mapChart.hideLoading();
+                mapChart.setOption(options);//数据加载完再渲染一遍地图，这样数据就渲染上去了
+                $(window).resize(mapChart.resize);*/
+            }
+        });
+    });
+
+
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+
+</script>
+</body>
+</html>

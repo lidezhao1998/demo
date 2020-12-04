@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增储备库')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-reserve-add">
+        <input name="latitude" id="latitude" class="form-control" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">库名称：</label>
+            <div class="col-sm-8">
+                <input name="librayName" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">库管理员：</label>
+            <div class="col-sm-8">
+                <input name="librayAdmin" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">覆盖范围：</label>
+            <div class="col-sm-8">
+                <input name="coverage" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">地点：</label>
+            <div class="col-sm-8">
+                <select name="address" th:onchange="dj2()" id="dj" class="form-control m-b"
+                        th:with="type=${@dict.getType('sys_province')}">
+                    <option>请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                            th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">储备库状态：</label>
+            <div class="col-sm-8">
+                <select name="status" th:onchange="dj()" class="form-control m-b"
+                        th:with="type=${@dict.getType('sys_cbk_status')}">
+                    <option>请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                            id="dj"></option>
+                </select>
+            </div>
+        </div>
+
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "reserves/reserve";
+    $("#form-reserve-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-reserve-add').serialize());
+        }
+    }
+
+    function dj2() {
+        var url = ctx + "system/gisMap/getListCaoYuanGisMap2";
+        var data = "addrArea=" + $("#dj").val();
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                if(data.status=='404'){
+                    layer.alert("此地区储备库已存在 请重新选择!")
+                    $("#dj").val("");
+
+                }else{
+                    alert(2)
+                    $("#latitude").val(data.latitude);
+
+                }
+
+            }
+        });
+
+    }
+</script>
+</body>
+</html>

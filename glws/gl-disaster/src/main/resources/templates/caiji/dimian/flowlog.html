@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('流程记录页面')" />
+    <th:block th:include="include :: jquery-steps-css" />
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-striped table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: whitesmoke;
+        height: 55px;
+    }
+
+    /*按钮背景色*/
+    .btn-success{
+
+        background-color:rgba(48,146,62, 0.9);
+
+    }
+
+</style>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+
+    var prefix = ctx + "caiji/survey";
+    var prefix1 = ctx + "workflow/wflog";
+    var id=[[${id}]];
+    var type=[[${type}]];
+    $(function() {
+        var options = {
+            url: prefix1 + "/listInfo",
+            queryParams:{id:id,type:type},
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            pagination:false,
+            modalName: "流程记录",
+            columns: [
+                {
+
+                    title: '序号',
+                    align: 'center',
+                    valign: 'middle',
+                    switchable:false,
+                    formatter:function(value,row,index){
+
+                        return index + 1;
+                    }
+                },
+                {
+                    field : 'sendtime',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '发送时间'
+                },
+                {
+                    field : 'sendname',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '发送人'
+                },
+                {
+                    field : 'receivename',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '接受人'
+                }
+                ]
+        };
+        $.table.init(options);
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('退牧还草工程资金汇总报表')"/>
+    <style>
+        #china-map {
+            width: 850px;
+            height: 850px;
+            margin: auto;
+        }
+
+        #box {
+            display: none;
+            background-color: goldenrod;
+            width: 180px;
+            height: 30px;
+        }
+
+        #box-title {
+            display: block;
+        }
+    </style>
+    <style type="text/css">
+        body {
+            background-color: rgba(144, 238, 144, 0.2);
+        }
+
+    </style>
+</head>
+<body class="gray-bg">
+<div class="col-sm-18 select-table">
+
+    <!--选项卡-->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="false"> 折线图</a>
+                    </li>
+                    <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">柱状图</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="panel-body">
+                            <div id="echarts-line-chart" style="width: 1300px;height:600px;"></div>
+
+                        </div>
+                    </div>
+                    <div id="tab-2" class="tab-pane">
+                        <div class="panel-body">
+                            <div id="echarts-histogram-chart" style="width: 1300px;height:600px;"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--折线图-->
+        <!-- <div  id="echarts-line-chart" style="width: 1300px;height:600px;"></div>-->
+
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+    <th:block th:include="include :: footer"/>
+    <th:block th:include="include :: echarts-js"/>
+    <script th:inline="javascript">
+        //var prefix = ctx + "system/summary";
+        var prefix = ctx + "zaihai/sczjtj";
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#test2'
+                , type: 'year'
+            });
+        });
+
+        /*折线图*/
+        $(function () {
+            var grand=[[${grand}]]
+            if(grand=='3') {
+                var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+                var harmTotalarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var engineeringhazard = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var seriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var engineeringSeriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var defensiveArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var controlarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var province = [[${province}]]
+                var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+                $.ajax({
+                    type: "post",
+                    async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                    url: prefix + "/getProvinceRatOption",    //请求发送到dataActiont处
+                    data: {province: province},
+                    dataType: "json",        //返回数据形式为json
+                    success: function (result) {
+                        //请求成功时执行该函数内容，result即为服务器返回的json对象
+                        if (result) {
+                            for (var i = 0; i < result.length; i++) {
+                                year.push(result[i].year);
+                                harmTotalarea.push(result[i].harmTotalarea);
+                                engineeringhazard.push(result[i].engineeringhazard);
+                                seriousArea.push(result[i].seriousArea);
+                                engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                defensiveArea.push(result[i].defensiveArea);
+                                controlarea.push(result[i].controlarea);
+
+                                week.push(result[i].week);
+                            }
+                            lineChart.hideLoading();    //隐藏加载动画
+                            lineChart.setOption({        //加载数据图表
+                                title: {
+                                    text: '草原鼠害发生防治统计折线图'
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+
+                                },
+                                legend: {
+                                    width: "70%",
+                                    data: ['危害总面积', '严重危害面积', '工程区危害面积', '工程区严重危害面积', '当年防治面积', '持续控制面积'],
+                                    selected: {
+                                        '工程区严重危害面积': false,
+                                        '严重危害面积': false,
+                                        '工程区危害面积': false,
+                                        '当年防治面积': false,
+                                        '持续控制面积': false,
+
+                                    },
+                                },
+                                calculable: true,
+                                xAxis: {
+                                    boundaryGap: false,
+                                    data: year
+                                },
+                                yAxis: {
+                                    type: 'value'
+                                },
+                                series: [
+                                    {
+                                        name: '危害总面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '危害总面积',
+                                        data: harmTotalarea
+                                    },
+                                    {
+                                        name: '严重危害面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '危害总面积',
+                                        data: engineeringhazard
+                                    },
+                                    {
+                                        name: '工程区危害面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '工程区危害面积',
+                                        data: seriousArea
+                                    },
+                                    {
+                                        name: '工程区严重危害面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '工程区严重危害面积',
+                                        data: engineeringSeriousArea
+                                    },
+                                    {
+                                        name: '当年防治面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '当年防治面积',
+                                        data: defensiveArea
+                                    },
+                                    {
+                                        name: '持续控制面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '持续控制面积',
+                                        data: controlarea
+                                    }
+                                ]
+
+                            });
+                            window.onresize = lineChart.resize;
+                        }
+                    },
+                    error: function (errorMsg) {
+                        //请求失败时执行该函数
+                        alert("图表请求数据失败!");
+                        lineChart.hideLoading();
+                    }
+                });
+            }else if(grand=='4'){
+                var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+                var harmTotalarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var engineeringhazard = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var seriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var engineeringSeriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var defensiveArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var controlarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                /*var province = [[${province}]]*/
+                var city = [[${city}]]
+                var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+                $.ajax({
+                    type: "post",
+                    async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                    url: prefix + "/getProvinceRatOption",    //请求发送到dataActiont处
+                    data: {city: city},
+                    dataType: "json",        //返回数据形式为json
+                    success: function (result) {
+                        //请求成功时执行该函数内容，result即为服务器返回的json对象
+                        if (result) {
+                            for (var i = 0; i < result.length; i++) {
+                                year.push(result[i].year);
+                                harmTotalarea.push(result[i].harmTotalarea);
+                                engineeringhazard.push(result[i].engineeringhazard);
+                                seriousArea.push(result[i].seriousArea);
+                                engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                defensiveArea.push(result[i].defensiveArea);
+                                controlarea.push(result[i].controlarea);
+
+                                week.push(result[i].week);
+                            }
+                            lineChart.hideLoading();    //隐藏加载动画
+                            lineChart.setOption({        //加载数据图表
+                                title: {
+                                    text: '草原鼠害发生防治统计折线图'
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+
+                                },
+                                legend: {
+                                    width: "70%",
+                                    data: ['危害总面积', '严重危害面积', '工程区危害面积', '工程区严重危害面积', '当年防治面积', '持续控制面积'],
+                                    selected: {
+                                        '工程区严重危害面积': false,
+                                        '严重危害面积': false,
+                                        '工程区危害面积': false,
+                                        '当年防治面积': false,
+                                        '持续控制面积': false,
+
+                                    },
+                                },
+                                calculable: true,
+                                xAxis: {
+                                    boundaryGap: false,
+                                    data: year
+                                },
+                                yAxis: {
+                                    type: 'value'
+                                },
+                                series: [
+                                    {
+                                        name: '危害总面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '危害总面积',
+                                        data: harmTotalarea
+                                    },
+                                    {
+                                        name: '严重危害面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '危害总面积',
+                                        data: engineeringhazard
+                                    },
+                                    {
+                                        name: '工程区危害面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '工程区危害面积',
+                                        data: seriousArea
+                                    },
+                                    {
+                                        name: '工程区严重危害面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '工程区严重危害面积',
+                                        data: engineeringSeriousArea
+                                    },
+                                    {
+                                        name: '当年防治面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '当年防治面积',
+                                        data: defensiveArea
+                                    },
+                                    {
+                                        name: '持续控制面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '持续控制面积',
+                                        data: controlarea
+                                    }
+                                ]
+
+                            });
+                            window.onresize = lineChart.resize;
+                        }
+                    },
+                    error: function (errorMsg) {
+                        //请求失败时执行该函数
+                        alert("图表请求数据失败!");
+                        lineChart.hideLoading();
+                    }
+                });
+            } else{
+                var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+                var harmTotalarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var engineeringhazard = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var seriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var engineeringSeriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var defensiveArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var controlarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+
+                var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+
+                var province = [[${province}]]
+                var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+                $.ajax({
+                    type: "post",
+                    async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                    url: prefix + "/getOption",    //请求发送到dataActiont处
+                    data: {province: province},
+                    dataType: "json",        //返回数据形式为json
+                    success: function (result) {
+                        //请求成功时执行该函数内容，result即为服务器返回的json对象
+                        if (result) {
+                            for (var i = 0; i < result.length; i++) {
+                                year.push(result[i].year);
+                                harmTotalarea.push(result[i].harmTotalarea);
+                                engineeringhazard.push(result[i].engineeringhazard);
+                                seriousArea.push(result[i].seriousArea);
+                                engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                defensiveArea.push(result[i].defensiveArea);
+                                controlarea.push(result[i].controlarea);
+
+                                week.push(result[i].week);
+                            }
+                            lineChart.hideLoading();    //隐藏加载动画
+                            lineChart.setOption({        //加载数据图表
+                                title: {
+                                    text: '草原鼠害发生防治统计折线图'
+                                },
+                                tooltip: {
+                                    trigger: 'axis',
+
+                                },
+                                legend: {
+                                    width: "70%",
+                                    data: ['危害总面积', '严重危害面积', '工程区危害面积', '工程区严重危害面积', '当年防治面积', '持续控制面积'],
+                                    selected: {
+                                        '工程区严重危害面积': false,
+                                        '严重危害面积': false,
+                                        '工程区危害面积': false,
+                                        '当年防治面积': false,
+                                        '持续控制面积': false,
+
+                                    },
+                                },
+                                calculable: true,
+                                xAxis: {
+                                    boundaryGap: false,
+                                    data: year
+                                },
+                                yAxis: {
+                                    type: 'value'
+                                },
+                                series: [
+                                    {
+                                        name: '危害总面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '危害总面积',
+                                        data: harmTotalarea
+                                    },
+                                    {
+                                        name: '严重危害面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '危害总面积',
+                                        data: engineeringhazard
+                                    },
+                                    {
+                                        name: '工程区危害面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '工程区危害面积',
+                                        data: seriousArea
+                                    },
+                                    {
+                                        name: '工程区严重危害面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '工程区严重危害面积',
+                                        data: engineeringSeriousArea
+                                    },
+                                    {
+                                        name: '当年防治面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '当年防治面积',
+                                        data: defensiveArea
+                                    },
+                                    {
+                                        name: '持续控制面积',
+                                        type: 'line',
+                                        smooth: true,
+                                        stack: '持续控制面积',
+                                        data: controlarea
+                                    }
+                                ]
+
+                            });
+                            window.onresize = lineChart.resize;
+                        }
+                    },
+                    error: function (errorMsg) {
+                        //请求失败时执行该函数
+                        alert("图表请求数据失败!");
+                        lineChart.hideLoading();
+                    }
+                });
+            }
+
+        });
+
+        /*柱状图*/
+        $(function () {
+            var grand=[[${grand}]]
+            if(grand=='3'){
+                //省级用户
+                var prefix = ctx + "zaihai/sczjtj";
+                var url=prefix + "/getOptionRatHistogram";
+                var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+                var harmTotalarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var engineeringhazard = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var seriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var engineeringSeriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var province = [];
+                var defensiveArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var controlarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var lineChart = echarts.init(document.getElementById("echarts-histogram-chart"));
+                $.ajax({
+                    type: "post",
+                    async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                    url:url,    //请求发送到dataActiont处
+                    data: {province: province},
+                    dataType: "json",        //返回数据形式为json
+                    success: function (result) {
+                        //请求成功时执行该函数内容，result即为服务器返回的json对象
+                        if (result) {
+
+                            for (var i = 0; i < result.length; i++) {
+                                year.push(result[i].year);
+                                harmTotalarea.push(result[i].harmTotalarea);
+                                engineeringhazard.push(result[i].engineeringhazard);
+                                seriousArea.push(result[i].seriousArea);
+                                engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                province.push(result[i].city);
+                                defensiveArea.push(result[i].defensiveArea);
+                                controlarea.push(result[i].controlarea);
+                            }
+                            lineChart.hideLoading();    //隐藏加载动画
+                            lineChart.setOption({        //加载数据图表
+                                title: {
+                                    text: '草原鼠害发生与防治统计柱状图'
+                                },
+                                tooltip: {
+                                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                        type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                                    }
+                                },
+                                legend: {
+                                    width: "70%",
+                                    data: ['危害总面积', '严重危害面积', '工程区危害面积', '工程区严重危害面积', '当年防治面积', '持续控制面积'],
+                                    /*selected:{
+                                        '工程区危害总面积' :false,
+                                        '严重危害面积' :false,
+                                        '工程区危害面积' :false,
+                                    },*/
+                                },
+                                calculable: true,
+                                xAxis: {
+                                    data: province
+                                },
+                                yAxis: {
+                                    type: 'value'
+                                },
+                                series: [{
+                                    name: '危害总面积',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: harmTotalarea
+                                },
+                                    {
+                                        name: '严重危害面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: engineeringhazard
+                                    },
+                                    {
+                                        name: '工程区危害面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: seriousArea
+                                    },
+                                    {
+                                        name: '工程区严重危害面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: engineeringSeriousArea
+                                    },
+                                    {
+                                        name: '当年防治面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: defensiveArea
+                                    },
+                                    {
+                                        name: '持续控制面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: controlarea
+                                    }
+                                ]
+
+                            });
+                            window.onresize = lineChart.resize;
+
+                        }
+                    },
+                    error: function (errorMsg) {
+                        //请求失败时执行该函数
+                        alert("图表请求数据失败!");
+                        lineChart.hideLoading();
+                    }
+                });
+            }else if(grand=='4'){
+                //市级用户
+                var prefix = ctx + "zaihai/sczjtj";
+                var url=prefix + "/getOptionRatHistogram";
+                var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+                var harmTotalarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var engineeringhazard = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var seriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var engineeringSeriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var province = [];
+                var defensiveArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var controlarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+                var lineChart = echarts.init(document.getElementById("echarts-histogram-chart"));
+                $.ajax({
+                    type: "post",
+                    async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                    url:url,    //请求发送到dataActiont处
+                    data: {province: province},
+                    dataType: "json",        //返回数据形式为json
+                    success: function (result) {
+                        //请求成功时执行该函数内容，result即为服务器返回的json对象
+                        if (result) {
+                            for (var i = 0; i < result.length; i++) {
+                                year.push(result[i].year);
+                                harmTotalarea.push(result[i].harmTotalarea);
+                                engineeringhazard.push(result[i].engineeringhazard);
+                                seriousArea.push(result[i].seriousArea);
+                                engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                province.push(result[i].county);
+                                defensiveArea.push(result[i].defensiveArea);
+                                controlarea.push(result[i].controlarea);
+                            }
+                            lineChart.hideLoading();    //隐藏加载动画
+                            lineChart.setOption({        //加载数据图表
+                                title: {
+                                    text: '草原鼠害发生与防治统计柱状图'
+                                },
+                                tooltip: {
+                                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                        type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                                    }
+                                },
+                                legend: {
+                                    width: "70%",
+                                    data: ['危害总面积', '严重危害面积', '工程区危害面积', '工程区严重危害面积', '当年防治面积', '持续控制面积'],
+                                    /*selected:{
+                                     '工程区危害总面积' :false,
+                                     '严重危害面积' :false,
+                                     '工程区危害面积' :false,
+                                     },*/
+                                },
+                                calculable: true,
+                                xAxis: {
+                                    data: province
+                                },
+                                yAxis: {
+                                    type: 'value'
+                                },
+                                series: [{
+                                    name: '危害总面积',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: harmTotalarea
+                                },
+                                    {
+                                        name: '严重危害面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: engineeringhazard
+                                    },
+                                    {
+                                        name: '工程区危害面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: seriousArea
+                                    },
+                                    {
+                                        name: '工程区严重危害面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: engineeringSeriousArea
+                                    },
+                                    {
+                                        name: '当年防治面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: defensiveArea
+                                    },
+                                    {
+                                        name: '持续控制面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: controlarea
+                                    }
+                                ]
+
+                            });
+                            window.onresize = lineChart.resize;
+
+                        }
+                    },
+                    error: function (errorMsg) {
+                        //请求失败时执行该函数
+                        alert("图表请求数据失败!");
+                        lineChart.hideLoading();
+                    }
+                });
+            } else{
+                //国家级用户
+                var prefix = ctx + "zaihai/sczjtj";
+                var url=prefix + "/getOptionHistogram";
+            var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+            var harmTotalarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var engineeringhazard = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var seriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var engineeringSeriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var province = [];
+            var defensiveArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var controlarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+
+
+            var lineChart = echarts.init(document.getElementById("echarts-histogram-chart"));
+            $.ajax({
+                type: "post",
+                async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                url:url,    //请求发送到dataActiont处
+                data: {province: province},
+                dataType: "json",        //返回数据形式为json
+                success: function (result) {
+                    //请求成功时执行该函数内容，result即为服务器返回的json对象
+                    if (result) {
+
+                        for (var i = 0; i < result.length; i++) {
+                            year.push(result[i].year);
+                            harmTotalarea.push(result[i].harmTotalarea);
+                            engineeringhazard.push(result[i].engineeringhazard);
+                            seriousArea.push(result[i].seriousArea);
+                            engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                            province.push(result[i].province);
+                            defensiveArea.push(result[i].defensiveArea);
+                            controlarea.push(result[i].controlarea);
+
+
+                        }
+                        lineChart.hideLoading();    //隐藏加载动画
+                        lineChart.setOption({        //加载数据图表
+                            title: {
+                                text: '草原鼠害发生与防治统计柱状图'
+                            },
+                            tooltip: {
+                                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                    type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                                }
+                            },
+                            legend: {
+                                width: "70%",
+                                data: ['危害总面积', '严重危害面积', '工程区危害面积', '工程区严重危害面积', '当年防治面积', '持续控制面积'],
+                                /*selected:{
+                                    '工程区危害总面积' :false,
+                                    '严重危害面积' :false,
+                                    '工程区危害面积' :false,
+                                },*/
+                            },
+                            calculable: true,
+                            xAxis: {
+                                data: province
+                            },
+                            yAxis: {
+                                type: 'value'
+                            },
+                            series: [{
+                                name: '危害总面积',
+                                type: 'bar',
+                                stack: '总量',
+                                barWidth: 40,//柱图宽度
+                                data: harmTotalarea
+                            },
+                                {
+                                    name: '严重危害面积',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: engineeringhazard
+                                },
+                                {
+                                    name: '工程区危害面积',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: seriousArea
+                                },
+                                {
+                                    name: '工程区严重危害面积',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: engineeringSeriousArea
+                                },
+                                {
+                                    name: '当年防治面积',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: defensiveArea
+                                },
+                                {
+                                    name: '持续控制面积',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: controlarea
+                                }
+                            ]
+
+                        });
+                        window.onresize = lineChart.resize;
+
+                    }
+                },
+                error: function (errorMsg) {
+                    //请求失败时执行该函数
+                    alert("图表请求数据失败!");
+                    lineChart.hideLoading();
+                }
+            });
+        }
+        });
+    </script>
+</body>
+</html>

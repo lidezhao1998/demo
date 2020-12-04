@@ -1,0 +1,265 @@
+package com.ruoyi.web.controller.system;
+
+import java.text.DecimalFormat;
+import java.util.*;
+
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.Improve;
+import com.ruoyi.system.domain.SysRole;
+import com.ruoyi.system.domain.TTaskPublish;
+import com.ruoyi.system.service.ISysDictDataService;
+import com.ruoyi.system.service.ITTaskBuildService;
+import com.ruoyi.system.service.ITTaskPublishService;
+import com.ruoyi.system.service.ITTaskReportService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import com.ruoyi.system.domain.TTaskReport;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+
+/**
+ * 舍饲棚围建设任务分省报表
+ *
+ * @author feiyanxu
+ * @date 2019-12-23
+ */
+@Controller
+@RequestMapping("/system/build")
+public class TTaskBuildController extends BaseController {
+    private String prefix = "system/build";
+
+    @Autowired
+    private ITTaskBuildService taskBuildServiceService;
+
+    @Autowired
+    private ISysDictDataService iSysDictDataService;
+
+    @Autowired
+    private ITTaskReportService ItaskReportService;
+
+    @Autowired
+    private ITTaskPublishService tTaskPublishService;
+
+
+    @RequiresPermissions("system:build:view")
+    @GetMapping()
+    public String report(String province, String year, ModelMap mmap) {
+        System.err.println("========开始");
+        mmap.put("province", province);
+        mmap.put("year", year);
+        return prefix + "/build";
+    }
+
+    /**
+     * 查询饲棚围建设任务分省报表
+     */
+    @RequiresPermissions("system:build:list")
+    @PostMapping("/list")
+    @ResponseBody
+    public Improve list(TTaskPublish TTaskpblish, String provinc, String yea) {
+        return getImprove(TTaskpblish, provinc, yea);
+
+    }
+
+    private Improve getImprove(TTaskPublish TTaskpblish, String provinc, String yea) {
+        //保留两位小数
+        DecimalFormat df = new DecimalFormat("#.00");
+        //获取登录用户的部门
+        String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+        //获取角色
+        List<SysRole> roles = ShiroUtils.getSysUser().getRoles();
+        for (int i = 0; i < roles.size(); i++) {
+            SysRole sysRole = roles.get(i);
+            String roleName = sysRole.getRoleName();
+            if (roleName.equals("省级")) {
+                provinc = deptName;
+            }
+        }
+        if (provinc != null || yea != null) {
+            TTaskpblish.setProvince(provinc);
+            TTaskpblish.setYear(yea);
+        } else if (provinc != null && yea == null) {
+            TTaskpblish.setProvince(provinc);
+
+        } else if (yea != null && provinc == null) {
+            TTaskpblish.setYear(yea);
+
+        }
+
+        //存储处理数据
+        Improve improve = new Improve();
+        //查询退牧还草工程任务领取分解表所有数据
+        List<TTaskPublish> listData = tTaskPublishService.selectTTaskPublishList(TTaskpblish);
+        //判断库中是否有空值
+        for (int i = 0; i < listData.size(); i++) {
+            TTaskPublish tTaskPublish = listData.get(i);
+
+            if (tTaskPublish.getHspjSize() == null) {
+                tTaskPublish.setHspjSize(0.0);
+            }
+        }
+        for (int i = 0; i < roles.size(); i++) {
+            SysRole sysRole = roles.get(i);
+            String roleName = sysRole.getRoleName();
+            if (roleName.equals("省级")) {
+                //省级查询退牧还草工程任务领取分解表所有数据
+                List<TTaskPublish> listCityData = tTaskPublishService.selectCityPublishList(TTaskpblish);
+                /**
+                 * 从退牧还草工程任务领取分解表查询所有年份
+                 */
+                int minYear = Integer.parseInt(listCityData.stream().min(Comparator.comparing(TTaskPublish::getYear)).get().getYear());
+                int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+                List<Integer> yearRange = new ArrayList<>();
+                for (int a = minYear; a <= currentYear; a++) {
+                    yearRange.add(a);
+                }
+                Collections.reverse(yearRange);
+                improve.setYearCols(yearRange);
+                /**
+                 * 查询出所有的城市
+                 */
+                Set<String> cityDistinct = new HashSet<>();
+                listCityData.forEach(item -> cityDistinct.add(item.getAddress()));
+                improve.setCityRows(cityDistinct);
+                /**
+                 * 将省份、年份进行处理（省份：此年份中所有数值之和）
+                 */
+                List<Map<String, String>> datas = new ArrayList<>();
+                cityDistinct.forEach(address -> {
+                    Map<String, String> map = new HashMap<>();
+                    yearRange.forEach(year -> {
+                        double sum = Double.parseDouble(df.format(listCityData.stream()
+                                .filter(item -> item.getYear().equals(String.valueOf(year)) && item.getAddress().equals(address))
+                                .mapToDouble(TTaskPublish::getHspjSize).sum()));
+                        map.put(String.valueOf(year), String.valueOf(sum));
+                    });
+                    String province = address;
+                    map.put("province", province);
+                    datas.add(map);
+                });
+                improve.setDatas(datas);
+                return improve;
+            }
+        }
+        /**
+         * 从退牧还草工程任务领取分解表查询所有年份
+         */
+        int minYear = Integer.parseInt(listData.stream().min(Comparator.comparing(TTaskPublish::getYear)).get().getYear());
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        List<Integer> yearRange = new ArrayList<>();
+        for (int i = minYear; i <= currentYear; i++) {
+            yearRange.add(i);
+        }
+        Collections.reverse(yearRange);
+        improve.setYearCols(yearRange);
+        /**
+         * 查询出所有的省份
+         */
+        Set<String> provinceDistinct = new HashSet<>();
+        listData.forEach(item -> provinceDistinct.add(item.getProvince()));
+        improve.setProvinceRows(provinceDistinct);
+        /**
+         * 将省份、年份进行处理（省份：此年份中所有数值之和）
+         */
+        List<Map<String, String>> datas = new ArrayList<>();
+        provinceDistinct.forEach(province -> {
+            Map<String, String> map = new HashMap<>();
+            yearRange.forEach(year -> {
+                double sum = Double.parseDouble(df.format(listData.stream()
+                        .filter(item -> item.getYear().equals(String.valueOf(year)) && item.getProvince().equals(province))
+                        .mapToDouble(TTaskPublish::getHspjSize).sum()));
+                map.put(String.valueOf(year), String.valueOf(sum));
+            });
+            map.put("province", province);
+            datas.add(map);
+        });
+        improve.setDatas(datas);
+        return improve;
+    }
+
+
+    /**
+     * 导出饲棚围建设任务分省报表
+     */
+    @RequiresPermissions("system:build:export")
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(TTaskReport tTaskReport) {
+        List<TTaskReport> list = taskBuildServiceService.selectTTaskReportList(tTaskReport);
+        ExcelUtil<TTaskReport> util = new ExcelUtil<TTaskReport>(TTaskReport.class);
+        return util.exportExcel(list, "build");
+    }
+
+    /**
+     * 饲棚围建设任务分省报表柱状图
+     */
+    @PostMapping("/getOptionHistogram")
+    @ResponseBody
+    public Improve getOption(TTaskPublish tTaskPublish, String provinc, String year) {
+        if (StringUtils.isEmpty(provinc) && StringUtils.isEmpty(year)) {
+            tTaskPublish.setProvince(null);
+            Improve improve = getImprove(tTaskPublish, provinc, year);
+            return improve;
+        } else if (provinc != null && provinc != "" || year != null && year != "") {
+            //根据字典键值查询字典标签
+            String provinceLabel = iSysDictDataService.selectDictValueToLabel(provinc);
+            tTaskPublish.setProvince(provinceLabel);
+            Improve improve = getImprove(tTaskPublish, provinc, year);
+            return improve;
+        }
+        return null;
+
+    }
+    /**
+     * 饲棚围建设任务分省报表折线图
+     */
+    @PostMapping("/getOptionLineChart")
+    @ResponseBody
+    public List<TTaskPublish> getOption(TTaskPublish tTaskPublish,String province) {
+        List<TTaskPublish> list = tTaskPublishService.selectSummaryList(tTaskPublish);
+        List<TTaskPublish> newlist = new ArrayList<>();
+
+        for(int i = 0;i<list.size();i++) {
+            TTaskPublish newTTaskReport = list.get(i);
+            /** 围栏规模合计 */
+            Double jmgm = newTTaskReport.getJmSize();
+            Double xmgm = newTTaskReport.getXmSize();
+            Double hqmgm = newTTaskReport.getHqlxSize();
+            Double smhgm = newTTaskReport.getSmhzlSize();
+            if(jmgm==null){jmgm=0.0;}
+            if(xmgm==null){xmgm=0.0;}
+            if(hqmgm==null){hqmgm=0.0;}
+            if(smhgm==null){smhgm=0.0;}
+            Double wlScale = jmgm + xmgm + hqmgm + smhgm;
+            newTTaskReport.setWlScale(wlScale);
+            newlist.add(newTTaskReport);
+        }
+        return newlist;
+    }
+
+    /**
+     * 跳转舍饲棚围建设任务分省报表折线图
+     */
+    @GetMapping(value = "/EcharsLineChart")
+    public String EcharsLineChart(String province, ModelMap mmap){
+        mmap.put("province", province);
+        return prefix + "/EcharsLineChart";
+    }
+
+    /**
+     * 跳转舍饲棚围建设任务分省报表柱状图
+     */
+    @GetMapping(value = "/EcharsHistogram")
+    public String EcharsHistogram(String year, String province, ModelMap mmap) {
+        mmap.put("province", province);
+        mmap.put("year", year);
+        return prefix + "/EcharsHistogram";
+    }
+
+
+}

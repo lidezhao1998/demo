@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CTaskChfzMapper">
+    
+    <resultMap type="CTaskChfz" id="CTaskChfzResult">
+        <result property="id"    column="ID"    />
+        <result property="number"    column="NUMBER"    />
+        <result property="year"    column="YEAR"    />
+        <result property="week"    column="WEEK"    />
+        <result property="province"    column="PROVINCE"    />
+        <result property="city"    column="CITY"    />
+        <result property="county"    column="COUNTY"    />
+        <result property="type"    column="TYPE"    />
+        <result property="harmTotalarea"    column="HARM_TOTALAREA"    />
+        <result property="engineeringhazard"    column="ENGINEERINGHAZARD"    />
+        <result property="seriousArea"    column="SERIOUS_AREA"    />
+        <result property="engineeringSeriousArea"    column="ENGINEERING_SERIOUS_AREA"    />
+        <result property="totalPrevention"    column="TOTAL_PREVENTION"    />
+        <result property="chemistryControl"    column="CHEMISTRY_CONTROL"    />
+        <result property="subtotal"    column="SUBTOTAL"    />
+        <result property="attractStarlings"    column="ATTRACT_STARLINGS"    />
+        <result property="pastureChicken"    column="PASTURE_CHICKEN"    />
+        <result property="pastureDuck"    column="PASTURE_DUCK"    />
+        <result property="matrine"    column="MATRINE"    />
+        <result property="nicotine"    column="NICOTINE"    />
+        <result property="greenMuscardineFungus"    column="GREEN_MUSCARDINE_FUNGUS"    />
+        <result property="azadirachtin"    column="AZADIRACHTIN"    />
+        <result property="avermectin"    column="AVERMECTIN"    />
+        <result property="empedobacterBrevis"    column="EMPEDOBACTER_BREVIS"    />
+        <result property="osthole"    column="OSTHOLE"    />
+        <result property="weiSu"    column="WEI_SU"    />
+        <result property="enterocytozoonBieneusi"    column="ENTEROCYTOZOON_BIENEUSI"    />
+        <result property="expatriateManagers"    column="EXPATRIATE_MANAGERS"    />
+        <result property="work"    column="WORK"    />
+        <result property="plane"    column="PLANE"    />
+        <result property="bigSprayer"    column="BIG_SPRAYER"    />
+        <result property="smallSprayer"    column="SMALL_SPRAYER"    />
+        <result property="car"    column="CAR"    />
+        <result property="pastureChickenNum"    column="PASTURE_CHICKEN_NUM"    />
+        <result property="pastureDuckNum"    column="PASTURE_DUCK_NUM"    />
+        <result property="starlingNest"    column="STARLING_NEST"    />
+        <result property="remarks"    column="REMARKS"    />
+        <result property="creatTime"    column="CREAT_TIME"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="createId"    column="CREATE_ID"    />
+        <result property="createBy"    column="CREATE_By"    />
+        <result property="status"    column="STATUS"    />
+        <result property="roleName"    column="ROLE_NAME"    />
+        <result property="code"    column="CODE"    />
+
+    </resultMap>
+
+    <sql id="selectCTaskChfzVo">
+        select ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY, TYPE, HARM_TOTALAREA, ENGINEERINGHAZARD, SERIOUS_AREA, ENGINEERING_SERIOUS_AREA, TOTAL_PREVENTION, CHEMISTRY_CONTROL, SUBTOTAL, ATTRACT_STARLINGS, PASTURE_CHICKEN, PASTURE_DUCK, MATRINE, NICOTINE, GREEN_MUSCARDINE_FUNGUS, AZADIRACHTIN, AVERMECTIN, EMPEDOBACTER_BREVIS, OSTHOLE, WEI_SU, ENTEROCYTOZOON_BIENEUSI, EXPATRIATE_MANAGERS, WORK, PLANE, BIG_SPRAYER, SMALL_SPRAYER, CAR, PASTURE_CHICKEN_NUM, PASTURE_DUCK_NUM, STARLING_NEST, REMARKS, CREAT_TIME, UPDATE_TIME, CREATE_ID, CREATE_By, STATUS,CODE from c_task_chfz
+    </sql>
+<!--合计数量Vo-->
+    <sql id="selectCTaskChfzSumVo">
+            select ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY, TYPE, sum(HARM_TOTALAREA) HARM_TOTALAREA,sum(ENGINEERINGHAZARD) ENGINEERINGHAZARD,sum(SERIOUS_AREA) SERIOUS_AREA,sum(ENGINEERING_SERIOUS_AREA) ENGINEERING_SERIOUS_AREA,sum(TOTAL_PREVENTION) TOTAL_PREVENTION,sum(CHEMISTRY_CONTROL) CHEMISTRY_CONTROL,sum(SUBTOTAL) SUBTOTAL,sum(ATTRACT_STARLINGS) ATTRACT_STARLINGS,sum(PASTURE_CHICKEN) PASTURE_CHICKEN,sum(PASTURE_DUCK) PASTURE_DUCK, sum(MATRINE)MATRINE, sum(NICOTINE)NICOTINE, sum(GREEN_MUSCARDINE_FUNGUS)GREEN_MUSCARDINE_FUNGUS, sum(AZADIRACHTIN)AZADIRACHTIN,sum(AVERMECTIN) AVERMECTIN,sum(EMPEDOBACTER_BREVIS) EMPEDOBACTER_BREVIS,sum(OSTHOLE) OSTHOLE,sum(WEI_SU) WEI_SU,sum(ENTEROCYTOZOON_BIENEUSI) ENTEROCYTOZOON_BIENEUSI,sum(EXPATRIATE_MANAGERS)  EXPATRIATE_MANAGERS,sum(WORK) WORK,sum(PLANE) PLANE,sum(BIG_SPRAYER)  BIG_SPRAYER,sum(SMALL_SPRAYER)  SMALL_SPRAYER,sum(CAR) CAR,sum(PASTURE_CHICKEN_NUM) PASTURE_CHICKEN_NUM,sum(PASTURE_DUCK_NUM) PASTURE_DUCK_NUM,sum(STARLING_NEST) STARLING_NEST, REMARKS, CREAT_TIME, UPDATE_TIME, CREATE_ID, CREATE_By,ROLENAME STATUS from c_task_chfz
+
+    </sql>
+
+    <select id="selectCTaskChfzList" parameterType="CTaskChfz" resultMap="CTaskChfzResult">
+        <include refid="selectCTaskChfzVo"/>
+
+        <where>  
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{v}, '%')</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+<!--
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+-->
+
+        </where>
+
+
+    </select>
+
+
+<!--分析预测虫害-->
+    <select id="selectCTaskChfzAnalyze" parameterType="CTaskChfz" resultMap="CTaskChfzResult">
+        <include refid="selectCTaskChfzSumVo"/>
+
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{v}, '%')</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+
+        </where>
+        group by year
+
+    </select>
+
+
+    <!--省级级列表展示-->
+
+    <select id="selectCTaskChfzProvinceList" parameterType="CTaskChfz" resultMap="CTaskChfzResult">
+        <include refid="selectCTaskChfzSumVo"/>
+
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{v}, '%')</if>
+<!--
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+-->
+        </where>
+
+        group by province
+
+    </select>
+
+
+
+
+    <!--市级列表展示-->
+
+    <select id="selectCTaskChfzCityList" parameterType="CTaskChfz" resultMap="CTaskChfzResult">
+        <include refid="selectCTaskChfzSumVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE like concat('%', #{province}, '%')</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{createBy}, '%')</if>
+<!--
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+-->
+        </where>
+        group by city
+
+    </select>
+
+
+    <!--县级列表展示-->
+
+    <select id="selectCTaskChfzCountyList" parameterType="CTaskChfz" resultMap="CTaskChfzResult">
+        <include refid="selectCTaskChfzSumVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{createBy}, '%')</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+
+        </where>
+        group by county
+
+    </select>
+
+
+    <!--展示列表-->
+    <select id="selectCTaskChfzParentList"  resultMap="CTaskChfzResult">
+         select ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY, TYPE, sum(HARM_TOTALAREA) HARM_TOTALAREA,sum(ENGINEERINGHAZARD) ENGINEERINGHAZARD,sum(SERIOUS_AREA) SERIOUS_AREA,sum(ENGINEERING_SERIOUS_AREA) ENGINEERING_SERIOUS_AREA,sum(TOTAL_PREVENTION) TOTAL_PREVENTION,sum(CHEMISTRY_CONTROL) CHEMISTRY_CONTROL,sum(SUBTOTAL) SUBTOTAL,sum(ATTRACT_STARLINGS) ATTRACT_STARLINGS,sum(PASTURE_CHICKEN) PASTURE_CHICKEN,sum(PASTURE_DUCK) PASTURE_DUCK, sum(MATRINE)MATRINE, sum(NICOTINE)NICOTINE, sum(GREEN_MUSCARDINE_FUNGUS)GREEN_MUSCARDINE_FUNGUS, sum(AZADIRACHTIN)AZADIRACHTIN,sum(AVERMECTIN) AVERMECTIN,sum(EMPEDOBACTER_BREVIS) EMPEDOBACTER_BREVIS,sum(OSTHOLE) OSTHOLE,sum(WEI_SU) WEI_SU,sum(ENTEROCYTOZOON_BIENEUSI) ENTEROCYTOZOON_BIENEUSI,sum(EXPATRIATE_MANAGERS)  EXPATRIATE_MANAGERS,sum(WORK) WORK,sum(PLANE) PLANE,sum(BIG_SPRAYER)  BIG_SPRAYER,sum(SMALL_SPRAYER)  SMALL_SPRAYER,sum(CAR) CAR,sum(PASTURE_CHICKEN_NUM) PASTURE_CHICKEN_NUM,sum(PASTURE_DUCK_NUM) PASTURE_DUCK_NUM,sum(STARLING_NEST) STARLING_NEST, REMARKS, CREAT_TIME, UPDATE_TIME, CREATE_ID, CREATE_By, STATUS from c_task_chfz group by province
+
+    </select>
+
+    <select id="selectCTaskChfzById" parameterType="Long" resultMap="CTaskChfzResult">
+        <include refid="selectCTaskChfzVo"/>
+        where ID = #{id}
+    </select>
+        
+    <insert id="insertCTaskChfz" parameterType="CTaskChfz" useGeneratedKeys="true" keyProperty="id">
+        insert into c_task_chfz
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER,</if>
+            <if test="year != null  and year != ''">YEAR,</if>
+            <if test="week != null  and week != ''">WEEK,</if>
+            <if test="province != null  and province != ''">PROVINCE,</if>
+            <if test="city != null  and city != ''">CITY,</if>
+            <if test="county != null  and county != ''">COUNTY,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="harmTotalarea != null ">HARM_TOTALAREA,</if>
+            <if test="engineeringhazard != null ">ENGINEERINGHAZARD,</if>
+            <if test="seriousArea != null ">SERIOUS_AREA,</if>
+            <if test="engineeringSeriousArea != null ">ENGINEERING_SERIOUS_AREA,</if>
+            <if test="totalPrevention != null ">TOTAL_PREVENTION,</if>
+            <if test="chemistryControl != null  and chemistryControl != ''">CHEMISTRY_CONTROL,</if>
+            <if test="subtotal != null ">SUBTOTAL,</if>
+            <if test="attractStarlings != null ">ATTRACT_STARLINGS,</if>
+            <if test="pastureChicken != null ">PASTURE_CHICKEN,</if>
+            <if test="pastureDuck != null ">PASTURE_DUCK,</if>
+            <if test="matrine != null ">MATRINE,</if>
+            <if test="nicotine != null ">NICOTINE,</if>
+            <if test="greenMuscardineFungus != null ">GREEN_MUSCARDINE_FUNGUS,</if>
+            <if test="azadirachtin != null ">AZADIRACHTIN,</if>
+            <if test="avermectin != null ">AVERMECTIN,</if>
+            <if test="empedobacterBrevis != null ">EMPEDOBACTER_BREVIS,</if>
+            <if test="osthole != null ">OSTHOLE,</if>
+            <if test="weiSu != null ">WEI_SU,</if>
+            <if test="enterocytozoonBieneusi != null ">ENTEROCYTOZOON_BIENEUSI,</if>
+            <if test="expatriateManagers != null ">EXPATRIATE_MANAGERS,</if>
+            <if test="work != null ">WORK,</if>
+            <if test="plane != null ">PLANE,</if>
+            <if test="bigSprayer != null ">BIG_SPRAYER,</if>
+            <if test="smallSprayer != null ">SMALL_SPRAYER,</if>
+            <if test="car != null ">CAR,</if>
+            <if test="pastureChickenNum != null ">PASTURE_CHICKEN_NUM,</if>
+            <if test="pastureDuckNum != null ">PASTURE_DUCK_NUM,</if>
+            <if test="starlingNest != null ">STARLING_NEST,</if>
+            <if test="remarks != null  and remarks != ''">REMARKS,</if>
+            <if test="creatTime != null ">CREAT_TIME,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="createId != null  and createId != ''">CREATE_ID,</if>
+            <if test="createName != null  and createName != ''">CREATE_NAME,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">#{number},</if>
+            <if test="year != null  and year != ''">#{year},</if>
+            <if test="week != null  and week != ''">#{week},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="county != null  and county != ''">#{county},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="harmTotalarea != null ">#{harmTotalarea},</if>
+            <if test="engineeringhazard != null ">#{engineeringhazard},</if>
+            <if test="seriousArea != null ">#{seriousArea},</if>
+            <if test="engineeringSeriousArea != null ">#{engineeringSeriousArea},</if>
+            <if test="totalPrevention != null ">#{totalPrevention},</if>
+            <if test="chemistryControl != null  and chemistryControl != ''">#{chemistryControl},</if>
+            <if test="subtotal != null ">#{subtotal},</if>
+            <if test="attractStarlings != null ">#{attractStarlings},</if>
+            <if test="pastureChicken != null ">#{pastureChicken},</if>
+            <if test="pastureDuck != null ">#{pastureDuck},</if>
+            <if test="matrine != null ">#{matrine},</if>
+            <if test="nicotine != null ">#{nicotine},</if>
+            <if test="greenMuscardineFungus != null ">#{greenMuscardineFungus},</if>
+            <if test="azadirachtin != null ">#{azadirachtin},</if>
+            <if test="avermectin != null ">#{avermectin},</if>
+            <if test="empedobacterBrevis != null ">#{empedobacterBrevis},</if>
+            <if test="osthole != null ">#{osthole},</if>
+            <if test="weiSu != null ">#{weiSu},</if>
+            <if test="enterocytozoonBieneusi != null ">#{enterocytozoonBieneusi},</if>
+            <if test="expatriateManagers != null ">#{expatriateManagers},</if>
+            <if test="work != null ">#{work},</if>
+            <if test="plane != null ">#{plane},</if>
+            <if test="bigSprayer != null ">#{bigSprayer},</if>
+            <if test="smallSprayer != null ">#{smallSprayer},</if>
+            <if test="car != null ">#{car},</if>
+            <if test="pastureChickenNum != null ">#{pastureChickenNum},</if>
+            <if test="pastureDuckNum != null ">#{pastureDuckNum},</if>
+            <if test="starlingNest != null ">#{starlingNest},</if>
+            <if test="remarks != null  and remarks != ''">#{remarks},</if>
+            <if test="creatTime != null ">#{creatTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="createId != null  and createId != ''">#{createId},</if>
+            <if test="createName != null  and createName != ''">#{createName},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCTaskChfz" parameterType="CTaskChfz">
+        update c_task_chfz
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER = #{number},</if>
+            <if test="year != null  and year != ''">YEAR = #{year},</if>
+            <if test="week != null  and week != ''">WEEK = #{week},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="city != null  and city != ''">CITY = #{city},</if>
+            <if test="county != null  and county != ''">COUNTY = #{county},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="harmTotalarea != null ">HARM_TOTALAREA = #{harmTotalarea},</if>
+            <if test="engineeringhazard != null ">ENGINEERINGHAZARD = #{engineeringhazard},</if>
+            <if test="seriousArea != null ">SERIOUS_AREA = #{seriousArea},</if>
+            <if test="engineeringSeriousArea != null ">ENGINEERING_SERIOUS_AREA = #{engineeringSeriousArea},</if>
+            <if test="totalPrevention != null ">TOTAL_PREVENTION = #{totalPrevention},</if>
+            <if test="chemistryControl != null  and chemistryControl != ''">CHEMISTRY_CONTROL = #{chemistryControl},</if>
+            <if test="subtotal != null ">SUBTOTAL = #{subtotal},</if>
+            <if test="attractStarlings != null ">ATTRACT_STARLINGS = #{attractStarlings},</if>
+            <if test="pastureChicken != null ">PASTURE_CHICKEN = #{pastureChicken},</if>
+            <if test="pastureDuck != null ">PASTURE_DUCK = #{pastureDuck},</if>
+            <if test="matrine != null ">MATRINE = #{matrine},</if>
+            <if test="nicotine != null ">NICOTINE = #{nicotine},</if>
+            <if test="greenMuscardineFungus != null ">GREEN_MUSCARDINE_FUNGUS = #{greenMuscardineFungus},</if>
+            <if test="azadirachtin != null ">AZADIRACHTIN = #{azadirachtin},</if>
+            <if test="avermectin != null ">AVERMECTIN = #{avermectin},</if>
+            <if test="empedobacterBrevis != null ">EMPEDOBACTER_BREVIS = #{empedobacterBrevis},</if>
+            <if test="osthole != null ">OSTHOLE = #{osthole},</if>
+            <if test="weiSu != null ">WEI_SU = #{weiSu},</if>
+            <if test="enterocytozoonBieneusi != null ">ENTEROCYTOZOON_BIENEUSI = #{enterocytozoonBieneusi},</if>
+            <if test="expatriateManagers != null ">EXPATRIATE_MANAGERS = #{expatriateManagers},</if>
+            <if test="work != null ">WORK = #{work},</if>
+            <if test="plane != null ">PLANE = #{plane},</if>
+            <if test="bigSprayer != null ">BIG_SPRAYER = #{bigSprayer},</if>
+            <if test="smallSprayer != null ">SMALL_SPRAYER = #{smallSprayer},</if>
+            <if test="car != null ">CAR = #{car},</if>
+            <if test="pastureChickenNum != null ">PASTURE_CHICKEN_NUM = #{pastureChickenNum},</if>
+            <if test="pastureDuckNum != null ">PASTURE_DUCK_NUM = #{pastureDuckNum},</if>
+            <if test="starlingNest != null ">STARLING_NEST = #{starlingNest},</if>
+            <if test="remarks != null  and remarks != ''">REMARKS = #{remarks},</if>
+            <if test="creatTime != null ">CREAT_TIME = #{creatTime},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="createId != null  and createId != ''">CREATE_ID = #{createId},</if>
+            <if test="createName != null  and createName != ''">CREATE_NAME = #{createName},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="code != null  and status != ''">CODE = #{code},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCTaskChfzById" parameterType="Long">
+        delete from c_task_chfz where ID = #{id}
+    </delete>
+
+    <delete id="deleteCTaskChfzByIds" parameterType="String">
+        delete from c_task_chfz where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <!--虫害折线图-->
+    <select id="selectCTaskChfzListLine" parameterType="CTaskChfz" resultMap="CTaskChfzResult">
+        <include refid="selectCTaskChfzVo"/>
+
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{v}, '%')</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+
+        </where>
+        group  by YEAR   order by YEAR
+
+    </select>
+
+    <!--首页虫害折线图-->
+    <select id="selectCTaskChfzListLinePage" parameterType="CTaskChfz" resultMap="CTaskChfzResult">
+        <include refid="selectCTaskChfzVo"/>
+
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{v}, '%')</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+
+        </where>
+        group  by WEEK   order by CREAT_TIME
+
+    </select>
+
+
+
+    <!--虫害统计图-->
+    <select id="selectCTaskChfzListColumnar" parameterType="CTaskChfz" resultMap="CTaskChfzResult">
+        <include refid="selectCTaskChfzVo"/>
+
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{v}, '%')</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+
+        </where>
+        group  by province
+
+
+    </select>
+
+    <!--首页虫害省级用户柱状图-->
+    <select id="selectCTaskChfzListColumnarProvince" parameterType="CTaskChfz" resultMap="CTaskChfzResult">
+        <include refid="selectCTaskChfzVo"/>
+
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createId != null  and createId != ''"> and CREATE_ID = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_By like concat('%', #{v}, '%')</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+
+        </where>
+        group  by city
+
+    </select>
+</mapper>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('退牧还草工程资金汇总报表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <!--搜索条件-->
+        <!--<div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+
+                        <li class="select-time">
+                            <p>年度：</p>
+                            <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                        </li>
+                        &lt;!&ndash;                        <li>&ndash;&gt;
+                        &lt;!&ndash;                            <select name="province" th:with="type=${@dict.getType('sys_province')}">&ndash;&gt;
+                        &lt;!&ndash;                                <option value="">请选择任务省份</option>&ndash;&gt;
+                        &lt;!&ndash;                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"&ndash;&gt;
+                        &lt;!&ndash;                                        th:value="${dict.dictValue}"></option>&ndash;&gt;
+                        &lt;!&ndash;                            </select>&ndash;&gt;
+                        &lt;!&ndash;                        </li>&ndash;&gt;
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>-->
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="EcharsLineChart()" shiro:hasPermission="system:build:export">
+                <i class="fa fa-download"></i> 折线图展示
+            </a>
+            <a class="btn btn-warning" onclick="EcharsHistogram()" shiro:hasPermission="system:build:export">
+                <i class="fa fa-download"></i> 柱状图展示
+            </a>
+        </div>
+
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "system/summary";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            exportUrl: prefix + "/export",
+            striped: true,
+            pagination: false,
+            showExport: true,
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            modalName: "工程资金汇总报表",
+            exportOptions: {
+                fileName: "工程资金汇总报表f",
+                worksheetName: "工程资金汇总报表w",
+                tableName: "工程资金汇总报表t",
+                ignoreColumn: []  //忽略第一列和最后一列,默认忽略第一列
+            },
+            columns: [
+                [
+                    {
+                        field: 'year',
+                        title: '年份',
+                        rowspan: 3,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                    }, {
+                        title: '建设任务',
+                        rowspan: 1,
+                        colspan: 6,
+                        align: 'center',
+                        valign: 'middle'
+                    }, {
+                        title: '资金',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 1,
+                        colspan: 3,
+                    }
+                ],
+                [
+                    {
+                        title: '围栏任务(万亩)',
+                        colspan: 1,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '其他任务(万亩)',
+                        colspan: 5,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'totalInvestment',
+                        title: '资金合计(万元)',
+                        colspan: 1,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'zyMoney',
+                        title: '中央资金(万元)',
+                        colspan: 1,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'dfMoney',
+                        title: '地方资金(万元)',
+                        colspan: 1,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                    }
+                ],
+                [
+                    {
+                        field: 'wlScale',
+                        title: '合计',
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'thzyglSize',
+                        title: '退化草原改良',
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'rgscdSize',
+                        title: '人工种草地',
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'hspjSize',
+                        title: '含饲棚圈',
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'httSize',
+                        title: '黑土滩',
+                        align: 'center',
+                        valign: 'middle',
+                    },
+                    {
+                        field: 'dhcSize',
+                        title: '毒害草',
+                        align: 'center',
+                        valign: 'middle',
+                    }
+                ]
+            ]
+        };
+        $.table.init(options);
+    });
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+    function EcharsLineChart() {
+        var url = prefix + '/EcharsLineChart';
+        $.modal.openFull("工程资金汇总折线图报表", url);
+    }
+
+    function EcharsHistogram() {
+        var url = prefix + '/EcharsHistogram';
+        $.modal.openFull("工程资金汇总柱状图报表", url);
+    }
+
+    $(".fixed-table-body").on("scroll", function () {
+        var sl = this.scrollLeft;
+        $(this).next()[0].scrollLeft = sl;
+    })
+</script>
+</body>
+</html>

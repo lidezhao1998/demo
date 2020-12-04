@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.WaterConservationMapper">
+    
+    <resultMap type="WaterConservation" id="WaterConservationResult">
+        <result property="conservationId"    column="CONSERVATION_ID"    />
+        <result property="standArea"    column="STAND_AREA"    />
+        <result property="annulPrecipitation"    column="ANNUL_PRECIPITATION"    />
+        <result property="evapotranspiration"    column="EVAPOTRANSPIRATION"    />
+        <result property="waterConservation"    column="WATER_CONSERVATION"    />
+        <result property="annualWaterConservation"    column="ANNUAL_WATER_CONSERVATION"    />
+        <result property="waterQualityValue"    column="WATER_QUALITY_VALUE"    />
+        <result property="conserveWaterValue"    column="CONSERVE_WATER_VALUE"    />
+        <result property="unilConserveWaterValue"    column="UNIL_CONSERVE_WATER_VALUE"    />
+        <result property="surfaceAnnualRunoff"  column="SURFACE_ANNUAL_RUNOFF"  />
+    </resultMap>
+
+    <sql id="selectWaterConservationVo">
+        select CONSERVATION_ID, STAND_AREA, ANNUL_PRECIPITATION, EVAPOTRANSPIRATION, WATER_CONSERVATION, ANNUAL_WATER_CONSERVATION, WATER_QUALITY_VALUE, CONSERVE_WATER_VALUE, UNIL_CONSERVE_WATER_VALUE, SURFACE_ANNUAL_RUNOFF from water_conservation
+    </sql>
+
+    <select id="selectWaterConservationList" parameterType="WaterConservation" resultMap="WaterConservationResult">
+        <include refid="selectWaterConservationVo"/>
+        <where>  
+            <if test="standArea != null "> and STAND_AREA = #{standArea}</if>
+            <if test="annulPrecipitation != null "> and ANNUL_PRECIPITATION = #{annulPrecipitation}</if>
+            <if test="evapotranspiration != null "> and EVAPOTRANSPIRATION = #{evapotranspiration}</if>
+            <if test="waterConservation != null "> and WATER_CONSERVATION = #{waterConservation}</if>
+            <if test="annualWaterConservation != null "> and ANNUAL_WATER_CONSERVATION = #{annualWaterConservation}</if>
+            <if test="waterQualityValue != null "> and WATER_QUALITY_VALUE = #{waterQualityValue}</if>
+            <if test="conserveWaterValue != null "> and CONSERVE_WATER_VALUE = #{conserveWaterValue}</if>
+            <if test="unilConserveWaterValue != null "> and UNIL_CONSERVE_WATER_VALUE = #{unilConserveWaterValue}</if>
+            <if test="surfaceAnnualRunoff != null" > and SURFACE_ANNUAL_RUNOFF = #{surfaceAnnualRunoff}</if>
+        </where>
+    </select>
+    
+    <select id="selectWaterConservationById" parameterType="Long" resultMap="WaterConservationResult">
+        <include refid="selectWaterConservationVo"/>
+        where CONSERVATION_ID = #{conservationId}
+    </select>
+        
+    <insert id="insertWaterConservation" parameterType="WaterConservation" useGeneratedKeys="true" keyProperty="conservationId">
+        insert into water_conservation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="standArea != null ">STAND_AREA,</if>
+            <if test="annulPrecipitation != null ">ANNUL_PRECIPITATION,</if>
+            <if test="evapotranspiration != null ">EVAPOTRANSPIRATION,</if>
+            <if test="waterConservation != null ">WATER_CONSERVATION,</if>
+            <if test="annualWaterConservation != null ">ANNUAL_WATER_CONSERVATION,</if>
+            <if test="waterQualityValue != null ">WATER_QUALITY_VALUE,</if>
+            <if test="conserveWaterValue != null ">CONSERVE_WATER_VALUE,</if>
+            <if test="unilConserveWaterValue != null ">UNIL_CONSERVE_WATER_VALUE,</if>
+            <if test="surfaceAnnualRunoff != null ">SURFACE_ANNUAL_RUNOFF,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="standArea != null ">#{standArea},</if>
+            <if test="annulPrecipitation != null ">#{annulPrecipitation},</if>
+            <if test="evapotranspiration != null ">#{evapotranspiration},</if>
+            <if test="waterConservation != null ">#{waterConservation},</if>
+            <if test="annualWaterConservation != null ">#{annualWaterConservation},</if>
+            <if test="waterQualityValue != null ">#{waterQualityValue},</if>
+            <if test="conserveWaterValue != null ">#{conserveWaterValue},</if>
+            <if test="unilConserveWaterValue != null ">#{unilConserveWaterValue},</if>
+            <if test="surfaceAnnualRunoff != null ">#{surfaceAnnualRunoff},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWaterConservation" parameterType="WaterConservation">
+        update water_conservation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="standArea != null ">STAND_AREA = #{standArea},</if>
+            <if test="annulPrecipitation != null ">ANNUL_PRECIPITATION = #{annulPrecipitation},</if>
+            <if test="evapotranspiration != null ">EVAPOTRANSPIRATION = #{evapotranspiration},</if>
+            <if test="waterConservation != null ">WATER_CONSERVATION = #{waterConservation},</if>
+            <if test="annualWaterConservation != null ">ANNUAL_WATER_CONSERVATION = #{annualWaterConservation},</if>
+            <if test="waterQualityValue != null ">WATER_QUALITY_VALUE = #{waterQualityValue},</if>
+            <if test="conserveWaterValue != null ">CONSERVE_WATER_VALUE = #{conserveWaterValue},</if>
+            <if test="unilConserveWaterValue != null ">UNIL_CONSERVE_WATER_VALUE = #{unilConserveWaterValue},</if>
+            <if test="surfaceAnnualRunoff != null ">SURFACE_ANNUAL_RUNOFF = #{surfaceAnnualRunoff},</if>
+        </trim>
+        where CONSERVATION_ID = #{conservationId}
+    </update>
+
+    <delete id="deleteWaterConservationById" parameterType="Long">
+        delete from water_conservation where CONSERVATION_ID = #{conservationId}
+    </delete>
+
+    <delete id="deleteWaterConservationByIds" parameterType="String">
+        delete from water_conservation where CONSERVATION_ID in 
+        <foreach item="conservationId" collection="array" open="(" separator="," close=")">
+            #{conservationId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('退牧还草工程任务创建')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form id="form-user-add" class="form-horizontal">
+        <input name="deptId" type="hidden" id="treeId"/>
+        <h4 class="form-header h4">建设规模</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>禁牧建设规模：</label>
+                    <div class="col-sm-8">
+                        <input name="jmSize"  class="form-control" type="text" maxlength="30" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>禁牧建设投资：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input name="jmMoney" onclick="selectDeptTree()" id="treeName" type="text"  class="form-control" >
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>休牧建设规模：</label>
+                    <div class="col-sm-8">
+                        <input id="phonenumber" name="xmSize"  class="form-control" type="text" maxlength="11" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>休牧建设投资：</label>
+                    <div class="col-sm-8">
+                        <input id="email" name="smMoney" class="form-control " type="text" maxlength="50">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>划区轮休建设规模：</label>
+                    <div class="col-sm-8">
+                        <input id="loginName" name="hqlxSize"  class="form-control" type="text" maxlength="30" required>万亩
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>划区轮休建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="hqlxMoney"  class="form-control" type="text" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>石漠化治理建设规模：</label>
+                    <div class="col-sm-8">
+                        <input id="loginName" name="smhzlSize"  class="form-control" type="text" maxlength="30" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>石漠化治理建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="smhzlMoney"  class="form-control" type="text" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>围栏合计：</label>
+                    <div class="col-sm-8">
+                        <input id="loginName" name="loginName"  class="form-control" type="text" maxlength="30" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>：</label>
+                    <div class="col-sm-8">
+                        <input name="password"  class="form-control" type="text" d>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <h4 class="form-header h4">其他部分</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>退化草原改良建设规模：</label>
+                    <div class="col-sm-8">
+                        <input id="loginName" name="thcyglSize"  class="form-control" type="text" maxlength="30" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>退化草原改良建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="thcyglMoney"  class="form-control" type="text" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>人工饲草地建设规模：</label>
+                    <div class="col-sm-8">
+                        <input id="loginName" name="rgscdSize"  class="form-control" type="text" maxlength="30" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>人工饲草地建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="rgscdMoney"  class="form-control" type="text" >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>含饲棚圈建设规模 ：</label>
+                    <div class="col-sm-8">
+                        <input id="loginName" name="hspjSize"  class="form-control" type="text" maxlength="30" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>含饲棚圈建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="hspjMoney"  class="form-control" type="text" >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>黑土滩建设规模：</label>
+                    <div class="col-sm-8">
+                        <input id="loginName" name="httSize"  class="form-control" type="text" maxlength="30" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>黑土滩建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="httMoney"  class="form-control" type="text" >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>毒害草建设规模 ：</label>
+                    <div class="col-sm-8">
+                        <input id="loginName" name="dhcSize"  class="form-control" type="text" maxlength="30" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>毒害草建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="dhcMoney"  class="form-control" type="text" >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>已垦草原治理建设规模：</label>
+                    <div class="col-sm-8">
+                        <input id="loginName" name="ykcyzlSize"  class="form-control" type="text" maxlength="30" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>已垦草原治理建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="ykcyzlMoney"  class="form-control" type="text" >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="form-header h4">计划资金</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>中央投资：</label>
+                    <div class="col-sm-8">
+                        <input id="loginName" name="zyMoney"  class="form-control" type="text" maxlength="30" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>地方投资：</label>
+                    <div class="col-sm-8">
+                        <input name="dfMoney"  class="form-control" type="text" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row">
+             <div class="col-sm-12">
+                 <div class="form-group">
+                     <label class="col-xs-2 control-label">备注：</label>
+                     <div class="col-xs-10">
+                         <textarea name="remark" maxlength="500" class="form-control" rows="3"></textarea>
+                     </div>
+                 </div>
+             </div>
+         </div>-->
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+    var prefix = ctx + "system/publish"
+    $("#form-publish-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-publish-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

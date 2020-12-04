@@ -1,0 +1,213 @@
+package com.ruoyi.zaihai.caiji.controller;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.zaihai.caiji.domain.CTaskTechnology;
+import com.ruoyi.zaihai.caiji.service.ICTaskTechnologyService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.core.page.TableDataInfo;
+
+import javax.xml.crypto.Data;
+
+/**
+ * 【科技成果Controller
+ * 
+ * @author ruoyi
+ * @date 2020-06-17
+ */
+@Controller
+@RequestMapping("/achievements/technology")
+
+public class CTaskTechnologyController extends BaseController
+{
+    private String prefix = "system/technology";
+
+    @Autowired
+    private ICTaskTechnologyService cTaskTechnologyService;
+
+    @RequiresPermissions("achievements:technology:view")
+    @GetMapping()
+    public String technology()
+    {
+        return prefix + "/technology";
+    }
+
+    /**
+     * 查询科技成果信息列表
+     */
+    @RequiresPermissions("achievements:technology:list")
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(CTaskTechnology cTaskTechnology)
+    {
+        startPage();
+        List<CTaskTechnology> list = cTaskTechnologyService.selectCTaskTechnologyList(cTaskTechnology);
+        return getDataTable(list);
+    }
+
+    /*
+     *展开详情信息*/
+
+
+    @GetMapping("/detail/{id}")
+    @RequiresPermissions("achievements:technology:detail")
+    public String detail(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        CTaskTechnology cTaskTechnology = cTaskTechnologyService.selectCTaskTechnologyById(id);
+        mmap.put("cTaskTechnology",cTaskTechnology);
+        return prefix + "/detail";
+    }
+
+    /*
+     *上报信息*/
+
+    @GetMapping("/report/{id}")
+    public String report(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        CTaskTechnology cTaskTechnology = cTaskTechnologyService.selectCTaskTechnologyById(id);
+        cTaskTechnology.setReportTime(DateUtils.getNowDate());
+        if(cTaskTechnology.getStatus().equals("1")){
+            cTaskTechnology.setStatus("已上报");
+        }else{
+            cTaskTechnology.setStatus("未上报");
+
+        }
+        mmap.put("cTaskTechnology",cTaskTechnology);
+        return prefix + "/report";
+    }
+
+
+    /**
+     * 导出科技成果信息列表
+     */
+    @RequiresPermissions("achievements:technology:export")
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(CTaskTechnology cTaskTechnology)
+    {
+        List<CTaskTechnology> list = cTaskTechnologyService.selectCTaskTechnologyList(cTaskTechnology);
+        ExcelUtil<CTaskTechnology> util = new ExcelUtil<CTaskTechnology>(CTaskTechnology.class);
+        return util.exportExcel(list, "technology");
+    }
+
+    /**
+     * 新增科技成果
+     */
+    @GetMapping("/add")
+    @RequiresPermissions("achievements:technology:add")
+    public String add()
+    {
+        return prefix + "/add";
+    }
+
+
+
+    /**
+     * 新增保存科技成果信息
+     */
+    @RequiresPermissions("achievements:technology:add")
+    @Log(title = "科技成果信息", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(CTaskTechnology cTaskTechnology)
+    {
+
+        cTaskTechnology.setStatus("0");
+        return toAjax(cTaskTechnologyService.insertCTaskTechnology(cTaskTechnology));
+    }
+
+    /**
+     * 新增保存科技成果信息
+     */
+    @RequiresPermissions("achievements:technology:add1")
+    @Log(title = "科技成果信息", businessType = BusinessType.INSERT)
+    @PostMapping("/add1")
+    @ResponseBody
+    public AjaxResult addSave1(CTaskTechnology cTaskTechnology)
+    {
+
+        cTaskTechnology.setStatus("1");
+        return toAjax(cTaskTechnologyService.insertCTaskTechnology(cTaskTechnology));
+    }
+
+    /**
+     * 上传
+     */
+    @GetMapping("/upload")
+    public String upload()
+    {
+        return prefix + "/upload";
+    }
+
+
+    /**
+     * 修改科技成果信息
+     */
+    @GetMapping("/edit/{id}")
+    @RequiresPermissions("achievements:technology:edit")
+    public String edit(@PathVariable("id") Long id, ModelMap mmap)
+    {
+        CTaskTechnology cTaskTechnology = cTaskTechnologyService.selectCTaskTechnologyById(id);
+        mmap.put("cTaskTechnology", cTaskTechnology);
+        return prefix + "/edit";
+    }
+
+    /**
+     * 修改保存科技成果信息
+     */
+    @RequiresPermissions("achievements:technology:edit")
+    @Log(title = "科技成果信息", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(CTaskTechnology cTaskTechnology)
+    {
+
+        cTaskTechnology.setStatus("0");
+        return toAjax(cTaskTechnologyService.updateCTaskTechnology(cTaskTechnology));
+    }
+    /**
+     * 修改保存科技成果信息
+     */
+    @RequiresPermissions("achievements:technology:edit1")
+    @Log(title = "科技成果信息", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit1")
+    @ResponseBody
+    public AjaxResult editSave1(CTaskTechnology cTaskTechnology)
+    {
+
+        cTaskTechnology.setStatus("1");
+        cTaskTechnology.setReportTime(DateUtils.getNowDate());
+        return toAjax(cTaskTechnologyService.updateCTaskTechnology(cTaskTechnology));
+    }
+
+    /**
+     * 删除科技成果信息
+     */
+    @RequiresPermissions("achievements:technology:remove")
+    @Log(title = "科技成果信息", businessType = BusinessType.DELETE)
+    @PostMapping( "/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids )
+    {
+
+        return toAjax(cTaskTechnologyService.deleteCTaskTechnologyByIds(ids));
+    }
+
+}

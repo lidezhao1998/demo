@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('发生防治年报编辑页面')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-fznb-edit" th:object="${cTaskFznb}">
+            <input name="id" th:field="*{id}" type="hidden">
+           <!-- <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">编号：</label>
+                        <div class="col-sm-8">
+                            <input name="number" th:field="*{number}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">年份：</label>
+                        <div class="col-sm-8">
+                            <input name="year"  th:field="*{year}" id="test2" class="form-control" placeholder="yyyy" type="text" style="display:block;float:left;width:421.33px " required>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">类型：</label>
+                        <div class="col-sm-8">
+                            <select name="type" class="form-control m-b" disabled>
+                                <option value="">发生防治年报</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">中央：</label>
+                        <div class="col-sm-8">
+                            <input name="ratharmCenter" th:field="*{ratharmCenter}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">省级：</label>
+                        <div class="col-sm-8">
+                            <input name="ratharmProvince" th:field="*{ratharmProvince}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地级：</label>
+                        <div class="col-sm-8">
+                            <input name="ratharmCity" th:field="*{ratharmCity}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">县级：</label>
+                        <div class="col-sm-8">
+                            <input name="ratharmCounty" th:field="*{ratharmCounty}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">中央：</label>
+                        <div class="col-sm-8">
+                            <input name="insectharmCenter" th:field="*{insectharmCenter}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">省级：</label>
+                        <div class="col-sm-8">
+                            <input name="insectharmProvince" th:field="*{insectharmProvince}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地级：</label>
+                        <div class="col-sm-8">
+                            <input name="insectharmCity" th:field="*{insectharmCity}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">县级：</label>
+                        <div class="col-sm-8">
+                            <input name="insectharmCounty" th:field="*{insectharmCounty}" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">经济损失：</label>
+                        <div class="col-sm-8">
+                            <input name="economicLoss" th:field="*{economicLoss}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">家畜死亡：</label>
+                        <div class="col-sm-8">
+                            <input name="livestockDeath" th:field="*{livestockDeath}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">其中工程区危害面积：</label>
+                        <div class="col-sm-8">
+                            <input name="hazardArea" th:field="*{hazardArea}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">危害总面积：</label>
+                        <div class="col-sm-8">
+                            <input name="hazardAllArea" th:field="*{hazardAllArea}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">当年防治用量：</label>
+                        <div class="col-sm-8">
+                            <input name="controlDosage" th:field="*{controlDosage}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">亩用量（毫升）：</label>
+                        <div class="col-sm-8">
+                            <input name="muDosage" th:field="*{muDosage}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            <h2 class="col-sm-12" style="text-align: center;font-weight: bold ">
+                年报信息
+            </h2>
+            <h4 class="form-header h4">基本信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>编号：</label>
+                        <div class="col-sm-8">
+                            <input name="number" th:field="*{number}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group" style="margin-top: 10px ">
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>年度：</label>
+                        <div class="input-group date">
+                            <div class="col-sm-8">
+                                <input name="year"  th:field="*{year}" id="test2" class="form-control" placeholder="yyyy" type="text" style="display:block;float:left;width:421.33px " required  maxlength="6">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">经济损失：</label>
+                        <div class="col-sm-8">
+                            <input name="economicLoss" th:field="*{economicLoss}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">家畜死亡：</label>
+                        <div class="col-sm-8">
+                            <input name="livestockDeath" th:field="*{livestockDeath}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">其中工程区危害面积：</label>
+                        <div class="col-sm-8">
+                            <input name="hazardArea" th:field="*{hazardArea}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">危害总面积：</label>
+                        <div class="col-sm-8">
+                            <input name="hazardAllArea" th:field="*{hazardAllArea}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')"  maxlength="6">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">当年防治用量（吨）：</label>
+                        <div class="col-sm-8">
+                            <input name="controlDosage" th:field="*{controlDosage}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')" maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">亩用量（毫升）：</label>
+                        <div class="col-sm-8">
+                            <input name="muDosage" th:field="*{muDosage}" class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')" maxlength="6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="form-header h4">鼠害信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">中央(鼠害)：</label>
+                        <div class="col-sm-8">
+                            <input name="ratharmCenter" th:field="*{ratharmCenter}" class="form-control" type="text" maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">省(鼠害)：</label>
+                        <div class="col-sm-8">
+                            <input name="ratharmProvince" th:field="*{ratharmProvince}" class="form-control" type="text" maxlength="6">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">市(鼠害)：</label>
+                        <div class="col-sm-8">
+                            <input name="ratharmCity" th:field="*{ratharmCity}" class="form-control" type="text" maxlength="6">
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">县(鼠害)：</label>
+                        <div class="col-sm-8">
+                            <input name="ratharmCounty" th:field="*{ratharmCounty}" class="form-control" type="text" maxlength="6">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="form-header h4">虫害信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">中央(虫害)：</label>
+                        <div class="col-sm-8">
+                            <input name="insectharmCenter" th:field="*{insectharmCenter}" class="form-control" type="text" maxlength="6">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">省级(虫害)：</label>
+                        <div class="col-sm-8">
+                            <input name="insectharmProvince" th:field="*{insectharmProvince}" class="form-control" type="text" maxlength="6">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地级(虫害)：</label>
+                        <div class="col-sm-8">
+                            <input name="insectharmCity" th:field="*{insectharmCity}" class="form-control" type="text" maxlength="6">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">县级(虫害)：</label>
+                        <div class="col-sm-8">
+                            <input name="insectharmCounty" th:field="*{insectharmCounty}" class="form-control" type="text" maxlength="6">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="button-s" style="margin-left: 70%">
+<!--
+            <button type="button" class="btn btn-w-m btn-primary" onclick="saveup()" >提 交</button>
+-->
+            <button type="button" class="btn btn-w-m btn-primary" onclick="save()" >保 存</button>
+            <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "caiji/fznb";
+        $("#form-fznb-edit").validate({
+            focusCleanup: true
+        });
+
+        /*function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-fznb-edit').serialize());
+            }
+        }*/
+
+        $("input[name='creatTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#test2',
+                type: 'year',
+            });
+        });
+
+        function save() {
+            if ($.validate.form()) {
+                $.modal.confirm("确认要点击确定吗?", function () {
+                    saveTab(prefix + "/edit", $('#form-fznb-edit').serialize());
+                });
+            }
+        }
+        function saveTab(url, data, callback) {
+            var config = {
+                url: url,
+                type: "post",
+                dataType: "json",
+                data: data,
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                },
+                success: function(result) {
+                    if (typeof callback == "function" ) {
+                        callback(result);
+                    }
+                    if (result.code == web_status.SUCCESS) {
+                        confirmdemo(result.msg,function() {
+                            reload();
+                        });
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                }
+            };
+            $.ajax(config)
+        }
+        function saveup(){
+            if ($.validate.form()) {
+                $.modal.confirm("确认要点击确定吗?", function () {
+                    saveModal(prefix + "/edit1", $('#form-fznb-edit').serialize());
+                });
+            }
+        }
+
+
+        function confirmdemo(content, callBack) {
+            layer.confirm(content, {
+                icon: 3,
+                title: "系统提示",
+                btn: ['确认']
+            },  function (index) {
+                layer.close(index);
+
+                callBack(true);
+
+            });
+        };
+
+        // 保存信息 弹出提示框
+        function saveModal(url, data, callback) {
+            var config = {
+                url: url,
+                type: "post",
+                dataType: "json",
+                data: data,
+                success: function(result) {
+                    if (typeof callback == "function" ) {
+                        callback(result);
+                    }
+                    if (result.code == web_status.SUCCESS) {
+                        confirmdemo(result.msg,function() {
+                            reload();
+                        });
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+
+                }
+            };
+            $.ajax(config)
+        }
+        function reload () {
+            parent.location.reload();
+        }
+    </script>
+</body>
+</html>

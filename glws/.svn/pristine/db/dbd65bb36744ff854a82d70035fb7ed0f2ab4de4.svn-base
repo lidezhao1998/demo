@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原生产力分析折线图')" />
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="col-sm-10 search-collapse">
+        <form id="dept-form">
+        <div class="select-list">
+            <ul>
+                <li>
+                    系数：<input type="text" id="xs" name="xs" th:value="${xs}"/>
+                </li>
+                <li>
+                    <a id="search" name="search" class="btn btn-primary btn-rounded btn-sm">&nbsp;设置</a>
+                    <a class="btn btn-warning btn-rounded btn-sm" onclick="reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                </li>
+            </ul>
+        </div>
+        </form>
+    </div>
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <div class="echarts" id="echarts-line-chart"></div>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script type="text/javascript">
+    var prefix = ctx + "analyze/production";
+    $(function () {
+        var message="[[${message}]]";
+        if(message!=""){
+            alert(message);
+        }
+        var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+        var lineoption = {
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['草原生产力','草原生产力预测']
+            },
+            grid:{
+                x:40,
+                x2:40,
+                y2:24
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : [[${years}]]
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    name: '万吨',
+                    axisLabel : {
+                        margin:-3,
+                        formatter: '{value}'
+                    },
+                    grid: {
+                        left: 35
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'草原生产力',
+                    type:'line',
+                    data: [[${values}]],
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    }
+                    ,
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'草原生产力预测',
+                    type:'line',
+                    color:"#14d146",
+                    data: [[${anaData}]]
+                }
+
+
+            ]
+        };
+        lineChart.setOption(lineoption);
+        $(window).resize(lineChart.resize);
+
+        var options = {
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            pageSize:5,
+            pageList:[5,10,15,20],//分页步进值
+            url: prefix + "/list",
+            sortName: "createTime",
+            sortOrder: "asc",
+            modalName: "草原生产力历史变化",
+            columns: [
+                {
+                    field: 'id',
+                    title: 'ID'
+                },
+                {
+                    field: 'year',
+                    title: '年份'
+                },
+                {
+                    field: 'value',
+                    title: '生产力'
+                }
+            ]
+        };
+        $.table.init(options);
+
+
+    });
+    function reset(){
+        var xs=0.9;
+        $("#xs").val(xs);
+        window.location.href=prefix+"?xs="+xs;
+
+    }
+    $('#search').click(function () {
+        var xs=$("#xs").val();
+        if(!isNaN(xs)){
+            if(0>=xs){
+                alert("请输入0到1之间的数");
+            }else if(xs>=1){
+                alert("请输入0到1之间的数");
+            }else{
+                window.location.href=prefix+"?xs="+xs;
+            }
+        }else{
+            alert("请输入0到1之间的数");
+        }
+    })
+
+</script>
+</body>
+</html>

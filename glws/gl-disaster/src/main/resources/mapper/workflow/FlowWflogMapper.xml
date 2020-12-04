@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.workflow.mapper.FlowWflogMapper">
+    
+    <resultMap type="FlowWflog" id="FlowWflogResult">
+        <result property="login"    column="LOGIN"    />
+        <result property="workflowid"    column="WORKFLOWID"    />
+        <result property="superlogid"    column="SUPERLOGID"    />
+        <result property="nextlogid"    column="NEXTLOGID"    />
+        <result property="workflowname"    column="WORKFLOWNAME"    />
+        <result property="filetypeid"    column="FILETYPEID"    />
+        <result property="filetypename"    column="FILETYPENAME"    />
+        <result property="recordid"    column="RECORDID"    />
+        <result property="title"    column="TITLE"    />
+        <result property="receiveid"    column="RECEIVEID"    />
+        <result property="receivedept"    column="RECEIVEDEPT"    />
+        <result property="receivename"    column="RECEIVENAME"    />
+        <result property="receivetime"    column="RECEIVETIME"    />
+        <result property="signname"    column="SIGNNAME"    />
+        <result property="signdeptid"    column="SIGNDEPTID"    />
+        <result property="signuserid"    column="SIGNUSERID"    />
+        <result property="signtime"    column="SIGNTIME"    />
+        <result property="senddeptid"    column="SENDDEPTID"    />
+        <result property="senduserid"    column="SENDUSERID"    />
+        <result property="sendname"    column="SENDNAME"    />
+        <result property="settime"    column="SETTIME"    />
+        <result property="sendtime"    column="SENDTIME"    />
+        <result property="operateid"    column="OPERATEID"    />
+        <result property="operatename"    column="OPERATENAME"    />
+        <result property="wflevelid"    column="WFLEVELID"    />
+        <result property="wflevename"    column="WFLEVENAME"    />
+        <result property="idea"    column="IDEA"    />
+        <result property="superrecordid"    column="SUPERRECORDID"    />
+        <result property="superfiletype"    column="SUPERFILETYPE"    />
+        <result property="examinetag"    column="EXAMINETAG"    />
+        <result property="startexamine"    column="STARTEXAMINE"    />
+        <result property="endexamine"    column="ENDEXAMINE"    />
+        <result property="endsublogid"    column="ENDSUBLOGID"    />
+        <result property="accredit"    column="ACCREDIT"    />
+        <result property="accreditinfo"    column="ACCREDITINFO"    />
+        <result property="acctopid"    column="ACCTOPID"    />
+        <result property="addsub"    column="ADDSUB"    />
+        <result property="freedeptuser"    column="FREEDEPTUSER"    />
+        <result property="freeflag"    column="FREEFLAG"    />
+        <result property="startfreewfleve"    column="STARTFREEWFLEVE"    />
+        <result property="doback"    column="DOBACK"    />
+        <result property="sequence"    column="SEQUENCE"    />
+        <result property="giveaccuser"    column="GIVEACCUSER"    />
+        <result property="superworkflow"    column="SUPERWORKFLOW"    />
+    </resultMap>
+
+    <sql id="selectFlowWflogVo">
+        select LOGIN, WORKFLOWID, SUPERLOGID, NEXTLOGID, WORKFLOWNAME, FILETYPEID, FILETYPENAME, RECORDID, TITLE, RECEIVEID, RECEIVEDEPT, RECEIVENAME, RECEIVETIME, SIGNNAME, SIGNDEPTID, SIGNUSERID, SIGNTIME, SENDDEPTID, SENDUSERID, SENDNAME, SETTIME, SENDTIME, OPERATEID, OPERATENAME, WFLEVELID, WFLEVENAME, IDEA, SUPERRECORDID, SUPERFILETYPE, EXAMINETAG, STARTEXAMINE, ENDEXAMINE, ENDSUBLOGID, ACCREDIT, ACCREDITINFO, ACCTOPID, ADDSUB, FREEDEPTUSER, FREEFLAG, STARTFREEWFLEVE, DOBACK, SEQUENCE, GIVEACCUSER, SUPERWORKFLOW from flow_wflog
+    </sql>
+
+    <select id="selectFlowWflogList" parameterType="FlowWflog" resultMap="FlowWflogResult">
+        <include refid="selectFlowWflogVo"/>
+        <where>  
+            <if test="workflowid != null  and workflowid != ''"> and WORKFLOWID = #{workflowid}</if>
+            <if test="superlogid != null  and superlogid != ''"> and SUPERLOGID = #{superlogid}</if>
+            <if test="nextlogid != null  and nextlogid != ''"> and NEXTLOGID = #{nextlogid}</if>
+            <if test="workflowname != null  and workflowname != ''"> and WORKFLOWNAME like concat('%', #{workflowname}, '%')</if>
+            <if test="filetypeid != null  and filetypeid != ''"> and FILETYPEID = #{filetypeid}</if>
+            <if test="filetypename != null  and filetypename != ''"> and FILETYPENAME like concat('%', #{filetypename}, '%')</if>
+            <if test="recordid != null  and recordid != ''"> and RECORDID = #{recordid}</if>
+            <if test="title != null  and title != ''"> and TITLE = #{title}</if>
+            <if test="receiveid != null  and receiveid != ''"> and RECEIVEID = #{receiveid}</if>
+            <if test="receivedept != null  and receivedept != ''"> and RECEIVEDEPT = #{receivedept}</if>
+            <if test="receivename != null  and receivename != ''"> and RECEIVENAME like concat('%', #{receivename}, '%')</if>
+            <if test="receivetime != null  and receivetime != ''"> and RECEIVETIME = #{receivetime}</if>
+            <if test="signname != null  and signname != ''"> and SIGNNAME like concat('%', #{signname}, '%')</if>
+            <if test="signdeptid != null  and signdeptid != ''"> and SIGNDEPTID = #{signdeptid}</if>
+            <if test="signuserid != null  and signuserid != ''"> and SIGNUSERID = #{signuserid}</if>
+            <if test="signtime != null  and signtime != ''"> and SIGNTIME = #{signtime}</if>
+            <if test="senddeptid != null  and senddeptid != ''"> and SENDDEPTID = #{senddeptid}</if>
+            <if test="senduserid != null  and senduserid != ''"> and SENDUSERID = #{senduserid}</if>
+            <if test="sendname != null  and sendname != ''"> and SENDNAME like concat('%', #{sendname}, '%')</if>
+            <if test="settime != null  and settime != ''"> and SETTIME = #{settime}</if>
+            <if test="sendtime != null  and sendtime != ''"> and SENDTIME = #{sendtime}</if>
+            <if test="operateid != null  and operateid != ''"> and OPERATEID = #{operateid}</if>
+            <if test="operatename != null  and operatename != ''"> and OPERATENAME like concat('%', #{operatename}, '%')</if>
+            <if test="wflevelid != null  and wflevelid != ''"> and WFLEVELID = #{wflevelid}</if>
+            <if test="wflevename != null  and wflevename != ''"> and WFLEVENAME like concat('%', #{wflevename}, '%')</if>
+            <if test="idea != null  and idea != ''"> and IDEA = #{idea}</if>
+            <if test="superrecordid != null  and superrecordid != ''"> and SUPERRECORDID = #{superrecordid}</if>
+            <if test="superfiletype != null  and superfiletype != ''"> and SUPERFILETYPE = #{superfiletype}</if>
+            <if test="examinetag != null  and examinetag != ''"> and EXAMINETAG = #{examinetag}</if>
+            <if test="startexamine != null  and startexamine != ''"> and STARTEXAMINE = #{startexamine}</if>
+            <if test="endexamine != null  and endexamine != ''"> and ENDEXAMINE = #{endexamine}</if>
+            <if test="endsublogid != null  and endsublogid != ''"> and ENDSUBLOGID = #{endsublogid}</if>
+            <if test="accredit != null  and accredit != ''"> and ACCREDIT = #{accredit}</if>
+            <if test="accreditinfo != null  and accreditinfo != ''"> and ACCREDITINFO = #{accreditinfo}</if>
+            <if test="acctopid != null  and acctopid != ''"> and ACCTOPID = #{acctopid}</if>
+            <if test="addsub != null  and addsub != ''"> and ADDSUB = #{addsub}</if>
+            <if test="freedeptuser != null  and freedeptuser != ''"> and FREEDEPTUSER = #{freedeptuser}</if>
+            <if test="freeflag != null  and freeflag != ''"> and FREEFLAG = #{freeflag}</if>
+            <if test="startfreewfleve != null  and startfreewfleve != ''"> and STARTFREEWFLEVE = #{startfreewfleve}</if>
+            <if test="doback != null  and doback != ''"> and DOBACK = #{doback}</if>
+            <if test="sequence != null  and sequence != ''"> and SEQUENCE = #{sequence}</if>
+            <if test="giveaccuser != null  and giveaccuser != ''"> and GIVEACCUSER = #{giveaccuser}</if>
+            <if test="superworkflow != null  and superworkflow != ''"> and SUPERWORKFLOW = #{superworkflow}</if>
+        </where>
+    </select>
+    
+    <select id="selectFlowWflogById" parameterType="String" resultMap="FlowWflogResult">
+        <include refid="selectFlowWflogVo"/>
+        where LOGIN = #{login}
+    </select>
+        
+    <insert id="insertFlowWflog" parameterType="FlowWflog">
+        insert into flow_wflog
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="login != null  and login != ''">LOGIN,</if>
+            <if test="workflowid != null  and workflowid != ''">WORKFLOWID,</if>
+            <if test="superlogid != null  and superlogid != ''">SUPERLOGID,</if>
+            <if test="nextlogid != null  and nextlogid != ''">NEXTLOGID,</if>
+            <if test="workflowname != null  and workflowname != ''">WORKFLOWNAME,</if>
+            <if test="filetypeid != null  and filetypeid != ''">FILETYPEID,</if>
+            <if test="filetypename != null  and filetypename != ''">FILETYPENAME,</if>
+            <if test="recordid != null  and recordid != ''">RECORDID,</if>
+            <if test="title != null  and title != ''">TITLE,</if>
+            <if test="receiveid != null  and receiveid != ''">RECEIVEID,</if>
+            <if test="receivedept != null  and receivedept != ''">RECEIVEDEPT,</if>
+            <if test="receivename != null  and receivename != ''">RECEIVENAME,</if>
+            <if test="receivetime != null  and receivetime != ''">RECEIVETIME,</if>
+            <if test="signname != null  and signname != ''">SIGNNAME,</if>
+            <if test="signdeptid != null  and signdeptid != ''">SIGNDEPTID,</if>
+            <if test="signuserid != null  and signuserid != ''">SIGNUSERID,</if>
+            <if test="signtime != null  and signtime != ''">SIGNTIME,</if>
+            <if test="senddeptid != null  and senddeptid != ''">SENDDEPTID,</if>
+            <if test="senduserid != null  and senduserid != ''">SENDUSERID,</if>
+            <if test="sendname != null  and sendname != ''">SENDNAME,</if>
+            <if test="settime != null  and settime != ''">SETTIME,</if>
+            <if test="sendtime != null  and sendtime != ''">SENDTIME,</if>
+            <if test="operateid != null  and operateid != ''">OPERATEID,</if>
+            <if test="operatename != null  and operatename != ''">OPERATENAME,</if>
+            <if test="wflevelid != null  and wflevelid != ''">WFLEVELID,</if>
+            <if test="wflevename != null  and wflevename != ''">WFLEVENAME,</if>
+            <if test="idea != null  and idea != ''">IDEA,</if>
+            <if test="superrecordid != null  and superrecordid != ''">SUPERRECORDID,</if>
+            <if test="superfiletype != null  and superfiletype != ''">SUPERFILETYPE,</if>
+            <if test="examinetag != null  and examinetag != ''">EXAMINETAG,</if>
+            <if test="startexamine != null  and startexamine != ''">STARTEXAMINE,</if>
+            <if test="endexamine != null  and endexamine != ''">ENDEXAMINE,</if>
+            <if test="endsublogid != null  and endsublogid != ''">ENDSUBLOGID,</if>
+            <if test="accredit != null  and accredit != ''">ACCREDIT,</if>
+            <if test="accreditinfo != null  and accreditinfo != ''">ACCREDITINFO,</if>
+            <if test="acctopid != null  and acctopid != ''">ACCTOPID,</if>
+            <if test="addsub != null  and addsub != ''">ADDSUB,</if>
+            <if test="freedeptuser != null  and freedeptuser != ''">FREEDEPTUSER,</if>
+            <if test="freeflag != null  and freeflag != ''">FREEFLAG,</if>
+            <if test="startfreewfleve != null  and startfreewfleve != ''">STARTFREEWFLEVE,</if>
+            <if test="doback != null  and doback != ''">DOBACK,</if>
+            <if test="sequence != null  and sequence != ''">SEQUENCE,</if>
+            <if test="giveaccuser != null  and giveaccuser != ''">GIVEACCUSER,</if>
+            <if test="superworkflow != null  and superworkflow != ''">SUPERWORKFLOW,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="login != null  and login != ''">#{login},</if>
+            <if test="workflowid != null  and workflowid != ''">#{workflowid},</if>
+            <if test="superlogid != null  and superlogid != ''">#{superlogid},</if>
+            <if test="nextlogid != null  and nextlogid != ''">#{nextlogid},</if>
+            <if test="workflowname != null  and workflowname != ''">#{workflowname},</if>
+            <if test="filetypeid != null  and filetypeid != ''">#{filetypeid},</if>
+            <if test="filetypename != null  and filetypename != ''">#{filetypename},</if>
+            <if test="recordid != null  and recordid != ''">#{recordid},</if>
+            <if test="title != null  and title != ''">#{title},</if>
+            <if test="receiveid != null  and receiveid != ''">#{receiveid},</if>
+            <if test="receivedept != null  and receivedept != ''">#{receivedept},</if>
+            <if test="receivename != null  and receivename != ''">#{receivename},</if>
+            <if test="receivetime != null  and receivetime != ''">#{receivetime},</if>
+            <if test="signname != null  and signname != ''">#{signname},</if>
+            <if test="signdeptid != null  and signdeptid != ''">#{signdeptid},</if>
+            <if test="signuserid != null  and signuserid != ''">#{signuserid},</if>
+            <if test="signtime != null  and signtime != ''">#{signtime},</if>
+            <if test="senddeptid != null  and senddeptid != ''">#{senddeptid},</if>
+            <if test="senduserid != null  and senduserid != ''">#{senduserid},</if>
+            <if test="sendname != null  and sendname != ''">#{sendname},</if>
+            <if test="settime != null  and settime != ''">#{settime},</if>
+            <if test="sendtime != null  and sendtime != ''">#{sendtime},</if>
+            <if test="operateid != null  and operateid != ''">#{operateid},</if>
+            <if test="operatename != null  and operatename != ''">#{operatename},</if>
+            <if test="wflevelid != null  and wflevelid != ''">#{wflevelid},</if>
+            <if test="wflevename != null  and wflevename != ''">#{wflevename},</if>
+            <if test="idea != null  and idea != ''">#{idea},</if>
+            <if test="superrecordid != null  and superrecordid != ''">#{superrecordid},</if>
+            <if test="superfiletype != null  and superfiletype != ''">#{superfiletype},</if>
+            <if test="examinetag != null  and examinetag != ''">#{examinetag},</if>
+            <if test="startexamine != null  and startexamine != ''">#{startexamine},</if>
+            <if test="endexamine != null  and endexamine != ''">#{endexamine},</if>
+            <if test="endsublogid != null  and endsublogid != ''">#{endsublogid},</if>
+            <if test="accredit != null  and accredit != ''">#{accredit},</if>
+            <if test="accreditinfo != null  and accreditinfo != ''">#{accreditinfo},</if>
+            <if test="acctopid != null  and acctopid != ''">#{acctopid},</if>
+            <if test="addsub != null  and addsub != ''">#{addsub},</if>
+            <if test="freedeptuser != null  and freedeptuser != ''">#{freedeptuser},</if>
+            <if test="freeflag != null  and freeflag != ''">#{freeflag},</if>
+            <if test="startfreewfleve != null  and startfreewfleve != ''">#{startfreewfleve},</if>
+            <if test="doback != null  and doback != ''">#{doback},</if>
+            <if test="sequence != null  and sequence != ''">#{sequence},</if>
+            <if test="giveaccuser != null  and giveaccuser != ''">#{giveaccuser},</if>
+            <if test="superworkflow != null  and superworkflow != ''">#{superworkflow},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFlowWflog" parameterType="FlowWflog">
+        update flow_wflog
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workflowid != null  and workflowid != ''">WORKFLOWID = #{workflowid},</if>
+            <if test="superlogid != null  and superlogid != ''">SUPERLOGID = #{superlogid},</if>
+            <if test="nextlogid != null  and nextlogid != ''">NEXTLOGID = #{nextlogid},</if>
+            <if test="workflowname != null  and workflowname != ''">WORKFLOWNAME = #{workflowname},</if>
+            <if test="filetypeid != null  and filetypeid != ''">FILETYPEID = #{filetypeid},</if>
+            <if test="filetypename != null  and filetypename != ''">FILETYPENAME = #{filetypename},</if>
+            <if test="recordid != null  and recordid != ''">RECORDID = #{recordid},</if>
+            <if test="title != null  and title != ''">TITLE = #{title},</if>
+            <if test="receiveid != null  and receiveid != ''">RECEIVEID = #{receiveid},</if>
+            <if test="receivedept != null  and receivedept != ''">RECEIVEDEPT = #{receivedept},</if>
+            <if test="receivename != null  and receivename != ''">RECEIVENAME = #{receivename},</if>
+            <if test="receivetime != null  and receivetime != ''">RECEIVETIME = #{receivetime},</if>
+            <if test="signname != null  and signname != ''">SIGNNAME = #{signname},</if>
+            <if test="signdeptid != null  and signdeptid != ''">SIGNDEPTID = #{signdeptid},</if>
+            <if test="signuserid != null  and signuserid != ''">SIGNUSERID = #{signuserid},</if>
+            <if test="signtime != null  and signtime != ''">SIGNTIME = #{signtime},</if>
+            <if test="senddeptid != null  and senddeptid != ''">SENDDEPTID = #{senddeptid},</if>
+            <if test="senduserid != null  and senduserid != ''">SENDUSERID = #{senduserid},</if>
+            <if test="sendname != null  and sendname != ''">SENDNAME = #{sendname},</if>
+            <if test="settime != null  and settime != ''">SETTIME = #{settime},</if>
+            <if test="sendtime != null  and sendtime != ''">SENDTIME = #{sendtime},</if>
+            <if test="operateid != null  and operateid != ''">OPERATEID = #{operateid},</if>
+            <if test="operatename != null  and operatename != ''">OPERATENAME = #{operatename},</if>
+            <if test="wflevelid != null  and wflevelid != ''">WFLEVELID = #{wflevelid},</if>
+            <if test="wflevename != null  and wflevename != ''">WFLEVENAME = #{wflevename},</if>
+            <if test="idea != null  and idea != ''">IDEA = #{idea},</if>
+            <if test="superrecordid != null  and superrecordid != ''">SUPERRECORDID = #{superrecordid},</if>
+            <if test="superfiletype != null  and superfiletype != ''">SUPERFILETYPE = #{superfiletype},</if>
+            <if test="examinetag != null  and examinetag != ''">EXAMINETAG = #{examinetag},</if>
+            <if test="startexamine != null  and startexamine != ''">STARTEXAMINE = #{startexamine},</if>
+            <if test="endexamine != null  and endexamine != ''">ENDEXAMINE = #{endexamine},</if>
+            <if test="endsublogid != null  and endsublogid != ''">ENDSUBLOGID = #{endsublogid},</if>
+            <if test="accredit != null  and accredit != ''">ACCREDIT = #{accredit},</if>
+            <if test="accreditinfo != null  and accreditinfo != ''">ACCREDITINFO = #{accreditinfo},</if>
+            <if test="acctopid != null  and acctopid != ''">ACCTOPID = #{acctopid},</if>
+            <if test="addsub != null  and addsub != ''">ADDSUB = #{addsub},</if>
+            <if test="freedeptuser != null  and freedeptuser != ''">FREEDEPTUSER = #{freedeptuser},</if>
+            <if test="freeflag != null  and freeflag != ''">FREEFLAG = #{freeflag},</if>
+            <if test="startfreewfleve != null  and startfreewfleve != ''">STARTFREEWFLEVE = #{startfreewfleve},</if>
+            <if test="doback != null  and doback != ''">DOBACK = #{doback},</if>
+            <if test="sequence != null  and sequence != ''">SEQUENCE = #{sequence},</if>
+            <if test="giveaccuser != null  and giveaccuser != ''">GIVEACCUSER = #{giveaccuser},</if>
+            <if test="superworkflow != null  and superworkflow != ''">SUPERWORKFLOW = #{superworkflow},</if>
+        </trim>
+        where LOGIN = #{login}
+    </update>
+
+    <delete id="deleteFlowWflogById" parameterType="String">
+        delete from flow_wflog where LOGIN = #{login}
+    </delete>
+
+    <delete id="deleteFlowWflogByIds" parameterType="String">
+        delete from flow_wflog where LOGIN in 
+        <foreach item="login" collection="array" open="(" separator="," close=")">
+            #{login}
+        </foreach>
+    </delete>
+    
+</mapper>

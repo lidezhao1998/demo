@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CPlotMapper">
+
+    <resultMap type="CPlot" id="CPlotResult">
+        <result property="plotId" column="PLOT_ID"/>
+        <result property="groundId" column="GROUND_ID"/>
+        <result property="samplingNumber" column="SAMPLING_NUMBER"/>
+        <result property="samplingArea" column="SAMPLING_AREA"/>
+        <result property="harmfulSpeciesType" column="HARMFUL_SPECIES_TYPE"/>
+        <result property="detailedType" column="DETAILED_TYPE"/>
+        <result property="sectiondType" column="SECTIOND_TYPE"/>
+        <result property="quantityDetermination" column="QUANTITY_DETERMINATION"/>
+        <result property="photoUrl" column="PHOTO_URL"/>
+        <result property="standardDensity" column="STANDARD_DENSITY"/>
+        <result property="samplingTime" column="SAMPLING_TIME"/>
+        <result property="plantNumber" column="PLANT_NUMBER"/>
+        <result property="eachpestNumber" column="EACHPEST_NUMBER"/>
+        <result property="mouseSeare" column="MOUSE_SEARE"/>
+        <result property="status" column="STATUS"/>
+        <result property="createBy" column="CREATE_BY"/>
+        <result property="createTime" column="CREATE_TIME"/>
+
+    </resultMap>
+
+    <sql id="selectCPlotVo">
+       SELECT
+	PLOT_ID,
+	GROUND_ID,
+	SAMPLING_NUMBER,
+	SECTIOND_TYPE,
+d.dict_label	SAMPLING_AREA,
+	CASE HARMFUL_SPECIES_TYPE
+WHEN '001' THEN
+	'害虫'
+WHEN '002' THEN
+	'害鼠'
+WHEN '003' THEN
+	'病害'
+WHEN '004' THEN
+	'毒害草'
+END AS HARMFUL_SPECIES_TYPE,
+ DETAILED_TYPE,
+ QUANTITY_DETERMINATION,
+ PHOTO_URL,
+ STANDARD_DENSITY,
+ SAMPLING_TIME,
+ PLANT_NUMBER,
+ EACHPEST_NUMBER,
+ MOUSE_SEARE,
+ SAMPLING_TIME,
+ p.STATUS,
+ p.CREATE_TIME
+FROM
+	c_plot p
+LEFT  JOIN  sys_dict_data d on  d.dict_code=p.SAMPLING_AREA
+    </sql>
+
+    <select id="selectCPlotList" parameterType="CPlot" resultMap="CPlotResult">
+        <include refid="selectCPlotVo"/>
+        <where>
+            <if test="plotId != null ">and PLOT_ID = #{plotId}</if>
+            <if test="groundId != null ">and GROUND_ID = #{groundId}</if>
+            <if test="samplingNumber != null  and samplingNumber != ''">and SAMPLING_NUMBER = #{samplingNumber}</if>
+            <if test="samplingArea != null  and samplingArea != ''">and SAMPLING_AREA = #{samplingArea}</if>
+            <!--<if test="harmfulSpeciesType != null  and harmfulSpeciesType != ''"> and HARMFUL_SPECIES_TYPE = #{harmfulSpeciesType}</if>-->
+            <if test="detailedType != null  and detailedType != ''">and DETAILED_TYPE = #{detailedType}</if>
+            <if test="quantityDetermination != null  and quantityDetermination != ''">and QUANTITY_DETERMINATION =
+                #{quantityDetermination}
+            </if>
+            <!--
+                    <if test="photoUrl != null  and photoUrl != ''"> and PHOTO_URL = #{photoUrl}</if>
+            -->
+            <if test="standardDensity != null  and standardDensity != ''">and STANDARD_DENSITY = #{standardDensity}</if>
+            <if test="status != null  and status != ''">and STATUS = #{status}</if>
+        </where>
+
+
+    </select>
+
+    <select id="selectCPlotGyId" parameterType="Long" resultMap="CPlotResult">
+        <include refid="selectCPlotVo"/>
+        where GROUND_ID = #{groundId}
+    </select>
+    <select id="selectCPlotGyIdCount" parameterType="Long" resultMap="CPlotResult">
+        <include refid="selectCPlotVo"/>
+        where GROUND_ID = #{groundId} Order By CREATE_TIME DESC
+    </select>
+    <select id="selectCPlotById" parameterType="Long" resultMap="CPlotResult">
+        select PLOT_ID, GROUND_ID, SAMPLING_NUMBER, SAMPLING_AREA,SECTIOND_TYPE,CASE HARMFUL_SPECIES_TYPE when '001' then '害虫'when '002' then '害鼠'when '003' then '病害'when '004' then '毒害草' END AS HARMFUL_SPECIES_TYPE, DETAILED_TYPE, QUANTITY_DETERMINATION, PHOTO_URL, STANDARD_DENSITY ,SAMPLING_TIME,PLANT_NUMBER,EACHPEST_NUMBER,MOUSE_SEARE,SAMPLING_TIME,STATUS ,CREATE_TIME from c_plot
+
+        where PLOT_ID = #{plotId}
+    </select>
+
+    <sql id="selectCPlotVo1">
+       select PLOT_ID, GROUND_ID, SAMPLING_NUMBER, SAMPLING_AREA, HARMFUL_SPECIES_TYPE, DETAILED_TYPE,SECTIOND_TYPE, QUANTITY_DETERMINATION, PHOTO_URL, STANDARD_DENSITY ,SAMPLING_TIME,PLANT_NUMBER,EACHPEST_NUMBER,MOUSE_SEARE,STATUS from c_plot
+ </sql>
+
+
+    <select id="selectCPlotList1" parameterType="CPlot" resultMap="CPlotResult">
+        <include refid="selectCPlotVo1"/>
+
+
+    </select>
+
+
+    <sql id="selectCPlotVo2">
+       select PLOT_ID, GROUND_ID, SAMPLING_NUMBER, SECTIOND_TYPE,SAMPLING_AREA, HARMFUL_SPECIES_TYPE, DETAILED_TYPE,SECTIOND_TYPE, QUANTITY_DETERMINATION, PHOTO_URL, STANDARD_DENSITY ,SAMPLING_TIME,PLANT_NUMBER,EACHPEST_NUMBER,MOUSE_SEARE,STATUS from c_plot
+ </sql>
+
+
+    <select id="selectCPlotList2" parameterType="CPlot" resultMap="CPlotResult">
+        <include refid="selectCPlotVo2"/>
+
+
+    </select>
+    <select id="selectCPlotDetailById" parameterType="Long" resultMap="CPlotResult">
+  SELECT
+	PLOT_ID,
+	GROUND_ID,
+	SAMPLING_NUMBER,
+	SECTIOND_TYPE,
+	d.dict_label SAMPLING_AREA,
+	CASE HARMFUL_SPECIES_TYPE
+    WHEN '001' THEN
+        '害虫'
+    WHEN '002' THEN
+        '害鼠'
+    WHEN '003' THEN
+        '病害'
+    WHEN '004' THEN
+        '毒害草'
+    END AS HARMFUL_SPECIES_TYPE,
+     DETAILED_TYPE,
+     QUANTITY_DETERMINATION,
+     PHOTO_URL,
+     STANDARD_DENSITY,
+     SAMPLING_TIME,
+     PLANT_NUMBER,
+     EACHPEST_NUMBER,
+     MOUSE_SEARE,
+     SAMPLING_TIME,
+     p.STATUS,
+     p.CREATE_TIME
+    FROM
+        c_plot p
+    LEFT  JOIN sys_dict_data d ON d.dict_code = p.SAMPLING_AREA
+    where p.PLOT_ID = #{plotId}
+
+
+    </select>
+
+
+    <insert id="insertCPlot" parameterType="CPlot" useGeneratedKeys="true" keyProperty="plotId">
+
+        insert into c_plot
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            <if test="groundId != null ">GROUND_ID,</if>
+            <if test="samplingNumber != null  and samplingNumber != ''">SAMPLING_NUMBER,</if>
+            <if test="samplingArea != null  and samplingArea != ''">SAMPLING_AREA,</if>
+            <if test="harmfulSpeciesType != null  and harmfulSpeciesType != ''">HARMFUL_SPECIES_TYPE,</if>
+            <if test="detailedType != null  and detailedType != ''">DETAILED_TYPE,</if>
+            <if test="sectiondType != null  and detailedType != ''">SECTIOND_TYPE,</if>
+            <if test="quantityDetermination != null  and quantityDetermination != ''">QUANTITY_DETERMINATION,</if>
+            <if test="photoUrl != null  and photoUrl != ''">PHOTO_URL,</if>
+            <if test="standardDensity != null  and standardDensity != ''">STANDARD_DENSITY,</if>
+            <if test="plantNumber != null  and plantNumber != ''">PLANT_NUMBER,</if>
+            <if test="eachpestNumber != null  and eachpestNumber != ''">EACHPEST_NUMBER,</if>
+            <if test="mouseSeare != null  and mouseSeare != ''">MOUSE_SEARE,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="samplingTime != null">SAMPLING_TIME,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="createTime != null ">CREATE_TIME,</if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+
+
+            <if test="groundId != null ">#{groundId},</if>
+            <if test="samplingNumber != null  and samplingNumber != ''">#{samplingNumber},</if>
+            <if test="samplingArea != null  and samplingArea != ''">#{samplingArea},</if>
+            <if test="harmfulSpeciesType != null  and harmfulSpeciesType != ''">#{harmfulSpeciesType},</if>
+            <if test="detailedType != null  and detailedType != ''">#{detailedType},</if>
+            <if test="sectiondType != null  and detailedType != ''">#{sectiondType},</if>
+            <if test="quantityDetermination != null  and quantityDetermination != ''">#{quantityDetermination},</if>
+            <if test="photoUrl != null  and photoUrl != ''">#{photoUrl},</if>
+            <if test="standardDensity != null  and standardDensity != ''">#{standardDensity},</if>
+            <if test="plantNumber != null  and plantNumber != ''">#{plantNumber},</if>
+            <if test="eachpestNumber != null  and eachpestNumber != ''">#{eachpestNumber},</if>
+            <if test="mouseSeare != null  and mouseSeare != ''">#{mouseSeare},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="samplingTime != null">#{samplingTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+
+        </trim>
+    </insert>
+
+    <update id="updateCPlot" parameterType="CPlot">
+        update c_plot
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="groundId != null ">GROUND_ID = #{groundId},</if>
+            <if test="samplingNumber != null  and samplingNumber != ''">SAMPLING_NUMBER = #{samplingNumber},</if>
+            <if test="samplingArea != null  and samplingArea != ''">SAMPLING_AREA = #{samplingArea},</if>
+            <if test="harmfulSpeciesType != null  and harmfulSpeciesType != ''">HARMFUL_SPECIES_TYPE =
+                #{harmfulSpeciesType},
+            </if>
+            <if test="detailedType != null  and detailedType != ''">DETAILED_TYPE = #{detailedType},</if>
+            <if test="sectiondType != null  and detailedType != ''">SECTIOND_TYPE = #{sectiondType},</if>
+            <if test="quantityDetermination != null  and quantityDetermination != ''">QUANTITY_DETERMINATION =
+                #{quantityDetermination},
+            </if>
+            <if test="photoUrl != null  and photoUrl != ''">PHOTO_URL = #{photoUrl},</if>
+            <if test="plantNumber != null  and plantNumber != ''">PLANT_NUMBER=#{plantNumber},</if>
+            <if test="standardDensity != null  and standardDensity != ''">STANDARD_DENSITY = #{standardDensity},</if>
+            <if test="samplingTime != null">SAMPLING_TIME = #{samplingTime},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+        </trim>
+        where PLOT_ID = #{plotId}
+    </update>
+
+    <update id="updateCPlot1" parameterType="CPlot">
+        update c_plot
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="groundId != null ">GROUND_ID = #{groundId},</if>
+            <if test="samplingNumber != null  and samplingNumber != ''">SAMPLING_NUMBER = #{samplingNumber},</if>
+            <if test="samplingArea != null  and samplingArea != ''">SAMPLING_AREA = #{samplingArea},</if>
+            <if test="harmfulSpeciesType != null  and harmfulSpeciesType != ''">HARMFUL_SPECIES_TYPE =
+                #{harmfulSpeciesType},
+            </if>
+            <if test="detailedType != null  and detailedType != ''">DETAILED_TYPE = #{detailedType},</if>
+            <if test="sectiondType != null  and detailedType != ''">SECTIOND_TYPE = #{sectiondType},</if>
+            <if test="quantityDetermination != null  and quantityDetermination != ''">QUANTITY_DETERMINATION =
+                #{quantityDetermination},
+            </if>
+            <if test="plantNumber != null  and plantNumber != ''">PLANT_NUMBER=#{plantNumber},</if>
+            <if test="photoUrl != null  and photoUrl != ''">PHOTO_URL = #{photoUrl},</if>
+            <if test="standardDensity != null  and standardDensity != ''">STANDARD_DENSITY = #{standardDensity},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <!--            <if test="samplingTime != null  and samplingTime != ''">SAMPLING_TIME = #{samplingTime},</if>-->
+        </trim>
+        where STATUS=0
+    </update>
+
+    <delete id="deleteCPlotById" parameterType="Long">
+        delete from c_plot where PLOT_ID = #{plotId}
+    </delete>
+
+    <delete id="deleteCPlotByIds" parameterType="String">
+        delete from c_plot where PLOT_ID in
+        <foreach item="plotId" collection="array" open="(" separator="," close=")">
+            #{plotId}
+        </foreach>
+    </delete>
+
+    <!--<select id="selectCPlotById1" parameterType="Long" >
+        select PLOT_ID, GROUND_ID, SAMPLING_NUMBER, SAMPLING_AREA, HARMFUL_SPECIES_TYPE, DETAILED_TYPE, QUANTITY_DETERMINATION, PHOTO, STANDARD_DENSITY ,SAMPLING_TIME,PLANT_NUMBER,EACHPEST_NUMBER,MOUSE_SEARE from c_plot
+        where  PLOT_ID = #{plotId}
+    </select>-->
+
+    <delete id="deleteCPlotGyIds" parameterType="String">
+        delete from c_plot where GROUND_ID in
+        <foreach item="plotId" collection="array" open="(" separator="," close=")">
+            #{plotId}
+        </foreach>
+    </delete>
+</mapper>

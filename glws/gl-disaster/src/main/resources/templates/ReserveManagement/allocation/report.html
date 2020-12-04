@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('查看科技成果上报信息')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+
+        <form class="form-horizontal m" id="form-allocation-edit" th:object="${KAllocation}">
+            <h2 class="col-sm-12" style="text-align: center;font-weight: bold ">
+                上报信息
+            </h2>
+            <h3 style="margin-left: 6%">
+                ---------基本信息---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            </h3>
+            <input name="id" th:field="*{id}" id="id" type="hidden">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">调拨单号：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${KAllocation.oddnumber}" class="form-control-static" type="text" disabled="disabled"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">名称：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${KAllocation.dbName}" class="form-control-static" type="text" disabled="disabled"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">申请地区：</label>
+                        <div class="col-sm-8">
+                            <div   th:text="${KAllocation.applicationArea}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label class="col-sm-3 control-label">调出时间：</label>
+                    <div class="col-sm-8">
+                        <div name="allocationTime" th:text="${#dates.format(KAllocation.allocationTime,'yyyy-MM-dd')}" class=" form-control-static"  style="font-weight: bold"  type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 style="margin-left: 6%">
+                ----------物资信息---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            </h3>
+            <div class="col-sm-12 select-table">
+                <div class="row" style="margin-left:1.5px;margin-bottom: 1px">
+
+                </div>
+                <table id="mytable"  class="tg" name="test"border="0px solid rgba(48,146,62, 0.9)" cellspacing="0" cellpadding="0" style="width: 100%;height: 35px">
+                    <tr id="tr1"  align="center" style="background-color: rgba(48,146,62, 0.9)">
+                        <td style="width: 10%;height:35px;" ><font size="2" color="white">物资序号</font></td>
+                        <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>物资类型</font></td>
+                        <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>物资名称</font></td>
+                        <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>型号</font></td>
+                        <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>数量</font></td>
+                        <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>厂商信息</font></td>
+                        <!--
+                                                <td>入库人</td>
+                        -->
+                        <td style="width: 15%;height:35px; "><font size="2" color="white"><span style="color: red; ">*</span>备注</font></td>
+                    </tr>
+
+                    <tr th:each="KAllocation : ${KInstocklist}">
+                        <td><input  type="text" style="width: 100%; height: 35px"  min th:value="2"> </td>
+
+                        <td>   <input name="model" type="text"  style="width: 100%; height: 35px"   th:value="${KAllocation.type}" readonly>
+                        </td>
+                        <td>
+                            <input name="name" type="text"  style="width: 100%; height: 35px"   th:value="${KAllocation.name}" readonly>
+                        </td>
+
+                        <td><input name="model" type="text"  style="width: 100%; height: 35px"   th:value="${KAllocation.model}" readonly> </td>
+                        <td><input name="goodsNumber" type="text"  style="width: 100%; height: 35px"   th:value="${KAllocation.goodsNumber}" readonly> </td>
+
+                        <td><input name="manufactor" type="text"  style="width: 100%; height: 35px"   th:value="${KAllocation.manufactor}" readonly> </td>
+                        <td><input name="reason" type="text" style="width: 100%; height: 35px"   th:value="${KAllocation.reason}" readonly> </td>
+
+                        <td style="min-width:66px;"><!--<a class="btn btn-danger btn-xs" onclick="del11(this)"><i class="fa fa-remove"></i>删除</a>--></td>
+                    </tr>
+                </table>
+
+            </div>
+        </form>
+        <div class="button-b" style="margin-left: 70%" id="button-set">
+            <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+            <button type="button" class="btn btn-w-m btn-info" onclick="report()" >确认上报</button>
+
+        </div>
+        <!-- <div class="col-sm-offset-5 col-sm-10">
+             <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandler()"  ><i class="fa fa-check"></i>入 库</button>&nbsp;&nbsp;&nbsp;&nbsp;
+             <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandlerSave()"  ><i class="fa fa-check"></i>保 存</button>&nbsp;&nbsp;&nbsp;&nbsp;
+             <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+    &lt;!&ndash;
+             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('form-publish-add', 'bootstrap-table1')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+    &ndash;&gt;
+
+         </div>-->
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "reserves/allocation";
+        $("#form-allocation-edit").validate({
+            focusCleanup: true
+        });
+
+
+
+        $("input[name='creatTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+
+        function report() {
+            var id=$("#id").val();
+                $.operate.save(prefix + "/cancel", {"id": id});
+        }
+    </script>
+</body>
+</html>

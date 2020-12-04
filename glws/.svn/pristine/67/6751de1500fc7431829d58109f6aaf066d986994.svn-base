@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('工程进度审核详细信息查看')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<style>
+    .table tr:first-child td{
+        font-size: 12px;
+        font-weight: bold;
+        background:#3CC4A9;
+        color: white;
+    }
+</style>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <div class="col-sm-12 search-collapse">
+        <p>任务信息</p>
+        <div class="col-sm-8  pull-left" style="padding: 0px;">
+            <table class="table select-table table-striped" style="text-align:center;">
+                <tr>
+                    <td style="width: 130px;">围栏部分</td>
+                    <td>围栏合计</td>
+                    <td>禁牧建设</td>
+                    <td>休牧建设</td>
+                    <td>划区轮休</td>
+                    <td>石漠化治理</td>
+                </tr>
+                <tr>
+                    <td>建设规模(万亩)</td>
+                    <!--围栏合计-->
+                    <td th:text="${taskList.wlScale}"></td>
+                    <!--禁牧建设-->
+                    <td th:text="${taskList.jmSize}"></td>
+                    <!--休牧建设-->
+                    <td th:text="${taskList.xmSize}"></td>
+                    <!--划区轮休-->
+                    <td th:text="${taskList.hqlxSize}"></td>
+                    <!--石漠化治理-->
+                    <td th:text="${taskList.smhzlSize}"></td>
+                </tr>
+                <tr>
+                    <td>建设投资(万元)</td>
+                    <!--围栏合计-->
+                    <td th:text="${taskList.wlInvestment}"></td>
+                    <!--禁牧建设-->
+                    <td th:text="${taskList.jmMoney}"></td>
+                    <!--休牧建设-->
+                    <td th:text="${taskList.xmMoney}"></td>
+                    <!--划区轮休-->
+                    <td th:text="${taskList.hqlxMoney}"></td>
+                    <!--石漠化治理-->
+                    <td th:text="${taskList.smhzlMoney}"></td>
+                </tr>
+            </table>
+            <table class="table select-table table-striped" style="text-align:center;">
+                <tbody>
+                <tr>
+                    <td style="width: 130px;">其他部分</td>
+                    <td>退化草原改良</td>
+                    <td>人工种草地</td>
+                    <td>含饲棚圈</td>
+                    <td>黑土滩</td>
+                    <td>毒害草</td>
+                </tr>
+                <tr>
+                    <td>建设规模(万亩)</td>
+                    <!--退化草原改良-->
+                    <td th:text="${taskList.thzyglSize}"></td>
+                    <!--人工种草地-->
+                    <td th:text="${taskList.rgscdSize}"></td>
+                    <!--含饲棚圈-->
+                    <td th:text="${taskList.hspjSize}"></td>
+                    <!--黑土滩-->
+                    <td th:text="${taskList.httSize}"></td>
+                    <!--毒害草-->
+                    <td th:text="${taskList.dhcSize}"></td>
+                </tr>
+                <tr>
+                    <td>建设投资(万元)</td>
+                    <!--退化草原改良-->
+                    <td th:text="${taskList.thzyglMoney}"></td>
+                    <!--人工种草地-->
+                    <td th:text="${taskList.rgscdMoney}"></td>
+                    <!--含饲棚圈-->
+                    <td th:text="${taskList.hspjMoney}"></td>
+                    <!--黑土滩-->
+                    <td th:text="${taskList.httMoney}"></td>
+                    <!--毒害草-->
+                    <td th:text="${taskList.dhcMoney}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-4  pull-right">
+            <table class="table-striped " style="text-align: left;height: 104px;width: 360px;margin-top: 10px">
+                <tr style="background-image: url('../../../img/ic_guhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                    <td style="font-size: 16px;padding-left: 45px;">
+                        <img src="../../../img/ic_gmhj.png" height="32" width="32"/>
+                        <span style="margin-left: 10px">规模总合计</span>
+                        <span id="zgmCount"  style="font-size: 22px;color: #6b87f9" th:text="${taskList.zgmCount}"></span>
+                        <span>万亩</span>
+                    </td>
+                </tr>
+            </table>
+            <table class="table-striped " style="text-align: left;height: 104px;width: 360px;background-image: url('../../../img/ic_tzhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                <tr style="background-color: transparent">
+                    <td style="font-size: 16px;padding-left: 45px;">
+                        <div style="height: 50px">
+                            <img src="../../../img/ic_tzhj.png" height="32" width="32"/>
+                            <span style="margin-left: 10px">投资总合计</span>
+                            <span id="zjeCount" style="font-size: 22px;color: #fe7d51" th:text="${taskList.zjeCount}"></span>
+                            <span>万元</span>
+                        </div>
+                        <div>
+                            <span>中央</span>
+                            <span id="zyMoney" style="font-size: 22px;color: #fe7d51" th:text="${taskList.zyMoney}"></span>
+                            <span>万元</span>
+                            <span style="margin-left: 10px">地方</span>
+                            <span id="dfMoney" style="font-size: 22px;color: #fe7d51" th:text="${taskList.dfMoney}"></span>
+                            <span>万元</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-sm-12 search-collapse">
+        <p>上报信息</p>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" th:onclick="'javascript:ht('+${sonList.reportId}+')' ">
+                <i class="fa fa-plus"></i> 查看绘图
+            </a>
+        </div>
+        <div class="col-sm-8  pull-left" style="padding: 0px;">
+            <table class="table select-table table-striped" style="text-align:center;">
+                <tr>
+                    <td style="width: 130px;">围栏部分</td>
+                    <td>围栏合计</td>
+                    <td>禁牧建设</td>
+                    <td>休牧建设</td>
+                    <td>划区轮休</td>
+                    <td>石漠化治理</td>
+                </tr>
+                <tr>
+                    <td>建设规模(万亩)</td>
+                    <!--围栏合计-->
+                    <td th:text="${sonList.wlScale}"></td>
+                    <!--禁牧建设-->
+                    <td th:text="${sonList.jmSize}"></td>
+                    <!--休牧建设-->
+                    <td th:text="${sonList.xmSize}"></td>
+                    <!--划区轮休-->
+                    <td th:text="${sonList.hqlxSize}"></td>
+                    <!--石漠化治理-->
+                    <td th:text="${sonList.smhzlSize}"></td>
+                </tr>
+                <tr>
+                    <td>建设投资(万元)</td>
+                    <!--围栏合计-->
+                    <td th:text="${sonList.wlInvestment}"></td>
+                    <!--禁牧建设-->
+                    <td th:text="${sonList.jmMoney}"></td>
+                    <!--休牧建设-->
+                    <td th:text="${sonList.xmMoney}"></td>
+                    <!--划区轮休-->
+                    <td th:text="${sonList.hqlxMoney}"></td>
+                    <!--石漠化治理-->
+                    <td th:text="${sonList.smhzlMoney}"></td>
+                </tr>
+            </table>
+            <table class="table select-table table-striped" style="text-align:center;">
+                <tbody>
+                <tr>
+                    <td style="width: 130px;">其他部分</td>
+                    <td>退化草原改良</td>
+                    <td>人工种草地</td>
+                    <td>含饲棚圈</td>
+                    <td>黑土滩</td>
+                    <td>毒害草</td>
+                </tr>
+                <tr>
+                    <td>建设规模(万亩)</td>
+                    <!--退化草原改良-->
+                    <td th:text="${sonList.thcyglSize}"></td>
+                    <!--人工种草地-->
+                    <td th:text="${sonList.rgscdSize}"></td>
+                    <!--含饲棚圈-->
+                    <td th:text="${sonList.hspjSize}"></td>
+                    <!--黑土滩-->
+                    <td th:text="${sonList.httSize}"></td>
+                    <!--毒害草-->
+                    <td th:text="${sonList.dhcSize}"></td>
+                </tr>
+                <tr>
+                    <td>建设投资(万元)</td>
+                    <!--退化草原改良-->
+                    <td th:text="${sonList.thcyglMoney}"></td>
+                    <!--人工种草地-->
+                    <td th:text="${sonList.rgscdMoney}"></td>
+                    <!--含饲棚圈-->
+                    <td th:text="${sonList.hspjMoney}"></td>
+                    <!--黑土滩-->
+                    <td th:text="${sonList.httMoney}"></td>
+                    <!--毒害草-->
+                    <td th:text="${sonList.dhcMoney}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-4  pull-right">
+            <table class="table-striped " style="text-align: left;height: 104px;width: 360px;margin-top: 10px">
+                <tr style="background-image: url('../../../img/ic_guhj_bg.png');background-color: transparent;background-repeat: no-repeat;background-position: 100% 100%;">
+                    <td style="font-size: 16px;padding-left: 45px;">
+                        <div style="height: 50px">
+                            <img src="../../../img/ic_gmhj.png" height="32" width="32"/>
+                            <span style="margin-left: 10px">规模总合计</span>
+                            <span  style="font-size: 22px;color: #6b87f9" th:text="${sonList.zgmCount}"></span>
+                            <span>万亩</span>
+                        </div>
+                        <div>
+                            <span>已完成总任务量</span>
+                            <span style="font-size: 22px;color: #6b87f9" th:text="${sonList.jindu}"></span>
+                            <span>%</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10" th:if="${sonList.status == '1' || sonList.status == '2'}" >
+            <button type="button" class="btn  btn-danger" onclick="$.modal.close()"><i class="fa fa-reply-all"></i>关 闭</button>
+        </div>
+        <div class="col-sm-offset-5 col-sm-10" th:if="${sonList.status == '0'}">
+            <button type="button" class="btn  btn-primary" th:onclick="'javascript:change('+${sonList.reportId}+',1)' ">通 过</button>
+            <button type="button" class="btn  btn-danger" th:onclick="'javascript:changeLose('+${sonList.reportId}+',2)' ">驳 回</button>
+            <button type="button" class="btn  btn-danger" onclick="$.modal.close()"><i class="fa fa-reply-all"></i>关 闭</button>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "system/review";
+    function relax() {
+        $.modal.close();
+        parent.location.reload();
+    }
+
+    function change(id, status) {
+        $.post(ctx + "system/review/change", {reportId: id, status: status},relax);
+    }
+
+
+    function changeLose(id, status) {
+        var url = ctx + 'system/review/add/' + id + '/' + status;
+        $.modal.open("驳回原因", url, '770', '280');
+    }
+
+    function look(id) {
+        var url = ctx + 'system/idea/get/' + id;
+        $.modal.open("驳回原因查看", url, '770', '380');
+    }
+
+    $("#form-report-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-report-add').serialize(),function () {
+                var target = $('.RuoYi_iframe[data-id="' + '/system/review' + '"]');
+                var url = target.attr('src');
+                target.attr('src', url).ready();
+            });
+        }
+    }
+
+    /*绘图弹框*/
+    function ht(id) {
+            var prefix = ctx + "system/gisMap";
+             var  url = prefix + '/reportId/' + id;
+             $.modal.open("查看草地信息", url, 800, 600);
+    }
+</script>
+</body>
+</html>

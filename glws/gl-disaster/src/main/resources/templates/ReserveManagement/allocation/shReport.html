@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('查看调拨单')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-allocation-edit" th:object="${KAllocation}">
+        <h2 class="col-sm-12" style="text-align: center;font-weight: bold ">
+            上报信息
+        </h2>
+        <h3 style="margin-left: 6%">
+            ---------基本信息---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        </h3>
+        <input   name="id" th:field="*{id}" id="id" type="hidden">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">调拨单号：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${KAllocation.oddnumber}" class="form-control-static" type="text" disabled="disabled"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">名称：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${KAllocation.dbName}" class="form-control-static" type="text" disabled="disabled"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">申请地区：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${KAllocation.applicationArea}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label class="col-sm-3 control-label">调出时间：</label>
+                <div class="col-sm-8">
+                    <div name="allocationTime" th:text="${#dates.format(KAllocation.allocationTime,'yyyy-MM-dd')}" class=" form-control-static"  style="font-weight: bold"  type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3 style="margin-left: 6%">
+            ----------物资信息---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        </h3>
+        <div class="col-sm-12 select-table">
+            <div class="row" style="margin-left:1.5px;margin-bottom: 1px">
+
+            </div>
+            <table id="table"  class="tg" name="test"border="0px solid rgba(48,146,62, 0.9)" cellspacing="0" cellpadding="0" style="width: 100%;height: 35px">
+                <tr id="tr1"  align="center" style="background-color: rgba(48,146,62, 0.9)">
+                    <td style="width: 10%;height:35px;" ><font size="2" color="white">物资序号</font></td>
+                    <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>物资类型</font></td>
+                    <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>物资名称</font></td>
+                    <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>型号</font></td>
+                    <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>数量</font></td>
+                    <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>厂商信息</font></td>
+                    <!--
+                                            <td>入库人</td>
+                    -->
+                    <td style="width: 15%;height:35px; "><font size="2" color="white"><span style="color: red; ">*</span>备注</font></td>
+                </tr>
+
+                <tr th:each="KAllocation : ${KInstocklist}">
+                    <td><input  type="text" style="width: 100%; height: 35px"  min th:value="2"> </td>
+
+                    <td>   <input name="model" type="text"  style="width: 100%; height: 35px"   th:value="${KAllocation.type}" readonly>
+                    </td>
+                    <td>
+                        <input name="name" type="text"  style="width: 100%; height: 35px"   th:value="${KAllocation.name}" readonly>
+                    </td>
+                    <td><input name="goodsNumber" type="text"  style="width: 100%; height: 35px"   th:value="${KAllocation.goodsNumber}" readonly> </td>
+
+                    <td><input name="model" type="text"  style="width: 100%; height: 35px"   th:value="${KAllocation.model}" readonly> </td>
+                    <td><input name="manufactor" type="text"  style="width: 100%; height: 35px"   th:value="${KAllocation.manufactor}" readonly> </td>
+                    <td><input name="reason" type="text" style="width: 100%; height: 35px"   th:value="${KAllocation.reason}" readonly> </td>
+
+                    <td style="min-width:66px;"><!--<a class="btn btn-danger btn-xs" onclick="del11(this)"><i class="fa fa-remove"></i>删除</a>--></td>
+                </tr>
+            </table>
+
+        </div>
+    </form>
+
+
+    <form class="form-horizontal m" id="form-allocation-sh" >
+
+        <div class="col-sm-12 select-table" id="shTable">
+
+            <h3 style="margin-left: 6%">
+                --------------审核信息---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            </h3>
+            <div class="row" style="margin-left:1.5px;margin-bottom: 1px">
+                    <div >
+                        <button type="button" style="background-color: rgba(48,146,62, 0.9)" class="btn btn-sm btn-primary" onclick="addRow()"><i class="fa fa-check"></i>新增</button>&nbsp;
+                        <button type="button"  style="background-color: rgba(48,146,62, 0.9)" class="btn btn-sm btn-primary" onclick="resolveAll()"><i class="fa fa-check"></i>确定调拨</button>&nbsp;
+
+                    </div>
+
+            </div>
+            <table id="mytable"  class="tg" name="test"border="0px solid rgba(48,146,62, 0.9)" cellspacing="0" cellpadding="0" style="width: 100%;height: 35px">
+                <tr id="tr3"  align="center" style="background-color: rgba(48,146,62, 0.9)">
+                    <td style="width: 10%;height:35px;" ><font size="2" color="white">物资序号</font></td>
+                    <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>物资类型</font></td>
+                    <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>物资名称</font></td>
+                    <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>型号</font></td>
+                    <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>数量(千)</font></td>
+                    <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>厂商信息</font></td>
+                    <!--
+                                            <td>入库人</td>
+                    -->
+                    <td style="width: 15%;height:35px; "><font size="2" color="white"><span style="color: red; ">*</span>备注</font></td>
+                </tr>
+
+
+                <tr id="tr4">
+                    <td>
+
+                        <input  id="publishID_1" name="publishId_1"   value="1" style="width: 100%;height: 35px;" required readonly="readonly" >
+                        <!--
+                                                    <input  id="id" name="id"  type="hidden"  >
+                        -->
+                    </td>
+                    <td>
+
+                        <select
+                                id="manufactorType" name="manufactorType" onchange="getCities()" style="width: 100%;height:35px; "
+                        >
+                        </select> </td>
+                    <td>
+                        <select
+                                id="manufactorName" name="manufactorName"   style="width: 100%;height:35px; "
+                        >
+                        </select></td>
+                    <td><input id="model" name="model" type="text" style="width: 100%; height: 35px"  > </td>
+                    <td><input id="goodsNumber" name="goodsNumber" type="text"  style="width: 100%; height: 35px"  min maxlength="6"
+                    > </td>
+                    <td><input  id="manufactor" name="manufactor" type="text"  style="width: 100%; height: 35px"  > </td>
+                    <td><input id="reason" name="reason" type="text" style="width: 100%; height: 35px" >
+
+
+                </tr>
+
+            </table>
+
+        </div>
+    </form>
+    <div class="col-sm-offset-5 col-sm-10">
+        <button id="qr" type="button" class="btn btn-sm btn-primary" th:onclick="qr()"  ><i class="fa fa-check"></i>确认调拨</button>&nbsp;
+        <button type="button" class="btn btn-sm btn-primary" th:onclick="bh()"  ><i class="fa fa-check"></i>驳回</button>&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script type="text/javascript">
+    var prefix = ctx + "reserves/allocationSh";
+    $("#form-allocation-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-allocation-edit').serialize());
+        }
+    }
+
+   /* function bh() {
+        var id=$("#shId").val();
+        $.operate.save(prefix + "/bh", {"id": id});
+
+        /!*$.modal.confirm("确认要驳回吗？", function () {
+        })*!/
+    }*/
+
+
+   $(function(){
+       $("#shTable").hide();
+
+    })
+    function bh(id) {
+        var id=$("#id").val();
+
+        layer.prompt({
+            formType: 2,
+            title: '审批',
+            btn: [ '驳回'],
+            yes: function(index, layero){
+
+
+
+                var value = layero.find(".layui-layer-input").val();
+                // 获取文本框输入的值
+                $.operate.save(prefix + "/bh", {"id": id,"remark":value});
+
+                layer.close(index);
+                console.log("驳回："+id);
+            },btn2: function(index, layero){
+                var value = layero.find(".layui-layer-input").val();
+            }
+        });
+
+    }
+
+    //驳回
+  /*  function bh(id) {
+        layer.prompt({
+            formType: 1,
+            title: '驳回',
+            btn: [ '驳回'],
+            yes: function(index, layero){
+                // 获取文本框输入的值
+                var value = layero.find(".layui-layer-input").val();
+                layer.close(index);
+                console.log("审核通过："+id);
+            },btn2: function(index, layero){
+                var value = layero.find(".layui-layer-input").val();
+                $.operate.save(prefix + "/sh", {"id": id,"remark":value});
+
+            }
+        });
+    }
+*/
+    function qr() {
+
+        $("#shTable").show();
+                $("#qr").hide();
+
+
+        var id= $("#id").val();
+
+
+    }
+
+    $("input[name='allocationTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+
+
+    /*审核追加需要的方法*/
+    //省市区三级联动
+    $(function(){
+        getProvinces();
+        var op1 = document.createElement("option");
+        document.getElementById("manufactorName").appendChild(op1);
+
+    });
+</script>
+<script type="text/javascript">
+    // ===== 加载物资类型 =====
+    function getProvinces() {
+        var url=ctx+"reserves/instock/getType";
+        $.ajax({
+            "url": url,
+            "type": "GET",
+            "dataType": "json",
+            "success": function(data) {
+                //alert(JSON.stringify(data))
+                var op = document.createElement("option");
+                document.getElementById("manufactorType").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].materialType;
+                    op.text = data[i].materialName;
+                    document.getElementById("manufactorType").appendChild(op);
+                }
+            }
+        });
+
+        getCities();
+    }
+
+
+    // ===== 加载物资列表 =====
+    function getCities() {
+        $("#manufactorName").empty();
+        var url=ctx+"reserves/instock/getGoods";
+        var data = "provinceCode=" + $("#manufactorType").val();
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function(data) {
+
+                var op = document.createElement("option");
+                document.getElementById("manufactorName").appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].materialName;
+                    op.text = data[i].materialName;
+                    document.getElementById("manufactorName").appendChild(op);
+                }
+            }
+        });
+
+    }
+
+
+    function getType(number) {
+        var url=ctx+"reserves/instock/getType";
+        $.ajax({
+            "url": url,
+            "type": "GET",
+            "dataType": "json",
+            "success": function(data) {
+                //alert(JSON.stringify(data))
+                var op = document.createElement("option");
+                document.getElementById("manufactorType_"+number).appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].materialType;
+                    op.text = data[i].materialName;
+                    document.getElementById("manufactorType_"+number).appendChild(op);
+                }
+            }
+        });
+
+
+
+        getName(number);
+
+    }
+
+    function getName(number) {
+        $("#manufactorName_"+number).empty();
+        var url=ctx+"reserves/instock/getGoods";
+        var data = "provinceCode=" + $("#manufactorType_"+number).val();
+        $.ajax({
+            "url": url,
+            "data": data,
+            "type": "GET",
+            "dataType": "json",
+            "success": function(data) {
+
+                var op = document.createElement("option");
+                document.getElementById("manufactorName_"+number).appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    var op = document.createElement("option");
+                    op.value = data[i].materialName;
+                    op.text = data[i].materialName;
+                    document.getElementById("manufactorName_"+number).appendChild(op);
+                }
+            }
+        });
+
+    }
+
+
+    /* 删除一行 */
+    function del11(obj) {
+        var tab = obj.parentNode.parentNode;
+        tab.parentNode.removeChild(tab);
+        dataValidation();
+    }
+
+
+    //追加一行
+    function addRow() {
+        var tableNode =	document.getElementById("mytable");
+        var trNodeList = tableNode.getElementsByTagName("tr");
+        //得到最后一行(tr)的所有td
+        var tdNodeList = trNodeList[trNodeList.length - 1].getElementsByTagName("td");
+        var td_input_name = tdNodeList[0].getElementsByTagName("input")[0].name;
+        var strIndex = td_input_name.indexOf("_");
+        var number = td_input_name.substring(strIndex + 1)
+
+        var trNode = document.createElement("tr");
+        number++;
+        $("#mytable").append("<tr>" +
+            "<td> <input name=\"publishId_"+number+"\"  id=\"publishId\" value="+number+" type=\"text\" style=\"width: 100%; height:35px;\"  min readonly=\"readonly\"> </td>" +
+            "<td><select id=\"manufactorType_"+number+"\"  name=\"manufactorType\" onchange=\"getName("+number+")\" style=\"width: 100%;height:35px;\" > </select> </td>"+
+            "<td><select id=\"manufactorName_"+number+"\" name=\"manufactorName\" style=\"width: 100%;height:35px;\" > </select> </td>"+
+            "<td> <input name=\"model\" type=\"text\" style=\"width: 100%; height:35px;\"  > </td>"+
+            "<td> <input name=\"goodsNumber\" type=\"text\" style=\"width: 100%; height:35px;\"  min maxlength=\"6\" onkeyup=\"value=value.replace(/[^\\d]/g,'')\"> </td>"+
+            "<td> <input name=\"manufactor\" type=\"text\"  style=\"width: 100%; height:35px;\"  > </td>"+
+            "<td> <input name=\"reason\" type=\"text\" style=\"width: 100%; height:35px;\"  > </td>" +
+            " <td><a class=\"btn btn-danger btn-xs\" onclick=\"del11(this)\"><i class=\"fa fa-remove\"></i>删除</a></td></tr>")
+        getType(number)
+        //数据校验
+        $('input').blur(function () {
+            dataValidation(this);
+        })
+    }
+
+
+
+    function resolveAll() {
+        if ($.validate.form()) {
+            $.modal.confirm("确认要调拨吗？", function () {
+            //审核调拨单id
+           var allcationShId=$("#id").val();
+                /*  var warehousing=$("#test2").val();*/
+
+            var oddnumber=$("#oddnumber").val();
+            var applicationArea=$("#applicationArea").val();
+           // alert(applicationArea)
+
+
+            for(var i = 0; i < $('select').length; i++){
+                let current = $('select').eq(i).val();
+                if(current == ""){
+                    layer.alert("未选择出库物资 !")
+
+                    return;
+                }
+            }
+
+          /*  for(var i = 0; i < $('input').length; i++){
+                let current = $('input').eq(i).val();
+                if(current == ""){
+                    layer.alert("请完整填写出库信息 !")
+
+
+                    return;
+                }
+            }*/
+            /*let list = ['wlScale','wlInvestment','jmSize','jmMoney','xmSize','xmMoney','hqlxSize','hqlxMoney','smhzlSize','smhzlMoney','thzyglSize','thzyglMoney','rgscdSize','rgscdMoney','hspjSize','hspjMoney','httSize','httMoney','dhcSize','dhcMoney'];
+            for(var i = 0; i < list.length; i++){
+                let current = $('#' + list[i]).text();
+                if(parseInt(current) != 0){
+                    $.modal.confirm("未全部分解,请全部分解后提交", function () {})
+                    return;
+                }
+            }*/
+            var orderItemArray = new Array();
+            $("#form-allocation-sh tr").each(function () {
+                //this代表当前dom对象tr
+                var that = this;
+                var orderItemObj = new Object();
+                $(that).find("select,input").each(function () {
+                    var name = $(this).attr("name");
+                    orderItemObj[name] = $(this).val();
+                });
+                orderItemObj["allocationId"] = allcationShId;
+                //orderItemObj["warehousingTime"] = warehousing;
+
+                orderItemArray.push(orderItemObj);
+            });
+                var url = prefix + "/addFenJie";
+                $.ajax({
+                url: url,
+                dataType: "json",
+                contentType: "application/json;charsetset=UTF-8",//必
+                type: "post",
+                cache: false,
+                data: JSON.stringify(orderItemArray),//必须
+                // data: JSON.stringify({orderItemArray: orderItemArray,reserve: reserve,warehousingTime:warehousingTime}),
+                success: function (obj) {
+                    if (obj == "400") {
+                        layer.alert('审核成功！', function (index) {
+                            //加载刷新父类页面并关闭弹窗
+                            window.parent.location.reload();
+                            parent.layer.closeAll('iframe');
+                        });
+                    } else if (obj == "404") {
+                        layer.alert("审核失败！");
+                    } else {
+                        layer.alert("发布失败，请查看网络！！！");
+                    }
+                },
+                error: function (textStatus, e) {
+                    layer.alert("系统ajax交互错误: ");
+                }
+            });
+
+            })
+        }
+
+    }
+
+
+
+</script>
+</body>
+</html>

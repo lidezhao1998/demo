@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改生态效益价值评价社会公共数据')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-data-edit" th:object="${publicData}">
+            <input name="dataid" th:field="*{dataid}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">数据名称：</label>
+                <div class="col-sm-8">
+                    <input name="dataName" th:field="*{dataName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">单位：</label>
+                <div class="col-sm-8">
+                    <input name="unit" th:field="*{unit}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">数值：</label>
+                <div class="col-sm-8">
+                    <input name="value" th:field="*{value}" class="form-control" type="text">
+                </div>
+            </div>
+ <!--           <div class="form-group">
+                <label class="col-sm-3 control-label">来源及依据：</label>
+                <div class="col-sm-8">
+                    <input name="source" th:field="*{source}" class="form-control" type="text">
+                </div>
+            </div>-->
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">来源及依据：</label>
+                    <div class="col-sm-8">
+                        <textarea type="text" name="source" th:field="*{source}" class="form-control" style="margin: 0px 104px 0px 0px; width: 470px; height: 81px;"></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "eceas/data";
+        $("#form-data-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-data-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gl-disaster" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/glma-admin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/glma-system" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/glws-admin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/glws-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/glws-framework" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/glws-generator" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/glws-system" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sinosoft-admin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sinosoft-system" charset="UTF-8" />
+  </component>
+</project>

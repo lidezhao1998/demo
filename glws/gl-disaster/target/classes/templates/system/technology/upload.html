@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('文件上传')" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                </div>
+                    <div class="form-group">
+                        <label class="font-noraml">多文件上传</label>
+                        <div class="file-loading">
+                            <input id="fileinput-demo-1" type="file" multiple>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="button-b" style="margin-left: 70%" id="button-set">
+    <!--<button type="button" class="btn btn-w-m btn-primary" onclick="saveup()"id="saveup" >保存并上传</button>
+    <button type="button" class="btn btn-w-m btn-primary" onclick="save()"id="save" >保 存</button>-->
+    <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: bootstrap-fileinput-js" />
+<script type="text/javascript">
+    var prefix = ctx + "achievements/technology";
+    $(document).ready(function () {
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '#',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            initialPreview: [
+                ""
+            ]
+        });
+    });
+
+    function save() {
+        if ($.validate.form()) {
+            $.modal.confirm("确认要点击确定吗?", function () {
+                saveTab(prefix + "/add", $('#fileinput-demo-1').serialize());
+            });
+        }
+    }
+    function saveTab(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+            },
+            success: function(result) {
+                if (typeof callback == "function" ) {
+                    callback(result);
+                }
+                if (result.code == web_status.SUCCESS) {
+                    confirmdemo(result.msg,function() {
+                        reload();
+                    });
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            }
+        };
+        $.ajax(config)
+    }
+    function saveup(){
+        if ($.validate.form()) {
+            $.modal.confirm("确认要点击确定吗?", function () {
+                saveModal(prefix + "/add1", $('#fileinput-demo-1').serialize());
+            });
+        }
+    }
+    $("input[name='time']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+    function confirmdemo(content, callBack) {
+        layer.confirm(content, {
+            icon: 3,
+            title: "系统提示",
+            btn: ['确认']
+        },  function (index) {
+            layer.close(index);
+
+            callBack(true);
+
+        });
+    };
+
+    // 保存信息 弹出提示框
+    function saveModal(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            success: function(result) {
+                if (typeof callback == "function" ) {
+                    callback(result);
+                }
+                if (result.code == web_status.SUCCESS) {
+                    confirmdemo(result.msg,function() {
+                        reload();
+                    });
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+
+            }
+        };
+        $.ajax(config)
+    }
+    function reload () {
+        parent.location.reload();
+    }
+</script>
+</body>
+</html>

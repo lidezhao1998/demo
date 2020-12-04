@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('退牧还草工程实施比对')"/>
+</head>
+<style>
+    .echarts {
+        height: 360px;
+    }
+    .col-sm-12 span{
+        font-size: 16px;
+        margin-left: 15px;
+    }
+</style>
+<body class="gray-bg">
+<div class="col-sm-18 select-table" style="padding: 0px 20px;">
+    <div class="col-sm-12 search-collapse" style="padding: 10px">
+        <span>任务年份:</span><span id="year"></span><span style="margin-left: 0px">年</span>
+        <span>任务地点:</span><span id="address"></span>
+        <span>任务状态:</span><span id="status"></span>
+    </div>
+    <div class="col-sm-12 select-table">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>图形列表</h5>
+            </div>
+            <!--横向比对-->
+            <div class="ibox-content">
+                <div class="echarts" id="echarts-line-chart"></div>
+            </div>
+            <!--纵向比对-->
+            <div class="ibox-content">
+                <div class="echarts" id="echarts-line-chart1"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+
+<script th:inline="javascript">
+    var prefix = ctx + "system/analysis";
+    $(function () {
+        let tTaskReport = sessionStorage.getItem('tTaskReport');
+        if (tTaskReport != null && tTaskReport !=''){
+            tTaskReport = JSON.parse(tTaskReport);
+        }
+        let year = tTaskReport.year;
+        let province = tTaskReport.province;
+        let city = tTaskReport.city;
+        let address = tTaskReport.address;
+        let status = tTaskReport.status;
+        if(province !== '' && address !== ''){
+            city = '';
+        }else{
+            city = '-' + city;
+        }
+        let addressName = province + city +'-' + address;
+        let statusName = '';
+        switch (status) {
+            case '0': statusName = '未审核';break;
+            case '1': statusName = '通过';break;
+            case '2': statusName = '驳回';break;
+            case '3': statusName = '待审核';break;
+            case '4': statusName = '通过';break;
+            case '5': statusName = '驳回';break;
+        }
+        $('#year').text(year);
+        $('#address').text(addressName);
+        $('#status').text(statusName);
+        /* 横向比对 */
+        var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+        $.ajax({
+            type: "post",
+            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: prefix + "/horizontalAlignment",    //请求发送到dataActiont处
+            data: {
+                year:tTaskReport.year,
+                concreteTime:tTaskReport.concreteTime,
+                province:tTaskReport.province,
+                city:tTaskReport.city,
+                address:tTaskReport.address
+            },
+            dataType: "json",        //返回数据形式为json
+            success: function (result) {
+                console.log(result)
+                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                if (result) {
+                    let legendData = [];
+                    let xAxisData = [];
+                    let seriesData = [];
+                    let datas = result.data;
+                    for (var i = 0; i < datas.length; i++) {
+                        //横坐标 某一年的月份
+                        let years = datas[i].year + '-' +datas[i].concreteTime;
+                        xAxisData.push(years);
+                        //折线图数据
+                        seriesData.push(datas[i].jmSize);
+                    }
+                    lineChart.hideLoading();    //隐藏加载动画
+                    lineChart.setOption({        //加载数据图表
+                        title: {
+                            text: '横向比对',
+                            //subtext:'这是一行说明',
+                            left: 'center',
+                            align: 'right'
+                        },
+                        tooltip: {
+                            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                            }
+                        },
+                        calculable: true,
+                        xAxis: {
+                            boundaryGap: false,
+                            data: xAxisData
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: {
+                            data:seriesData,
+                            type: 'line'
+                        }
+                    });
+                    window.onresize = lineChart.resize;
+
+                }
+            },
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                lineChart.hideLoading();
+            }
+        });
+
+        /* 纵向比对 */
+        var linechart1 = echarts.init(document.getElementById("echarts-line-chart1"));
+        $.ajax({
+            type: "post",
+            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: prefix + "/longitudinalComparison",    //请求发送到dataActiont处
+            data: {
+                year:tTaskReport.year,
+                concreteTime:tTaskReport.concreteTime,
+                province:tTaskReport.province,
+                city:tTaskReport.city,
+                address:tTaskReport.address
+            },
+            dataType: "json",        //返回数据形式为json
+            success: function (result) {
+                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                if (result) {
+                    let legendData = [];
+                    let xAxisData = [];
+                    let seriesData = [];
+                    let datas = result.data;
+                    for (var i = 0; i < datas.length; i++) {
+                        //横坐标 某一年的月份
+                        let years = datas[i].year;
+                        xAxisData.push(years);
+                        //折线图数据
+                        seriesData.push(datas[i].jmSize);
+                    }
+                    linechart1.hideLoading();    //隐藏加载动画
+                    linechart1.setOption({        //加载数据图表
+                        title: {
+                            text: '纵向比对',
+                            //subtext:'这是一行说明',
+                            left: 'center',
+                            align: 'right'
+                        },
+                        tooltip: {
+                            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                            }
+                        },
+                        calculable: true,
+                        xAxis: {
+                            boundaryGap: false,
+                            data: xAxisData
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: {
+                            data:seriesData,
+                            type: 'line'
+                        }
+                    });
+                    window.onresize = linechart1.resize;
+
+                }
+            },
+            error: function (errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                linechart1.hideLoading();
+            }
+        });
+
+    });
+
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

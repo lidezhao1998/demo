@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('地面调查数据审核')" />
+    <th:block th:include="include :: jquery-steps-css" />
+    <link rel="stylesheet" href="//res.layui.com/layui/dist/css/layui.css"  media="all">
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-striped table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: whitesmoke;
+        height: 55px;
+    }
+
+    /*按钮背景色*/
+    .btn-success{
+        background-color:rgba(48,146,62, 0.9);
+
+    }
+</style>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form class="form-horizontal m" enctype="multipart/form-data" method="post" style="margin-top: 40px">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="tabs-container" style="margin-left: 0%;margin-right: 0%">
+
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"  style="color: rgba(48,146,62, 0.9)">待办</a>
+                    </li>
+                    <li class="active2"><a data-toggle="tab" href="#tab-2" aria-expanded="false" style="color: rgba(48,146,62, 0.9)">已办</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="panel-body">
+                            <div class="col-sm-12 select-table table-striped">
+                                <div class="select-list">
+                                    <ul>
+                                        <li>
+                                            <p>样地编号：</p>
+                                            <input type="text" name="sampleNumber"/>
+                                        </li>
+                                        <li>
+                                            <p>省级名称：</p>
+                                            <input type="text" name="provincialLevelName"/>
+                                        </li>
+                                        <li>
+                                            <p>地级名称：</p>
+                                            <input type="text" name="cityLevelName"/>
+                                        </li>
+                                        <li>
+                                            <p>县级名称：</p>
+                                            <input type="text" name="countyLevelName"/>
+                                        </li>
+
+
+                                        <li>
+                                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <table id="bootstrap-table"></table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="tab-2" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="col-sm-12 select-table table-striped">
+                                <div class="select-list">
+                                    <ul>
+                                        <li>
+                                            <p>样地编号：</p>
+                                            <input type="text" name="codeId"/>
+                                        </li>
+                                        <li>
+                                            <p>省级名称：</p>
+                                            <input type="text" name="provincialLevelName"/>
+                                        </li>
+                                        <li>
+                                            <p>地级名称：</p>
+                                            <input type="text" name="cityLevelName"/>
+                                        </li>
+                                        <li>
+                                            <p>县级名称：</p>
+                                            <input type="text" name="countyLevelName"/>
+                                        </li>
+
+                                        <li>
+                                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <table id="bootstrap-table2"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var detailFlag = [[${@permission.hasPermi('system:surveyselect:detail')}]];
+    var editFlag = [[${@permission.hasPermi('system:surveyselect:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:surveyselect:remove')}]];
+    var prefix = ctx + "system/surveyassess";
+
+    $(function() {
+        var options = {
+            id:"bootstrap-table",
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            detailUrl: prefix + "/detail/{id}",
+            exportUrl: prefix + "/export",
+            showSearch:false,
+            showRefresh:false,
+            showColumns:false,
+            showToggle:false,
+            modalName: "地面调查数据",
+            columns: [
+                {
+                    field : 'title',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '样地编号'
+                },
+                {
+                    field : 'workflowname',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '县级名称'
+                },
+                {
+                    field : 'draftuser',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '起草人'
+                },
+                {
+                    field : 'createTime',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '起1草时间'
+                },
+        {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.id + '\')"><i class="fa fa-search"></i>审核</a> ');
+                        return actions.join('');
+                    }
+                }
+               ]
+        };
+        $.table.init(options);
+    });
+
+    $(function() {
+        var options = {
+            id:"bootstrap-table2",
+            url: prefix + "/listre",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            detailUrl: prefix + "/check/{id}",
+            exportUrl: prefix + "/export",
+            showSearch:false,
+            showRefresh:false,
+            showColumns:false,
+            showToggle:false,
+                modalName: "地面调查数据",
+            columns: [
+                {
+                    field : 'title',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '样地编号'
+                },
+                {
+                    field : 'workflowname',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '县级名称'
+                },
+                {
+                    field : 'draftuser',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '起草人'
+                },
+                {
+                    field : 'readtime',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '审核时间'
+                },{
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-info btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="detailAll(\''+'查看'+row.filetypename+'详情页面\',\'' + row.recordid + '\')"><i class="fa fa-search"></i>查看</a> ');
+                        return actions.join('');
+                    }
+                }
+            ]
+        };
+        $.table.init(options);
+    });
+   function detailAll(title,id){
+       $.modal.openTab(title,prefix + "/detailAll?groundId="+id);
+   }
+    function detail(dds){
+        $.modal.openTab("核查地面调查数据页面",prefix + "/check/"+dds);
+
+    }
+    </script>
+</body>
+</html>

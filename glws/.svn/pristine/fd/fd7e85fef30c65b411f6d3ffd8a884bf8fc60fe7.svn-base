@@ -1,0 +1,14 @@
+xxl.job:
+  admin.addresses: http://127.0.0.1:28080/xxl-job-admin
+  accessToken:
+  executor:
+    appname: xxl-job-executor-sample
+    ip:
+    port: 9999
+    logpath: /tmp/jobhandler
+    logretentiondays: -1
+mybatis:
+  # 搜索指定包别名
+  typeAliasesPackage: com.xhz.spider.mapper
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapperLocations: classpath*:mapper/*Mapper.xml

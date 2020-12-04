@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('【毒害草知识库信息列表')" />
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-striped table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: whitesmoke;
+        height: 55px;
+    }
+    /*按钮背景色*/
+    .btn-success{
+        background-color: #30923E;
+    }
+
+</style>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>中文名：</p>
+                                <input type="text" name="chineseName"/>
+                            </li>
+                            <li>
+                                <p>学名：</p>
+                                <input type="text" name="scientificName"/>
+                            </li>
+                            <li>
+                                <p>别名：</p>
+                                <input type="text" name="alias"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="library:knowledge:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="library:knowledge:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="library:knowledge:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('library:knowledge:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('library:knowledge:remove')}]];
+        var prefix = ctx + "library/poisonknowledge";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "【毒害草管理】",
+                showSearch:false,
+                showRefresh:false,
+                showColumns:false,
+                showToggle:false,
+                showExport:false,
+                columns: [{
+                    align: 'center',
+                    valign: 'middle',
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : 'id',
+                    align: 'center',
+                    valign: 'middle',
+                    visible: false
+                },
+                {
+                    field : 'chineseName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '中文名'
+                },
+                {
+                    field : 'scientificName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '学名'
+                },
+                {
+                    field : 'alias',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '别名'
+                },
+                {
+                    field : 'commonName',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '俗名'
+                },
+                {
+                    field : 'divisionSubfamily',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '科_亚科'
+                },
+                {
+                    field : 'genusSubgenus',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '属_亚属'
+                },
+                {
+                    field : 'morphologicalCharacter',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '形态特征',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+
+                {
+                    title: '操作',
+                    align: 'center',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="authUser(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a>');
+                        /*actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="authUser(\'' + row.id + '\')"><i class="fa fa-key"></i>查看</a>');*/
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+
+        /* -详情展开 */
+        function authUser(id) {
+            var url = prefix + '/detail/' + id;
+            $.modal.openTab("详情展开", url);
+        }
+
+
+
+        //表格超出宽度鼠标悬停显示td内容
+        function paramsMatter(value,row,index, field) {
+            var span=document.createElement('span');
+            span.setAttribute('title',value);
+            span.innerHTML = value;
+            return span.outerHTML;
+        }
+        //td宽度以及内容超过宽度隐藏
+        function formatTableUnit(value, row, index) {
+            return {
+                css: {
+                    "white-space": 'nowrap',
+                    "text-overflow": 'ellipsis',
+                    "overflow": 'hidden',
+                    "max-width":"150px"
+                }
+            }
+        }
+    </script>
+</body>
+</html>

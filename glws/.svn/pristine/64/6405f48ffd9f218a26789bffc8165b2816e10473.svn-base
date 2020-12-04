@@ -1,0 +1,243 @@
+package com.sinosoft.extinterface.domain;
+
+import com.ruoyi.common.core.domain.BaseEntity;
+import com.vividsolutions.jts.geom.Geometry;
+
+import java.math.BigDecimal;
+
+/**
+ * author  lhf
+ * date  2020/8/19 17:31
+ * version 1.0
+ */
+public class LandSurvey extends BaseEntity {
+    private long id;
+    private String name;
+    //新加
+    private long itemCode;//目代码
+    private String item;//目
+    private long sectionCode;//科代码
+    private String section;//科
+    private long genericCode;//属代码
+    private String generic;//属
+    private long bundleCode;//丛代码
+    private String bundle;//丛
+    private String color;//颜色
+    private BigDecimal area;//面积平方米
+    private String centroid;//中心坐标
+    private String geomData;//斑块坐标
+    private String provinceName;//分布范围
+    private int status;
+    private String geometry;
+    private String province;//省
+    private String city ;//市
+    private String county;//区、县
+    private String ownershipProperty;//权属性质(国家、集体）
+    private String landType;//地类（草地）
+    private String patternSpotCharacteristic;//图斑特征
+    private String grasslandType;//草地类型
+    private String remark;//备份
+
+    public String getGeometry() {
+        return geometry;
+    }
+
+    public void setGeometry(String geometry) {
+        this.geometry = geometry;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getItemCode() {
+        return itemCode;
+    }
+
+    public void setItemCode(long itemCode) {
+        this.itemCode = itemCode;
+    }
+
+    public String getItem() {
+        return item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
+
+    public long getSectionCode() {
+        return sectionCode;
+    }
+
+    public void setSectionCode(long sectionCode) {
+        this.sectionCode = sectionCode;
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public long getGenericCode() {
+        return genericCode;
+    }
+
+    public void setGenericCode(long genericCode) {
+        this.genericCode = genericCode;
+    }
+
+    public String getGeneric() {
+        return generic;
+    }
+
+    public void setGeneric(String generic) {
+        this.generic = generic;
+    }
+
+    public long getBundleCode() {
+        return bundleCode;
+    }
+
+    public void setBundleCode(long bundleCode) {
+        this.bundleCode = bundleCode;
+    }
+
+    public String getBundle() {
+        return bundle;
+    }
+
+    public void setBundle(String bundle) {
+        this.bundle = bundle;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public BigDecimal getArea() {
+        return area;
+    }
+
+    public void setArea(BigDecimal area) {
+        this.area = area;
+    }
+
+    public String getCentroid() {
+        return centroid;
+    }
+
+    public void setCentroid(String centroid) {
+        this.centroid = centroid;
+    }
+
+    public String getGeomData() {
+        return geomData;
+    }
+
+    public void setGeomData(String geomData) {
+        this.geomData = geomData;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    public String getOwnershipProperty() {
+        return ownershipProperty;
+    }
+
+    public void setOwnershipProperty(String ownershipProperty) {
+        this.ownershipProperty = ownershipProperty;
+    }
+
+    public String getLandType() {
+        return landType;
+    }
+
+    public void setLandType(String landType) {
+        this.landType = landType;
+    }
+
+
+    public String getPatternSpotCharacteristic() {
+        return patternSpotCharacteristic;
+    }
+
+    public void setPatternSpotCharacteristic(String patternSpotCharacteristic) {
+        this.patternSpotCharacteristic = patternSpotCharacteristic;
+    }
+
+    public String getGrasslandType() {
+        return grasslandType;
+    }
+
+    public void setGrasslandType(String grasslandType) {
+        this.grasslandType = grasslandType;
+    }
+
+    @Override
+    public String getRemark() {
+        return remark;
+    }
+
+    @Override
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+}

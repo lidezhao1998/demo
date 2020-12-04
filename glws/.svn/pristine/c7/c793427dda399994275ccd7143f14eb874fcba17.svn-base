@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>省市Gis展示</title>
+    <th:block th:include="include :: header('地图')"/>
+    <link th:href="@{/css/gis.css}" rel="stylesheet"/>
+</head>
+<body onLoad="onLoad()">
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div id="map">
+                <div class="header-r">
+                <div class="header-r-bg">
+                    <a href="javascript:;" style="font-size: 16px;color:red" id="gisZoom"></a></strong>
+                    <a href="javascript:;" id="ranging" onclick="measurementGis('LineString')">测距</a>
+                    <a href="javascript:;" id="measuringSurface" onclick="measurementGis('Polygon')">测面</a>
+                    <a href="javascript:;" id="locationShow">定位</a>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="mouse-position">
+    </div>
+</div>
+</div>
+</body>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-css"/>
+<th:block th:include="include :: ztree-css"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var map;
+    var prefixPostGis = ctx + "system/postGis";
+    var mapIds = [[${mapIds}]];
+    var gisLonLat = [[${lngLat}]];
+</script>
+<script type="text/javascript">
+    var prefixGisMap = ctx + "system/gisMap";
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+    });
+
+    function onLoad() {
+        load();
+        var view = map.getView();
+        if(mapIds!=null && mapIds!='null'){
+            if (pointQueryName != null && pointQueryName.length > 0) {
+                for (var i = 0; i < pointQueryName.length; i++) {
+                    ol.Observable.unByKey(pointQueryName[i]);
+                }
+            }
+            for(var i=0;i<mapIds.length;i++){
+                gisMapByGid(mapIds[i]);
+            }
+        }
+    }
+</script>
+</html>

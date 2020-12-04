@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('各省草原生产力分析柱状图')" />
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <div class="ibox-tools">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                    <i class="fa fa-wrench"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a th:href="@{/analyze/province/map}">地图</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <div class="echarts" id="echarts-bar-chart"></div>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script  th:inline="javascript">
+    $(function () {
+        var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+        var years=[[${years}]];
+        var mapValue=[[${mapValue}]];
+        var categoryCount = [[${provinces}]];
+        var xAxisData = [];
+        var customData = [];
+        var legendData = [];
+        var dataList = [];
+        for (var i = 0; i < years.length; i++) {
+            legendData.push(years[i]);
+            dataList.push([]);
+        }
+        for (var i = 0; i <categoryCount.length; i++) {
+            var pro=categoryCount[i];
+            xAxisData.push(pro);
+            for (var j = 0; j < dataList.length; j++) {
+                if (mapValue[pro]==""){
+                    dataList[j].push(0);
+                }else{
+                    //根据省份获取年份的数据列表
+                    var listyears=mapValue[pro];
+                    for (var m=0;m<listyears.length;m++){
+                        if(legendData[j]==listyears[m].year){
+                            var sum=(listyears[m].sum);
+                            dataList[j].push(sum);
+                        }
+                    }
+                }
+            }
+        }
+        function renderItem(params, api) {
+            var xValue = api.value(0);
+            var currentSeriesIndices = api.currentSeriesIndices();
+            var barLayout = api.barLayout({
+                barGap: '20%', barCategoryGap: '10%', count: currentSeriesIndices.length - 1
+            });
+
+            var points = [];
+            for (var i = 0; i < currentSeriesIndices.length; i++) {
+                var seriesIndex = currentSeriesIndices[i];
+                if (seriesIndex !== params.seriesIndex) {
+                    var point = api.coord([xValue, api.value(seriesIndex)]);
+                    point[0] += barLayout[i - 1].offsetCenter;
+                    point[1] -= 20;
+                    points.push(point);
+                }
+            }
+            var style = api.style({
+                stroke: api.visual('color'),
+                fill: null
+            });
+
+            return {
+                type: 'polyline',
+                shape: {
+                    points: points
+                },
+                style: style
+            };
+        }
+
+        baroption = {
+            tooltip: {
+                trigger: 'axis',
+                confine: true
+            },
+            legend: {
+                data: legendData
+            },
+            dataZoom: [{
+                type: 'slider',
+                start: 50,
+                end: 70
+            }, {
+                type: 'inside',
+                start: 50,
+                end: 70
+            }],
+            xAxis: {
+                data: xAxisData,
+                axisTick:{
+                    alignWithLabel:true
+                }
+            },
+            yAxis: {},
+            series: [{
+                type: 'custom',
+                name: 'trend',
+                renderItem: renderItem,
+                itemStyle: {
+                    borderWidth: 2
+                },
+                data: customData,
+                z: 100
+            }].concat(echarts.util.map(dataList, function (data, index) {
+                return {
+                    type: 'bar',
+                    animation: false,
+                    name: legendData[index],
+                    itemStyle: {
+                        opacity: 0.5
+                    },
+                    data: data
+                };
+            }))
+        };
+        barChart.setOption(baroption);
+        window.onresize = barChart.resize;
+        var prefix = ctx + "analyze/province";
+        var options = {
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            pageSize:5,
+            pageList:[5,10,15,20],//分页步进值
+            url: prefix + "/list",
+            sortName: "year",
+            sortOrder: "desc",
+            modalName: "各省草原生产力",
+            columns: [
+                {
+                    field: 'id',
+                    title: 'ID'
+                },
+                {
+                    field: 'province',
+                    title: '省份'
+                },
+                {
+                    field: 'year',
+                    title: '年份'
+                },
+                {
+                    field: 'dryWeight',
+                    title: '干重'
+                },
+                {
+                    field: 'wetWeight',
+                    title: '鲜重'
+                }
+            ]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

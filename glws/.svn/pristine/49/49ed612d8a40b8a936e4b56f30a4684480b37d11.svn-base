@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('保存常规监测数据')" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="white-bg">
+<div class="main-content">
+    <form class="form-horizontal" id="form-normalInspection-add" enctype="multipart/form-data" th:object="${normalInspection}">
+        <input id="photoUrl" name="photoUrl" type="text" hidden>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">调查时间：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input name="surveyTime" type="text" class="form-control" id="surveyTime" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">调查人：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="surveyUser" name="surveyUser" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">东经：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="eastLongitude" name="eastLongitude" placeholder="请输入数字..." onkeyup="value=value.replace(/[^\d.]/g,'')" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">北纬：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="northrrnLatitude" name="northrrnLatitude" placeholder="请输入数字..." onkeyup="value=value.replace(/[^\d.]/g,'')" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">海拔：</label>
+                    <div class="col-sm-5">
+                        <input id="altitude" name="altitude" placeholder="请输入数字..." onkeyup="value=value.replace(/[^\d.]/g,'')" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">区域：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="area" name="area" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">样方编号：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="sampleNumber" name="sampleNumber" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">样方面积：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="sampleArea" name="sampleArea"  placeholder="请输入数字..." onkeyup="value=value.replace(/[^\d.]/g,'')" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">植被盖度：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="vegetaionCoverage" name="vegetaionCoverage" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">草群平均高度：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="grassAveHeight" name="grassAveHeight" placeholder="请输入数字..." onkeyup="value=value.replace(/[^\d.]/g,'')" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">枯落物情况：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input name="litterCondition" type="text" class="form-control" id="litterCondition" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">植物种数：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input name="plantSpecies" type="text" placeholder="请输入整数..." onkeyup="value=value.replace(/[^\d]/g,'')" class="form-control" id="plantSpecies" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">主要植物：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <select id="plantMain" name="plantMain" class="form-control noselect2 selectpicker"
+                                th:with="type=${@dict.getType('di_mian_botany')}" required>
+                            <option value="">请选择</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictCode}">
+                            </option >
+                        </select >
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">毒害草种数：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="poisGrassNum" name="poisGrassNum" placeholder="请输入整数..." onkeyup="value=value.replace(/[^\d]/g,'')" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">主要毒害草名称：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="mainPoisgrassName" name="mainPoisgrassName" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">鲜重：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="freshWeight" placeholder="请输入数字..." onkeyup="value=value.replace(/[^\d.]/g,'')" name="freshWeight" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">干重：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="dryWeight" name="dryWeight" placeholder="请输入数字..." onkeyup="value=value.replace(/[^\d.]/g,'')" class="form-control"  type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">可食干重：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="edibleDryWeight"  placeholder="请输入数字..." onkeyup="value=value.replace(/[^\d.]/g,'')" name="edibleDryWeight" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">具有灌木和高大草木：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="shrubsAndVegetation" name="shrubsAndVegetation" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">草地类型：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <select id="grasslandClass" name="grasslandClass" class="form-control noselect2 selectpicker"
+                                th:with="type=${@dict.getType('di_grassland')}" required>
+                            <option value="">请选择</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictCode}">
+                            </option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">草地形：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="grasslandType" name="grasslandType" class="form-control" type="text" required>
+                      <!--  <select id="grasslandType" name="grasslandType" class="form-control noselect2 selectpicker"
+                                th:with="type=${@dict.getType('di_terrain')}" required>
+                            <option value="">请选择</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictCode}">
+                            </option>
+                        </select>
+-->
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">地形地貌：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="terrainOriginal" name="terrainOriginal" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">土地质地：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <select id="landGeological" name="landGeological" class="form-control noselect2 selectpicker"
+                                th:with="type=${@dict.getType('di_soil')}" required>
+                            <option value="">请选择</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictCode}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">坡向：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="aspect" name="aspect" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">坡位：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="slopePosition" name="slopePosition" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">覆沙情况：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="sievedSandSituation" name="sievedSandSituation" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">侵蚀原因：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="erosionReasons" name="erosionReasons" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">地表侵蚀：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="surfaceErosion" name="surfaceErosion" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">盐碱斑：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="salineSpot" name="salineSpot" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">裸地面积比例：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="proportionArea"  placeholder="请输入数字..." onkeyup="value=value.replace(/[^\d.]/g,'')" name="proportionArea" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">地表有无季节性积水：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="seasonalWater" name="seasonalWater" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">年平均降水量：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="amountRprecipitation"  placeholder="请输入数字..." onkeyup="value=value.replace(/[^\d.]/g,'')" name="amountRprecipitation" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">利用方式：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="usePattern" name="usePattern" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">利用状况：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="useCondition" name="useCondition" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">评价：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="evaluate" name="evaluate" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">综合评价：<span style="color: red; ">*</span></label>
+                    <div class="col-sm-5">
+                        <input id="comprehensiveAssessment" name="comprehensiveAssessment" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="font-noraml">样方照片 <span style="color: red; ">*</span></label>
+            <div class="file-loading">
+                <input class="file" type="file"  id="file" name="photo" accept=".jpg,.png,.gif,.jpeg">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: datetimepicker-js" />
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: bootstrap-fileinput-js" />
+<script type="text/javascript">
+    var prefix = ctx + "integration/normalInspection";
+    var prefixUplocal = ctx;
+
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#surveyTime',
+            type: 'datetime',
+            trigger: 'click'
+        });
+    })
+    var obj = document.getElementById("photoUrl");//储存图图片id
+    var ids = [];
+    var initialPreview = [];
+    var initialPreviewConfig = [];
+    // var codeId = $("#codeId").val();
+    $("#file").fileinput({
+        'theme': 'explorer-fas',
+        // uploadExtraData: {
+        //     codeId: codeId
+        // },
+        'uploadUrl':prefix+'/upload',
+        deleteUrl:prefix+"/delete",
+        overwriteInitial: false,
+        uploadIcon: "<i class=\"glyphicon glyphicon-upload\"></i>",
+        initialPreviewAsData: true,
+        uploadAsync: true,
+        showCancel: false,
+        allowedFileExtensions: ['jpg', 'gif', 'png', 'bmp', 'jpeg'],//指出带有哪些后缀名的文件才是被接受上传的
+        previewFileIcon: '',//当文件无法被预览时出现在缩略图中的图标，默认是
+        maxFileCount: 10,
+        layoutTemplates: {
+            actionUpload: ""
+        },
+        deleteExtraData: {
+            files: "111111111"
+        },
+        initialPreview: initialPreview,
+        initialPreviewConfig: initialPreviewConfig,
+
+
+    }).on('filebatchuploaderror', function (event, data, msg) {
+        alert("上传失败");
+    }).on("filepredelete", function (event, key, jax, data) {
+        return !confirm("确定删除？");
+    }).on('filedeleted', function (event, key) {
+        removearry(ids, key)
+        alert("删除成功");
+        obj.value = ids;
+    });
+    $(".kv-file-remove").click(function () {
+
+        // alert("target"+JSON.stringify( $(this).target));
+    });
+    /*$('#file').on('filepredelete', function(event,data,jax,key) {
+         alert("key"+JSON.stringify(key));
+         alert("data"+JSON.stringify(data));
+         alert("jax"+JSON.stringify(jax));
+         alert("event"+JSON.stringify(event));
+         console.log('Key = ' + key);
+
+     });*/
+
+
+    $("#file").on("fileuploaded", function (event, data, previewId, index) {
+        //alert("data"+JSON.stringify(data));
+        initialPreview.push(data.response.initialPreview)
+        var obj = {
+            caption: data.response.filename,
+            size: data.response.size,
+            url: prefix + '/delete',
+            key: data.response.id,
+        }
+        // alert(JSON.stringify(obj));
+        initialPreviewConfig.push(obj);
+        //alert(JSON.stringify(initialPreview));
+        ids=[];
+        for (var i = 0; i < initialPreviewConfig.length; i++) {
+            ids.push(initialPreviewConfig[i].key)
+        }
+        //alert("ids"+ids);
+        $("#photoUrl").val(ids);
+        // alert("obj"+$("#photoUrl").val())
+        $('#file').fileinput('destroy');
+        $("#file").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': prefix + '/upload',
+            overwriteInitial: false,
+            uploadIcon: "<i class=\"glyphicon glyphicon-upload\"></i>",
+            initialPreviewAsData: true,
+            uploadAsync: true,
+            showCancel: false,
+            allowedFileExtensions: ['jpg', 'gif', 'png', 'bmp', 'jpeg'],//指出带有哪些后缀名的文件才是被接受上传的
+            previewFileIcon: '',//当文件无法被预览时出现在缩略图中的图标，默认是
+            maxFileCount: 10,
+            layoutTemplates: {
+                actionUpload: ""
+            },
+            deleteExtraData: {
+                files: "111111111"
+            },
+            initialPreview: initialPreview,
+            initialPreviewConfig: initialPreviewConfig,
+
+
+        })
+        $('#file').fileinput('enable');
+
+    });
+
+    function dianji() {
+        //  alert(initialPreview);
+        // alert(JSON.stringify(initialPreviewConfig));
+        // alert($("#photoUrl").val());
+    }
+
+    //数组排序方法
+    function evlabc(a) { //排序大小
+        var i = j = t = 0;
+        for (i = 0; i < a.length; i++) {
+            for (j = 0; j < a.length; j++) {
+                if (a[i] < a[j]) {// 相邻元素两两对比
+                    t = a[i];
+                    a[i] = a[j];
+                    a[j] = t;
+                }
+            }
+        }
+        return a;
+    }
+
+    //取值在数组中的下标
+    function indexOfArry(arry, val) {
+        for (var i = 0; i < arry.length; i++) {
+            if (arry[i] == val) return i;
+        }
+        return -1;
+    };
+
+    //删除数组中固定的值
+    function removearry(arry, val) {
+        var index = indexOfArry(arry, val);
+        if (index > -1) {
+            arry.splice(index, 1);
+        }
+    };
+
+
+    // $("#file").fileinput({
+    //     allowedFileExtensions : ['jpg', 'png','gif', 'jpeg'],//接收的文件后缀
+    //     showUpload: false, //是否显示上传按钮
+    //     showRemove:true, // 是否显示移除按钮
+    //     maxFileCount:1//上传图片最大数量
+    // });
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-normalInspection-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

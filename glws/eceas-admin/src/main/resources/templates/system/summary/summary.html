@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('退牧还草工程资金汇总报表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+
+                        <li class="select-time">
+                            <p>年度：</p>
+                            <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                        </li>
+                        <li>
+                        <select name="province" th:with="type=${@dict.getType('sys_province')}">
+                            <option value="">请选择任务省份</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                        </select>
+                    </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:summary:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+            <a class="btn btn-warning" onclick="Echars()" shiro:hasPermission="system:summary:export">
+                <i class="fa fa-download"></i> 图表展示
+            </a>
+        </div>
+
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js" />
+<script th:inline="javascript">
+    var prefix = ctx + "system/summary";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            exportUrl: prefix + "/export",
+            striped: true,
+            showFooter: true,
+            pagination:false,
+            modalName: "工程资金汇总报表",
+            columns: [
+                [
+                    {
+                        field: 'year',
+                        title: '年份',
+                        rowspan: 3,
+                        colspan: 1,
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function () {
+                            return "合计"
+                        }
+                    }, {
+                    title: '建设任务',
+                    rowspan: 1,
+                    colspan: 11,
+                    align: 'center',
+                    valign: 'middle'
+                }, {
+                    title: '资金',
+                    align: 'center',
+                    valign: 'middle',
+                    rowspan: 1,
+                    colspan: 3,
+                }
+                ],
+                [
+                    {
+                        title: '围栏任务(万亩)',
+                        colspan: 5,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: '其他任务(万亩)',
+                        colspan: 6,
+                        rowspan: 1,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        field: 'totalInvestment',
+                        title: '资金合计(万元)',
+                        colspan: 1,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].totalInvestment);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'zyMoney',
+                        title: '中央资金(万元)',
+                        colspan: 1,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].zyMoney);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'dfMoney',
+                        title: '地方资金(万元)',
+                        colspan: 1,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].dfMoney);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    }
+                ],
+                [
+                    {
+                        // 禁牧建设规模
+                        field: 'jmSize',
+                        title: '禁牧',
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].jmSize);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    },
+                    {
+                        // 休牧建设规模
+                        field: 'xmSize',
+                        title: '休牧',
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].xmSize);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'hqlxSize',
+                        title: '划区轮牧',
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].hqlxSize);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'smhzlSize',
+                        title: '石漠化治理',
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].smhzlSize);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'wlScale',
+                        title: '合计',
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].wlScale);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'thzyglSize',
+                        title: '退化草原改良',
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].thzyglSize);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'rgscdSize',
+                        title: '人工饲草地',
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].rgscdSize);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'hspjSize',
+                        title: '含饲棚圈',
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].hspjSize);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'httSize',
+                        title: '黑土滩',
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].httSize);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'dhcSize',
+                        title: '毒害草',
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].dhcSize);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    },
+                    {
+                        field: 'ykcyzlSize',
+                        title: '已垦草原治理',
+                        align: 'center',
+                        valign: 'middle',
+                        footerFormatter:function (value) {
+                            var sumBalance = 0;
+                            for (var i in value) {
+                                sumBalance += parseFloat(value[i].ykcyzlSize);
+                            }
+                            return sumBalance.toFixed(2);
+                        }
+                    }
+                ]
+            ]
+        };
+        $.table.init(options);
+    });
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+    function Echars(){
+        var url = prefix + '/Echars';
+        $.modal.openFull("退牧还草工程资金汇总报表", url);
+    }
+
+    $(".fixed-table-body").on("scroll",function(){
+        var sl=this.scrollLeft;
+        $(this).next()[0].scrollLeft = sl;
+    })
+</script>
+</body>
+</html>

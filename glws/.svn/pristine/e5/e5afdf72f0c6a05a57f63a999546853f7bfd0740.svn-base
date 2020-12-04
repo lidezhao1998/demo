@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.externalInterface.mapper.GlmaGisFeaturesMapper">
+
+    <resultMap type="com.sinosoft.externalInterface.domain.GlmaGisFeatures" id="glmaGisFeatures">
+        <id property="id" column="id"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    <insert id="addSharedProjectTree">
+        insert into t_gis_features(
+        <if test="id != null and id != 0">id,</if>
+        <if test="parentId != null and parentId != 0">parent_id,</if>
+        <if test="name != null and name != ''">name,</if>
+        <if test="server_name != null and server_name != ''">server_name,</if>
+        <if test="ancestors != null and ancestors != ''">ancestors,</if>
+        <if test="orderNum != null and orderNum != ''">order_num,</if>
+        <if test="status != null">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="source != null and source != ''">source,</if>
+        <if test="sourceId != null and sourceId != ''">sourceId,</if>
+        create_time
+        )values(
+        <if test="id != null and id != 0">#{id},</if>
+        <if test="parentId != null and parentId != 0">#{parentId},</if>
+        <if test="name != null and name != ''">#{name},</if>
+        <if test="server_name != null and server_name != ''">#{server_name},</if>
+        <if test="ancestors != null and ancestors != ''">#{ancestors},</if>
+        <if test="orderNum != null and orderNum != ''">#{orderNum},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="source != null and source != ''">#{source},</if>
+        <if test="sourceId != null and sourceId != ''">#{sourceId},</if>
+        sysdate()
+        )
+    </insert>
+
+</mapper>

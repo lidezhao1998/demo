@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原虫害发生与防治情况列表管理页面')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>编号：</p>
+                                <input type="text" name="number"/>
+                            </li>
+                            <li>
+                                <p>年度：</p>
+                                <input type="text" name="year"/>
+                            </li>
+                            <li>
+                                <p>周：</p>
+                                <input type="text" name="week"/>
+                            </li>
+                            <li>
+                                <p>省：</p>
+                                <input type="text" name="province"/>
+                            </li>
+                            <li>
+                                <p>市：</p>
+                                <input type="text" name="city"/>
+                            </li>
+                            <li>
+                                <p>县区：</p>
+                                <input type="text" name="county"/>
+                            </li>
+                            <li>
+                                <p>类型：</p>
+                                <select name="type" th:with="type=${@dict.getType('')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>危害总面积：</p>
+                                <input type="text" name="harmTotalarea"/>
+                            </li>
+                            <li>
+                                <p>工程区危害面积：</p>
+                                <input type="text" name="engineeringhazard"/>
+                            </li>
+                            <li>
+                                <p>严重危害总面积：</p>
+                                <input type="text" name="seriousArea"/>
+                            </li>
+                            <li>
+                                <p>工程区严重危害面积：</p>
+                                <input type="text" name="engineeringSeriousArea"/>
+                            </li>
+                            <li>
+                                <p>合计：</p>
+                                <input type="text" name="totalPrevention"/>
+                            </li>
+                            <li>
+                                <p>化学防治：</p>
+                                <input type="text" name="chemistryControl"/>
+                            </li>
+                            <li>
+                                <p>小计：</p>
+                                <input type="text" name="subtotal"/>
+                            </li>
+                            <li>
+                                <p>招募椋鸟：</p>
+                                <input type="text" name="attractStarlings"/>
+                            </li>
+                            <li>
+                                <p>牧鸡：</p>
+                                <input type="text" name="pastureChicken"/>
+                            </li>
+                            <li>
+                                <p>牧鸭：</p>
+                                <input type="text" name="pastureDuck"/>
+                            </li>
+                            <li>
+                                <p>苦参碱：</p>
+                                <input type="text" name="matrine"/>
+                            </li>
+                            <li>
+                                <p>烟碱：</p>
+                                <input type="text" name="nicotine"/>
+                            </li>
+                            <li>
+                                <p>绿僵菌：</p>
+                                <input type="text" name="greenMuscardineFungus"/>
+                            </li>
+                            <li>
+                                <p>印楝素：</p>
+                                <input type="text" name="azadirachtin"/>
+                            </li>
+                            <li>
+                                <p>阿维菌素：</p>
+                                <input type="text" name="avermectin"/>
+                            </li>
+                            <li>
+                                <p>短稳杆菌：</p>
+                                <input type="text" name="empedobacterBrevis"/>
+                            </li>
+                            <li>
+                                <p>蛇床子素：</p>
+                                <input type="text" name="osthole"/>
+                            </li>
+                            <li>
+                                <p>阿维苏：</p>
+                                <input type="text" name="weiSu"/>
+                            </li>
+                            <li>
+                                <p>微孢子虫：</p>
+                                <input type="text" name="enterocytozoonBieneusi"/>
+                            </li>
+                            <li>
+                                <p>管理技术干部（人/天）：</p>
+                                <input type="text" name="expatriateManagers"/>
+                            </li>
+                            <li>
+                                <p>出工（人/天）：</p>
+                                <input type="text" name="work"/>
+                            </li>
+                            <li>
+                                <p>飞机（架/次）：</p>
+                                <input type="text" name="plane"/>
+                            </li>
+                            <li>
+                                <p>大型喷雾器（台/套/天）：</p>
+                                <input type="text" name="bigSprayer"/>
+                            </li>
+                            <li>
+                                <p>中小型喷雾器（台/套/天）：</p>
+                                <input type="text" name="smallSprayer"/>
+                            </li>
+                            <li>
+                                <p>车辆（辆/天）：</p>
+                                <input type="text" name="car"/>
+                            </li>
+                            <li>
+                                <p>牧鸡（万只）：</p>
+                                <input type="text" name="pastureChickenNum"/>
+                            </li>
+                            <li>
+                                <p>牧鸭：</p>
+                                <input type="text" name="pastureDuckNum"/>
+                            </li>
+                            <li>
+                                <p>椋鸟巢：</p>
+                                <input type="text" name="starlingNest"/>
+                            </li>
+                            <li>
+                                <p>备注：</p>
+                                <input type="text" name="remarks"/>
+                            </li>
+                            <li>
+                                <p>null：</p>
+                                <input type="text" name="createName"/>
+                            </li>
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="zaihai:chfz:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="zaihai:chfz:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="zaihai:chfz:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="zaihai:chfz:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('zaihai:chfz:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('zaihai:chfz:remove')}]];
+        var prefix = ctx + "caiji/chfz";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                detailUrl: prefix + "/detail/{id}",
+                modalName: "草原虫害发生与防治情况管理页面",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'id', 
+                    title : 'id',
+                    align: 'center',
+                    visible: false
+                },
+                {
+                    field : 'number',
+                    align: 'center',
+                    title : '编号'
+                },
+                {
+                    field : 'year',
+                    align: 'center',
+                    title : '年度'
+                },
+                {
+                    field : 'week',
+                    align: 'center',
+                    title : '周'
+                },
+                {
+                    field : 'province',
+                    align: 'center',
+                    title : '省'
+                },
+                {
+                    field : 'city',
+                    align: 'center',
+                    title : '市'
+                },
+                {
+                    field : 'county',
+                    align: 'center',
+                    title : '县区'
+                },
+                {
+                    field : 'type',
+                    align: 'center',
+                    title : '类型'
+                },
+                {
+                    field : 'harmTotalarea',
+                    align: 'center',
+                    title : '危害总面积'
+                },
+                {
+                    field : 'engineeringhazard',
+                    align: 'center',
+                    title : '工程区危害面积'
+                },
+                {
+                    field : 'seriousArea',
+                    align: 'center',
+                    title : '严重危害总面积'
+                },
+                {
+                    field : 'engineeringSeriousArea',
+                    align: 'center',
+                    title : '工程区严重危害面积'
+                },
+                {
+                    field : 'totalPrevention',
+                    align: 'center',
+                    title : '合计'
+                },
+                {
+                    field : 'chemistryControl',
+                    align: 'center',
+                    title : '化学防治'
+                },
+                {
+                    field : 'subtotal',
+                    align: 'center',
+                    title : '小计'
+                },
+                {
+                    field : 'attractStarlings',
+                    align: 'center',
+                    title : '招募椋鸟'
+                },
+                {
+                    field : 'pastureChicken',
+                    align: 'center',
+                    title : '牧鸡'
+                },
+                {
+                    field : 'pastureDuck',
+                    align: 'center',
+                    title : '牧鸭'
+                },
+                {
+                    field : 'matrine',
+                    align: 'center',
+                    title : '苦参碱'
+                },
+                {
+                    field : 'nicotine',
+                    align: 'center',
+                    title : '烟碱'
+                },
+                {
+                    field : 'greenMuscardineFungus',
+                    align: 'center',
+                    title : '绿僵菌'
+                },
+                {
+                    field : 'azadirachtin',
+                    align: 'center',
+                    title : '印楝素'
+                },
+                {
+                    field : 'avermectin',
+                    align: 'center',
+                    title : '阿维菌素'
+                },
+                {
+                    field : 'empedobacterBrevis',
+                    align: 'center',
+                    title : '短稳杆菌'
+                },
+                {
+                    field : 'osthole',
+                    align: 'center',
+                    title : '蛇床子素'
+                },
+                {
+                    field : 'weiSu',
+                    align: 'center',
+                    title : '阿维苏'
+                },
+                {
+                    field : 'enterocytozoonBieneusi',
+                    align: 'center',
+                    title : '微孢子虫'
+                },
+                {
+                    field : 'expatriateManagers',
+                    align: 'center',
+                    title : '管理技术干部'
+                },
+                {
+                    field : 'work',
+                    align: 'center',
+                    title : '出工'
+                },
+                {
+                    field : 'plane',
+                    align: 'center',
+                    title : '飞机'
+                },
+                {
+                    field : 'bigSprayer',
+                    align: 'center',
+                    title : '大型喷雾器'
+                },
+                {
+                    field : 'smallSprayer',
+                    align: 'center',
+                    title : '中小型喷雾器'
+                },
+                {
+                    field : 'car',
+                    align: 'center',
+                    title : '车辆'
+                },
+                {
+                    field : 'pastureChickenNum',
+                    align: 'center',
+                    title : '牧鸡'
+                },
+                {
+                    field : 'pastureDuckNum',
+                    align: 'center',
+                    title : '牧鸭'
+                },
+                {
+                    field : 'starlingNest',
+                    align: 'center',
+                    title : '椋鸟巢'
+                },
+                {
+                    field : 'remarks',
+                    align: 'center',
+                    title : '备注'
+                },
+                {
+                    field : 'createName',
+                    align: 'center',
+                    title : 'null'
+                },
+                {
+                    field : 'status',
+                    align: 'center',
+                    title : '状态'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

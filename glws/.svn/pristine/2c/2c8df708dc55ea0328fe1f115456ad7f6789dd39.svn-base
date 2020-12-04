@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CTaskSelectAllMapper">
+    
+    <resultMap type="CTaskSelectAll" id="CTaskSelectAllResult">
+        <result property="id"    column="ID"    />
+        <result property="number"    column="NUMBER"    />
+        <result property="year"    column="YEAR"    />
+        <result property="week"    column="WEEK"    />
+        <result property="province"    column="PROVINCE"    />
+        <result property="city"    column="CITY"    />
+        <result property="county"    column="COUNTY"    />
+        <result property="type"    column="TYPE"    />
+        <result property="creatTime"    column="CREAT_TIME"    />
+        <result property="status"    column="STATUS"    />
+        <result property="createBy"    column="CREATE_BY"/>
+        <result property="code"    column="CODE"/>
+    </resultMap>
+
+    <sql id="selectCTaskSelectAllVo">
+        SELECT ID,NUMBER,YEAR,WEEK,PROVINCE,CITY,COUNTY,TYPE,CREAT_TIME,STATUS,CREATE_BY,CODE FROM c_task_chfz
+        <where>
+            <if test="number != null  and number != ''">and NUMBER like concat('%', #{number}, '%')</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+        </where>
+        UNION
+        SELECT ID,NUMBER,YEAR,WEEK,PROVINCE,CITY,COUNTY,TYPE,CREAT_TIME,STATUS,CREATE_BY,CODE FROM c_task_fznb
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER like concat('%', #{number}, '%')</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+        </where>
+        UNION
+        SELECT ID,NUMBER,YEAR,WEEK,PROVINCE,CITY,COUNTY,TYPE,CREAT_TIME,STATUS,CREATE_BY,CODE FROM c_task_scny
+        <where>
+            <if test="number != null  and number != ''">and NUMBER like concat('%', #{number}, '%')</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+        </where>
+        UNION
+        SELECT ID,NUMBER,YEAR,WEEK,PROVINCE,CITY,COUNTY,TYPE,CREAT_TIME,STATUS,CREATE_BY,CODE FROM c_task_sczj
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER like concat('%', #{number}, '%')</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+        </where>
+
+    </sql>
+
+    <sql id="selectCTaskSelectAllVo1">
+        SELECT ID,NUMBER,YEAR,WEEK,PROVINCE,CITY,COUNTY,TYPE,CREAT_TIME,STATUS,CREATE_BY,CODE FROM c_task_chfz c
+        <where>
+            <if test="code != null  and code != ''">and c.CODE LIKE   concat( #{code}, '%')</if>
+            <if test="number != null  and number != ''"> and c.NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and c.YEAR = #{year}</if>
+            <if test="type != null  and type != ''"> and c.TYPE = #{type}</if>
+            <if test="province != null  and province != ''"> and c.PROVINCE LIKE   concat( #{province}, '%')</if>
+            <if test="city != null  and city != ''"> and c.CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and c.COUNTY = #{county}</if>
+        </where>
+        UNION
+        SELECT ID,NUMBER,YEAR,WEEK,PROVINCE,CITY,COUNTY,TYPE,CREAT_TIME,STATUS,CREATE_BY,CODE FROM c_task_fznb f
+        <where>
+            <if test="code != null  and code != ''">and f.CODE LIKE   concat( #{code}, '%')</if>
+            <if test="number != null  and number != ''"> and f.NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and f.YEAR = #{year}</if>
+            <if test="type != null  and type != ''"> and f.TYPE = #{type}</if>
+            <if test="province != null  and province != ''"> and f.PROVINCE LIKE   concat( #{province}, '%')</if>
+            <if test="city != null  and city != ''"> and f.CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and f.COUNTY = #{county}</if>
+        </where>
+        UNION
+        SELECT ID,NUMBER,YEAR,WEEK,PROVINCE,CITY,COUNTY,TYPE,CREAT_TIME,STATUS,CREATE_BY,CODE FROM c_task_scny s
+        <where>
+            <if test="code != null  and code != ''">and s.CODE LIKE   concat( #{code}, '%')</if>
+            <if test="number != null  and number != ''"> and s.NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and s.YEAR = #{year}</if>
+            <if test="type != null  and type != ''"> and s.TYPE = #{type}</if>
+            <if test="province != null  and province != ''"> and s.PROVINCE LIKE   concat( #{province}, '%')</if>
+            <if test="city != null  and city != ''"> and s.CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and s.COUNTY = #{county}</if>
+        </where>
+        UNION
+        SELECT ID,NUMBER,YEAR,WEEK,PROVINCE,CITY,COUNTY,TYPE,CREAT_TIME,STATUS,CREATE_BY,CODE FROM c_task_sczj j
+        <where>
+            <if test="code != null  and code != ''">and j.CODE LIKE   concat( #{code}, '%')</if>
+            <if test="number != null  and number != ''"> and j.NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and j.YEAR = #{year}</if>
+            <if test="type != null  and type != ''"> and j.TYPE = #{type}</if>
+            <if test="province != null  and province != ''"> and j.PROVINCE  LIKE   concat( #{province}, '%')</if>
+            <if test="city != null  and city != ''"> and j.CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and j.COUNTY = #{county}</if>
+        </where>
+    </sql>
+
+
+
+
+    <select id="selectCTaskSelectAllList" parameterType="CTaskSelectAll" resultMap="CTaskSelectAllResult">
+        <include refid="selectCTaskSelectAllVo"/>
+
+
+
+    </select>
+
+    <select id="selectCTaskSelectAllList1" parameterType="CTaskSelectAll" resultMap="CTaskSelectAllResult">
+        <include refid="selectCTaskSelectAllVo1"/>
+
+    </select>
+
+    <select id="selectCTaskSelectAllById" parameterType="Long" resultMap="CTaskSelectAllResult">
+        <include refid="selectCTaskSelectAllVo"/>
+        where ID = #{id}
+    </select>
+
+    <insert id="insertCTaskSelectAll" parameterType="CTaskSelectAll" useGeneratedKeys="true" keyProperty="id">
+        insert into c_task_sczj
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER,</if>
+            <if test="year != null  and year != ''">YEAR,</if>
+            <if test="week != null  and week != ''">WEEK,</if>
+            <if test="province != null  and province != ''">PROVINCE,</if>
+            <if test="city != null  and city != ''">CITY,</if>
+            <if test="county != null  and county != ''">COUNTY,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="creatTime != null ">CREAT_TIME,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">#{number},</if>
+            <if test="year != null  and year != ''">#{year},</if>
+            <if test="week != null  and week != ''">#{week},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="county != null  and county != ''">#{county},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="creatTime != null ">#{creatTime},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+
+        </trim>
+
+        insert into c_task_scny
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER,</if>
+            <if test="year != null  and year != ''">YEAR,</if>
+            <if test="week != null  and week != ''">WEEK,</if>
+            <if test="province != null  and province != ''">PROVINCE,</if>
+            <if test="city != null  and city != ''">CITY,</if>
+            <if test="county != null  and county != ''">COUNTY,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="projectType != null  and projectType != ''">PROJECT_TYPE,</if>
+            <if test="pesticide != null  and pesticide != ''">PESTICIDE,</if>
+            <if test="manufacturer != null  and manufacturer != ''">MANUFACTURER,</if>
+            <if test="pesticidePrice != null ">PESTICIDE_PRICE,</if>
+            <if test="orderQuantity != null ">ORDER_QUANTITY,</if>
+            <if test="fundsUsed != null ">FUNDS_USED,</if>
+            <if test="controlDosage != null ">CONTROL_DOSAGE,</if>
+            <if test="muDosage != null ">MU_DOSAGE,</if>
+            <if test="chemistryControl != null  and chemistryControl != ''">CHEMISTRY_CONTROL,</if>
+            <if test="total != null ">TOTAL,</if>
+            <if test="remarks != null  and remarks != ''">REMARKS,</if>
+            <if test="creatTime != null ">CREAT_TIME,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">#{number},</if>
+            <if test="year != null  and year != ''">#{year},</if>
+            <if test="week != null  and week != ''">#{week},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="county != null  and county != ''">#{county},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="projectType != null  and projectType != ''">#{projectType},</if>
+            <if test="pesticide != null  and pesticide != ''">#{pesticide},</if>
+            <if test="manufacturer != null  and manufacturer != ''">#{manufacturer},</if>
+            <if test="pesticidePrice != null ">#{pesticidePrice},</if>
+            <if test="orderQuantity != null ">#{orderQuantity},</if>
+            <if test="fundsUsed != null ">#{fundsUsed},</if>
+            <if test="controlDosage != null ">#{controlDosage},</if>
+            <if test="muDosage != null ">#{muDosage},</if>
+            <if test="chemistryControl != null  and chemistryControl != ''">#{chemistryControl},</if>
+            <if test="total != null ">#{total},</if>
+            <if test="remarks != null  and remarks != ''">#{remarks},</if>
+            <if test="creatTime != null ">#{creatTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+        </trim>
+
+        insert into c_task_fznb
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER,</if>
+            <if test="year != null ">YEAR,</if>
+            <if test="province != null  and province != ''">PROVINCE,</if>
+            <if test="city != null  and city != ''">CITY,</if>
+            <if test="county != null  and county != ''">COUNTY,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="ratharmCenter != null ">RATHARM_CENTER,</if>
+            <if test="ratharmProvince != null ">RATHARM_PROVINCE,</if>
+            <if test="ratharmCity != null ">RATHARM_CITY,</if>
+            <if test="ratharmCounty != null ">RATHARM_COUNTY,</if>
+            <if test="insectharmCenter != null ">INSECTHARM_CENTER,</if>
+            <if test="insectharmProvince != null ">INSECTHARM_PROVINCE,</if>
+            <if test="insectharmCity != null ">INSECTHARM_CITY,</if>
+            <if test="insectharmCounty != null ">INSECTHARM_COUNTY,</if>
+            <if test="economicLoss != null ">ECONOMIC_LOSS,</if>
+            <if test="livestockDeath != null ">LIVESTOCK_DEATH,</if>
+            <if test="hazardArea != null ">HAZARD_AREA,</if>
+            <if test="hazardAllArea != null ">HAZARD_ALL_AREA,</if>
+            <if test="controlDosage != null ">CONTROL_DOSAGE,</if>
+            <if test="muDosage != null ">MU_DOSAGE,</if>
+            <if test="creatTime != null ">CREAT_TIME,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="year != null ">#{year},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="county != null  and county != ''">#{county},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="ratharmCenter != null ">#{ratharmCenter},</if>
+            <if test="ratharmProvince != null ">#{ratharmProvince},</if>
+            <if test="ratharmCity != null ">#{ratharmCity},</if>
+            <if test="ratharmCounty != null ">#{ratharmCounty},</if>
+            <if test="insectharmCenter != null ">#{insectharmCenter},</if>
+            <if test="insectharmProvince != null ">#{insectharmProvince},</if>
+            <if test="insectharmCity != null ">#{insectharmCity},</if>
+            <if test="insectharmCounty != null ">#{insectharmCounty},</if>
+            <if test="economicLoss != null ">#{economicLoss},</if>
+            <if test="livestockDeath != null ">#{livestockDeath},</if>
+            <if test="hazardArea != null ">#{hazardArea},</if>
+            <if test="hazardAllArea != null ">#{hazardAllArea},</if>
+            <if test="controlDosage != null ">#{controlDosage},</if>
+            <if test="muDosage != null ">#{muDosage},</if>
+            <if test="creatTime != null ">#{creatTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+        </trim>
+
+        insert into c_task_chfz
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER,</if>
+            <if test="year != null  and year != ''">YEAR,</if>
+            <if test="week != null  and week != ''">WEEK,</if>
+            <if test="province != null  and province != ''">PROVINCE,</if>
+            <if test="city != null  and city != ''">CITY,</if>
+            <if test="county != null  and county != ''">COUNTY,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="harmTotalarea != null ">HARM_TOTALAREA,</if>
+            <if test="engineeringhazard != null ">ENGINEERINGHAZARD,</if>
+            <if test="seriousArea != null ">SERIOUS_AREA,</if>
+            <if test="engineeringSeriousArea != null ">ENGINEERING_SERIOUS_AREA,</if>
+            <if test="totalPrevention != null ">TOTAL_PREVENTION,</if>
+            <if test="chemistryControl != null  and chemistryControl != ''">CHEMISTRY_CONTROL,</if>
+            <if test="subtotal != null ">SUBTOTAL,</if>
+            <if test="attractStarlings != null ">ATTRACT_STARLINGS,</if>
+            <if test="pastureChicken != null ">PASTURE_CHICKEN,</if>
+            <if test="pastureDuck != null ">PASTURE_DUCK,</if>
+            <if test="matrine != null ">MATRINE,</if>
+            <if test="nicotine != null ">NICOTINE,</if>
+            <if test="greenMuscardineFungus != null ">GREEN_MUSCARDINE_FUNGUS,</if>
+            <if test="azadirachtin != null ">AZADIRACHTIN,</if>
+            <if test="avermectin != null ">AVERMECTIN,</if>
+            <if test="empedobacterBrevis != null ">EMPEDOBACTER_BREVIS,</if>
+            <if test="osthole != null ">OSTHOLE,</if>
+            <if test="weiSu != null ">WEI_SU,</if>
+            <if test="enterocytozoonBieneusi != null ">ENTEROCYTOZOON_BIENEUSI,</if>
+            <if test="expatriateManagers != null ">EXPATRIATE_MANAGERS,</if>
+            <if test="work != null ">WORK,</if>
+            <if test="plane != null ">PLANE,</if>
+            <if test="bigSprayer != null ">BIG_SPRAYER,</if>
+            <if test="smallSprayer != null ">SMALL_SPRAYER,</if>
+            <if test="car != null ">CAR,</if>
+            <if test="pastureChickenNum != null ">PASTURE_CHICKEN_NUM,</if>
+            <if test="pastureDuckNum != null ">PASTURE_DUCK_NUM,</if>
+            <if test="starlingNest != null ">STARLING_NEST,</if>
+            <if test="remarks != null  and remarks != ''">REMARKS,</if>
+            <if test="creatTime != null ">CREAT_TIME,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="createId != null  and createId != ''">CREATE_ID,</if>
+            <if test="createName != null  and createName != ''">CREATE_NAME,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">#{number},</if>
+            <if test="year != null  and year != ''">#{year},</if>
+            <if test="week != null  and week != ''">#{week},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="county != null  and county != ''">#{county},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="harmTotalarea != null ">#{harmTotalarea},</if>
+            <if test="engineeringhazard != null ">#{engineeringhazard},</if>
+            <if test="seriousArea != null ">#{seriousArea},</if>
+            <if test="engineeringSeriousArea != null ">#{engineeringSeriousArea},</if>
+            <if test="totalPrevention != null ">#{totalPrevention},</if>
+            <if test="chemistryControl != null  and chemistryControl != ''">#{chemistryControl},</if>
+            <if test="subtotal != null ">#{subtotal},</if>
+            <if test="attractStarlings != null ">#{attractStarlings},</if>
+            <if test="pastureChicken != null ">#{pastureChicken},</if>
+            <if test="pastureDuck != null ">#{pastureDuck},</if>
+            <if test="matrine != null ">#{matrine},</if>
+            <if test="nicotine != null ">#{nicotine},</if>
+            <if test="greenMuscardineFungus != null ">#{greenMuscardineFungus},</if>
+            <if test="azadirachtin != null ">#{azadirachtin},</if>
+            <if test="avermectin != null ">#{avermectin},</if>
+            <if test="empedobacterBrevis != null ">#{empedobacterBrevis},</if>
+            <if test="osthole != null ">#{osthole},</if>
+            <if test="weiSu != null ">#{weiSu},</if>
+            <if test="enterocytozoonBieneusi != null ">#{enterocytozoonBieneusi},</if>
+            <if test="expatriateManagers != null ">#{expatriateManagers},</if>
+            <if test="work != null ">#{work},</if>
+            <if test="plane != null ">#{plane},</if>
+            <if test="bigSprayer != null ">#{bigSprayer},</if>
+            <if test="smallSprayer != null ">#{smallSprayer},</if>
+            <if test="car != null ">#{car},</if>
+            <if test="pastureChickenNum != null ">#{pastureChickenNum},</if>
+            <if test="pastureDuckNum != null ">#{pastureDuckNum},</if>
+            <if test="starlingNest != null ">#{starlingNest},</if>
+            <if test="remarks != null  and remarks != ''">#{remarks},</if>
+            <if test="creatTime != null ">#{creatTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="createId != null  and createId != ''">#{createId},</if>
+            <if test="createName != null  and createName != ''">#{createName},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+        </trim>
+
+    </insert>
+
+    <update id="updateCTaskSelectAll" parameterType="java.util.List">
+        update c_task_sczj
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER = #{number},</if>
+            <if test="year != null  and year != ''">YEAR = #{year},</if>
+            <if test="week != null  and week != ''">WEEK = #{week},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="city != null  and city != ''">CITY = #{city},</if>
+            <if test="county != null  and county != ''">COUNTY = #{county},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="creatTime != null ">CREAT_TIME = #{creatTime},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+        </trim>
+        where ID = #{id}
+
+        update c_task_chfz
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER = #{number},</if>
+            <if test="year != null  and year != ''">YEAR = #{year},</if>
+            <if test="week != null  and week != ''">WEEK = #{week},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="city != null  and city != ''">CITY = #{city},</if>
+            <if test="county != null  and county != ''">COUNTY = #{county},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="harmTotalarea != null ">HARM_TOTALAREA = #{harmTotalarea},</if>
+            <if test="engineeringhazard != null ">ENGINEERINGHAZARD = #{engineeringhazard},</if>
+            <if test="seriousArea != null ">SERIOUS_AREA = #{seriousArea},</if>
+            <if test="engineeringSeriousArea != null ">ENGINEERING_SERIOUS_AREA = #{engineeringSeriousArea},</if>
+            <if test="totalPrevention != null ">TOTAL_PREVENTION = #{totalPrevention},</if>
+            <if test="chemistryControl != null  and chemistryControl != ''">CHEMISTRY_CONTROL = #{chemistryControl},</if>
+            <if test="subtotal != null ">SUBTOTAL = #{subtotal},</if>
+            <if test="attractStarlings != null ">ATTRACT_STARLINGS = #{attractStarlings},</if>
+            <if test="pastureChicken != null ">PASTURE_CHICKEN = #{pastureChicken},</if>
+            <if test="pastureDuck != null ">PASTURE_DUCK = #{pastureDuck},</if>
+            <if test="matrine != null ">MATRINE = #{matrine},</if>
+            <if test="nicotine != null ">NICOTINE = #{nicotine},</if>
+            <if test="greenMuscardineFungus != null ">GREEN_MUSCARDINE_FUNGUS = #{greenMuscardineFungus},</if>
+            <if test="azadirachtin != null ">AZADIRACHTIN = #{azadirachtin},</if>
+            <if test="avermectin != null ">AVERMECTIN = #{avermectin},</if>
+            <if test="empedobacterBrevis != null ">EMPEDOBACTER_BREVIS = #{empedobacterBrevis},</if>
+            <if test="osthole != null ">OSTHOLE = #{osthole},</if>
+            <if test="weiSu != null ">WEI_SU = #{weiSu},</if>
+            <if test="enterocytozoonBieneusi != null ">ENTEROCYTOZOON_BIENEUSI = #{enterocytozoonBieneusi},</if>
+            <if test="expatriateManagers != null ">EXPATRIATE_MANAGERS = #{expatriateManagers},</if>
+            <if test="work != null ">WORK = #{work},</if>
+            <if test="plane != null ">PLANE = #{plane},</if>
+            <if test="bigSprayer != null ">BIG_SPRAYER = #{bigSprayer},</if>
+            <if test="smallSprayer != null ">SMALL_SPRAYER = #{smallSprayer},</if>
+            <if test="car != null ">CAR = #{car},</if>
+            <if test="pastureChickenNum != null ">PASTURE_CHICKEN_NUM = #{pastureChickenNum},</if>
+            <if test="pastureDuckNum != null ">PASTURE_DUCK_NUM = #{pastureDuckNum},</if>
+            <if test="starlingNest != null ">STARLING_NEST = #{starlingNest},</if>
+            <if test="remarks != null  and remarks != ''">REMARKS = #{remarks},</if>
+            <if test="creatTime != null ">CREAT_TIME = #{creatTime},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="createId != null  and createId != ''">CREATE_ID = #{createId},</if>
+            <if test="createName != null  and createName != ''">CREATE_NAME = #{createName},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+        </trim>
+        where ID = #{id}
+
+        update c_task_fznb
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="year != null ">YEAR = #{year},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="city != null  and city != ''">CITY = #{city},</if>
+            <if test="county != null  and county != ''">COUNTY = #{county},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="ratharmCenter != null ">RATHARM_CENTER = #{ratharmCenter},</if>
+            <if test="ratharmProvince != null ">RATHARM_PROVINCE = #{ratharmProvince},</if>
+            <if test="ratharmCity != null ">RATHARM_CITY = #{ratharmCity},</if>
+            <if test="ratharmCounty != null ">RATHARM_COUNTY = #{ratharmCounty},</if>
+            <if test="insectharmCenter != null ">INSECTHARM_CENTER = #{insectharmCenter},</if>
+            <if test="insectharmProvince != null ">INSECTHARM_PROVINCE = #{insectharmProvince},</if>
+            <if test="insectharmCity != null ">INSECTHARM_CITY = #{insectharmCity},</if>
+            <if test="insectharmCounty != null ">INSECTHARM_COUNTY = #{insectharmCounty},</if>
+            <if test="economicLoss != null ">ECONOMIC_LOSS = #{economicLoss},</if>
+            <if test="livestockDeath != null ">LIVESTOCK_DEATH = #{livestockDeath},</if>
+            <if test="hazardArea != null ">HAZARD_AREA = #{hazardArea},</if>
+            <if test="hazardAllArea != null ">HAZARD_ALL_AREA = #{hazardAllArea},</if>
+            <if test="controlDosage != null ">CONTROL_DOSAGE = #{controlDosage},</if>
+            <if test="muDosage != null ">MU_DOSAGE = #{muDosage},</if>
+            <if test="creatTime != null ">CREAT_TIME = #{creatTime},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+        </trim>
+        where ID = #{id}
+
+        update c_task_scny
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER = #{number},</if>
+            <if test="year != null  and year != ''">YEAR = #{year},</if>
+            <if test="week != null  and week != ''">WEEK = #{week},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="city != null  and city != ''">CITY = #{city},</if>
+            <if test="county != null  and county != ''">COUNTY = #{county},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="projectType != null  and projectType != ''">PROJECT_TYPE = #{projectType},</if>
+            <if test="pesticide != null  and pesticide != ''">PESTICIDE = #{pesticide},</if>
+            <if test="manufacturer != null  and manufacturer != ''">MANUFACTURER = #{manufacturer},</if>
+            <if test="pesticidePrice != null ">PESTICIDE_PRICE = #{pesticidePrice},</if>
+            <if test="orderQuantity != null ">ORDER_QUANTITY = #{orderQuantity},</if>
+            <if test="fundsUsed != null ">FUNDS_USED = #{fundsUsed},</if>
+            <if test="controlDosage != null ">CONTROL_DOSAGE = #{controlDosage},</if>
+            <if test="muDosage != null ">MU_DOSAGE = #{muDosage},</if>
+            <if test="chemistryControl != null  and chemistryControl != ''">CHEMISTRY_CONTROL = #{chemistryControl},</if>
+            <if test="total != null ">TOTAL = #{total},</if>
+            <if test="remarks != null  and remarks != ''">REMARKS = #{remarks},</if>
+            <if test="creatTime != null ">CREAT_TIME = #{creatTime},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCTaskSelectAllById" parameterType="Long">
+         delete from c_task_chfz where ID = #{id}
+    </delete>
+
+
+
+
+    <!--<delete id="deleteCTaskSelectAllByIds" parameterType="String">
+        delete from c_task_sczj where ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+    </delete>-->
+
+    <delete id="deleteCTaskSelectAllByIds" parameterType="String">
+        delete from c_task_fznb where ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+    </delete>
+
+
+
+
+</mapper>

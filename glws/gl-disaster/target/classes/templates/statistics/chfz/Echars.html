@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原虫害发生与防治情况列表')" />
+
+    <script src="http://www.sucainiu.com/themes/cdn/jquery/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.min.js"></script>
+    <script type="text/javascript" src="./js/map/china.js"></script>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+    <meta charset="UTF-8">
+    <style>
+        #china-map {
+            width: 850px;
+            height: 850px;
+            margin: auto;
+        }
+        #box{
+            display:none;
+            background-color: goldenrod;
+            width: 180px;
+            height: 30px;
+        }
+        #box-title{
+            display:block;
+        }
+    </style>
+    <style type="text/css">
+        body{
+            background-color:rgba(144, 238, 144, 0.2);
+        }
+
+    </style>
+
+</head>
+<body class="gray-bg">
+<div class="col-sm-18 select-table">
+    <div class="col-sm-6">
+        <div class="panel blank-panel">
+
+<!--
+
+            <div style="margin-top:35px;">
+                <form class="form-horizontal m" id="form-knowledge-edit" th:object="${cTaskChfz}">
+                <table class="VirusSummary_1-1-265_26c8Iu VirusSummary_1-1-265_2fRxdu" style="color:rgba(0, 190, 199, 0.6);" align="center" width="700px">
+                    <tbody>
+                <tr>
+                    <td cellspacing="250px"><div class="VirusSummary_1-1-265_6xUfqo"><div class="VirusSummary_1-1-265_Af8Lb3" style="font-size:20px">危害总面积</div><div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                        <div  style="color:rgba(0, 190, 199, 0.6);font-size:20px;" th:text="${cTaskChfz.harmTotalarea}" class="form-control-static" type="text" disabled="disabled"></div>
+                    </div></div>
+                    </td><td cellspacing="250px"><div class="VirusSummary_1-1-265_1erbWM"><div class="VirusSummary_1-1-265_Af8Lb3" style="font-size:20px">严重危害总面积</div><div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                    <div  style="color:rgba(0, 190, 199, 0.6);font-size:20px;" th:text="${cTaskChfz.seriousArea}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                </div></div></td>
+                    <td cellspacing="250px"><div class="VirusSummary_1-1-265_2ahJaj"><div class="VirusSummary_1-1-265_Af8Lb3" style="font-size:20px">工程区危害面积</div><div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                        <div  style="color:rgba(0, 190, 199, 0.6);font-size:20px;" th:text="${cTaskChfz.seriousArea}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div></div></td>
+                    <td cellspacing="250px"><div class="VirusSummary_1-1-265_28rIkx"><div class="VirusSummary_1-1-265_Af8Lb3" style="font-size:20px">工程区危害总面积</div><div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                        <div   style="color:rgba(0, 190, 199, 0.6);font-size:20px;"  th:text="${cTaskChfz.engineeringSeriousArea}" class="form-control-static" type="text" disabled="disabled"></div>
+                    </div></div></td>
+                </tr></tbody>
+                </table>
+                    </form>
+            </div>
+-->
+
+
+            <div class="panel-body" style="margin-top:60px;">
+                <div class="tab-content">
+                    <div id="tab-4" class="tab-pane ">
+                    <div id="china-map"></div>
+
+                </div>
+
+                    <div id="tab-5" class="tab-pane active">
+                            <div  id="echarts-line-chart" style="width: 1300px;height:600px;"></div>
+                </div>
+                    <div class="col-sm-12 select-table table-bordered">
+                        <table id="bootstrap-table"  ></table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<!--
+<button id="back">返回全1国</button>
+-->
+<script th:inline="javascript">
+    var prefix = ctx + "zaihai/chfztj";
+
+    var myChart = echarts.init(document.getElementById('china-map'));
+    //var oBack = document.getElementById("back");
+
+    var provinces = ['shanghai', 'hebei', 'shanxi', 'neimenggu', 'liaoning', 'jilin', 'heilongjiang', 'jiangsu', 'zhejiang', 'anhui', 'fujian', 'jiangxi', 'shandong', 'henan', 'hubei', 'hunan', 'guangdong', 'guangxi', 'hainan', 'sichuan', 'guizhou', 'yunnan', 'xizang', 'shanxi1', 'gansu', 'qinghai', 'ningxia', 'xinjiang', 'beijing', 'tianjin', 'chongqing', 'xianggang', 'aomen'];
+
+    var provincesText = ['上海', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆', '北京', '天津', '重庆', '香港', '澳门'];
+
+    var seriesData = [{
+        name: '北京',
+        value: 100
+    }, {
+        name: '天津',
+        value: 0
+    }, {
+        name: '上海',
+        value: 60
+    }, {
+        name: '重庆',
+        value: 0
+    }, {
+        name: '河北',
+        value: 60
+    }, {
+        name: '河南',
+        value: 60
+    }, {
+        name: '云南',
+        value: 0
+    }, {
+        name: '辽宁',
+        value: 0
+    }, {
+        name: '黑龙江',
+        value: 0
+    }, {
+        name: '湖南',
+        value: 60
+    }, {
+        name: '安徽',
+        value: 0
+    }, {
+        name: '山东',
+        value: 60
+    }, {
+        name: '新疆',
+        value: 0
+    }, {
+        name: '江苏',
+        value: 0
+    }, {
+        name: '浙江',
+        value: 0
+    }, {
+        name: '江西',
+        value: 1230
+    }, {
+        name: '湖北',
+        value: 12160
+    }, {
+        name: '广西',
+        value: 60221
+    }, {
+        name: '甘肃',
+        value: 191923
+    }, {
+        name: '山西',
+        value: 660
+    }, {
+        name: '内蒙古',
+        value: 12310
+    }, {
+        name: '陕西',
+        value: 0
+    }, {
+        name: '吉林',
+        value: 0
+    }, {
+        name: '福建',
+        value: 0
+    }, {
+        name: '贵州',
+        value: 0
+    }, {
+        name: '广东',
+        value: 597
+    }, {
+        name: '青海',
+        value: 0
+    }, {
+        name: '西藏',
+        value: 0
+    }, {
+        name: '四川',
+        value: 60
+    }, {
+        name: '宁夏',
+        value: 220
+    }, {
+        name: '海南',
+        value: 60
+    }, {
+        name: '台湾',
+        value: 540
+    }, {
+        name: '香港',
+        value: 450
+    }, {
+        name: '澳门',
+        value: 0
+    }];
+
+   /* oBack.onclick = function () {
+        initEcharts("china", "中88国");
+    };*/
+
+    initEcharts("china", "中国");
+
+    // 初始化echarts
+    function initEcharts(pName, Chinese_) {
+        var tmpSeriesData = pName === "china" ? seriesData : [];
+
+        var option = {
+            title: {
+                text: Chinese_ || pName,
+                left: 'center',
+                subtext: '纯属虚构'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}<br/>{c} (p / km3)'
+            },
+            legend: {
+                orient: 'vertical',
+                x:'left',
+                data:['iphone3','iphone4','iphone5']
+            },
+            //设置数额梯度
+            dataRange: {
+                min: 0,
+                max: 2500,
+                x: 'left',
+                y: 'bottom',
+                text:['高','低'],           // 文本，默认为数值文本
+                calculable : true
+            },
+            //辅助的一些小插件
+            toolbox: {
+                show: true,
+                orient : 'vertical',
+                x: 'right',
+                y: 'center',
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            series: [
+                {
+                    name: Chinese_ || pName,
+                    type: 'map',
+                    mapType: pName ,
+                    roam: false,//是否开启鼠标缩放和平移漫游
+                    data: tmpSeriesData,
+                    top: "3%",//组件距离容器的距离
+                    zoom:1.1,
+                    selectedMode : 'single',
+
+                    label: {
+                        normal: {
+                            show: true,//显示省份标签
+                            textStyle:{color:"#fbfdfe"}//省份标签字体颜色
+                        },
+                        emphasis: {//对应的鼠标悬浮效果
+                            show: true,
+                            textStyle:{color:"#323232"}
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            borderWidth: .5,//区域边框宽度
+                            borderColor: '#0550c3',//区域边框颜色
+                            areaColor:"#4ea397",//区域颜色
+
+                        },
+
+                        emphasis: {
+                            borderWidth: .5,
+                            borderColor: '#4b0082',
+                            areaColor:"#ece39e",
+                        }
+                    },
+                },
+            ]
+
+        };
+
+        myChart.setOption(option);
+
+        myChart.off("click");
+
+        if (pName === "china") { // 全国时，添加click 进入省级
+            myChart.on('click', function (param) {
+                console.log(param.name);
+                // 遍历取到provincesText 中的下标  去拿到对应的省js
+                for (var i = 0; i < provincesText.length; i++) {
+                    if (param.name === provincesText[i]) {
+                        //显示对应省份的方法
+                        showProvince(provinces[i], provincesText[i]);
+                        break;
+                    }
+                }
+                if (param.componentType === 'series') {
+                    var provinceName =param.name;
+                    $('#box').css('display','block');
+                    $("#box-title").html(provinceName);
+
+                }
+            });
+        } else { // 省份，添加双击 回退到全国
+            myChart.on("dblclick", function () {
+                initEcharts("china", "中国");
+            });
+        }
+    }
+
+    // 展示对应的省
+    function showProvince(pName, Chinese_) {
+        //这写省份的js都是通过在线构建工具生成的，保存在本地，需要时加载使用即可，最好不要一开始全部直接引入。
+        loadBdScript('$' + pName + 'JS', '/js/map/province/' + pName + '.js', function () {
+            initEcharts(Chinese_);
+            alert(Chinese_)
+        });
+    }
+
+    // 加载对应的JS
+    function loadBdScript(scriptId, url, callback) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        if (script.readyState) {  //IE
+            script.onreadystatechange = function () {
+                if (script.readyState === "loaded" || script.readyState === "complete") {
+                    script.onreadystatechange = null;
+                    callback();
+                }
+            };
+        } else {  // Others
+            script.onload = function () {
+                callback();
+            };
+        }
+        script.src = url;
+        script.id = scriptId;
+        document.getElementsByTagName("head")[0].appendChild(script);
+    };
+
+
+    $(function () {
+        var year=[];    //横坐标数组（实际用来盛放X轴坐标值）
+        var harmTotalarea=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var engineeringhazard=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var seriousArea=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var engineeringSeriousArea=[];    //纵坐标数组（实际用来盛放Y坐标值）
+        var week=[];    //纵坐标数组（实际用来盛放Y坐标值）
+
+        var province= [[${province}]]
+
+        var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+        $.ajax({
+            type : "post",
+            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url : prefix + "/getOption",    //请求发送到dataActiont处
+            data : {province:province},
+            dataType : "json",        //返回数据形式为json
+            success : function(result) {
+                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                if (result) {
+
+                    for(var i=0;i<result.length;i++){
+                        year.push(result[i].year);
+                        harmTotalarea.push(result[i].harmTotalarea);
+                        engineeringhazard.push(result[i].engineeringhazard);
+                        seriousArea.push(result[i].seriousArea);
+                        engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                        week.push(result[i].week);
+                    }
+                    lineChart.hideLoading();    //隐藏加载动画
+                    lineChart.setOption({        //加载数据图表
+                        title : {
+                            text: '草原虫害防治统计折线图'
+                        },
+                        tooltip: {trigger: 'axis',
+
+                        },
+                        legend: {
+                            width:"50%",
+                            data:['危害总面积', '严重危害面积', '工程区危害面积', '工程区危害总面积']
+                        },
+                        calculable : true,
+                        xAxis: {
+                            boundaryGap : false,
+                            data:year
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [
+                            {
+                                name: '危害总面积',
+                                type: 'line',
+                                smooth: true,
+                                stack: '危害总面积',
+                                data:harmTotalarea
+                            },
+                            {
+                                name: '严重危害面积',
+                                type: 'line',
+                                smooth: true,
+                                stack: engineeringhazard,
+                            },
+                            {
+                                name: '工程区危害面积',
+                                type: 'line',
+                                smooth: true,
+                                stack: '工程区危害面积',
+                                data:seriousArea
+                            },
+                            {
+                                name: '工程区危害总面积',
+                                type: 'line',
+                                smooth: true,
+                                stack: '累计危害总面积',
+                                data:engineeringSeriousArea
+                            }
+                        ]
+
+                    });
+                    window.onresize = lineChart.resize;
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                lineChart.hideLoading();
+            }
+        });
+
+    });
+    $(function() {
+        alert(22)
+        var options = {
+            url: prefix + "/addressList",
+            exportUrl: prefix + "/export",
+            modalName: "草原虫害发生与防治情况",
+            pagination:false,
+            showExport: true,
+            Icons:'glyphicon-export',
+
+            columns: [
+
+                {
+
+                    //field : 'year',
+                    title : '年度',
+                    align: 'center',
+                    valign: 'middle',
+
+                },
+                /* {
+                     rowspan: 3,
+                     colspan: 1,
+                     field : 'week',
+                     title : '周',
+                     align: 'center',
+                     valign: 'middle'
+                 },*/
+                {
+                   // field : 'province',v v
+                    title : '省份',
+                    align: 'center',
+                    valign: 'middle'
+                },
+
+
+
+                {
+                    title : '当年防治面积',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    title : '防治投入',
+                    align: 'center',
+                    valign: 'middle'
+                }
+
+
+                /*{
+                    field: 'wlScale',
+                    title: '合计',
+                    align: 'center',
+                    valign: 'middle',
+                    footerFormatter:function (value) {
+                        var sumBalance = 0;
+                        for (var i in value) {
+                            sumBalance += parseFloat(value[i].wlScale);
+                        }
+                        return sumBalance.toFixed(2);
+                    }
+                },*/
+
+
+
+            ],
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('入库列表')" />
+</head>
+<style>
+    /*修改表头颜色*/
+    .table-striped table thead{
+        background-color:rgba(48,146,62, 0.9);
+        color: whitesmoke;
+        height: 55px;
+    }
+    /*按钮背景色*/
+    .btn-success{
+        background-color: #30923E;
+    }
+
+</style>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>物资名称：</p>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li class="select-time">
+                                <p>入库时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginWarehousingTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endWarehousingTime]"/>
+                            </li>
+                            <!--<li>
+                                <p>入库方式：</p>
+                                <input type="text" name="warehousingMode"/>
+                            </li>-->
+                            <li>
+                                <p>接货人：</p>
+                                <input type="text" name="receiver"/>
+                            </li>
+
+                           <!-- <li>
+                                <p>送货人：</p>
+                                <input type="text" name=" deliveryPerson"/>
+                            </li>-->
+
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="system:instock:add">
+                    <i class="fa fa-plus"></i> 新增入库
+                </a>
+             <!--   <a class="btn btn-primary single disabled" onclick="$.operate.editTab()" shiro:hasPermission="system:instock:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>-->
+
+                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:instock:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:instock:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:instock:remove')}]];
+        var prefix = ctx + "system/instock";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+                showExport: true,
+                modalName: "入库",
+
+                columns: [
+                    {
+                        field: 'id',
+                        title: '序号',
+                        width:5 ,
+                        align: 'center',
+                        valign: 'middle',
+                        switchable:false,
+                        formatter:function(value,row,index){
+                            //return index+1; //序号正序排序从1开始
+                            var pageSize=$('#bootstrap-table').bootstrapTable('getOptions').pageSize;//通过表的#id 可以得到每页多少条
+                            var pageNumber=$('#bootstrap-table').bootstrapTable('getOptions').pageNumber;//通过表的#id 可以得到当前第几页
+                            return pageSize * (pageNumber - 1) + index + 1;    //返回每条的序号： 每页条数 * （当前页 - 1 ）+ 序号
+                        }
+                    },
+                {
+                    field : 'id',
+                    title : 'id',
+                    align: 'center',
+                    valign: 'middle',
+                    visible: false
+                },
+                {
+                    field : 'name',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '物资名称'
+                },
+                    {
+                        field : 'address',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '入库地点'
+                    },
+                {
+                    field : 'warehousingTime',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '入库时间'
+                },
+                {
+                    field : 'warehousingMode',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '入库方式'
+                },
+                {
+                    field : 'receiver',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '接货人'
+                },
+                {
+                    field : 'receiverNumber',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '接货人电话'
+                },
+                {
+                    field : 'deliveryPerson',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '送货人'
+                },
+                {
+                    field : 'reasonNumber',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '送货人电话'
+                },
+                {
+                    field : 'goodsNumber',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '货物数量'
+                },
+                {
+                    field : 'goodsMoney',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '货物金额'
+                },
+                {
+                    field : 'reason',
+                    align: 'center',
+                    valign: 'middle',
+                    title : '原因'
+                },
+                {
+                    field : 'status',
+                    title : '状态',
+                    align: 'center',
+                    valign: 'middle',
+                    visible: editFlag == 'hidden' ? false : true,
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    },
+                },
+
+                {
+                    title: '操作',
+                    align: 'center',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function(value, row, index) {
+                        if(row.status==1){
+                            var actions = [];
+                            actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="authUser(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="cancelAuthUser(\'' + row.id + '\')"><i class="fa fa-edit"></i>入库</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+
+                            return actions.join('');
+                        }else{
+                            var actions = [];
+                            actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="authUser(\'' + row.id + '\')"><i class="fa fa-search"></i>详情</a> ');
+                            return actions.join('');
+                        }
+
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+
+        /* 发布状态显示 */
+        function statusTools(row) {
+            if (row.status=='1') {
+                return '<p>待入库</p> ';
+            } else if (row.status=='2') {
+                //return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.roleId + '\')"></i> ';
+                return '<p>已入库</p> ';
+            }
+        }
+
+       /* function cancelAuthUser(instockId) {
+            $.modal.confirm("确认要入库吗？", function () {
+                $.operate.post(prefix + "/cancel", {"instockId": instockId});
+            })
+        }*/
+
+        /* -详情展开 */
+        function authUser(id) {
+            var url = prefix + '/detail/' + id;
+            $.modal.openTab("详情展开", url);
+        }
+
+        /* -入库详情展开 */
+        function cancelAuthUser(id) {
+            var url = prefix + '/report/' + id;
+            $.modal.openTab("入库详情展开", url);
+        }
+
+
+
+
+        //省市区三级联动
+       /* $(function(){
+            getProvinces();
+            var op1 = document.createElement("option");
+            op1.value = -1;
+            op1.text ="-&#45;&#45;&#45;&#45; 所在市 -&#45;&#45;&#45;&#45;&#45;&#45;";
+            document.getElementById("addrCity").appendChild(op1);
+            var op2 = document.createElement("option");
+            op2.value = -1;
+            op2.text = "-&#45;&#45;&#45;&#45; 所在区 -&#45;&#45;&#45;&#45;&#45;&#45;";
+            document.getElementById("addrArea").appendChild(op2);
+            var op3 = document.createElement("option");
+            op3.value = -1;
+            op3.text = "-&#45;&#45;&#45;&#45; 所在四级 -&#45;&#45;&#45;&#45;&#45;&#45;";
+            document.getElementById("addrdz").appendChild(op3);
+        });*/
+    </script>
+     <!-- <script type="text/javascript">
+          // ===== 加载省列表 =====
+          function getProvinces() {
+              //  var url = "<%=basePath%>dict/getProvinces";
+              var url=ctx+"system/publish/getProvinces";
+              $.ajax({
+                  "url": url,
+                  "type": "GET",
+                  "dataType": "json",
+                  "success": function(data) {
+                      //alert(JSON.stringify(data))
+                      var op = document.createElement("option");
+                      op.value = -1;
+                      op.text = "-&#45;&#45;&#45;&#45; 所在省 -&#45;&#45;&#45;&#45;&#45;&#45;";
+                      document.getElementById("addrProvince").appendChild(op);
+                      for (var i = 0; i < data.length; i++) {
+                          var op = document.createElement("option");
+                          op.value = data[i].dictCode;
+                          op.text = data[i].dictLabel;
+                          document.getElementById("addrProvince").appendChild(op);
+                      }
+                  }
+              });
+              getCities();
+          }
+          // ===== 加载市列表 =====
+          function getCities() {
+              $("#addrCity").empty();
+              $("#addrArea").empty();
+              var url=ctx+"system/publish/getCities";
+              var data = "provinceCode=" + $("#addrProvince").val();
+              $.ajax({
+                  "url": url,
+                  "data": data,
+                  "type": "GET",
+                  "dataType": "json",
+                  "success": function(data) {
+                      var op = document.createElement("option");
+                      op.value = -1;
+                      op.text ="-&#45;&#45;&#45;&#45; 所在市 -&#45;&#45;&#45;&#45;&#45;&#45;";
+                      document.getElementById("addrCity").appendChild(op);
+                      for (var i = 0; i < data.length; i++) {
+                          var op = document.createElement("option");
+                          op.value = data[i].dictCode;
+                          op.text = data[i].dictLabel;
+                          document.getElementById("addrCity").appendChild(op);
+                      }
+                  }
+              });
+              getAreas();
+              var op2 = document.createElement("option");
+              op2.value = -1;
+              op2.text = "-&#45;&#45;&#45;&#45; 所在区 -&#45;&#45;&#45;&#45;&#45;&#45;";
+              document.getElementById("addrArea").appendChild(op2);
+          }
+          // ===== 加载区列表 =====
+          function getAreas() {
+              $("#addrArea").empty();
+              $("#addrdz").empty();
+              //var url = "<%=basePath%>dict/getAreas";
+              var url=ctx+"system/publish/getAreas";
+              var data = "cityCode=" + $("#addrCity").val();
+              $.ajax({
+                  "url": url,
+                  "data": data,
+                  "type": "GET",
+                  "dataType": "json",
+                  "success": function(data) {
+                      var op = document.createElement("option");
+                      op.value = -1;
+                      op.text = "-&#45;&#45;&#45;&#45; 所在区 -&#45;&#45;&#45;&#45;&#45;&#45;";
+                      document.getElementById("addrArea").appendChild(op);
+                      for (var i = 0; i < data.length; i++) {
+                          var op = document.createElement("option");
+                          op.value = data[i].dictCode;
+                          op.text = data[i].dictLabel;
+                          document.getElementById("addrArea").appendChild(op);
+                      }
+                  }
+              });
+              getadddz();
+              var op3 = document.createElement("option");
+              op3.value = -1;
+              op3.text = "-&#45;&#45;&#45;&#45; 所在四级 -&#45;&#45;&#45;&#45;&#45;&#45;";
+              document.getElementById("addrdz").appendChild(op3);
+          }
+     </script>-->
+</body>
+</html>

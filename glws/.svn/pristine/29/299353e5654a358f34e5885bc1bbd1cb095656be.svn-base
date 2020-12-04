@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('草原虫害防治报表')"/>
+    <style>
+        #china-map {
+            width: 850px;
+            height: 850px;
+            margin: auto;
+        }
+
+        #box {
+            display: none;
+            background-color: goldenrod;
+            width: 180px;
+            height: 30px;
+        }
+
+        #box-title {
+            display: block;
+        }
+    </style>
+    <style type="text/css">
+        body {
+            background-color: rgba(144, 238, 144, 0.2);
+        }
+
+    </style>
+</head>
+<body class="gray-bg">
+<div class="col-sm-18 select-table">
+    <!-- <div class="col-sm-12 search-collapse">
+         <form id="formId">
+             <div class="select-list">
+                 <ul>
+                     <li>
+                         <select name="province" th:with="type=${@dict.getType('sys_province')}">
+                             <option value="">请选择任务省份</option>
+                             <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                         </select>
+                     </li>
+                     <li>
+                         <button class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</button>
+                         <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                     </li>
+                 </ul>
+             </div>
+         </form>
+     </div>-->
+    <!--<div class="col-sm-12 select-table">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>图形列表</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="echarts" id="echarts-line-chart"></div>
+            </div>
+        </div>
+    </div>
+-->
+    <div class="row">
+        <form class="form-horizontal m" id="form-knowledge-edit" th:object="${cTaskScny}">
+            <table class="VirusSummary_1-1-265_26c8Iu VirusSummary_1-1-265_2fRxdu" style="color:rgba(0, 190, 199, 0.6);"
+                   align="center" width="700px">
+                <tbody>
+                <tr>
+                    <td cellspacing="280px">
+                        <div class="VirusSummary_1-1-265_6xUfqo">
+                            <div class="VirusSummary_1-1-265_Af8Lb3"
+                                 style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">农药价格（万元/吨）
+                            </div>
+                            <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                <div style="color:#2867DE;font-weight: 700;font-size:25px;text-align: center"
+                                     th:text="${cTaskScny.pesticidePrice}" class="form-control-static" type="text"
+                                     disabled="disabled">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: center">
+                            <h7 class="text-navy">
+                                <i class="fa fa-play fa-rotate-270"></i>上周+
+                                <div style="color:#2867DE;font-size:9px;" th:text="${cTaskScnyWeek.pesticidePrice}"></div>
+                            </h7>
+                            <!--
+                                                    <small>更新时间：当前</small>
+                            -->
+                        </div>
+                    </td>
+                    <td cellspacing="280px">
+                        <div class="VirusSummary_1-1-265_1erbWM">
+                            <div class="VirusSummary_1-1-265_Af8Lb3"
+                                 style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">订购数量（吨）
+                            </div>
+                            <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                <div style="color:#FF7800;font-weight: 700;font-size:25px;text-align: center"
+                                     th:text="${cTaskScny.orderQuantity}" class="form-control-static" type="text"
+                                     disabled="disabled"></div>
+
+                            </div>
+                        </div>
+                        <div style="text-align: center">
+                            <h7 class="text-navy">
+                                <i class="fa fa-play fa-rotate-270"></i>上周+
+                                <div style="color:#FF7800;font-size:9px;" th:text="${cTaskScnyWeek.orderQuantity}">+</div>
+                            </h7>
+                        </div>
+
+                    </td>
+                    <td cellspacing="280px">
+                        <div class="VirusSummary_1-1-265_2ahJaj">
+                            <div class="VirusSummary_1-1-265_Af8Lb3"
+                                 style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">所用资金（万元）
+                            </div>
+                            <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                <div style="color:#7FD357;font-weight: 700;font-size:25px;text-align: center"
+                                     th:text="${cTaskScny.fundsUsed}" class="form-control-static" type="text"
+                                     disabled="disabled"></div>
+                            </div>
+                        </div>
+                        <div style="text-align: center">
+                            <h7 class="text-navy">
+                                <i class="fa fa-play fa-rotate-270"></i>上周+
+                                <div style="color:#7FD357;font-size:9px;" th:text="${cTaskScnyWeek.fundsUsed}"></div>
+                            </h7>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td cellspacing="280px">
+                        <div class="VirusSummary_1-1-265_28rIkx">
+                            <div class="VirusSummary_1-1-265_Af8Lb3"
+                                 style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">当年防治用量（吨）
+                            </div>
+                            <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                <div style="color:#FF3C07;font-weight: 700;font-size:25px;text-align: center"
+                                     th:text="${cTaskScny.controlDosage}" class="form-control-static"
+                                     type="text" disabled="disabled"></div>
+                            </div>
+                        </div>
+                        <div style="text-align: center">
+                            <h7 class="text-navy">
+                                <i class="fa fa-play fa-rotate-270"></i>上周+
+                                <div style="color:#FF3C07;font-size:9px;" th:text="${cTaskScnyWeek.controlDosage}"></div>
+                            </h7>
+                        </div>
+                    </td>
+                    <td cellspacing="280px">
+                        <div class="VirusSummary_1-1-265_28rIkx">
+                            <div class="VirusSummary_1-1-265_Af8Lb3"
+                                 style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">亩用量（毫升）
+                            </div>
+                            <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                <div style="color:#00B4B5;font-weight: 700;font-size:25px;text-align: center"
+                                     th:text="${cTaskScny.muDosage}" class="form-control-static" type="text"
+                                     disabled="disabled"></div>
+                            </div>
+                        </div>
+                        <div style="text-align: center">
+                            <h7 class="text-navy">
+                                <i class="fa fa-play fa-rotate-270"></i>上周+
+                                <div style="color:#00B4B5;font-size:9px;" th:text="${cTaskScny.muDosage}"></div>
+                            </h7>
+                        </div>
+                    </td>
+                    <td cellspacing="280px">
+                        <div class="VirusSummary_1-1-265_28rIkx">
+                            <div class="VirusSummary_1-1-265_Af8Lb3"
+                                 style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">化学防治
+                            </div>
+                            <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                <div style="color:#366B98;font-weight: 700;font-size:25px;text-align: center"
+                                     th:text="${cTaskScny.chemistryControl}" class="form-control-static" type="text"
+                                     disabled="disabled"></div>
+                            </div>
+                        </div>
+                        <div style="text-align: center">
+                            <h7 class="text-navy">
+                                <i class="fa fa-play fa-rotate-270"></i>上周
+                                <div style="color:#366B98;font-size:9px;" th:text="${cTaskScny.chemistryControl}"></div>
+                            </h7>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-11">
+            <a class="collapse-link">
+                <i class="fa fa-chevron-up"></i>
+            </a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                <i class="fa fa-wrench"></i>
+            </a>
+
+            <a class="close-link">
+                <i class="fa fa-times"></i>
+            </a>
+            <!--地图-->
+            <div class="ibox-content">
+                <div style="height:700px" id="echarts-map-chart"></div>
+            </div>
+        </div>
+    </div>
+    <!--选项卡-->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="false"> 折线图</a>
+                    </li>
+                    <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">柱状图</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="panel-body">
+                            <div id="echarts-line-chart" style="width: 1300px;height:600px;"></div>
+
+                        </div>
+                    </div>
+                    <div id="tab-2" class="tab-pane">
+                        <div class="panel-body">
+                            <div id="echarts-histogram-chart" style="width: 1300px;height:600px;"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--折线图-->
+        <!-- <div  id="echarts-line-chart" style="width: 1300px;height:600px;"></div>-->
+
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+    <th:block th:include="include :: footer"/>
+    <th:block th:include="include :: echarts-js"/>
+
+    <script th:inline="javascript">
+        var prefix = ctx + "zaihai/scnytj";
+
+
+        /*地图统计*/
+        $(function () {
+            var dataList = []
+            var dataList2 = []
+            var dataList3 = []
+            var dataList4 = []
+            var dataList5 = []
+            var dataList6 = []
+
+
+            //后端获取json数据
+            //请求地图数据
+            $.ajax({
+                url: prefix + "/getRequestCount",    //请求发送到dataActiont处
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+
+                    if (data.success) {
+                        dataList = data.pesticidePriceList;
+                        dataList2 = data.orderQuantityList;
+                        dataList3 = data.fundsUsedList;
+                        dataList4 = data.controlDosageList;
+                        dataList5 = data.muDosageList;
+                        dataList6 = data.chemistryControlList;
+
+                        var mapChart = echarts.init(document.getElementById("echarts-map-chart"));
+                        var mapoption = {
+
+                            title: {
+                                text: '草原鼠虫害农药防治使用情况统计地图',
+                                subtext: '',
+                                x: 'center'
+                            },
+                            tooltip: {
+                                trigger: 'item'
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                x: 'left',
+                                data: ['农药价格', '订购数量', '所用资金', '当年防治用量', '亩用量', '化学防治'],
+                                selected: {
+                                    '订购数量': false,
+                                    '所用资金': false,
+                                    '当年防治用量': false,
+                                    '亩用量': false,
+                                },
+                                formatter: function (params) {
+                                    if (params.indexOf('\n') == -1) {
+                                        return params;
+                                    } else {
+                                        return '{white|' + params.split('\n')[0] + '}\n' + params.split('\n')[1];
+                                    }
+                                },
+                                textStyle: {
+                                    rich: {
+                                        white: {
+                                            color: "#fff",
+                                            fontSize: 12,
+                                            padding: [6, 0, 0, 0]
+                                        }
+                                    }
+                                }
+                            },
+                            dataRange: {
+                                min: 0,
+                                max: 25000,
+                                x: 'left',
+                                y: 'bottom',
+                                text: ['高', '低'],           // 文本，默认为数值文本
+                                calculable: true
+                            },
+                            toolbox: {
+                                show: true,
+                                orient: 'vertical',
+                                x: 'right',
+                                y: 'center',
+                                feature: {
+                                    mark: {show: true},
+                                    dataView: {show: true, readOnly: false},
+                                    restore: {show: true},
+                                    saveAsImage: {show: true}
+                                }
+                            },
+                            roamController: {
+                                show: true,
+                                x: 'right',
+                                mapTypeControl: {
+                                    'china': true
+                                }
+                            },
+                            series: [
+                                {
+                                    name: '农药价格',
+                                    type: 'map',
+                                    mapType: 'china',
+                                    itemStyle: {
+                                        normal: {
+                                            label: {show: true}, color: 'green',
+                                            areaStyle: {
+                                                color: 'green',//默认的地图板块颜色
+                                            }
+                                        },//默认是否显示省份名称
+
+                                        emphasis: {label: {show: true}},
+
+                                    },
+
+                                    data: dataList
+                                },
+                                {
+                                    name: '订购数量',
+                                    type: 'map',
+                                    mapType: 'china',
+                                    itemStyle: {
+                                        normal: {label: {show: true}},
+                                        emphasis: {label: {show: true}},
+                                        areaStyle: {
+                                            color: 'red',//默认的地图板块颜色
+                                        },
+                                    },
+                                    data: dataList2
+                                },
+                                {
+                                    name: '所用资金',
+                                    type: 'map',
+                                    mapType: 'china',
+                                    itemStyle: {
+                                        normal: {label: {show: true}},
+                                        emphasis: {label: {show: true}},
+                                        areaStyle: {
+                                            color: 'red',//默认的地图板块颜色
+                                        },
+                                    },
+                                    data: dataList3
+                                },
+                                {
+                                    name: '当年防治用量',
+                                    type: 'map',
+                                    mapType: 'china',
+                                    itemStyle: {
+                                        normal: {label: {show: true}},
+                                        emphasis: {label: {show: true}},
+                                        areaStyle: {
+                                            color: '#f3f3f3',//默认的地图板块颜色
+                                        },
+                                    },
+                                    data: dataList4
+                                },
+                                {
+                                    name: '亩用量（毫升）',
+                                    type: 'map',
+                                    mapType: 'china',
+                                    itemStyle: {
+                                        normal: {label: {show: true}},
+                                        emphasis: {label: {show: true}},
+                                        areaStyle: {
+                                            color: '#f3f3f7',//默认的地图板块颜色
+                                        },
+                                    },
+                                    data: dataList5
+                                },
+                                {
+                                    name: '化学防治',
+                                    type: 'map',
+                                    mapType: 'china',
+                                    itemStyle: {
+                                        normal: {label: {show: true}},
+                                        emphasis: {label: {show: true}},
+                                        areaStyle: {
+                                            color: '#f3f3f6',//默认的地图板块颜色
+                                        },
+                                    },
+                                    data: dataList6
+                                }
+                            ]
+                        };
+                        mapChart.setOption(mapoption);//先渲染出空地图
+                        $(window).resize(mapChart.resize);
+                    } else {
+                        console.log("getRequestCount 加载失败")
+                    }
+                },
+                error: function (jqXHR) {
+                    alert("getRequestCount发生错误：" + jqXHR.status);
+                    // }
+                }
+            });
+
+        });
+
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#test2'
+                , type: 'year'
+            });
+        });
+
+
+        /*折线图*/
+        $(function () {
+            var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+            var pesticidePrice = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var orderQuantity = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var fundsUsed = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var controlDosage = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var muDosage = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var chemistryControl = [];    //纵坐标数组（实际用来盛放Y坐标值）
+
+            var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var province = [[${province}]]
+
+
+            var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+            $.ajax({
+                type: "post",
+                async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                url: prefix + "/getOption",    //请求发送到dataActiont处
+                data: {province: province},
+                dataType: "json",        //返回数据形式为json
+                success: function (result) {
+                    //请求成功时执行该函数内容，result即为服务器返回的json对象
+                    if (result) {
+
+                        for (var i = 0; i < result.length; i++) {
+                            year.push(result[i].year);
+                            pesticidePrice.push(result[i].pesticidePrice);
+                            orderQuantity.push(result[i].orderQuantity);
+                            fundsUsed.push(result[i].fundsUsed);
+                            controlDosage.push(result[i].controlDosage);
+                            muDosage.push(result[i].muDosage);
+                            chemistryControl.push(result[i].chemistryControl);
+
+                            week.push(result[i].week);
+                        }
+                        lineChart.hideLoading();    //隐藏加载动画
+                        lineChart.setOption({        //加载数据图表
+                            title: {
+                                text: '草原鼠虫害防治农药使用统计折线图'
+                            },
+                            tooltip: {
+                                trigger: 'axis',
+
+                            },
+                            legend: {
+                                width: "70%",
+                                data: ['农药价格', '订购数量', '所用资金', '当年防治用量', '亩用量', '化学防治'],
+                                selected: {
+                                    '农药价格': false,
+                                    '订购数量': false,
+                                    '所用资金': false,
+                                    '当年防治用量': false,
+                                    '亩用量': false,
+
+                                },
+                            },
+                            calculable: true,
+                            xAxis: {
+                                boundaryGap: false,
+                                data: week
+                            },
+                            yAxis: {
+                                type: 'value'
+                            },
+                            series: [
+                                {
+                                    name: '农药价格',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '农药价格',
+                                    data: pesticidePrice
+                                },
+                                {
+                                    name: '订购数量',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '订购数量',
+                                    data: orderQuantity
+                                },
+                                {
+                                    name: '所用资金',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '所用资金',
+                                    data: fundsUsed
+                                },
+                                {
+                                    name: '当年防治用量',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '当年防治用量',
+                                    data: controlDosage
+                                },
+                                {
+                                    name: '亩用量',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '亩用量',
+                                    data: muDosage
+                                },
+                                {
+                                    name: '化学防治',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '化学防治',
+                                    data: chemistryControl
+                                }
+                            ]
+
+                        });
+                        window.onresize = lineChart.resize;
+                    }
+                },
+                error: function (errorMsg) {
+                    //请求失败时执行该函数
+                    alert("图表请求数据失败!");
+                    lineChart.hideLoading();
+                }
+            });
+
+        });
+
+        /*柱状图*/
+        $(function () {
+            var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+            var pesticidePrice = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var orderQuantity = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var fundsUsed = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var controlDosage = [];    //纵坐标数组（实际用来盛放Y坐标值）
+
+            var province = [];
+            var muDosage = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var chemistryControl = [];    //纵坐标数组（实际用来盛放Y坐标值）
+
+
+            var lineChart = echarts.init(document.getElementById("echarts-histogram-chart"));
+            $.ajax({
+                type: "post",
+                async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                url: prefix + "/getOptionHistogram",    //请求发送到dataActiont处
+                data: {province: province},
+                dataType: "json",        //返回数据形式为json
+                success: function (result) {
+                    //请求成功时执行该函数内容，result即为服务器返回的json对象
+                    if (result) {
+
+                        for (var i = 0; i < result.length; i++) {
+                            year.push(result[i].year);
+                            pesticidePrice.push(result[i].pesticidePrice);
+                            orderQuantity.push(result[i].orderQuantity);
+                            fundsUsed.push(result[i].fundsUsed);
+                            controlDosage.push(result[i].controlDosage);
+                            province.push(result[i].province);
+                            muDosage.push(result[i].muDosage);
+                            chemistryControl.push(result[i].chemistryControl);
+
+
+                        }
+                        lineChart.hideLoading();    //隐藏加载动画
+                        lineChart.setOption({        //加载数据图表
+                            title: {
+                                text: '草原鼠虫害防治农药使用统计柱状图'
+                            },
+                            tooltip: {
+                                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                    type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                                }
+                            },
+                            legend: {
+                                width: "70%",
+                                data: ['农药价格', '订购数量', '所用资金', '当年防治用量', '亩用量', '化学防治'],
+
+                            },
+                            calculable: true,
+                            xAxis: {
+                                data: province
+                            },
+                            yAxis: {
+                                type: 'value'
+                            },
+                            series: [{
+                                name: '农药价格',
+                                type: 'bar',
+                                stack: '总量',
+                                barWidth: 40,//柱图宽度
+                                data: pesticidePrice
+                            },
+                                {
+                                    name: '订购数量',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: orderQuantity
+                                },
+                                {
+                                    name: '所用资金',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: fundsUsed
+                                },
+                                {
+                                    name: '当年防治用量',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: controlDosage
+                                },
+                                {
+                                    name: '亩用量',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: muDosage
+                                },
+                                {
+                                    name: '化学防治',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: chemistryControl
+                                }
+                            ]
+
+                        });
+                        window.onresize = lineChart.resize;
+
+                    }
+                },
+                error: function (errorMsg) {
+                    //请求失败时执行该函数
+                    alert("图表请求数据失败!");
+                    lineChart.hideLoading();
+                }
+            });
+
+        });
+
+
+        /*统计列表*/
+        $(function () {
+            var options = {
+                url: prefix + "/addressList",
+                exportUrl: prefix + "/export",
+                modalName: "草原鼠虫害防治农药使用情况",
+                pagination: false,
+                showExport: true,
+                striped: true,
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+                rowStyle: rowStyle,//通过自定义函数设置行样式
+                Icons: 'glyphicon-export',
+
+                /* ignoreColumn: [0,12],  //忽略某些列的索引数组
+                 fileName: '用户列表',  //文件名称设置
+                 worksheetName: 'sheet1',  //表格工作区名称
+                 tableName: '用户78列表',
+                 onMsoNumberFormat: doOnMsoNumberFormat,//大概是处理数字的方法
+                 onCellHtmlData: DoOnCellHtmlData,//这个属性方法可以重新修改每一个单元格的值*/
+
+                columns: [
+
+                    {
+
+                        field: 'province',
+                        title: '省',
+                        align: 'center',
+                        valign: 'middle',
+
+                    },
+
+                    {
+                        field: 'pesticidePrice',
+                        title: '农药价格',
+                        align: 'center',
+                        valign: 'middle'
+                    },
+
+                    {
+                        title: '订购数量',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'orderQuantity'
+                    },
+
+                    {
+                        title: '所用资金',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'fundsUsed'
+                    },
+                    {
+                        title: '当年防治用量',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'controlDosage'
+                    },
+                    {
+                        title: '亩用量',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'muDosage'
+                    },
+                    {
+                        title: '化学防治',
+                        align: 'center',
+                        valign: 'middle',
+                        field: 'chemistryControl'
+                    }
+                ],
+            };
+            $.table.init(options);
+        });
+
+
+        /* function rowStyle(row, index) {
+             var classes = ['active', 'success', 'info', 'warning', 'danger'];
+             if (index % 2 === 0 && index / 2 < classes.length) {
+                 return {
+                     classes: classes[index / 2]
+                 };
+             }
+             return {};
+         }*/
+        function rowStyle(row, index) {
+            var classes = ['active', 'success', 'info', 'warning', 'danger'];
+            if (index % 2 === 0 && index / 2 < classes.length) {
+                return {
+                    classes: classes[index / 2]
+                };
+            }
+            return {};
+
+            /*var style = {};
+            style={css:{'color':'#87CEEB'},};
+            return style;*/
+        }
+    </script>
+</div>
+</body>
+</html>

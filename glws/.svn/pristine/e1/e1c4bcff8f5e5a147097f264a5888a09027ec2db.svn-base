@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<style type="text/css">
+    /* 新增按钮 */
+    .row .col-sm-offset-3 {
+        margin-left: 10px;
+    }
+    /* 表头 */
+    thead th{
+        text-align: center;
+        vertical-align: middle;
+        background-color: #50c2c1;
+        color: white;
+    }
+
+    thead td{
+        text-align: center;
+        vertical-align: middle;
+        /*background-color: #50c2c1;
+        color: white;*/
+    }
+
+    .tg th {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: #ffffff;
+    }
+
+    /*修改表头颜色*/
+     .wrapper .table-striped table thead{
+         background-color: #50c2c1;
+         color: white;
+     }
+
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin: 16px;
+    }
+
+    .tg td {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: #FFFFFF;
+        color: black;
+    }
+
+    .tg td input {
+        border: 0px;
+        text-align: center;
+        background-color: #e5f7f6;
+    }
+
+    .tg th {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: #FFFFFF;
+        color: white;
+    }
+
+    /*表头 每行第一个td背景色*/
+    tr td:first-child {
+        background: #50c2c1;
+        color: white;
+    }
+
+    tr td:first-child select{
+        background: #50c2c1;
+        color: white;
+        border: 0px;
+    }
+
+    #recordList tr td{
+        color: #000000;
+    }
+</style>
+<th:block th:include="include :: layout-latest-css"/>
+<th:block th:include="include :: ztree-css"/>
+<head>
+    <th:block th:include="include :: header('修改退牧还草工程任务领取分解')"/>
+</head>
+
+<body class="white-bg">
+
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-resolve-edit" th:object="${tTaskResolve}" style="display: none">
+        <input id="publishId" name="" th:field="*{publishId}" style="display: none">
+        <input id="year2" name="year" th:field="*{year}" style="display: none">
+        <input id="province" name="province" th:field="*{province}" style="display: none">
+        <input id="address" name="address" th:field="*{address}" style="display: none">
+    </form>
+
+    <div class="col-sm-12 select-table">
+        <div class="row" align="left">
+            <div class="col-sm-offset-3 col-sm-10">
+                <button type="button" class="btn btn-sm btn-primary" onclick="addRow()"><i class="fa fa-check"></i>新增</button>&nbsp;
+                <button type="button" class="btn btn-sm btn-primary" onclick="resolveAll()"><i class="fa fa-check"></i>全部分解</button>&nbsp;
+            </div>
+        </div>
+        <form id="form-resolve-add" class="form-horizontal">
+            <input id="publishIdReslove" name="publishId" style="display: none">
+            <input id="year" name="year" style="display: none">
+            <table id="mytable" class="tg" name="test" style="width: 100%">
+                <thead>
+                <tr>
+                    <th rowspan="3" colspan="1" data-field="index" tabindex="0" style="width: 100px">
+                        <div class="th-inner ">任务地区</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  rowspan="1" colspan="10" tabindex="0">
+                        <div class="th-inner ">围栏部分</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  rowspan="1" colspan="10" tabindex="0">
+                        <div class="th-inner ">其他部分</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th rowspan="3" colspan="1" data-field="index" tabindex="0">
+                        <div class="th-inner ">操作</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                </tr>
+                <tr>
+                    <th  rowspan="1" colspan="2" tabindex="0">
+                        <div class="th-inner ">合计</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  rowspan="1" colspan="2" tabindex="0">
+                        <div class="th-inner ">禁牧</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  rowspan="1" colspan="2" tabindex="0">
+                        <div class="th-inner ">休牧</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  rowspan="1" colspan="2" tabindex="0">
+                        <div class="th-inner ">划区轮休</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  rowspan="1" colspan="2" tabindex="0">
+                        <div class="th-inner ">石漠化治理</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  rowspan="1" colspan="2" tabindex="0">
+                        <div class="th-inner ">退化草原改良</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  rowspan="1" colspan="2" tabindex="0">
+                        <div class="th-inner ">人工饲草地</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  rowspan="1" colspan="2" tabindex="0">
+                        <div class="th-inner ">含饲棚围</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  rowspan="1" colspan="2" tabindex="0">
+                        <div class="th-inner ">黑土地</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  rowspan="1" colspan="2" tabindex="0">
+                        <div class="th-inner ">毒害草</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                </tr>
+                <tr>
+                    <th  data-field="jmSize" tabindex="0">
+                        <div class="th-inner ">规模</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="jmMoney" tabindex="0">
+                        <div class="th-inner ">投资</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="jmSize" tabindex="0">
+                        <div class="th-inner ">规模</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="jmMoney" tabindex="0">
+                        <div class="th-inner ">投资</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="xmSize" tabindex="0">
+                        <div class="th-inner ">规模</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="xmMoney" tabindex="0">
+                        <div class="th-inner ">投资</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="hqlxSize" tabindex="0">
+                        <div class="th-inner ">规模</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="hqlxMoney" tabindex="0">
+                        <div class="th-inner ">投资</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="smhzlSize" tabindex="0">
+                        <div class="th-inner ">规模</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="smhzlMoney" tabindex="0">
+                        <div class="th-inner ">投资</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="thcyglSize" tabindex="0">
+                        <div class="th-inner ">规模</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="thcyglMoney" tabindex="0">
+                        <div class="th-inner ">投资</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="rgscdSize" tabindex="0">
+                        <div class="th-inner ">规模</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="rgscdMoney" tabindex="0">
+                        <div class="th-inner ">投资</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="hspjSize" tabindex="0">
+                        <div class="th-inner ">规模</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="hspjMoney" tabindex="0">
+                        <div class="th-inner ">投资</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="httSize" tabindex="0">
+                        <div class="th-inner ">规模</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="httMoney" tabindex="0">
+                        <div class="th-inner ">投资</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="dhcSize" tabindex="0">
+                        <div class="th-inner ">规模</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                    <th  data-field="dhcMoney" tabindex="0">
+                        <div class="th-inner ">投资</div>
+                        <div class="fht-cell"></div>
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="1">任务量</td>
+                    <td id="wlScaleTask">[[${tTaskResolve.wlScale}]]</td>
+                    <td id="wlInvestmentTask">[[${tTaskResolve.wlInvestment}]]</td>
+                    <td id="jmSizeTask">[[${tTaskResolve.jmSize}]]</td>
+                    <td id="jmMoneyTask">[[${tTaskResolve.jmMoney}]]</td>
+                    <td id="xmSizeTask">[[${tTaskResolve.xmSize}]]</td>
+                    <td id="xmMoneyTask">[[${tTaskResolve.xmMoney}]]</td>
+                    <td id="hqlxSizeTask">[[${tTaskResolve.hqlxSize}]]</td>
+                    <td id="hqlxMoneyTask">[[${tTaskResolve.hqlxMoney}]]</td>
+                    <td id="smhzlSizeTask">[[${tTaskResolve.smhzlSize}]]</td>
+                    <td id="smhzlMoneyTask">[[${tTaskResolve.smhzlMoney}]]</td>
+                    <td id="thzyglSizeTask">[[${tTaskResolve.thzyglSize}]]</td>
+                    <td id="thzyglMoneyTask">[[${tTaskResolve.thzyglMoney}]]</td>
+                    <td id="rgscdSizeTask">[[${tTaskResolve.rgscdSize}]]</td>
+                    <td id="rgscdMoneyTask">[[${tTaskResolve.rgscdMoney}]]</td>
+                    <td id="hspjSizeTask">[[${tTaskResolve.hspjSize}]]</td>
+                    <td id="hspjMoneyTask">[[${tTaskResolve.hspjMoney}]]</td>
+                    <td id="httSizeTask">[[${tTaskResolve.httSize}]]</td>
+                    <td id="httMoneyTask">[[${tTaskResolve.httMoney}]]</td>
+                    <td id="dhcSizeTask">[[${tTaskResolve.dhcSize}]]</td>
+                    <td id="dhcMoneyTask">[[${tTaskResolve.dhcMoney}]]</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="1">可分配总量</td>
+                    <td id="wlScale"></td>
+                    <td id="wlInvestment"></td>
+                    <td id="jmSize"></td>
+                    <td id="jmMoney"></td>
+                    <td id="xmSize"></td>
+                    <td id="xmMoney"></td>
+                    <td id="hqlxSize"></td>
+                    <td id="hqlxMoney"></td>
+                    <td id="smhzlSize"></td>
+                    <td id="smhzlMoney"></td>
+                    <td id="thzyglSize"></td>
+                    <td id="thzyglMoney"></td>
+                    <td id="rgscdSize"></td>
+                    <td id="rgscdMoney"></td>
+                    <td id="hspjSize"></td>
+                    <td id="hspjMoney"></td>
+                    <td id="httSize"></td>
+                    <td id="httMoney"></td>
+                    <td id="dhcSize"></td>
+                    <td id="dhcMoney"></td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tr th:each="tTaskResolve : ${tTaskResolveList}">
+                    <td><select id="addrCity" name="addrCity" style="width: 90px;height:30px; " required>
+                        <option  th:value="${tTaskResolve.address}" th:text="${tTaskResolve.address}"></option>
+                    </select>
+                    <td><input name="wlScale" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.wlScale}"> </td>
+                    <td><input name="wlInvestment" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.wlInvestment}"> </td>
+                    <td><input name="jmSize" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.jmSize}"> </td>
+                    <td><input name="jmMoney" type="text"  style="width: 100%; height: 100%"  min th:value="${tTaskResolve.jmMoney}"> </td>
+                    <td><input name="xmSize" type="text"  style="width: 100%; height: 100%"  min th:value="${tTaskResolve.xmSize}"> </td>
+                    <td><input name="xmMoney" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.xmMoney}"> </td>
+                    <td><input name="hqlxSize" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.hqlxSize}"> </td>
+                    <td><input name="hqlxMoney" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.hqlxMoney}"> </td>
+                    <td><input name="smhzlSize" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.smhzlSize}"> </td>
+                    <td><input name="smhzlMoney" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.smhzlMoney}"> </td>
+                    <td><input name="thzyglSize" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.thzyglSize}"> </td>
+                    <td><input name="thzyglMoney" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.thzyglMoney}"> </td>
+                    <td><input name="rgscdSize" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.rgscdSize}"> </td>
+                    <td><input name="rgscdMoney" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.rgscdMoney}"> </td>
+                    <td><input name="hspjSize" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.hspjSize}"> </td>
+                    <td><input name="hspjMoney" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.hspjMoney}"> </td>
+                    <td><input name="httSize" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.httSize}"> </td>
+                    <td><input name="httMoney" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.httMoney}"> </td>
+                    <td><input name="dhcSize" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.dhcSize}"> </td>
+                    <td><input name="dhcMoney" type="text" style="width: 100%; height: 100%"  min th:value="${tTaskResolve.dhcMoney}"> </td>
+                    <td style="min-width:66px;"><!--<a class="btn btn-danger btn-xs" onclick="del11(this)"><i class="fa fa-remove"></i>删除</a>--></td>
+                </tr>
+            </table>
+        </form>
+
+        <div class="col-sm-12 select-table table-striped">
+            <span>追加任务列表</span>
+            <table id="recordList"></table>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:resolve:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:resolve:remove')}]];
+    var prefix = ctx + "system/resolve";
+
+    /* 年度任务列表 */
+    var options = {
+        id:"recordList",
+        url: prefix + "/recordList",
+        showSearch: false,
+        showToggle: false,
+        showColumns: false,
+        showRefresh: false,
+        modalName: "退牧还草工程任务发分解",
+        columns: [[
+            {
+                field : 'index',
+                title : '序号',
+                rowspan: 2,
+                colspan: 1,
+                align: 'center',
+                valign: 'middle',
+                formatter:function(value, row, index){
+                    return index+1;
+                }
+
+            },
+            {
+                title : '任务地区',
+                field : 'address',
+                rowspan: 2,
+                colspan: 1,
+                align: 'center',
+                valign: 'middle'
+
+            },
+
+            {
+                title : '围栏建设部分',
+                rowspan: 1,
+                colspan: 2,
+                align: 'center',
+                valign: 'middle',
+                border: 1
+            },
+            {
+                title : '其他建设部分',
+                rowspan: 1,
+                colspan: 2,
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                title : '总合计',
+                rowspan: 1,
+                colspan: 2,
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                field : 'createTime',
+                title: '时间',
+                rowspan: 2,
+                colspan: 1,
+                align: 'center',
+                valign: 'middle',
+            }
+        ],
+            [
+                {
+                    field : 'wlScale',
+                    title : '规模合计(万亩)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field : 'wlInvestment',
+                    title : '投资合计(万元)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+
+                    field : 'qtmjCount',
+                    title : '其他规模合计(万亩)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field : 'qtjeCount',
+                    title : '其他投资合计(万元)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field : 'zgmCount',
+                    title : '总规模(万亩)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field : 'zjeCount',
+                    title : '总投资(万元)',
+                    align: 'center',
+                    valign: 'middle'
+                },
+
+            ],
+
+        ]
+
+    };
+    $.table.init(options);
+    /* 发布状态显示 */
+    function statusTools(row) {
+        if (row.status == '0') {
+            return '<p>未领取</p> ';
+        } else if (row.status == '1') {
+            return '<p>已领取</p> ';
+        } else if (row.status == '2') {
+            return '<p>进行中</p> ';
+        } else if (row.status == '3') {
+            return '<p>已分解</p> ';
+        } else if (row.status == '4') {
+            return '<p>待发布</p> ';
+        } else if (row.status == '5') {
+            return '<p>待发布</p> ';
+        } else if (row.status == '6') {
+            return '<p>待发布</p> ';
+        }
+    }
+</script>
+
+<script src="layer/layer.js"></script>
+<script src="layer/extend/layer.ext.js"></script>
+<script type="text/javascript">
+    /* 删除分解任务 */
+    function removeResolve(id) {
+        $.post(ctx + "system/resolve/removeResolve", {ids: id}, function (res) {
+            if (res.code == 0) {
+                layer.alert('删除分解任务成功！', function (index) {
+                    window.location.reload();
+                });
+            }
+        })
+    }
+
+    /* 删除一行 */
+    function del11(obj) {
+        var tab = obj.parentNode.parentNode;
+        tab.parentNode.removeChild(tab);
+        dataValidation();
+    }
+
+    function getCities() {
+        var url = ctx + "system/resolve/getCities";
+        var provinceCode = $("#province").val();
+        var addressCode = $("#address").val();
+        $.ajax({
+            "url": url,
+            "data": {provinceCode: provinceCode, addressCode: addressCode},
+            "type": "GET",
+            "dataType": "json",
+            "success": function (data) {
+                var op = document.createElement("option");
+                var select = document.getElementsByTagName("select");
+                op.value = -1;
+                op.text = "--请选择--";
+                select[select.length-1].appendChild(op);
+                for (var i = 0; i < data.length; i++) {
+                    let flag = true;
+                    for(var a = 0 ; a < select.length; a++){
+                        if(select[a].value == data[i].dictLabel){
+                            flag = false;
+                        }
+                    }
+                    if(flag){
+                        var op = document.createElement("option");
+                        op.value = data[i].dictLabel;
+                        op.text = data[i].dictLabel;
+                        select[select.length-1].appendChild(op);
+                    }
+                }
+            }
+        });
+    }
+
+    function cheshi() {
+        $.operate.save(ctx + "system/resolve/add", $('#form-resolve-add').serialize());
+    }
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+    var prefix = ctx + "system/resolve";
+    $("#form-publish-edit").validate({
+        focusCleanup: true
+    });
+
+    var publishId = $("#publishId").val();
+    //给分解赋值(任务的父id)
+    $("#publishID").val(publishId);
+    $("#publishIdReslove").val(publishId);
+    //赋值总任务年份
+    var year = $("#year2").val();
+    $("#year").val(year);
+
+    /* 分解任务 */
+    function submitHandler() {
+        if ($.validate.form()) {
+            if ($("#jmSize0").val() == '' && $("#jmMoney0").val() == '' && $("#xmSize0").val() == '' && $("#xmMoney0").val() == '' && $("#hqlxSize0").val() == '' && $("#hqlxMoney0").val() == '' && $("#smhzlSize0").val() == '' && $("#smhzlMoney0").val() == '' && $("#thzyglSize0").val() == '' && $("#thzyglMoney0").val() == '' && $("#rgscdSize0").val() == '' && $("#rgscdMoney0").val() == '' && $("#hspjSize0").val() == '' && $("#hspjMoney0").val() == '' && $("#httSize0").val() == '' && $("#httMoney0").val() == '' && $("#dhcSize0").val() == '' && $("#dhcMoney0").val() == '') {
+                $.modal.confirm("信息未填写成,请填写后提交", function () {})
+            } else {
+                $.modal.confirm("确认分解任务吗？", function () {
+                    $.operate.save(prefix + "/add", $('#form-resolve-add').serialize());
+                })
+            }
+        }
+    }
+
+    //追加一行
+    function addRow() {
+        var tableNode = document.getElementById("mytable");
+        var trNode = document.createElement("tr");
+        var tdText = '';
+        var td2 = '<td><a class="btn btn-danger btn-xs" onclick="del11(this)"><i class="fa fa-remove"></i>删除</a></td>';
+        var td3 = '<td><select id="addrCity" name="addrCity" style="width: 90px;height:30px; " required></select>' + '</td>';
+        var td5 = '<td> <input name="wlScale" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td6 = '<td> <input name="wlInvestment" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td7 = '<td> <input name="jmSize" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td8 = '<td> <input name="jmMoney" type="text"  style="width: 100%; height: 100%"  min> </td>';
+        var td9 = '<td> <input name="xmSize" type="text"  style="width: 100%; height: 100%"  min> </td>';
+        var td10 = '<td> <input name="xmMoney" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td11 = '<td><input name="hqlxSize" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td12 = '<td> <input name="hqlxMoney" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td13 = '<td> <input name="smhzlSize" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td14 = '<td> <input name="smhzlMoney" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td15 = '<td> <input name="thzyglSize" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td16 = '<td> <input name="thzyglMoney" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td17 = '<td> <input name="rgscdSize" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td18 = '<td> <input name="rgscdMoney" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td19 = '<td> <input name="hspjSize" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td20 = '<td> <input name="hspjMoney" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td21 = '<td> <input name="httSize" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td22 = '<td> <input name="httMoney" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td23 = '<td> <input name="dhcSize" type="text" style="width: 100%; height: 100%"  min> </td>';
+        var td24 = '<td> <input name="dhcMoney" type="text" style="width: 100%; height: 100%"  min> </td>';
+        tdText =  td3 + td5 + td6 + td7 + td8 + td9 + td10 + td11 + td12 + td13 + td14 + td15 + td16 + td17 + td18 + td19 + td20 + td21 + td22 + td23 + td24 + td2;
+        trNode.innerHTML = tdText;
+        tableNode.appendChild(trNode);
+        getCities();
+        //数据校验
+        $('input').blur(function () {
+            dataValidation(this);
+        })
+    }
+    //数据校验
+    $('input').blur(function () {
+        dataValidation(this);
+    })
+    //验证
+    var prefix = ctx + "system/resolve";
+    $("#form-resolve-add").validate({
+        rules: {
+            onkeyup: false,
+            min: true,
+        },
+        focusCleanup: true
+    });
+
+    function resolveAll() {
+        let list = ['wlScale','wlInvestment','jmSize','jmMoney','xmSize','xmMoney','hqlxSize','hqlxMoney','smhzlSize','smhzlMoney','thzyglSize','thzyglMoney','rgscdSize','rgscdMoney','hspjSize','hspjMoney','httSize','httMoney','dhcSize','dhcMoney'];
+        for(var i = 0; i < list.length; i++){
+            let current = $('#' + list[i]).text();
+            if(parseInt(current) != 0){
+                $.modal.confirm("未全部分解,请全部分解后提交", function () {})
+                return;
+            }
+        }
+        if ($("#addrCity").val() == '-1' || ($("#jmSize0").val() == '' && $("#jmMoney0").val() == '' && $("#xmSize0").val() == '' && $("#xmMoney0").val() == '' && $("#hqlxSize0").val() == '' && $("#hqlxMoney0").val() == '' && $("#smhzlSize0").val() == '' && $("#smhzlMoney0").val() == '' && $("#thzyglSize0").val() == '' && $("#thzyglMoney0").val() == '' && $("#rgscdSize0").val() == '' && $("#rgscdMoney0").val() == '' && $("#hspjSize0").val() == '' && $("#hspjMoney0").val() == '' && $("#httSize0").val() == '' && $("#httMoney0").val() == '' && $("#dhcSize0").val() == '' && $("#dhcMoney0").val() == '')) {
+            $.modal.confirm("信息未填写成,请填写后提交", function () {})
+        } else {
+            var orderItemArray = new Array();
+            $("#form-resolve-add tr").each(function () {
+                //this代表当前dom对象tr
+                var that = this;
+                var orderItemObj = new Object();
+                $(that).find("select,input").each(function () {
+                    var name = $(this).attr("name");
+                    orderItemObj[name] = $(this).val();
+                });
+                orderItemObj["year"] = year;
+                orderItemObj["publishId"] = publishId;
+                orderItemArray.push(orderItemObj);
+            });
+            var url = prefix + "/addFenJie";
+            $.ajax({
+                url: url,
+                dataType: "json",
+                contentType: "application/json;charsetset=UTF-8",//必
+                type: "post",
+                cache: false,
+                data: JSON.stringify(orderItemArray),//必须
+                success: function (obj) {
+                    if (obj == "400") {
+                        layer.alert('任务分解成功！', function (index) {
+                            window.location.reload();
+                        });
+                    } else if (obj == "404") {
+                        layer.alert("该总任务量不足！");
+                    } else {
+                        layer.alert("发布失败，请查看网络！！！");
+                    }
+                },
+                error: function (textStatus, e) {
+                    layer.alert("系统ajax交互错误: ");
+                }
+            });
+        }
+    }
+
+    /* 数据校验 */
+    function dataValidation(_this) {
+        let list = ['wlScale','wlInvestment','jmSize','jmMoney','xmSize','xmMoney','hqlxSize','hqlxMoney','smhzlSize','smhzlMoney','thzyglSize','thzyglMoney','rgscdSize','rgscdMoney','hspjSize','hspjMoney','httSize','httMoney','dhcSize','dhcMoney'];
+        let hz = [];
+        for(var i = 0; i < list.length; i++){
+            let current = $('input[name="'+list[i]+'"]');
+            let sum = 0;
+            for(var y = 0; y < current.length; y++){
+                if(current[y].value!=''&&current[y].value!=null){
+                    sum += parseInt(current[y].value);
+                }
+            }
+            hz[list[i]] = sum;
+            let assignable = parseInt($('#' + list[i] + 'Task').text()) - sum;
+            if(assignable >= 0){
+                $('#' + list[i]).text(assignable);
+            }else{
+                //$.modal.alertWarning('可分配总量小于0，请重新填写！');
+                $('#' + list[i]).text(assignable);
+            }
+        }
+    }
+    dataValidation();
+</script>
+<script>
+    var searchinput = $("input");
+    var textWidth = function (text) {
+        var sensor = $('<pre>' + text + '</pre>').css({display: 'none'});
+        $('body').append(sensor);
+        var width = sensor.width();
+        sensor.remove();
+        return width;
+    };
+    searchinput.unbind('keyup').bind('keyup', function () {
+        $(this).width(textWidth($(this).val() + 20));
+    });
+</script>
+</body>
+</html>

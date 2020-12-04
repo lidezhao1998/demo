@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原病害草知识库信息列表')" />
+    <style>
+        .colStyle {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        p{padding:0px; margin:0px;}
+    </style>
+
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+
+                            <li>
+                                <p>中文名：</p>
+                                <input type="text" name="middleName"/>
+                            </li>
+                            <li>
+                                <p>拉丁名：</p>
+                                <input type="text" name="latinName"/>
+                            </li>
+
+                            <li>
+                                <p>状态：</p>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                </select>
+                            </li>
+                            <!--<li class="select-time">
+                                <p>创建时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
+                            </li>
+-->
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="system:knowledge:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:knowledge:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:knowledge:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:knowledge:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table" style="table-layout: fixed;"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var detailFlag = [[${@permission.hasPermi('system:knowledge:detail')}]];
+        var editFlag = [[${@permission.hasPermi('system:knowledge:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:knowledge:remove')}]];
+        var prefix = ctx + "system/knowledge";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "草原病害草知识库信息",
+                showSearch:false,
+                showRefresh:false,
+                showColumns:false,
+                showToggle:false,
+                showExport:false,
+
+                columns: [{
+                    checkbox: true
+                },
+
+                {
+                    field : 'code',
+                    title : '编码'
+                },
+                {
+                    field : 'middleName',
+                    title : '中文名',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+                {
+                    field : 'latinName',
+                    title : '病原拉丁名',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+               /* {
+                    field : 'byName',
+                    title : '病原中名',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },*/
+                {
+                    field : 'byForm',
+                    title : '病原形态',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },
+                /*{
+                    field : 'subgate',
+                    title : '亚门',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },*/
+                /*{
+                    field : 'genus',
+                    title : '属',
+                    cellStyle:formatTableUnit,
+                    formatter :paramsMatter
+                },*/
+                    /*   {
+                         field : 'host',
+                         title : '寄生',
+                         cellStyle:formatTableUnit,
+                         formatter :paramsMatter
+                     },
+                     {
+                         field : 'distribution',
+                         title : '分布',
+                         cellStyle:formatTableUnit,
+                         formatter :paramsMatter
+                     },*/
+
+
+               /* {
+                    field : 'status',
+                    title : '状态'
+                },*/
+
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="authUser(\'' + row.id + '\')"><i class="fa fa-key"></i>查看</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+        /* -详情展开 */
+        function authUser(id) {
+            var url = prefix + '/detail/' + id;
+            $.modal.openTab("详情展开", url);
+        }
+       /* function paramsMatter(value, row, index) {
+
+            if(value==null && value==""){
+                alert(22)
+                return ;
+            }else{
+                alert(1)
+                var values = row.byForm
+                values = values.replace(/\s+/g,'&nbsp;')//替换空格
+                values = values.replace(/\},/,'},\n');//换行
+                var span=document.createElement('span');
+                span.setAttribute('title',values);
+                span.innerHTML = row.byForm;
+                return span.outerHTML;
+            }
+
+        }*/
+
+        //表格超出宽度鼠标悬停显示td内容
+        function paramsMatter(value,row,index, field) {
+            var span=document.createElement('span');
+            span.setAttribute('title',value);
+            span.innerHTML = value;
+            return span.outerHTML;
+        }
+        //td宽度以及内容超过宽度隐藏
+        function formatTableUnit(value, row, index) {
+
+            return {
+                css: {
+        "white-space": 'nowrap',
+        "text-overflow": 'ellipsis',
+        "overflow": 'hidden',
+        "max-width":"150px"
+        }
+        }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,740 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CRatpestKnowledgeMapper">
+
+    <resultMap type="CRatpestKnowledge" id="CRatpestKnowledgeResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="middleName"    column="MIDDLE_NAME"    />
+        <result property="alias"    column="ALIAS"    />
+        <result property="commonName"    column="COMMON_NAME"    />
+        <result property="families"    column="FAMILIES"    />
+        <result property="category"    column="CATEGORY"    />
+        <result property="genus"    column="GENUS"    />
+        <result property="relatedSpecie"    column="RELATED_SPECIE"    />
+        <result property="gwDistribution"    column="GW_DISTRIBUTION"    />
+        <result property="gnDistribution"    column="GN_DISTRIBUTION"    />
+        <result property="grasslandType"    column="GRASSLAND_TYPE"    />
+        <result property="altitude"    column="ALTITUDE"    />
+        <result property="lowAltitude"    column="LOW_ALTITUDE"    />
+        <result property="highAltitude"    column="HIGH_ALTITUDE"    />
+        <result property="soilMatrix"    column="SOIL_MATRIX"    />
+        <result property="soilType"    column="SOIL_TYPE"    />
+        <result property="indicatorPlants"    column="INDICATOR_PLANTS"    />
+        <result property="distributionMap"    column="DISTRIBUTION_MAP"    />
+        <result property="nationalMap"    column="NATIONAL_MAP"    />
+        <result property="provincialMap"    column="PROVINCIAL_MAP"    />
+        <result property="features"    column="FEATURES"    />
+        <result property="head"    column="HEAD"    />
+        <result property="chest"    column="CHEST"    />
+        <result property="wing"    column="WING"    />
+        <result property="foot"    column="FOOT"    />
+        <result property="abdomen"    column="ABDOMEN"    />
+        <result property="genitals"    column="GENITALS"    />
+        <result property="adultPattern"    column="ADULT_PATTERN"    />
+        <result property="adultPhotos"    column="ADULT_PHOTOS"    />
+        <result property="eggShape"    column="EGG_SHAPE"    />
+        <result property="eggMorphology"    column="EGG_MORPHOLOGY"    />
+        <result property="oocystMorphology"    column="OOCYST_MORPHOLOGY"    />
+        <result property="eggPattern"    column="EGG_PATTERN"    />
+        <result property="larvalMorphology"    column="LARVAL_MORPHOLOGY"    />
+        <result property="oneAge"    column="ONE_AGE"    />
+        <result property="twoAge"    column="TWO_AGE"    />
+        <result property="threeAge"    column="THREE_AGE"    />
+        <result property="foreAge"    column="FORE_AGE"    />
+        <result property="fiveAge"    column="FIVE_AGE"    />
+        <result property="sixAge"    column="SIX_AGE"    />
+        <result property="sixPhotos"    column="SIX_PHOTOS"    />
+        <result property="pupaMorphology"    column="PUPA_MORPHOLOGY"    />
+        <result property="pupaPhotos"    column="PUPA_PHOTOS"    />
+        <result property="biology"    column="BIOLOGY"    />
+        <result property="lifeHistory"    column="LIFE_HISTORY"    />
+        <result property="generationNumber"    column="GENERATION_NUMBER"    />
+        <result property="winteringPlace"    column="WINTERING_PLACE"    />
+        <result property="developmentalStage"    column="DEVELOPMENTAL_STAGE"    />
+        <result property="generalDescription"    column="GENERAL_DESCRIPTION"    />
+        <result property="circadianRhythm"    column="CIRCADIAN_RHYTHM"    />
+        <result property="feedingHabits"    column="FEEDING_HABITS"    />
+        <result property="taxis"    column="TAXIS"    />
+        <result property="clustering"    column="CLUSTERING"    />
+        <result property="relocation"    column="RELOCATION"    />
+        <result property="lifeTable"    column="LIFE_TABLE"    />
+        <result property="conventionalDescription"    column="CONVENTIONAL_DESCRIPTION"    />
+        <result property="planDecription"    column="PLAN_DECRIPTION"    />
+        <result property="naturalEnemy"    column="NATURAL_ENEMY"    />
+        <result property="climate"    column="CLIMATE"    />
+        <result property="climaticZone"    column="CLIMATIC_ZONE"    />
+        <result property="moistureCondition"    column="MOISTURE_CONDITION"    />
+        <result property="temperature"    column="TEMPERATURE"    />
+        <result property="eggTemperature"    column="EGG_TEMPERATURE"    />
+        <result property="eggWater"    column="EGG_WATER"    />
+        <result property="ovipositionRecognition"    column="OVIPOSITION_RECOGNITION"    />
+        <result property="soilCharacteristics"    column="SOIL_CHARACTERISTICS"    />
+        <result property="groundCoverage"    column="GROUND_COVERAGE"    />
+        <result property="soilCompactness"    column="SOIL_COMPACTNESS"    />
+        <result property="phValue"    column="PH_VALUE"    />
+        <result property="salinity"    column="SALINITY"    />
+        <result property="waterContent"    column="WATER_CONTENT"    />
+        <result property="spread"    column="SPREAD"    />
+        <result property="definitionRelocation"    column="DEFINITION_RELOCATION"    />
+        <result property="migrationFactors"    column="MIGRATION_FACTORS"    />
+        <result property="migrationAbility"    column="MIGRATION_ABILITY"    />
+        <result property="transfer"    column="TRANSFER"    />
+        <result property="migrationDefinition"    column="MIGRATION_DEFINITION"    />
+        <result property="transferFactors"    column="TRANSFER_FACTORS"    />
+        <result property="naturalDiffusion"    column="NATURAL_DIFFUSION"    />
+        <result property="food"    column="FOOD"    />
+        <result property="spawningGround"    column="SPAWNING_GROUND"    />
+        <result property="stimulate"    column="STIMULATE"    />
+        <result property="migrationPower"    column="MIGRATION_POWER"    />
+        <result property="spreadChannel"    column="SPREAD_CHANNEL"    />
+        <result property="hostPlant"    column="HOST_PLANT"    />
+        <result property="hazardPhotos"    column="HAZARD_PHOTOS"    />
+        <result property="damageDegree"    column="DAMAGE_DEGREE"    />
+        <result property="threeIntake"    column="THREE_INTAKE"    />
+        <result property="threeBigIntake"    column="THREE_BIG_INTAKE"    />
+        <result property="adultFoodIntake"    column="ADULT_FOOD_INTAKE"    />
+        <result property="foodRation"    column="FOOD_RATION"    />
+        <result property="threeLoss"    column="THREE_LOSS"    />
+        <result property="threeBigLoss"    column="THREE_BIG_LOSS"    />
+        <result property="bigLoss"    column="BIG_LOSS"    />
+        <result property="historicalModel"    column="HISTORICAL_MODEL"    />
+        <result property="occurrenceModel"    column="OCCURRENCE_MODEL"    />
+        <result property="developmentModel"    column="DEVELOPMENT_MODEL"    />
+        <result property="calendarModel"    column="CALENDAR_MODEL"    />
+        <result property="ctfjycfModel"    column="CTFJYCF_MODEL"    />
+        <result property="pjfyjdycfModel"    column="PJFYJDYCF_MODEL"    />
+        <result property="lcfyfjycfModel"    column="LCFYFJYCF_MODEL"    />
+        <result property="qjycModel"    column="QJYC_MODEL"    />
+        <result property="yxjwycModel"    column="YXJWYC_MODEL"    />
+        <result property="gctyxjwModel"    column="GCTYXJW_MODEL"    />
+        <result property="whqycModel"    column="WHQYC_MODEL"    />
+        <result property="xgtjyc"    column="XGTJYC"    />
+        <result property="fslycModel"    column="FSLYC_MODEL"    />
+        <result property="yxjsycf"    column="YXJSYCF"    />
+        <result property="qhtycf"    column="QHTYCF"    />
+        <result property="jwtrhslModel"    column="JWTRHSL_MODEL"    />
+        <result property="dmzbqxyzModel"    column="DMZBQXYZ_MODEL"    />
+        <result property="jyzsycf"    column="JYZSYCF"    />
+        <result property="xtzbycf"    column="XTZBYCF"    />
+        <result property="qfhcycModel"    column="QFHCYC_MODEL"    />
+        <result property="zhcdycModel"    column="ZHCDYC_MODEL"    />
+        <result property="controlIndex"    column="CONTROL_INDEX"    />
+        <result property="economicThreshold"    column="ECONOMIC_THRESHOLD"    />
+        <result property="ecologicalThreshold"    column="ECOLOGICAL_THRESHOLD"    />
+        <result property="economicEcologicalThreshold"    column="ECONOMIC_ECOLOGICAL_THRESHOLD"    />
+        <result property="fzffTable"    column="FZFF_TABLE"    />
+        <result property="hxfzSetUp"    column="HXFZ_SET_UP"    />
+        <result property="swfzSetUp"    column="SWFZ_SET_UP"    />
+        <result property="stzlSetUp"    column="STZL_SET_UP"    />
+        <result property="wlfzSetUp"    column="WLFZ_SET_UP"    />
+        <result property="status"    column="STATUS"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="updateBy"    column="UPDATE_BY"    />
+    </resultMap>
+
+    <sql id="selectCRatpestKnowledgeVo">
+        select ID, CODE, MIDDLE_NAME, ALIAS, COMMON_NAME, FAMILIES, CATEGORY, GENUS, RELATED_SPECIE, GW_DISTRIBUTION, GN_DISTRIBUTION, GRASSLAND_TYPE, ALTITUDE, LOW_ALTITUDE, HIGH_ALTITUDE, SOIL_MATRIX, SOIL_TYPE, INDICATOR_PLANTS, DISTRIBUTION_MAP, NATIONAL_MAP, PROVINCIAL_MAP, FEATURES, HEAD, CHEST, WING, FOOT, ABDOMEN, GENITALS, ADULT_PATTERN, ADULT_PHOTOS, EGG_SHAPE, EGG_MORPHOLOGY, OOCYST_MORPHOLOGY, EGG_PATTERN, LARVAL_MORPHOLOGY, ONE_AGE, TWO_AGE, THREE_AGE, FORE_AGE, FIVE_AGE, SIX_AGE, SIX_PHOTOS, PUPA_MORPHOLOGY, PUPA_PHOTOS, BIOLOGY, LIFE_HISTORY, GENERATION_NUMBER, WINTERING_PLACE, DEVELOPMENTAL_STAGE, GENERAL_DESCRIPTION, CIRCADIAN_RHYTHM, FEEDING_HABITS, TAXIS, CLUSTERING, RELOCATION, LIFE_TABLE, CONVENTIONAL_DESCRIPTION, PLAN_DECRIPTION, NATURAL_ENEMY, CLIMATE, CLIMATIC_ZONE, MOISTURE_CONDITION, TEMPERATURE, EGG_TEMPERATURE, EGG_WATER, OVIPOSITION_RECOGNITION, SOIL_CHARACTERISTICS, GROUND_COVERAGE, SOIL_COMPACTNESS, PH_VALUE, SALINITY, WATER_CONTENT, SPREAD, DEFINITION_RELOCATION, MIGRATION_FACTORS, MIGRATION_ABILITY, TRANSFER, MIGRATION_DEFINITION, TRANSFER_FACTORS, NATURAL_DIFFUSION, FOOD, SPAWNING_GROUND, STIMULATE, MIGRATION_POWER, SPREAD_CHANNEL, HOST_PLANT, HAZARD_PHOTOS, DAMAGE_DEGREE, THREE_INTAKE, THREE_BIG_INTAKE, ADULT_FOOD_INTAKE, FOOD_RATION, THREE_LOSS, THREE_BIG_LOSS, BIG_LOSS, HISTORICAL_MODEL, OCCURRENCE_MODEL, DEVELOPMENT_MODEL, CALENDAR_MODEL, CTFJYCF_MODEL, PJFYJDYCF_MODEL, LCFYFJYCF_MODEL, QJYC_MODEL, YXJWYC_MODEL, GCTYXJW_MODEL, WHQYC_MODEL, XGTJYC, FSLYC_MODEL, YXJSYCF, QHTYCF, JWTRHSL_MODEL, DMZBQXYZ_MODEL, JYZSYCF, XTZBYCF, QFHCYC_MODEL, ZHCDYC_MODEL, CONTROL_INDEX, ECONOMIC_THRESHOLD, ECOLOGICAL_THRESHOLD, ECONOMIC_ECOLOGICAL_THRESHOLD, FZFF_TABLE, HXFZ_SET_UP, SWFZ_SET_UP, STZL_SET_UP, WLFZ_SET_UP,CREATE_TIME as CREATE_TIME, STATUS from c_ratpest_knowledge
+    </sql>
+
+    <select id="selectCRatpestKnowledgeList" parameterType="CRatpestKnowledge" resultMap="CRatpestKnowledgeResult">
+        <include refid="selectCRatpestKnowledgeVo"/>
+        <where>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="middleName != null  and middleName != ''"> and MIDDLE_NAME like concat('%', #{middleName}, '%')</if>
+            <if test="alias != null  and alias != ''"> and ALIAS = #{alias}</if>
+            <if test="commonName != null  and commonName != ''"> and COMMON_NAME like concat('%', #{commonName}, '%')</if>
+<!--            <if test="order != null  and order != ''"> and ORDER = #{order}</if>-->
+<!--            <if test="section != null  and section != ''"> and SECTION = #{section}</if>-->
+            <if test="genus != null  and genus != ''"> and GENUS = #{genus}</if>
+            <if test="relatedSpecie != null  and relatedSpecie != ''"> and RELATED_SPECIE = #{relatedSpecie}</if>
+            <if test="gwDistribution != null  and gwDistribution != ''"> and GW_DISTRIBUTION like concat('%', #{gwDistribution}, '%')</if>
+            <if test="gnDistribution != null  and gnDistribution != ''"> and GN_DISTRIBUTION like concat('%', #{gnDistribution}, '%')</if>
+            <if test="grasslandType != null  and grasslandType != ''"> and GRASSLAND_TYPE = #{grasslandType}</if>
+            <if test="altitude != null  and altitude != ''"> and ALTITUDE = #{altitude}</if>
+            <if test="lowAltitude != null  and lowAltitude != ''"> and LOW_ALTITUDE = #{lowAltitude}</if>
+            <if test="highAltitude != null  and highAltitude != ''"> and HIGH_ALTITUDE = #{highAltitude}</if>
+            <if test="soilMatrix != null  and soilMatrix != ''"> and SOIL_MATRIX = #{soilMatrix}</if>
+            <if test="soilType != null  and soilType != ''"> and SOIL_TYPE = #{soilType}</if>
+            <if test="indicatorPlants != null  and indicatorPlants != ''"> and INDICATOR_PLANTS = #{indicatorPlants}</if>
+            <if test="distributionMap != null  and distributionMap != ''"> and DISTRIBUTION_MAP = #{distributionMap}</if>
+            <if test="nationalMap != null  and nationalMap != ''"> and NATIONAL_MAP = #{nationalMap}</if>
+            <if test="provincialMap != null  and provincialMap != ''"> and PROVINCIAL_MAP = #{provincialMap}</if>
+            <if test="features != null  and features != ''"> and FEATURES = #{features}</if>
+            <if test="head != null  and head != ''"> and HEAD = #{head}</if>
+            <if test="chest != null  and chest != ''"> and CHEST = #{chest}</if>
+            <if test="wing != null  and wing != ''"> and WING = #{wing}</if>
+            <if test="foot != null  and foot != ''"> and FOOT = #{foot}</if>
+            <if test="abdomen != null  and abdomen != ''"> and ABDOMEN = #{abdomen}</if>
+            <if test="genitals != null  and genitals != ''"> and GENITALS = #{genitals}</if>
+            <if test="adultPattern != null  and adultPattern != ''"> and ADULT_PATTERN = #{adultPattern}</if>
+            <if test="adultPhotos != null  and adultPhotos != ''"> and ADULT_PHOTOS = #{adultPhotos}</if>
+            <if test="eggShape != null  and eggShape != ''"> and EGG_SHAPE = #{eggShape}</if>
+            <if test="eggMorphology != null  and eggMorphology != ''"> and EGG_MORPHOLOGY = #{eggMorphology}</if>
+            <if test="oocystMorphology != null  and oocystMorphology != ''"> and OOCYST_MORPHOLOGY = #{oocystMorphology}</if>
+            <if test="eggPattern != null  and eggPattern != ''"> and EGG_PATTERN = #{eggPattern}</if>
+            <if test="larvalMorphology != null  and larvalMorphology != ''"> and LARVAL_MORPHOLOGY = #{larvalMorphology}</if>
+            <if test="oneAge != null  and oneAge != ''"> and ONE_AGE = #{oneAge}</if>
+            <if test="twoAge != null  and twoAge != ''"> and TWO_AGE = #{twoAge}</if>
+            <if test="threeAge != null  and threeAge != ''"> and THREE_AGE = #{threeAge}</if>
+            <if test="foreAge != null  and foreAge != ''"> and FORE_AGE = #{foreAge}</if>
+            <if test="fiveAge != null  and fiveAge != ''"> and FIVE_AGE = #{fiveAge}</if>
+            <if test="sixAge != null  and sixAge != ''"> and SIX_AGE = #{sixAge}</if>
+            <if test="sixPhotos != null  and sixPhotos != ''"> and SIX_PHOTOS = #{sixPhotos}</if>
+            <if test="pupaMorphology != null  and pupaMorphology != ''"> and PUPA_MORPHOLOGY = #{pupaMorphology}</if>
+            <if test="pupaPhotos != null  and pupaPhotos != ''"> and PUPA_PHOTOS = #{pupaPhotos}</if>
+            <if test="biology != null  and biology != ''"> and BIOLOGY = #{biology}</if>
+            <if test="lifeHistory != null  and lifeHistory != ''"> and LIFE_HISTORY = #{lifeHistory}</if>
+            <if test="generationNumber != null "> and GENERATION_NUMBER = #{generationNumber}</if>
+            <if test="winteringPlace != null  and winteringPlace != ''"> and WINTERING_PLACE = #{winteringPlace}</if>
+            <if test="developmentalStage != null  and developmentalStage != ''"> and DEVELOPMENTAL_STAGE = #{developmentalStage}</if>
+            <if test="generalDescription != null  and generalDescription != ''"> and GENERAL_DESCRIPTION = #{generalDescription}</if>
+            <if test="circadianRhythm != null  and circadianRhythm != ''"> and CIRCADIAN_RHYTHM = #{circadianRhythm}</if>
+            <if test="feedingHabits != null  and feedingHabits != ''"> and FEEDING_HABITS = #{feedingHabits}</if>
+            <if test="taxis != null  and taxis != ''"> and TAXIS = #{taxis}</if>
+            <if test="clustering != null  and clustering != ''"> and CLUSTERING = #{clustering}</if>
+            <if test="relocation != null  and relocation != ''"> and RELOCATION = #{relocation}</if>
+            <if test="lifeTable != null  and lifeTable != ''"> and LIFE_TABLE = #{lifeTable}</if>
+            <if test="conventionalDescription != null  and conventionalDescription != ''"> and CONVENTIONAL_DESCRIPTION = #{conventionalDescription}</if>
+            <if test="planDecription != null  and planDecription != ''"> and PLAN_DECRIPTION = #{planDecription}</if>
+            <if test="naturalEnemy != null  and naturalEnemy != ''"> and NATURAL_ENEMY = #{naturalEnemy}</if>
+            <if test="climate != null  and climate != ''"> and CLIMATE = #{climate}</if>
+            <if test="climaticZone != null  and climaticZone != ''"> and CLIMATIC_ZONE = #{climaticZone}</if>
+            <if test="moistureCondition != null  and moistureCondition != ''"> and MOISTURE_CONDITION = #{moistureCondition}</if>
+            <if test="temperature != null  and temperature != ''"> and TEMPERATURE = #{temperature}</if>
+            <if test="eggTemperature != null  and eggTemperature != ''"> and EGG_TEMPERATURE = #{eggTemperature}</if>
+            <if test="eggWater != null  and eggWater != ''"> and EGG_WATER = #{eggWater}</if>
+            <if test="ovipositionRecognition != null  and ovipositionRecognition != ''"> and OVIPOSITION_RECOGNITION = #{ovipositionRecognition}</if>
+            <if test="soilCharacteristics != null  and soilCharacteristics != ''"> and SOIL_CHARACTERISTICS = #{soilCharacteristics}</if>
+            <if test="groundCoverage != null  and groundCoverage != ''"> and GROUND_COVERAGE = #{groundCoverage}</if>
+            <if test="soilCompactness != null  and soilCompactness != ''"> and SOIL_COMPACTNESS = #{soilCompactness}</if>
+            <if test="phValue != null  and phValue != ''"> and PH_VALUE = #{phValue}</if>
+            <if test="salinity != null  and salinity != ''"> and SALINITY = #{salinity}</if>
+            <if test="waterContent != null  and waterContent != ''"> and WATER_CONTENT = #{waterContent}</if>
+            <if test="spread != null  and spread != ''"> and SPREAD = #{spread}</if>
+            <if test="definitionRelocation != null  and definitionRelocation != ''"> and DEFINITION_RELOCATION = #{definitionRelocation}</if>
+            <if test="migrationFactors != null  and migrationFactors != ''"> and MIGRATION_FACTORS = #{migrationFactors}</if>
+            <if test="migrationAbility != null  and migrationAbility != ''"> and MIGRATION_ABILITY = #{migrationAbility}</if>
+            <if test="transfer != null  and transfer != ''"> and TRANSFER = #{transfer}</if>
+            <if test="migrationDefinition != null  and migrationDefinition != ''"> and MIGRATION_DEFINITION = #{migrationDefinition}</if>
+            <if test="transferFactors != null  and transferFactors != ''"> and TRANSFER_FACTORS = #{transferFactors}</if>
+            <if test="naturalDiffusion != null  and naturalDiffusion != ''"> and NATURAL_DIFFUSION = #{naturalDiffusion}</if>
+            <if test="food != null  and food != ''"> and FOOD = #{food}</if>
+            <if test="spawningGround != null  and spawningGround != ''"> and SPAWNING_GROUND = #{spawningGround}</if>
+            <if test="stimulate != null  and stimulate != ''"> and STIMULATE = #{stimulate}</if>
+            <if test="migrationPower != null  and migrationPower != ''"> and MIGRATION_POWER = #{migrationPower}</if>
+            <if test="spreadChannel != null  and spreadChannel != ''"> and SPREAD_CHANNEL = #{spreadChannel}</if>
+            <if test="hostPlant != null  and hostPlant != ''"> and HOST_PLANT = #{hostPlant}</if>
+            <if test="hazardPhotos != null  and hazardPhotos != ''"> and HAZARD_PHOTOS = #{hazardPhotos}</if>
+            <if test="damageDegree != null  and damageDegree != ''"> and DAMAGE_DEGREE = #{damageDegree}</if>
+            <if test="threeIntake != null "> and THREE_INTAKE = #{threeIntake}</if>
+            <if test="threeBigIntake != null "> and THREE_BIG_INTAKE = #{threeBigIntake}</if>
+            <if test="adultFoodIntake != null "> and ADULT_FOOD_INTAKE = #{adultFoodIntake}</if>
+            <if test="foodRation != null "> and FOOD_RATION = #{foodRation}</if>
+            <if test="threeLoss != null "> and THREE_LOSS = #{threeLoss}</if>
+            <if test="threeBigLoss != null "> and THREE_BIG_LOSS = #{threeBigLoss}</if>
+            <if test="bigLoss != null "> and BIG_LOSS = #{bigLoss}</if>
+            <if test="historicalModel != null  and historicalModel != ''"> and HISTORICAL_MODEL = #{historicalModel}</if>
+            <if test="occurrenceModel != null  and occurrenceModel != ''"> and OCCURRENCE_MODEL = #{occurrenceModel}</if>
+            <if test="developmentModel != null  and developmentModel != ''"> and DEVELOPMENT_MODEL = #{developmentModel}</if>
+            <if test="calendarModel != null  and calendarModel != ''"> and CALENDAR_MODEL = #{calendarModel}</if>
+            <if test="ctfjycfModel != null  and ctfjycfModel != ''"> and CTFJYCF_MODEL = #{ctfjycfModel}</if>
+            <if test="pjfyjdycfModel != null  and pjfyjdycfModel != ''"> and PJFYJDYCF_MODEL = #{pjfyjdycfModel}</if>
+            <if test="lcfyfjycfModel != null  and lcfyfjycfModel != ''"> and LCFYFJYCF_MODEL = #{lcfyfjycfModel}</if>
+            <if test="qjycModel != null  and qjycModel != ''"> and QJYC_MODEL = #{qjycModel}</if>
+            <if test="yxjwycModel != null  and yxjwycModel != ''"> and YXJWYC_MODEL = #{yxjwycModel}</if>
+            <if test="gctyxjwModel != null  and gctyxjwModel != ''"> and GCTYXJW_MODEL = #{gctyxjwModel}</if>
+            <if test="whqycModel != null  and whqycModel != ''"> and WHQYC_MODEL = #{whqycModel}</if>
+            <if test="xgtjyc != null  and xgtjyc != ''"> and XGTJYC = #{xgtjyc}</if>
+            <if test="fslycModel != null  and fslycModel != ''"> and FSLYC_MODEL = #{fslycModel}</if>
+            <if test="yxjsycf != null  and yxjsycf != ''"> and YXJSYCF = #{yxjsycf}</if>
+            <if test="qhtycf != null  and qhtycf != ''"> and QHTYCF = #{qhtycf}</if>
+            <if test="jwtrhslModel != null  and jwtrhslModel != ''"> and JWTRHSL_MODEL = #{jwtrhslModel}</if>
+            <if test="dmzbqxyzModel != null  and dmzbqxyzModel != ''"> and DMZBQXYZ_MODEL = #{dmzbqxyzModel}</if>
+            <if test="jyzsycf != null  and jyzsycf != ''"> and JYZSYCF = #{jyzsycf}</if>
+            <if test="xtzbycf != null  and xtzbycf != ''"> and XTZBYCF = #{xtzbycf}</if>
+            <if test="qfhcycModel != null  and qfhcycModel != ''"> and QFHCYC_MODEL = #{qfhcycModel}</if>
+            <if test="zhcdycModel != null  and zhcdycModel != ''"> and ZHCDYC_MODEL = #{zhcdycModel}</if>
+            <if test="controlIndex != null  and controlIndex != ''"> and CONTROL_INDEX = #{controlIndex}</if>
+            <if test="economicThreshold != null  and economicThreshold != ''"> and ECONOMIC_THRESHOLD = #{economicThreshold}</if>
+            <if test="ecologicalThreshold != null  and ecologicalThreshold != ''"> and ECOLOGICAL_THRESHOLD = #{ecologicalThreshold}</if>
+            <if test="economicEcologicalThreshold != null  and economicEcologicalThreshold != ''"> and ECONOMIC_ECOLOGICAL_THRESHOLD = #{economicEcologicalThreshold}</if>
+            <if test="fzffTable != null  and fzffTable != ''"> and FZFF_TABLE = #{fzffTable}</if>
+            <if test="hxfzSetUp != null  and hxfzSetUp != ''"> and HXFZ_SET_UP = #{hxfzSetUp}</if>
+            <if test="swfzSetUp != null  and swfzSetUp != ''"> and SWFZ_SET_UP = #{swfzSetUp}</if>
+            <if test="stzlSetUp != null  and stzlSetUp != ''"> and STZL_SET_UP = #{stzlSetUp}</if>
+            <if test="wlfzSetUp != null  and wlfzSetUp != ''"> and WLFZ_SET_UP = #{wlfzSetUp}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="createTime != null  and createTime != ''"> and CREATE_TIME = #{createTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="updateBy != null  and updateBy != ''"> and UPDATE_BY = #{updateBy}</if>
+            <if test="params != null">
+                <if test="params.beginCreateTime!=null and params.beginCreateTime!=''">
+                  and    CREATE_TIME &gt;=#{params.beginCreateTime}
+                </if>
+             <if test="params.endCreateTime!=null and params.endCreateTime!=''">
+                 and   CREATE_TIME &lt;=DATE_ADD(#{params.endCreateTime},INTERVAL 1 DAY)
+                </if>
+            </if>
+        </where>
+        order by CREATE_TIME desc
+
+    </select>
+
+    <select id="selectCRatpestKnowledgeById" parameterType="Long" resultMap="CRatpestKnowledgeResult">
+        <include refid="selectCRatpestKnowledgeVo"/>
+        where ID = #{id}
+    </select>
+    <select id="checkCode" parameterType="string" resultType="java.lang.String">
+      select CODE from  c_ratpest_knowledge where  code=#{code}
+
+
+    </select>
+
+    <insert id="insertCRatpestKnowledge" parameterType="CRatpestKnowledge">
+        insert into c_ratpest_knowledge
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">ID,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="middleName != null  and middleName != ''">MIDDLE_NAME,</if>
+            <if test="alias != null  and alias != ''">ALIAS,</if>
+            <if test="commonName != null  and commonName != ''">COMMON_NAME,</if>
+            <if test="families != null  and families != ''">FAMILIES,</if>
+            <if test="category != null  and category != ''">CATEGORY,</if>
+            <if test="genus != null  and genus != ''">GENUS,</if>
+            <if test="relatedSpecie != null  and relatedSpecie != ''">RELATED_SPECIE,</if>
+            <if test="gwDistribution != null  and gwDistribution != ''">GW_DISTRIBUTION,</if>
+            <if test="gnDistribution != null  and gnDistribution != ''">GN_DISTRIBUTION,</if>
+            <if test="grasslandType != null  and grasslandType != ''">GRASSLAND_TYPE,</if>
+            <if test="altitude != null  and altitude != ''">ALTITUDE,</if>
+            <if test="lowAltitude != null  and lowAltitude != ''">LOW_ALTITUDE,</if>
+            <if test="highAltitude != null  and highAltitude != ''">HIGH_ALTITUDE,</if>
+            <if test="soilMatrix != null  and soilMatrix != ''">SOIL_MATRIX,</if>
+            <if test="soilType != null  and soilType != ''">SOIL_TYPE,</if>
+            <if test="indicatorPlants != null  and indicatorPlants != ''">INDICATOR_PLANTS,</if>
+            <if test="distributionMap != null  and distributionMap != ''">DISTRIBUTION_MAP,</if>
+            <if test="nationalMap != null  and nationalMap != ''">NATIONAL_MAP,</if>
+            <if test="provincialMap != null  and provincialMap != ''">PROVINCIAL_MAP,</if>
+            <if test="features != null  and features != ''">FEATURES,</if>
+            <if test="head != null  and head != ''">HEAD,</if>
+            <if test="chest != null  and chest != ''">CHEST,</if>
+            <if test="wing != null  and wing != ''">WING,</if>
+            <if test="foot != null  and foot != ''">FOOT,</if>
+            <if test="abdomen != null  and abdomen != ''">ABDOMEN,</if>
+            <if test="genitals != null  and genitals != ''">GENITALS,</if>
+            <if test="adultPattern != null  and adultPattern != ''">ADULT_PATTERN,</if>
+            <if test="adultPhotos != null  and adultPhotos != ''">ADULT_PHOTOS,</if>
+            <if test="eggShape != null  and eggShape != ''">EGG_SHAPE,</if>
+            <if test="eggMorphology != null  and eggMorphology != ''">EGG_MORPHOLOGY,</if>
+            <if test="oocystMorphology != null  and oocystMorphology != ''">OOCYST_MORPHOLOGY,</if>
+            <if test="eggPattern != null  and eggPattern != ''">EGG_PATTERN,</if>
+            <if test="larvalMorphology != null  and larvalMorphology != ''">LARVAL_MORPHOLOGY,</if>
+            <if test="oneAge != null  and oneAge != ''">ONE_AGE,</if>
+            <if test="twoAge != null  and twoAge != ''">TWO_AGE,</if>
+            <if test="threeAge != null  and threeAge != ''">THREE_AGE,</if>
+            <if test="foreAge != null  and foreAge != ''">FORE_AGE,</if>
+            <if test="fiveAge != null  and fiveAge != ''">FIVE_AGE,</if>
+            <if test="sixAge != null  and sixAge != ''">SIX_AGE,</if>
+            <if test="sixPhotos != null  and sixPhotos != ''">SIX_PHOTOS,</if>
+            <if test="pupaMorphology != null  and pupaMorphology != ''">PUPA_MORPHOLOGY,</if>
+            <if test="pupaPhotos != null  and pupaPhotos != ''">PUPA_PHOTOS,</if>
+            <if test="biology != null  and biology != ''">BIOLOGY,</if>
+            <if test="lifeHistory != null  and lifeHistory != ''">LIFE_HISTORY,</if>
+            <if test="generationNumber != null ">GENERATION_NUMBER,</if>
+            <if test="winteringPlace != null  and winteringPlace != ''">WINTERING_PLACE,</if>
+            <if test="developmentalStage != null  and developmentalStage != ''">DEVELOPMENTAL_STAGE,</if>
+            <if test="generalDescription != null  and generalDescription != ''">GENERAL_DESCRIPTION,</if>
+            <if test="circadianRhythm != null  and circadianRhythm != ''">CIRCADIAN_RHYTHM,</if>
+            <if test="feedingHabits != null  and feedingHabits != ''">FEEDING_HABITS,</if>
+            <if test="taxis != null  and taxis != ''">TAXIS,</if>
+            <if test="clustering != null  and clustering != ''">CLUSTERING,</if>
+            <if test="relocation != null  and relocation != ''">RELOCATION,</if>
+            <if test="lifeTable != null  and lifeTable != ''">LIFE_TABLE,</if>
+            <if test="conventionalDescription != null  and conventionalDescription != ''">CONVENTIONAL_DESCRIPTION,</if>
+            <if test="planDecription != null  and planDecription != ''">PLAN_DECRIPTION,</if>
+            <if test="naturalEnemy != null  and naturalEnemy != ''">NATURAL_ENEMY,</if>
+            <if test="climate != null  and climate != ''">CLIMATE,</if>
+            <if test="climaticZone != null  and climaticZone != ''">CLIMATIC_ZONE,</if>
+            <if test="moistureCondition != null  and moistureCondition != ''">MOISTURE_CONDITION,</if>
+            <if test="temperature != null  and temperature != ''">TEMPERATURE,</if>
+            <if test="eggTemperature != null  and eggTemperature != ''">EGG_TEMPERATURE,</if>
+            <if test="eggWater != null  and eggWater != ''">EGG_WATER,</if>
+            <if test="ovipositionRecognition != null  and ovipositionRecognition != ''">OVIPOSITION_RECOGNITION,</if>
+            <if test="soilCharacteristics != null  and soilCharacteristics != ''">SOIL_CHARACTERISTICS,</if>
+            <if test="groundCoverage != null  and groundCoverage != ''">GROUND_COVERAGE,</if>
+            <if test="soilCompactness != null  and soilCompactness != ''">SOIL_COMPACTNESS,</if>
+            <if test="phValue != null  and phValue != ''">PH_VALUE,</if>
+            <if test="salinity != null  and salinity != ''">SALINITY,</if>
+            <if test="waterContent != null  and waterContent != ''">WATER_CONTENT,</if>
+            <if test="spread != null  and spread != ''">SPREAD,</if>
+            <if test="definitionRelocation != null  and definitionRelocation != ''">DEFINITION_RELOCATION,</if>
+            <if test="migrationFactors != null  and migrationFactors != ''">MIGRATION_FACTORS,</if>
+            <if test="migrationAbility != null  and migrationAbility != ''">MIGRATION_ABILITY,</if>
+            <if test="transfer != null  and transfer != ''">TRANSFER,</if>
+            <if test="migrationDefinition != null  and migrationDefinition != ''">MIGRATION_DEFINITION,</if>
+            <if test="transferFactors != null  and transferFactors != ''">TRANSFER_FACTORS,</if>
+            <if test="naturalDiffusion != null  and naturalDiffusion != ''">NATURAL_DIFFUSION,</if>
+            <if test="food != null  and food != ''">FOOD,</if>
+            <if test="spawningGround != null  and spawningGround != ''">SPAWNING_GROUND,</if>
+            <if test="stimulate != null  and stimulate != ''">STIMULATE,</if>
+            <if test="migrationPower != null  and migrationPower != ''">MIGRATION_POWER,</if>
+            <if test="spreadChannel != null  and spreadChannel != ''">SPREAD_CHANNEL,</if>
+            <if test="hostPlant != null  and hostPlant != ''">HOST_PLANT,</if>
+            <if test="hazardPhotos != null  and hazardPhotos != ''">HAZARD_PHOTOS,</if>
+            <if test="damageDegree != null  and damageDegree != ''">DAMAGE_DEGREE,</if>
+            <if test="threeIntake != null ">THREE_INTAKE,</if>
+            <if test="threeBigIntake != null ">THREE_BIG_INTAKE,</if>
+            <if test="adultFoodIntake != null ">ADULT_FOOD_INTAKE,</if>
+            <if test="foodRation != null ">FOOD_RATION,</if>
+            <if test="threeLoss != null ">THREE_LOSS,</if>
+            <if test="threeBigLoss != null ">THREE_BIG_LOSS,</if>
+            <if test="bigLoss != null ">BIG_LOSS,</if>
+            <if test="historicalModel != null  and historicalModel != ''">HISTORICAL_MODEL,</if>
+            <if test="occurrenceModel != null  and occurrenceModel != ''">OCCURRENCE_MODEL,</if>
+            <if test="developmentModel != null  and developmentModel != ''">DEVELOPMENT_MODEL,</if>
+            <if test="calendarModel != null  and calendarModel != ''">CALENDAR_MODEL,</if>
+            <if test="ctfjycfModel != null  and ctfjycfModel != ''">CTFJYCF_MODEL,</if>
+            <if test="pjfyjdycfModel != null  and pjfyjdycfModel != ''">PJFYJDYCF_MODEL,</if>
+            <if test="lcfyfjycfModel != null  and lcfyfjycfModel != ''">LCFYFJYCF_MODEL,</if>
+            <if test="qjycModel != null  and qjycModel != ''">QJYC_MODEL,</if>
+            <if test="yxjwycModel != null  and yxjwycModel != ''">YXJWYC_MODEL,</if>
+            <if test="gctyxjwModel != null  and gctyxjwModel != ''">GCTYXJW_MODEL,</if>
+            <if test="whqycModel != null  and whqycModel != ''">WHQYC_MODEL,</if>
+            <if test="xgtjyc != null  and xgtjyc != ''">XGTJYC,</if>
+            <if test="fslycModel != null  and fslycModel != ''">FSLYC_MODEL,</if>
+            <if test="yxjsycf != null  and yxjsycf != ''">YXJSYCF,</if>
+            <if test="qhtycf != null  and qhtycf != ''">QHTYCF,</if>
+            <if test="jwtrhslModel != null  and jwtrhslModel != ''">JWTRHSL_MODEL,</if>
+            <if test="dmzbqxyzModel != null  and dmzbqxyzModel != ''">DMZBQXYZ_MODEL,</if>
+            <if test="jyzsycf != null  and jyzsycf != ''">JYZSYCF,</if>
+            <if test="xtzbycf != null  and xtzbycf != ''">XTZBYCF,</if>
+            <if test="qfhcycModel != null  and qfhcycModel != ''">QFHCYC_MODEL,</if>
+            <if test="zhcdycModel != null  and zhcdycModel != ''">ZHCDYC_MODEL,</if>
+            <if test="controlIndex != null  and controlIndex != ''">CONTROL_INDEX,</if>
+            <if test="economicThreshold != null  and economicThreshold != ''">ECONOMIC_THRESHOLD,</if>
+            <if test="ecologicalThreshold != null  and ecologicalThreshold != ''">ECOLOGICAL_THRESHOLD,</if>
+            <if test="economicEcologicalThreshold != null  and economicEcologicalThreshold != ''">ECONOMIC_ECOLOGICAL_THRESHOLD,</if>
+            <if test="fzffTable != null  and fzffTable != ''">FZFF_TABLE,</if>
+            <if test="hxfzSetUp != null  and hxfzSetUp != ''">HXFZ_SET_UP,</if>
+            <if test="swfzSetUp != null  and swfzSetUp != ''">SWFZ_SET_UP,</if>
+            <if test="stzlSetUp != null  and stzlSetUp != ''">STZL_SET_UP,</if>
+            <if test="wlfzSetUp != null  and wlfzSetUp != ''">WLFZ_SET_UP,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="createTime != null">CREATE_TIME,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="middleName != null  and middleName != ''">#{middleName},</if>
+            <if test="alias != null  and alias != ''">#{alias},</if>
+            <if test="commonName != null  and commonName != ''">#{commonName},</if>
+            <if test="families != null  and families != ''">#{families},</if>
+            <if test="category != null  and category != ''">#{category},</if>
+            <if test="genus != null  and genus != ''">#{genus},</if>
+            <if test="relatedSpecie != null  and relatedSpecie != ''">#{relatedSpecie},</if>
+            <if test="gwDistribution != null  and gwDistribution != ''">#{gwDistribution},</if>
+            <if test="gnDistribution != null  and gnDistribution != ''">#{gnDistribution},</if>
+            <if test="grasslandType != null  and grasslandType != ''">#{grasslandType},</if>
+            <if test="altitude != null  and altitude != ''">#{altitude},</if>
+            <if test="lowAltitude != null  and lowAltitude != ''">#{lowAltitude},</if>
+            <if test="highAltitude != null  and highAltitude != ''">#{highAltitude},</if>
+            <if test="soilMatrix != null  and soilMatrix != ''">#{soilMatrix},</if>
+            <if test="soilType != null  and soilType != ''">#{soilType},</if>
+            <if test="indicatorPlants != null  and indicatorPlants != ''">#{indicatorPlants},</if>
+            <if test="distributionMap != null  and distributionMap != ''">#{distributionMap},</if>
+            <if test="nationalMap != null  and nationalMap != ''">#{nationalMap},</if>
+            <if test="provincialMap != null  and provincialMap != ''">#{provincialMap},</if>
+            <if test="features != null  and features != ''">#{features},</if>
+            <if test="head != null  and head != ''">#{head},</if>
+            <if test="chest != null  and chest != ''">#{chest},</if>
+            <if test="wing != null  and wing != ''">#{wing},</if>
+            <if test="foot != null  and foot != ''">#{foot},</if>
+            <if test="abdomen != null  and abdomen != ''">#{abdomen},</if>
+            <if test="genitals != null  and genitals != ''">#{genitals},</if>
+            <if test="adultPattern != null  and adultPattern != ''">#{adultPattern},</if>
+            <if test="adultPhotos != null  and adultPhotos != ''">#{adultPhotos},</if>
+            <if test="eggShape != null  and eggShape != ''">#{eggShape},</if>
+            <if test="eggMorphology != null  and eggMorphology != ''">#{eggMorphology},</if>
+            <if test="oocystMorphology != null  and oocystMorphology != ''">#{oocystMorphology},</if>
+            <if test="eggPattern != null  and eggPattern != ''">#{eggPattern},</if>
+            <if test="larvalMorphology != null  and larvalMorphology != ''">#{larvalMorphology},</if>
+            <if test="oneAge != null  and oneAge != ''">#{oneAge},</if>
+            <if test="twoAge != null  and twoAge != ''">#{twoAge},</if>
+            <if test="threeAge != null  and threeAge != ''">#{threeAge},</if>
+            <if test="foreAge != null  and foreAge != ''">#{foreAge},</if>
+            <if test="fiveAge != null  and fiveAge != ''">#{fiveAge},</if>
+            <if test="sixAge != null  and sixAge != ''">#{sixAge},</if>
+            <if test="sixPhotos != null  and sixPhotos != ''">#{sixPhotos},</if>
+            <if test="pupaMorphology != null  and pupaMorphology != ''">#{pupaMorphology},</if>
+            <if test="pupaPhotos != null  and pupaPhotos != ''">#{pupaPhotos},</if>
+            <if test="biology != null  and biology != ''">#{biology},</if>
+            <if test="lifeHistory != null  and lifeHistory != ''">#{lifeHistory},</if>
+            <if test="generationNumber != null ">#{generationNumber},</if>
+            <if test="winteringPlace != null  and winteringPlace != ''">#{winteringPlace},</if>
+            <if test="developmentalStage != null  and developmentalStage != ''">#{developmentalStage},</if>
+            <if test="generalDescription != null  and generalDescription != ''">#{generalDescription},</if>
+            <if test="circadianRhythm != null  and circadianRhythm != ''">#{circadianRhythm},</if>
+            <if test="feedingHabits != null  and feedingHabits != ''">#{feedingHabits},</if>
+            <if test="taxis != null  and taxis != ''">#{taxis},</if>
+            <if test="clustering != null  and clustering != ''">#{clustering},</if>
+            <if test="relocation != null  and relocation != ''">#{relocation},</if>
+            <if test="lifeTable != null  and lifeTable != ''">#{lifeTable},</if>
+            <if test="conventionalDescription != null  and conventionalDescription != ''">#{conventionalDescription},</if>
+            <if test="planDecription != null  and planDecription != ''">#{planDecription},</if>
+            <if test="naturalEnemy != null  and naturalEnemy != ''">#{naturalEnemy},</if>
+            <if test="climate != null  and climate != ''">#{climate},</if>
+            <if test="climaticZone != null  and climaticZone != ''">#{climaticZone},</if>
+            <if test="moistureCondition != null  and moistureCondition != ''">#{moistureCondition},</if>
+            <if test="temperature != null  and temperature != ''">#{temperature},</if>
+            <if test="eggTemperature != null  and eggTemperature != ''">#{eggTemperature},</if>
+            <if test="eggWater != null  and eggWater != ''">#{eggWater},</if>
+            <if test="ovipositionRecognition != null  and ovipositionRecognition != ''">#{ovipositionRecognition},</if>
+            <if test="soilCharacteristics != null  and soilCharacteristics != ''">#{soilCharacteristics},</if>
+            <if test="groundCoverage != null  and groundCoverage != ''">#{groundCoverage},</if>
+            <if test="soilCompactness != null  and soilCompactness != ''">#{soilCompactness},</if>
+            <if test="phValue != null  and phValue != ''">#{phValue},</if>
+            <if test="salinity != null  and salinity != ''">#{salinity},</if>
+            <if test="waterContent != null  and waterContent != ''">#{waterContent},</if>
+            <if test="spread != null  and spread != ''">#{spread},</if>
+            <if test="definitionRelocation != null  and definitionRelocation != ''">#{definitionRelocation},</if>
+            <if test="migrationFactors != null  and migrationFactors != ''">#{migrationFactors},</if>
+            <if test="migrationAbility != null  and migrationAbility != ''">#{migrationAbility},</if>
+            <if test="transfer != null  and transfer != ''">#{transfer},</if>
+            <if test="migrationDefinition != null  and migrationDefinition != ''">#{migrationDefinition},</if>
+            <if test="transferFactors != null  and transferFactors != ''">#{transferFactors},</if>
+            <if test="naturalDiffusion != null  and naturalDiffusion != ''">#{naturalDiffusion},</if>
+            <if test="food != null  and food != ''">#{food},</if>
+            <if test="spawningGround != null  and spawningGround != ''">#{spawningGround},</if>
+            <if test="stimulate != null  and stimulate != ''">#{stimulate},</if>
+            <if test="migrationPower != null  and migrationPower != ''">#{migrationPower},</if>
+            <if test="spreadChannel != null  and spreadChannel != ''">#{spreadChannel},</if>
+            <if test="hostPlant != null  and hostPlant != ''">#{hostPlant},</if>
+            <if test="hazardPhotos != null  and hazardPhotos != ''">#{hazardPhotos},</if>
+            <if test="damageDegree != null  and damageDegree != ''">#{damageDegree},</if>
+            <if test="threeIntake != null ">#{threeIntake},</if>
+            <if test="threeBigIntake != null ">#{threeBigIntake},</if>
+            <if test="adultFoodIntake != null ">#{adultFoodIntake},</if>
+            <if test="foodRation != null ">#{foodRation},</if>
+            <if test="threeLoss != null ">#{threeLoss},</if>
+            <if test="threeBigLoss != null ">#{threeBigLoss},</if>
+            <if test="bigLoss != null ">#{bigLoss},</if>
+            <if test="historicalModel != null  and historicalModel != ''">#{historicalModel},</if>
+            <if test="occurrenceModel != null  and occurrenceModel != ''">#{occurrenceModel},</if>
+            <if test="developmentModel != null  and developmentModel != ''">#{developmentModel},</if>
+            <if test="calendarModel != null  and calendarModel != ''">#{calendarModel},</if>
+            <if test="ctfjycfModel != null  and ctfjycfModel != ''">#{ctfjycfModel},</if>
+            <if test="pjfyjdycfModel != null  and pjfyjdycfModel != ''">#{pjfyjdycfModel},</if>
+            <if test="lcfyfjycfModel != null  and lcfyfjycfModel != ''">#{lcfyfjycfModel},</if>
+            <if test="qjycModel != null  and qjycModel != ''">#{qjycModel},</if>
+            <if test="yxjwycModel != null  and yxjwycModel != ''">#{yxjwycModel},</if>
+            <if test="gctyxjwModel != null  and gctyxjwModel != ''">#{gctyxjwModel},</if>
+            <if test="whqycModel != null  and whqycModel != ''">#{whqycModel},</if>
+            <if test="xgtjyc != null  and xgtjyc != ''">#{xgtjyc},</if>
+            <if test="fslycModel != null  and fslycModel != ''">#{fslycModel},</if>
+            <if test="yxjsycf != null  and yxjsycf != ''">#{yxjsycf},</if>
+            <if test="qhtycf != null  and qhtycf != ''">#{qhtycf},</if>
+            <if test="jwtrhslModel != null  and jwtrhslModel != ''">#{jwtrhslModel},</if>
+            <if test="dmzbqxyzModel != null  and dmzbqxyzModel != ''">#{dmzbqxyzModel},</if>
+            <if test="jyzsycf != null  and jyzsycf != ''">#{jyzsycf},</if>
+            <if test="xtzbycf != null  and xtzbycf != ''">#{xtzbycf},</if>
+            <if test="qfhcycModel != null  and qfhcycModel != ''">#{qfhcycModel},</if>
+            <if test="zhcdycModel != null  and zhcdycModel != ''">#{zhcdycModel},</if>
+            <if test="controlIndex != null  and controlIndex != ''">#{controlIndex},</if>
+            <if test="economicThreshold != null  and economicThreshold != ''">#{economicThreshold},</if>
+            <if test="ecologicalThreshold != null  and ecologicalThreshold != ''">#{ecologicalThreshold},</if>
+            <if test="economicEcologicalThreshold != null  and economicEcologicalThreshold != ''">#{economicEcologicalThreshold},</if>
+            <if test="fzffTable != null  and fzffTable != ''">#{fzffTable},</if>
+            <if test="hxfzSetUp != null  and hxfzSetUp != ''">#{hxfzSetUp},</if>
+            <if test="swfzSetUp != null  and swfzSetUp != ''">#{swfzSetUp},</if>
+            <if test="stzlSetUp != null  and stzlSetUp != ''">#{stzlSetUp},</if>
+            <if test="wlfzSetUp != null  and wlfzSetUp != ''">#{wlfzSetUp},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCRatpestKnowledge" parameterType="CRatpestKnowledge">
+        update c_ratpest_knowledge
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="middleName != null  and middleName != ''">MIDDLE_NAME = #{middleName},</if>
+            <if test="alias != null  and alias != ''">ALIAS = #{alias},</if>
+            <if test="commonName != null  and commonName != ''">COMMON_NAME = #{commonName},</if>
+            <if test="families != null  and families != ''">FAMILIES = #{families},</if>
+            <if test="category != null  and category != ''">CATEGORY = #{category},</if>
+            <if test="genus != null  and genus != ''">GENUS = #{genus},</if>
+            <if test="relatedSpecie != null  and relatedSpecie != ''">RELATED_SPECIE = #{relatedSpecie},</if>
+            <if test="gwDistribution != null  and gwDistribution != ''">GW_DISTRIBUTION = #{gwDistribution},</if>
+            <if test="gnDistribution != null  and gnDistribution != ''">GN_DISTRIBUTION = #{gnDistribution},</if>
+            <if test="grasslandType != null  and grasslandType != ''">GRASSLAND_TYPE = #{grasslandType},</if>
+            <if test="altitude != null  and altitude != ''">ALTITUDE = #{altitude},</if>
+            <if test="lowAltitude != null  and lowAltitude != ''">LOW_ALTITUDE = #{lowAltitude},</if>
+            <if test="highAltitude != null  and highAltitude != ''">HIGH_ALTITUDE = #{highAltitude},</if>
+            <if test="soilMatrix != null  and soilMatrix != ''">SOIL_MATRIX = #{soilMatrix},</if>
+            <if test="soilType != null  and soilType != ''">SOIL_TYPE = #{soilType},</if>
+            <if test="indicatorPlants != null  and indicatorPlants != ''">INDICATOR_PLANTS = #{indicatorPlants},</if>
+            <if test="distributionMap != null  and distributionMap != ''">DISTRIBUTION_MAP = #{distributionMap},</if>
+            <if test="nationalMap != null  and nationalMap != ''">NATIONAL_MAP = #{nationalMap},</if>
+            <if test="provincialMap != null  and provincialMap != ''">PROVINCIAL_MAP = #{provincialMap},</if>
+            <if test="features != null  and features != ''">FEATURES = #{features},</if>
+            <if test="head != null  and head != ''">HEAD = #{head},</if>
+            <if test="chest != null  and chest != ''">CHEST = #{chest},</if>
+            <if test="wing != null  and wing != ''">WING = #{wing},</if>
+            <if test="foot != null  and foot != ''">FOOT = #{foot},</if>
+            <if test="abdomen != null  and abdomen != ''">ABDOMEN = #{abdomen},</if>
+            <if test="genitals != null  and genitals != ''">GENITALS = #{genitals},</if>
+            <if test="adultPattern != null  and adultPattern != ''">ADULT_PATTERN = #{adultPattern},</if>
+            <if test="adultPhotos != null  and adultPhotos != ''">ADULT_PHOTOS = #{adultPhotos},</if>
+            <if test="eggShape != null  and eggShape != ''">EGG_SHAPE = #{eggShape},</if>
+            <if test="eggMorphology != null  and eggMorphology != ''">EGG_MORPHOLOGY = #{eggMorphology},</if>
+            <if test="oocystMorphology != null  and oocystMorphology != ''">OOCYST_MORPHOLOGY = #{oocystMorphology},</if>
+            <if test="eggPattern != null  and eggPattern != ''">EGG_PATTERN = #{eggPattern},</if>
+            <if test="larvalMorphology != null  and larvalMorphology != ''">LARVAL_MORPHOLOGY = #{larvalMorphology},</if>
+            <if test="oneAge != null  and oneAge != ''">ONE_AGE = #{oneAge},</if>
+            <if test="twoAge != null  and twoAge != ''">TWO_AGE = #{twoAge},</if>
+            <if test="threeAge != null  and threeAge != ''">THREE_AGE = #{threeAge},</if>
+            <if test="foreAge != null  and foreAge != ''">FORE_AGE = #{foreAge},</if>
+            <if test="fiveAge != null  and fiveAge != ''">FIVE_AGE = #{fiveAge},</if>
+            <if test="sixAge != null  and sixAge != ''">SIX_AGE = #{sixAge},</if>
+            <if test="sixPhotos != null  and sixPhotos != ''">SIX_PHOTOS = #{sixPhotos},</if>
+            <if test="pupaMorphology != null  and pupaMorphology != ''">PUPA_MORPHOLOGY = #{pupaMorphology},</if>
+            <if test="pupaPhotos != null  and pupaPhotos != ''">PUPA_PHOTOS = #{pupaPhotos},</if>
+            <if test="biology != null  and biology != ''">BIOLOGY = #{biology},</if>
+            <if test="lifeHistory != null  and lifeHistory != ''">LIFE_HISTORY = #{lifeHistory},</if>
+            <if test="generationNumber != null ">GENERATION_NUMBER = #{generationNumber},</if>
+            <if test="winteringPlace != null  and winteringPlace != ''">WINTERING_PLACE = #{winteringPlace},</if>
+            <if test="developmentalStage != null  and developmentalStage != ''">DEVELOPMENTAL_STAGE = #{developmentalStage},</if>
+            <if test="generalDescription != null  and generalDescription != ''">GENERAL_DESCRIPTION = #{generalDescription},</if>
+            <if test="circadianRhythm != null  and circadianRhythm != ''">CIRCADIAN_RHYTHM = #{circadianRhythm},</if>
+            <if test="feedingHabits != null  and feedingHabits != ''">FEEDING_HABITS = #{feedingHabits},</if>
+            <if test="taxis != null  and taxis != ''">TAXIS = #{taxis},</if>
+            <if test="clustering != null  and clustering != ''">CLUSTERING = #{clustering},</if>
+            <if test="relocation != null  and relocation != ''">RELOCATION = #{relocation},</if>
+            <if test="lifeTable != null  and lifeTable != ''">LIFE_TABLE = #{lifeTable},</if>
+            <if test="conventionalDescription != null  and conventionalDescription != ''">CONVENTIONAL_DESCRIPTION = #{conventionalDescription},</if>
+            <if test="planDecription != null  and planDecription != ''">PLAN_DECRIPTION = #{planDecription},</if>
+            <if test="naturalEnemy != null  and naturalEnemy != ''">NATURAL_ENEMY = #{naturalEnemy},</if>
+            <if test="climate != null  and climate != ''">CLIMATE = #{climate},</if>
+            <if test="climaticZone != null  and climaticZone != ''">CLIMATIC_ZONE = #{climaticZone},</if>
+            <if test="moistureCondition != null  and moistureCondition != ''">MOISTURE_CONDITION = #{moistureCondition},</if>
+            <if test="temperature != null  and temperature != ''">TEMPERATURE = #{temperature},</if>
+            <if test="eggTemperature != null  and eggTemperature != ''">EGG_TEMPERATURE = #{eggTemperature},</if>
+            <if test="eggWater != null  and eggWater != ''">EGG_WATER = #{eggWater},</if>
+            <if test="ovipositionRecognition != null  and ovipositionRecognition != ''">OVIPOSITION_RECOGNITION = #{ovipositionRecognition},</if>
+            <if test="soilCharacteristics != null  and soilCharacteristics != ''">SOIL_CHARACTERISTICS = #{soilCharacteristics},</if>
+            <if test="groundCoverage != null  and groundCoverage != ''">GROUND_COVERAGE = #{groundCoverage},</if>
+            <if test="soilCompactness != null  and soilCompactness != ''">SOIL_COMPACTNESS = #{soilCompactness},</if>
+            <if test="phValue != null  and phValue != ''">PH_VALUE = #{phValue},</if>
+            <if test="salinity != null  and salinity != ''">SALINITY = #{salinity},</if>
+            <if test="waterContent != null  and waterContent != ''">WATER_CONTENT = #{waterContent},</if>
+            <if test="spread != null  and spread != ''">SPREAD = #{spread},</if>
+            <if test="definitionRelocation != null  and definitionRelocation != ''">DEFINITION_RELOCATION = #{definitionRelocation},</if>
+            <if test="migrationFactors != null  and migrationFactors != ''">MIGRATION_FACTORS = #{migrationFactors},</if>
+            <if test="migrationAbility != null  and migrationAbility != ''">MIGRATION_ABILITY = #{migrationAbility},</if>
+            <if test="transfer != null  and transfer != ''">TRANSFER = #{transfer},</if>
+            <if test="migrationDefinition != null  and migrationDefinition != ''">MIGRATION_DEFINITION = #{migrationDefinition},</if>
+            <if test="transferFactors != null  and transferFactors != ''">TRANSFER_FACTORS = #{transferFactors},</if>
+            <if test="naturalDiffusion != null  and naturalDiffusion != ''">NATURAL_DIFFUSION = #{naturalDiffusion},</if>
+            <if test="food != null  and food != ''">FOOD = #{food},</if>
+            <if test="spawningGround != null  and spawningGround != ''">SPAWNING_GROUND = #{spawningGround},</if>
+            <if test="stimulate != null  and stimulate != ''">STIMULATE = #{stimulate},</if>
+            <if test="migrationPower != null  and migrationPower != ''">MIGRATION_POWER = #{migrationPower},</if>
+            <if test="spreadChannel != null  and spreadChannel != ''">SPREAD_CHANNEL = #{spreadChannel},</if>
+            <if test="hostPlant != null  and hostPlant != ''">HOST_PLANT = #{hostPlant},</if>
+            <if test="hazardPhotos != null  and hazardPhotos != ''">HAZARD_PHOTOS = #{hazardPhotos},</if>
+            <if test="damageDegree != null  and damageDegree != ''">DAMAGE_DEGREE = #{damageDegree},</if>
+            <if test="threeIntake != null ">THREE_INTAKE = #{threeIntake},</if>
+            <if test="threeBigIntake != null ">THREE_BIG_INTAKE = #{threeBigIntake},</if>
+            <if test="adultFoodIntake != null ">ADULT_FOOD_INTAKE = #{adultFoodIntake},</if>
+            <if test="foodRation != null ">FOOD_RATION = #{foodRation},</if>
+            <if test="threeLoss != null ">THREE_LOSS = #{threeLoss},</if>
+            <if test="threeBigLoss != null ">THREE_BIG_LOSS = #{threeBigLoss},</if>
+            <if test="bigLoss != null ">BIG_LOSS = #{bigLoss},</if>
+            <if test="historicalModel != null  and historicalModel != ''">HISTORICAL_MODEL = #{historicalModel},</if>
+            <if test="occurrenceModel != null  and occurrenceModel != ''">OCCURRENCE_MODEL = #{occurrenceModel},</if>
+            <if test="developmentModel != null  and developmentModel != ''">DEVELOPMENT_MODEL = #{developmentModel},</if>
+            <if test="calendarModel != null  and calendarModel != ''">CALENDAR_MODEL = #{calendarModel},</if>
+            <if test="ctfjycfModel != null  and ctfjycfModel != ''">CTFJYCF_MODEL = #{ctfjycfModel},</if>
+            <if test="pjfyjdycfModel != null  and pjfyjdycfModel != ''">PJFYJDYCF_MODEL = #{pjfyjdycfModel},</if>
+            <if test="lcfyfjycfModel != null  and lcfyfjycfModel != ''">LCFYFJYCF_MODEL = #{lcfyfjycfModel},</if>
+            <if test="qjycModel != null  and qjycModel != ''">QJYC_MODEL = #{qjycModel},</if>
+            <if test="yxjwycModel != null  and yxjwycModel != ''">YXJWYC_MODEL = #{yxjwycModel},</if>
+            <if test="gctyxjwModel != null  and gctyxjwModel != ''">GCTYXJW_MODEL = #{gctyxjwModel},</if>
+            <if test="whqycModel != null  and whqycModel != ''">WHQYC_MODEL = #{whqycModel},</if>
+            <if test="xgtjyc != null  and xgtjyc != ''">XGTJYC = #{xgtjyc},</if>
+            <if test="fslycModel != null  and fslycModel != ''">FSLYC_MODEL = #{fslycModel},</if>
+            <if test="yxjsycf != null  and yxjsycf != ''">YXJSYCF = #{yxjsycf},</if>
+            <if test="qhtycf != null  and qhtycf != ''">QHTYCF = #{qhtycf},</if>
+            <if test="jwtrhslModel != null  and jwtrhslModel != ''">JWTRHSL_MODEL = #{jwtrhslModel},</if>
+            <if test="dmzbqxyzModel != null  and dmzbqxyzModel != ''">DMZBQXYZ_MODEL = #{dmzbqxyzModel},</if>
+            <if test="jyzsycf != null  and jyzsycf != ''">JYZSYCF = #{jyzsycf},</if>
+            <if test="xtzbycf != null  and xtzbycf != ''">XTZBYCF = #{xtzbycf},</if>
+            <if test="qfhcycModel != null  and qfhcycModel != ''">QFHCYC_MODEL = #{qfhcycModel},</if>
+            <if test="zhcdycModel != null  and zhcdycModel != ''">ZHCDYC_MODEL = #{zhcdycModel},</if>
+            <if test="controlIndex != null  and controlIndex != ''">CONTROL_INDEX = #{controlIndex},</if>
+            <if test="economicThreshold != null  and economicThreshold != ''">ECONOMIC_THRESHOLD = #{economicThreshold},</if>
+            <if test="ecologicalThreshold != null  and ecologicalThreshold != ''">ECOLOGICAL_THRESHOLD = #{ecologicalThreshold},</if>
+            <if test="economicEcologicalThreshold != null  and economicEcologicalThreshold != ''">ECONOMIC_ECOLOGICAL_THRESHOLD = #{economicEcologicalThreshold},</if>
+            <if test="fzffTable != null  and fzffTable != ''">FZFF_TABLE = #{fzffTable},</if>
+            <if test="hxfzSetUp != null  and hxfzSetUp != ''">HXFZ_SET_UP = #{hxfzSetUp},</if>
+            <if test="swfzSetUp != null  and swfzSetUp != ''">SWFZ_SET_UP = #{swfzSetUp},</if>
+            <if test="stzlSetUp != null  and stzlSetUp != ''">STZL_SET_UP = #{stzlSetUp},</if>
+            <if test="wlfzSetUp != null  and wlfzSetUp != ''">WLFZ_SET_UP = #{wlfzSetUp},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="createTime != null  and createTime != ''">CREATE_TIME = #{createTime},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY = #{updateBy},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCRatpestKnowledgeById" parameterType="Long">
+        delete from c_ratpest_knowledge where ID = #{id}
+    </delete>
+
+    <delete id="deleteCRatpestKnowledgeByIds" parameterType="String">
+        delete from c_ratpest_knowledge where ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="CRatpestKnowledgeUpdatePhoto" parameterType="String">
+    update c_ratpest_knowledge set ADULT_PATTERN=null where id=#{id}
+    </update>
+
+    <update id="CRatpestKnowledgeUpdatesixPhotos" parameterType="String">
+    update c_ratpest_knowledge set SIX_PHOTOS="" where id=#{id}
+    </update>
+
+    <update id="CRatpestKnowledgeUpdatepupaPhotos" parameterType="String">
+    update c_ratpest_knowledge set PUPA_PHOTOS="" where id=#{id}
+    </update>
+
+    <update id="CRatpestKnowledgeUpdatehazardPhotos" parameterType="String">
+    update c_ratpest_knowledge set HAZARD_PHOTOS="" where id=#{id}
+    </update>
+
+    <update id="CRatpestKnowledgeUpdatenationalMap" parameterType="String">
+    update c_ratpest_knowledge set NATIONAL_MAP="" where id=#{id}
+    </update>
+
+    <update id="CRatpestKnowledgeUpdateprovincialMap" parameterType="String">
+    update c_ratpest_knowledge set PROVINCIAL_MAP="" where id=#{id}
+    </update>
+
+
+
+</mapper>

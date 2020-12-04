@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('查看调拨单')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-allocation-edit" th:object="${kAllocation}">
+        <input id="shId" name="id" th:field="*{id}" type="hidden">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">调拨单号：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${kAllocation.oddnumber}" class="form-control-static" type="text" disabled="disabled"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">物资名称：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${kAllocation.name}" class="form-control-static" type="text" disabled="disabled"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">申请地区：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${kAllocation.applicationArea}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">调拨地区：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${kAllocation.allocationArea}" class="form-control-static" type="text" disabled="disabled"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <label class="col-sm-3 control-label">调出时间：</label>
+                <div class="col-sm-8">
+                    <div name="creatTime" th:text="${#dates.format(kAllocation.allocationTime,'yyyy-MM-dd')}" class=" form-control-static"  style="font-weight: bold"  type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">接货人：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${kAllocation.receiver}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <label class="col-sm-3 control-label">送货人：</label>
+                <div class="col-sm-8">
+                    <div   th:text="${kAllocation.deliveryman}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">接货人联系方式：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${kAllocation.receiverNumber}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <label class="col-sm-3 control-label">送货人联系方式：</label>
+                <div class="col-sm-8">
+                    <div   th:text="${kAllocation.deliverymanNumber}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">货物编码：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${kAllocation.cargoCode}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <label class="col-sm-3 control-label">货物数量：</label>
+                <div class="col-sm-8">
+                    <div   th:text="${kAllocation.cargoNumber}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">货物金额：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${kAllocation.cargoMoney}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <label class="col-sm-3 control-label">货物名称：</label>
+                <div class="col-sm-8">
+                    <div   th:text="${kAllocation.cargoName}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">调拨单状态：</label>
+                    <div class="col-sm-8">
+                        <div   th:text="${kAllocation.status}" class="form-control-static" type="text" disabled="disabled"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-primary" th:onclick="qr()"  ><i class="fa fa-check"></i>确认调拨</button>&nbsp;
+        <button type="button" class="btn btn-sm btn-primary" th:onclick="bh()"  ><i class="fa fa-check"></i>驳回</button>&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script type="text/javascript">
+    var prefix = ctx + "system/allocationSh";
+    $("#form-allocation-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-allocation-edit').serialize());
+        }
+    }
+
+    function bh() {
+        var id=$("#shId").val();
+        $.operate.save(prefix + "/bh", {"id": id});
+
+        /*$.modal.confirm("确认要驳回吗？", function () {
+        })*/
+    }
+
+    function qr() {
+       var id= $("#shId").val();
+
+        $.modal.confirm("确认要调拨吗？", function () {
+            $.operate.save(prefix + "/sh", {"id": id});
+        })
+    }
+
+    $("input[name='allocationTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+</script>
+</body>
+</html>

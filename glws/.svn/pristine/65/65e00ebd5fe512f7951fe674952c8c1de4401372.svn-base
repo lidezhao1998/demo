@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.caiji.mapper.CTaskScnyMapper">
+    
+    <resultMap type="CTaskScny" id="CTaskScnyResult">
+        <result property="id"    column="ID"    />
+        <result property="number"    column="NUMBER"    />
+        <result property="year"    column="YEAR"    />
+        <result property="week"    column="WEEK"    />
+        <result property="province"    column="PROVINCE"    />
+        <result property="city"    column="CITY"    />
+        <result property="county"    column="COUNTY"    />
+        <result property="type"    column="TYPE"    />
+        <result property="projectType"    column="PROJECT_TYPE"    />
+        <result property="pesticide"    column="PESTICIDE"    />
+        <result property="manufacturer"    column="MANUFACTURER"    />
+        <result property="pesticidePrice"    column="PESTICIDE_PRICE"    />
+        <result property="orderQuantity"    column="ORDER_QUANTITY"    />
+        <result property="fundsUsed"    column="FUNDS_USED"    />
+        <result property="controlDosage"    column="CONTROL_DOSAGE"    />
+        <result property="muDosage"    column="MU_DOSAGE"    />
+        <result property="chemistryControl"    column="CHEMISTRY_CONTROL"    />
+        <result property="total"    column="TOTAL"    />
+        <result property="remarks"    column="REMARKS"    />
+        <result property="creatTime"    column="CREAT_TIME"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="status"    column="STATUS"    />
+        <result property="code"    column="CODE"    />
+        <result property="weekTime" column="WEEKTIME"/>
+
+    </resultMap>
+
+    <sql id="selectCTaskScnyVo">
+        select ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY, TYPE, PROJECT_TYPE, PESTICIDE, MANUFACTURER, PESTICIDE_PRICE, ORDER_QUANTITY, FUNDS_USED, CONTROL_DOSAGE, MU_DOSAGE, CHEMISTRY_CONTROL, TOTAL, REMARKS, CREAT_TIME, UPDATE_TIME, CREATE_BY, STATUS,CODE,WEEKTIME from c_task_scny
+    </sql>
+
+    <sql id="selectCTaskSumScnyVo">
+    select ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY, TYPE, PROJECT_TYPE, PESTICIDE, MANUFACTURER, sum(PESTICIDE_PRICE)PESTICIDE_PRICE, sum(ORDER_QUANTITY)ORDER_QUANTITY, sum(FUNDS_USED)FUNDS_USED, sum(CONTROL_DOSAGE)CONTROL_DOSAGE, sum(MU_DOSAGE)MU_DOSAGE, sum(CHEMISTRY_CONTROL)CHEMISTRY_CONTROL, PESTICIDE_PRICE + ORDER_QUANTITY + FUNDS_USED + CONTROL_DOSAGE + MU_DOSAGE + CHEMISTRY_CONTROL AS TOTAL, REMARKS, CREAT_TIME, UPDATE_TIME, CREATE_BY, STATUS,WEEKTIME from c_task_scny
+  </sql>
+
+    <select id="selectCTaskScnyList" parameterType="CTaskScny" resultMap="CTaskScnyResult">
+        <include refid="selectCTaskSumScnyVo"/>
+        <where>  
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY like concat('%',#{city},'%')</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="projectType != null  and projectType != ''"> and PROJECT_TYPE = #{projectType}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+        </where>
+        group by county
+    </select>
+
+    <!--省级用户登录后展示页面-->
+    <select id="selectCTaskScnyParentList" parameterType="CTaskScny" resultMap="CTaskScnyResult">
+        <include refid="selectCTaskSumScnyVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+        <!--    <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>-->
+            <if test="city != null  and city != ''"> and CITY = #{city}</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="projectType != null  and projectType != ''"> and PROJECT_TYPE = #{projectType}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+        </where>
+        group  by province
+
+    </select>
+
+
+    <select id="selectCTaskScnyCityList" parameterType="CTaskScny" resultMap="CTaskScnyResult">
+        <include refid="selectCTaskSumScnyVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''">and PROVINCE like concat('%',#{province},'%')</if>
+            <if test="city != null  and city != ''"> and CITY like concat(#{city},'%')</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="projectType != null  and projectType != ''"> and PROJECT_TYPE = #{projectType}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <!--<if test="code != null  and code != ''"> and CODE = #{code}</if>-->
+        </where>
+        group  by city
+    </select>
+
+    <!-- 省级列表详情展示区县级列表 -->
+    <select id="selectCTaskScnyAreaListByProvince" parameterType="String" resultMap="CTaskScnyResult">
+        <include refid="selectCTaskSumScnyVo"/>
+
+        where PROVINCE = #{province} group by county
+    </select>
+
+    <!-- 市级列表详情展示区县级列表 -->
+    <select id="selectCTaskScnyAreaListByCity" parameterType="String" resultMap="CTaskScnyResult">
+        <include refid="selectCTaskSumScnyVo"/>
+        where CITY = #{city}
+        group by county
+    </select>
+
+    <select id="selectCTaskScnyAreaList" parameterType="CTaskScny" resultMap="CTaskScnyResult">
+        <include refid="selectCTaskSumScnyVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="city != null  and city != ''"> and CITY like concat('%',#{city},'%')</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <!--<if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="projectType != null  and projectType != ''"> and PROJECT_TYPE = #{projectType}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>-->
+        </where>
+        group  by year order by year
+    </select>
+
+    
+    <select id="selectCTaskScnyById" parameterType="Long" resultMap="CTaskScnyResult">
+        <include refid="selectCTaskScnyVo"/>
+        where ID = #{id}
+    </select>
+
+    <!--展示列表-->
+    <select id="selectCTaskScnyParentList222"  resultMap="CTaskScnyResult">
+        select ID, NUMBER, YEAR, WEEK, PROVINCE, CITY, COUNTY, TYPE, PROJECT_TYPE, PESTICIDE, MANUFACTURER, sum(PESTICIDE_PRICE)PESTICIDE_PRICE, sum(ORDER_QUANTITY)ORDER_QUANTITY, sum(FUNDS_USED)FUNDS_USED, sum(CONTROL_DOSAGE)CONTROL_DOSAGE, sum(MU_DOSAGE)MU_DOSAGE, sum(CHEMISTRY_CONTROL)CHEMISTRY_CONTROL, TOTAL, REMARKS, CREAT_TIME, UPDATE_TIME, CREATE_BY, STATUS from c_task_scny GROUP BY province
+    </select>
+
+        
+    <insert id="insertCTaskScny" parameterType="CTaskScny" useGeneratedKeys="true" keyProperty="id">
+        insert into c_task_scny
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER,</if>
+            <if test="year != null  and year != ''">YEAR,</if>
+            <if test="week != null  and week != ''">WEEK,</if>
+            <if test="province != null  and province != ''">PROVINCE,</if>
+            <if test="city != null  and city != ''">CITY,</if>
+            <if test="county != null  and county != ''">COUNTY,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="projectType != null  and projectType != ''">PROJECT_TYPE,</if>
+            <if test="pesticide != null  and pesticide != ''">PESTICIDE,</if>
+            <if test="manufacturer != null  and manufacturer != ''">MANUFACTURER,</if>
+            <if test="pesticidePrice != null  and pesticidePrice != ''">PESTICIDE_PRICE,</if>
+            <if test="orderQuantity != null  and orderQuantity != ''">ORDER_QUANTITY,</if>
+            <if test="fundsUsed != null  and fundsUsed != ''">FUNDS_USED,</if>
+            <if test="controlDosage != null  and controlDosage != ''">CONTROL_DOSAGE,</if>
+            <if test="muDosage != null  and muDosage != ''">MU_DOSAGE,</if>
+            <if test="chemistryControl != null  and chemistryControl != ''">CHEMISTRY_CONTROL,</if>
+            <if test="creatTime != null ">CREAT_TIME,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="weekTime != null ">WEEKTIME,</if>
+            <if test="remarks != null  and remarks != ''">REMARKS,</if>
+
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="number != null  and number != ''">#{number},</if>
+            <if test="year != null  and year != ''">#{year},</if>
+            <if test="week != null  and week != ''">#{week},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="county != null  and county != ''">#{county},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="projectType != null  and projectType != ''">#{projectType},</if>
+            <if test="pesticide != null  and pesticide != ''">#{pesticide},</if>
+            <if test="manufacturer != null  and manufacturer != ''">#{manufacturer},</if>
+            <if test="pesticidePrice != null  and pesticidePrice != ''">#{pesticidePrice},</if>
+            <if test="orderQuantity != null  and orderQuantity != ''">#{orderQuantity},</if>
+            <if test="fundsUsed != null  and fundsUsed != ''">#{fundsUsed},</if>
+            <if test="controlDosage != null  and controlDosage != ''">#{controlDosage},</if>
+            <if test="muDosage != null  and muDosage != ''">#{muDosage},</if>
+            <if test="chemistryControl != null  and chemistryControl != ''">#{chemistryControl},</if>
+            <if test="creatTime != null ">#{creatTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="weekTime != null">#{weekTime},</if>
+            <if test="remarks != null  and remarks != ''">#{remarks},</if>
+
+
+        </trim>
+    </insert>
+
+    <update id="updateCTaskScny" parameterType="CTaskScny">
+        update c_task_scny
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER = #{number},</if>
+            <if test="year != null  and year != ''">YEAR = #{year},</if>
+            <if test="week != null  and week != ''">WEEK = #{week},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="city != null  and city != ''">CITY = #{city},</if>
+            <if test="county != null  and county != ''">COUNTY = #{county},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="projectType != null  and projectType != ''">PROJECT_TYPE = #{projectType},</if>
+            <if test="pesticide != null  and pesticide != ''">PESTICIDE = #{pesticide},</if>
+            <if test="manufacturer != null  and manufacturer != ''">MANUFACTURER = #{pesticide},</if>
+            <if test="pesticidePrice != null  and pesticidePrice != ''">PESTICIDE_PRICE = #{pesticidePrice},</if>
+            <if test="orderQuantity != null  and orderQuantity != ''">ORDER_QUANTITY = #{orderQuantity},</if>
+            <if test="fundsUsed != null  and fundsUsed != ''">FUNDS_USED = #{fundsUsed},</if>
+            <if test="controlDosage != null  and controlDosage != ''">CONTROL_DOSAGE = #{controlDosage},</if>
+            <if test="muDosage != null  and muDosage != ''">MU_DOSAGE = #{muDosage},</if>
+            <if test="chemistryControl != null  and chemistryControl != ''">CHEMISTRY_CONTROL = #{chemistryControl},</if>
+            <if test="creatTime != null ">CREAT_TIME = #{creatTime},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="weekTime != null ">WEEKTIME = #{weekTime},</if>
+            <if test="remarks != null  and remarks != ''">REMARKS = #{remarks},</if>
+
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteCTaskScnyById" parameterType="Long">
+        delete from c_task_scny where ID = #{id}
+    </delete>
+
+    <delete id="deleteCTaskScnyByIds" parameterType="String">
+        delete from c_task_scny where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateCTaskSczjRoleName" parameterType="CTaskScny">
+        update c_task_scny
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="number != null  and number != ''">NUMBER = #{number},</if>
+            <if test="year != null  and year != ''">YEAR = #{year},</if>
+            <if test="week != null  and week != ''">WEEK = #{week},</if>
+            <if test="province != null  and province != ''">PROVINCE = #{province},</if>
+            <if test="city != null  and city != ''">CITY = #{city},</if>
+            <if test="county != null  and county != ''">COUNTY = #{county},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="projectType != null  and projectType != ''">PROJECT_TYPE = #{projectType},</if>
+            <if test="pesticide != null  and pesticide != ''">PESTICIDE = #{pesticide},</if>
+
+            <if test="creatTime != null ">CREAT_TIME = #{creatTime},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="roleName != null  and roleName != ''">ROLENAME = #{roleName},</if>
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="weekTime != null ">WEEKTIME = #{weekTime},</if>
+
+
+        </trim>
+        where ID = #{id}
+    </update>
+</mapper>

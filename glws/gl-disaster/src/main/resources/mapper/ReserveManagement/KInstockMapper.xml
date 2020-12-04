@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.ReserveManagement.mapper.KInstockMapper">
+    
+    <resultMap type="KInstock" id="KInstockResult">
+        <result property="id"    column="ID"    />
+        <result property="name"    column="NAME"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="warehousingTime"    column="WAREHOUSING_TIME"    />
+        <result property="warehousingMode"    column="WAREHOUSING_MODE"    />
+        <result property="type"    column="TYPE"    />
+        <result property="receiverNumber"    column="RECEIVER_NUMBER"    />
+        <result property="deliveryPerson"    column="DELIVERY_PERSON"    />
+        <result property="reasonNumber"    column="REASON_NUMBER"    />
+        <result property="goodsNumber"    column="GOODS_NUMBER"    />
+        <result property="goodsMoney"    column="GOODS_MONEY"    />
+        <result property="reason"    column="REASON"    />
+        <result property="status"    column="STATUS"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="createName"    column="CREATE_NAME"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="updateName"    column="UPDATE_NAME"    />
+        <result property="reserveId"    column="RESERVE_ID"    />
+        <result property="model"    column="MODEL"    />
+        <result property="manufactor"    column="MANUFACTOR"    />
+        <result property="manufactorName"    column="MANUFACTOR_NAME"    />
+        <result property="allocationId"    column="ALLOCATION_ID"    />
+        <result property="basicId"    column="BASIC_ID"    />
+
+
+    </resultMap>
+
+    <sql id="selectKInstockVo">
+        select ID, NAME, ADDRESS, WAREHOUSING_TIME,BASIC_ID,ALLOCATION_ID WAREHOUSING_MODE, TYPE, RECEIVER_NUMBER, DELIVERY_PERSON, REASON_NUMBER, GOODS_NUMBER, GOODS_MONEY, REASON, STATUS, CREATE_TIME, CREATE_NAME, UPDATE_TIME, UPDATE_NAME, RESERVE_ID,MANUFACTOR,MODEL from k_instock
+    </sql>
+
+
+    <sql id="selectKInstockCountVo">
+        select ID, NAME, sum(GOODS_NUMBER)GOODS_NUMBER,  STATUS from k_instock
+    </sql>
+
+
+    <!--入库列表-->
+    <select id="selectKInstockList" parameterType="KInstock" resultMap="KInstockResult">
+        <include refid="selectKInstockVo"/>
+        <where>
+            <if test="address != null and address != ''"> and ADDRESS = #{address}</if>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="warehousingTime != null "> and WAREHOUSING_TIME = #{warehousingTime}</if>
+            <if test="warehousingMode != null  and warehousingMode != ''"> and WAREHOUSING_MODE = #{warehousingMode}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="receiverNumber != null "> and RECEIVER_NUMBER = #{receiverNumber}</if>
+            <if test="deliveryPerson != null  and deliveryPerson != ''"> and DELIVERY_PERSON = #{deliveryPerson}</if>
+            <if test="reasonNumber != null "> and REASON_NUMBER = #{reasonNumber}</if>
+            <if test="goodsNumber != null "> and GOODS_NUMBER = #{goodsNumber}</if>
+            <if test="goodsMoney != null "> and GOODS_MONEY = #{goodsMoney}</if>
+            <if test="reason != null  and reason != ''"> and REASON = #{reason}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="createName != null  and createName != ''"> and CREATE_NAME like concat('%', #{createName}, '%')</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="updateName != null  and updateName != ''"> and UPDATE_NAME like concat('%', #{updateName}, '%')</if>
+            <if test="reserveId != null "> and RESERVE_ID = #{reserveId}</if>
+            <if test="basicId != null "> and BASIC_ID = #{basicId}</if>
+            <if test="allocationId != null "> and ALLOCATION_ID = #{allocationId}</if>
+
+            <if test="params != null">
+                <if test="params.beginCreateTime!=null and params.beginCreateTime!=''">
+                    and    CREATE_TIME &gt;=#{params.beginCreateTime}
+                </if>
+                <if test="params.endCreateTime!=null and params.endCreateTime!=''">
+                    and   CREATE_TIME &lt;=DATE_ADD(#{params.endCreateTime},INTERVAL 1 DAY)
+                </if>
+            </if>
+          and  (status='1')
+
+        </where>
+        order by CREATE_TIME desc
+
+    </select>
+    <!--出库列表-->
+    <select id="selectKInstockListTwo" parameterType="KInstock" resultMap="KInstockResult">
+        <include refid="selectKInstockVo"/>
+        <where>
+            <if test="address != null and address != ''"> and ADDRESS = #{address}</if>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="warehousingTime != null "> and WAREHOUSING_TIME = #{warehousingTime}</if>
+            <if test="warehousingMode != null  and warehousingMode != ''"> and WAREHOUSING_MODE = #{warehousingMode}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="receiverNumber != null "> and RECEIVER_NUMBER = #{receiverNumber}</if>
+            <if test="deliveryPerson != null  and deliveryPerson != ''"> and DELIVERY_PERSON = #{deliveryPerson}</if>
+            <if test="reasonNumber != null "> and REASON_NUMBER = #{reasonNumber}</if>
+            <if test="goodsNumber != null "> and GOODS_NUMBER = #{goodsNumber}</if>
+            <if test="goodsMoney != null "> and GOODS_MONEY = #{goodsMoney}</if>
+            <if test="reason != null  and reason != ''"> and REASON = #{reason}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="createName != null  and createName != ''"> and CREATE_NAME like concat('%', #{createName}, '%')</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="updateName != null  and updateName != ''"> and UPDATE_NAME like concat('%', #{updateName}, '%')</if>
+            <if test="reserveId != null "> and RESERVE_ID = #{reserveId}</if>
+            <if test="basicId != null "> and BASIC_ID = #{basicId}</if>
+
+            and (status='2')
+
+        </where>
+    </select>
+
+
+    <!--调拨单列表-->
+    <select id="selectKInstockAllocationList" parameterType="KInstock" resultMap="KInstockResult">
+        <include refid="selectKInstockVo"/>
+        <where>
+            <if test="address != null and address != ''"> and ADDRESS = #{address}</if>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+            <if test="warehousingTime != null "> and WAREHOUSING_TIME = #{warehousingTime}</if>
+            <if test="warehousingMode != null  and warehousingMode != ''"> and WAREHOUSING_MODE = #{warehousingMode}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="receiverNumber != null "> and RECEIVER_NUMBER = #{receiverNumber}</if>
+            <if test="deliveryPerson != null  and deliveryPerson != ''"> and DELIVERY_PERSON = #{deliveryPerson}</if>
+            <if test="reasonNumber != null "> and REASON_NUMBER = #{reasonNumber}</if>
+            <if test="goodsNumber != null "> and GOODS_NUMBER = #{goodsNumber}</if>
+            <if test="goodsMoney != null "> and GOODS_MONEY = #{goodsMoney}</if>
+            <if test="reason != null  and reason != ''"> and REASON = #{reason}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="createName != null  and createName != ''"> and CREATE_NAME like concat('%', #{createName}, '%')</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="updateName != null  and updateName != ''"> and UPDATE_NAME like concat('%', #{updateName}, '%')</if>
+            <if test="reserveId != null "> and RESERVE_ID = #{reserveId}</if>
+            <if test="allocationId != null "> and ALLOCATION_ID = #{allocationId}</if>
+
+            and (status='3')
+
+        </where>
+    </select>
+
+
+
+    <!--如库列表物资分组计算合-->
+    <select id="selectKInstockListCount" parameterType="KInstock" resultMap="KInstockResult">
+        <include refid="selectKInstockCountVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and NAME like concat('%', #{name}, '%')</if>
+
+            <if test="goodsNumber != null "> and GOODS_NUMBER = #{goodsNumber}</if>
+
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+
+            and status='4'
+
+        </where>
+        group by name
+    </select>
+
+
+
+    <select id="selectKInstockById" parameterType="Long" resultMap="KInstockResult">
+        <include refid="selectKInstockVo"/>
+        where ID = #{id}
+    </select>
+
+    <insert id="insertKInstock" parameterType="KInstock">
+        insert into k_instock
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">ID,</if>
+            <if test="address != null  and address != ''">ADDRESS,</if>
+            <if test="name != null  and name != ''">NAME,</if>
+            <if test="warehousingTime != null ">WAREHOUSING_TIME,</if>
+            <if test="warehousingMode != null  and warehousingMode != ''">WAREHOUSING_MODE,</if>
+            <if test="type != null  and type != ''">TYPE,</if>
+            <if test="receiverNumber != null ">RECEIVER_NUMBER,</if>
+            <if test="deliveryPerson != null  and deliveryPerson != ''">DELIVERY_PERSON,</if>
+            <if test="reasonNumber != null ">REASON_NUMBER,</if>
+            <if test="goodsNumber != null ">GOODS_NUMBER,</if>
+            <if test="goodsMoney != null ">GOODS_MONEY,</if>
+            <if test="reason != null  and reason != ''">REASON,</if>
+            <if test="status != null  and status != ''">STATUS,</if>
+            CREATE_TIME,
+            <if test="createName != null  and createName != ''">CREATE_NAME,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+            <if test="updateName != null  and updateName != ''">UPDATE_NAME,</if>
+            <if test="reserveId != null ">RESERVE_ID,</if>
+            <if test="model != null  and model != ''">MODEL,</if>
+            <if test="manufactor != null  and manufactor != ''">MANUFACTOR,</if>
+            <if test="allocationId != null  and allocationId != ''">ALLOCATION_ID,</if>
+            <if test="basicId != null  and basicId != ''">BASIC_ID,</if>
+
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="warehousingTime != null ">#{warehousingTime},</if>
+            <if test="warehousingMode != null  and warehousingMode != ''">#{warehousingMode},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="receiverNumber != null ">#{receiverNumber},</if>
+            <if test=" deliveryPerson != null  and  deliveryPerson != ''">#{deliveryPerson},</if>
+            <if test="reasonNumber != null ">#{reasonNumber},</if>
+            <if test="goodsNumber != null ">#{goodsNumber},</if>
+            <if test="goodsMoney != null ">#{goodsMoney},</if>
+            <if test="reason != null  and reason != ''">#{reason},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            sysdate(),
+            <if test="createName != null  and createName != ''">#{createName},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateName != null  and updateName != ''">#{updateName},</if>
+            <if test="reserveId != null ">#{reserveId},</if>
+            <if test="model != null ">#{model},</if>
+            <if test="manufactor != null ">#{manufactor},</if>
+            <if test="allocationId != null ">#{allocationId},</if>
+            <if test="basicId != null ">#{basicId},</if>
+
+
+        </trim>
+    </insert>
+
+    <update id="updateKInstock" parameterType="KInstock">
+        update k_instock
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="address != null  and address != ''">ADDRESS = #{address},</if>
+
+            <if test="name != null  and name != ''">NAME = #{name},</if>
+            <if test="warehousingTime != null ">WAREHOUSING_TIME = #{warehousingTime},</if>
+            <if test="warehousingMode != null  and warehousingMode != ''">WAREHOUSING_MODE = #{warehousingMode},</if>
+            <if test="type != null  and type != ''">TYPE = #{type},</if>
+            <if test="receiverNumber != null ">RECEIVER_NUMBER = #{receiverNumber},</if>
+            <if test="deliveryPerson != null  and deliveryPerson != ''">DELIVERY_PERSON = #{deliveryPerson},</if>
+            <if test="reasonNumber != null ">REASON_NUMBER = #{reasonNumber},</if>
+            <if test="goodsNumber != null ">GOODS_NUMBER = #{goodsNumber},</if>
+            <if test="model != null ">MODEL = #{model},</if>
+            <if test="manufactor != null ">MANUFACTOR = #{manufactor},</if>
+
+            <if test="goodsMoney != null ">GOODS_MONEY = #{goodsMoney},</if>
+            <if test="reason != null  and reason != ''">REASON = #{reason},</if>
+            <if test="status != null  and status != ''">STATUS = #{status},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="createName != null  and createName != ''">CREATE_NAME = #{createName},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+            <if test="updateName != null  and updateName != ''">UPDATE_NAME = #{updateName},</if>
+            <if test="reserveId != null ">RESERVE_ID = #{reserveId},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteKInstockById" parameterType="Long">
+        delete from k_instock where ID = #{id}
+    </delete>
+
+    <delete id="deleteKInstockByIds" parameterType="String">
+        delete from k_instock where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--确认入库改变状态-->
+    <update id="updateInstock" parameterType="Long">
+        update  k_instock set status='2' where ID=#{instockId}
+    </update>
+    <!--确认出库改变状态-->
+    <update id="updateOutbound" parameterType="Long">
+        update  k_instock set status='4' where ID=#{instockId}
+    </update>
+
+</mapper>

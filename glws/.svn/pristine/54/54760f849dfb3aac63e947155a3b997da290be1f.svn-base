@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TTaskBuildMapper">
+
+    <resultMap type="TTaskReport" id="TTaskReportResult">
+        <result property="reportId"    column="REPORT_ID"    />
+        <result property="resolveId"    column="RESOLVE_ID"    />
+        <result property="year"    column="YEAR"    />
+        <result property="province"    column="PROVINCE"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="addressId"    column="ADDRESS_ID"    />
+        <result property="timeScale"    column="TIME_SCALE"    />
+        <result property="jmSize"    column="JM_SIZE"    />
+        <result property="jmMoney"    column="JM_MONEY"    />
+        <result property="xmSize"    column="XM_SIZE"    />
+        <result property="xmMoney"    column="XM_MONEY"    />
+        <result property="hqlxSize"    column="HQLX_SIZE"    />
+        <result property="hqlxMoney"    column="HQLX_MONEY"    />
+        <result property="smhzlSize"    column="SMHZL_SIZE"    />
+        <result property="smhzlMoney"    column="SMHZL_MONEY"    />
+        <result property="thcyglSize"    column="THCYGL_SIZE"    />
+        <result property="thcyglMoney"    column="THCYGL_MONEY"    />
+        <result property="rgscdSize"    column="RGSCD_SIZE"    />
+        <result property="rgscdMoney"    column="RGSCD_MONEY"    />
+        <result property="hspjSize"    column="HSPJ_SIZE"    />
+        <result property="hspjMoney"    column="HSPJ_MONEY"    />
+        <result property="httSize"    column="HTT_SIZE"    />
+        <result property="httMoney"    column="HTT_MONEY"    />
+        <result property="dhcSize"    column="DHC_SIZE"    />
+        <result property="dhcMoney"    column="DHC_MONEY"    />
+        <result property="ykcyzlSize"    column="YKCYZL_SIZE"    />
+        <result property="ykcyzlMoney"    column="YKCYZL_MONEY"    />
+        <result property="zyMoney"    column="ZY_MONEY"    />
+        <result property="dfMoney"    column="DF_MONEY"    />
+        <result property="startTime"    column="START_TIME"    />
+        <result property="endTime"    column="END_TIME"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+        <result property="updateBy"    column="UPDATE_BY"    />
+        <result property="status"    column="STATUS"    />
+        <result property="delStatus"    column="DEL_STATUS"    />
+        <result property="auditId"    column="AUDIT_ID"    />
+        <result property="auditName"    column="AUDIT_NAME"    />
+        <result property="auditTime"    column="AUDIT_TIME"    />
+        <result property="auditStatus"    column="AUDIT_STATUS"    />
+    </resultMap>
+
+    <sql id="selectTTaskReportVo">
+        select REPORT_ID, RESOLVE_ID, YEAR, PROVINCE, ADDRESS, ADDRESS_ID, TIME_SCALE, JM_SIZE, JM_MONEY, XM_SIZE, XM_MONEY, HQLX_SIZE, HQLX_MONEY, SMHZL_SIZE, SMHZL_MONEY, THCYGL_SIZE, THCYGL_MONEY, RGSCD_SIZE, RGSCD_MONEY, HSPJ_SIZE, HSPJ_MONEY, HTT_SIZE, HTT_MONEY, DHC_SIZE, DHC_MONEY, YKCYZL_SIZE, YKCYZL_MONEY, ZY_MONEY, DF_MONEY, START_TIME, END_TIME, CREATE_TIME, CREATE_BY, UPDATE_TIME, UPDATE_BY, STATUS, DEL_STATUS, AUDIT_ID, AUDIT_NAME, AUDIT_TIME, AUDIT_STATUS from t_task_report group by PROVINCE
+    </sql>
+
+    <select id="selectTTaskReportList" parameterType="TTaskReport" resultMap="TTaskReportResult">
+        <include refid="selectTTaskReportVo"/>
+        <where>
+            <if test="resolveId != null "> and RESOLVE_ID = #{resolveId}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="province != null  and province != ''"> and PROVINCE = #{province}</if>
+            <if test="address != null  and address != ''"> and ADDRESS = #{address}</if>
+            <if test="addressId != null  and addressId != ''"> and ADDRESS_ID = #{addressId}</if>
+            <if test="timeScale != null  and timeScale != ''"> and TIME_SCALE = #{timeScale}</if>
+            <if test="jmSize != null "> and JM_SIZE = #{jmSize}</if>
+            <if test="jmMoney != null "> and JM_MONEY = #{jmMoney}</if>
+            <if test="xmSize != null "> and XM_SIZE = #{xmSize}</if>
+            <if test="xmMoney != null "> and XM_MONEY = #{xmMoney}</if>
+            <if test="hqlxSize != null "> and HQLX_SIZE = #{hqlxSize}</if>
+            <if test="hqlxMoney != null "> and HQLX_MONEY = #{hqlxMoney}</if>
+            <if test="smhzlSize != null "> and SMHZL_SIZE = #{smhzlSize}</if>
+            <if test="smhzlMoney != null "> and SMHZL_MONEY = #{smhzlMoney}</if>
+            <if test="thcyglSize != null "> and THCYGL_SIZE = #{thcyglSize}</if>
+            <if test="thcyglMoney != null "> and THCYGL_MONEY = #{thcyglMoney}</if>
+            <if test="rgscdSize != null "> and RGSCD_SIZE = #{rgscdSize}</if>
+            <if test="rgscdMoney != null "> and RGSCD_MONEY = #{rgscdMoney}</if>
+            <if test="hspjSize != null "> and HSPJ_SIZE = #{hspjSize}</if>
+            <if test="hspjMoney != null "> and HSPJ_MONEY = #{hspjMoney}</if>
+            <if test="httSize != null "> and HTT_SIZE = #{httSize}</if>
+            <if test="httMoney != null "> and HTT_MONEY = #{httMoney}</if>
+            <if test="dhcSize != null "> and DHC_SIZE = #{dhcSize}</if>
+            <if test="dhcMoney != null "> and DHC_MONEY = #{dhcMoney}</if>
+            <if test="ykcyzlSize != null "> and YKCYZL_SIZE = #{ykcyzlSize}</if>
+            <if test="ykcyzlMoney != null "> and YKCYZL_MONEY = #{ykcyzlMoney}</if>
+            <if test="zyMoney != null "> and ZY_MONEY = #{zyMoney}</if>
+            <if test="dfMoney != null "> and DF_MONEY = #{dfMoney}</if>
+            <if test="startTime != null "> and START_TIME = #{startTime}</if>
+            <if test="endTime != null "> and END_TIME = #{endTime}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="updateBy != null "> and UPDATE_BY = #{updateBy}</if>
+            <if test="status != null  and status != ''"> and STATUS = #{status}</if>
+            <if test="delStatus != null  and delStatus != ''"> and DEL_STATUS = #{delStatus}</if>
+            <if test="auditId != null "> and AUDIT_ID = #{auditId}</if>
+            <if test="auditName != null  and auditName != ''"> and AUDIT_NAME like concat('%', #{auditName}, '%')</if>
+            <if test="auditTime != null "> and AUDIT_TIME = #{auditTime}</if>
+            <if test="auditStatus != null  and auditStatus != ''"> and AUDIT_STATUS = #{auditStatus}</if>
+        </where>
+    </select>
+
+    <select id="selectTTaskReportById" parameterType="Long" resultMap="TTaskReportResult">
+        <include refid="selectTTaskReportVo"/>
+        where REPORT_ID = #{reportId}
+    </select>
+
+
+
+</mapper>

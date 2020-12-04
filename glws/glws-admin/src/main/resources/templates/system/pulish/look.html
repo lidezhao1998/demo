@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改退牧还草工程任务发布')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-publish-edit" th:object="${tTaskPublish}">
+        <input name="publishId" th:field="*{publishId}" type="hidden">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>年份：</label>
+                    <div class="col-sm-8">
+                        <input name="year" th:field="*{year}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>省份：</label>
+                    <div class="col-sm-8">
+                        <input name="province" th:field="*{province}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>禁牧建设规模：</label>
+                    <div class="col-sm-8">
+                        <input name="jmSize" th:field="*{jmSize}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>禁牧建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="jmMoney" th:field="*{jmMoney}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>休牧建设规模：</label>
+                    <div class="col-sm-8">
+                        <input name="xmSize" th:field="*{xmSize}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>休牧建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="xmMoney" th:field="*{xmMoney}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>划区轮休建设规模：</label>
+                    <div class="col-sm-8">
+                        <input name="hqlxSize" th:field="*{hqlxSize}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>划区轮休建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="hqlxMoney" th:field="*{hqlxMoney}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>石漠化治理建设规模：：</label>
+                    <div class="col-sm-8">
+                        <input name="smhzlSize" th:field="*{smhzlSize}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>石漠化治理建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="smhzlMoney" th:field="*{smhzlMoney}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>围栏合计：</label>
+                    <div class="col-sm-8">
+                        <input id="hj" name="hj"  class="form-control" type="text" maxlength="30" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>投资合计：</label>
+                    <div class="col-sm-8">
+                        <input name="tzhj" id="tzhj" class="form-control" type="text" disabled="disabled" >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="form-header h4">其他部分</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>退化草原改良建设规模：</label>
+                    <div class="col-sm-8">
+                        <input name="thzyglSize" th:field="*{thzyglSize}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>退化草原改良建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="thzyglMoney" th:field="*{thzyglMoney}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>人工饲草地建设规模：</label>
+                    <div class="col-sm-8">
+                        <input name="rgscdSize" th:field="*{rgscdSize}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>人工饲草地建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="rgscdMoney" th:field="*{rgscdMoney}" class="form-control" type="text" disabled="disabled">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>含饲棚圈建设规模 ：</label>
+                    <div class="col-sm-8">
+                        <input name="hspjSize" th:field="*{hspjSize}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>含饲棚圈建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="hspjMoney" th:field="*{hspjMoney}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>黑土滩建设规模：</label>
+                    <div class="col-sm-8">
+                        <input name="httSize" th:field="*{httSize}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>黑土滩建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="httMoney" th:field="*{httMoney}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>毒害草建设规模 ：</label>
+                    <div class="col-sm-8">
+                        <input name="dhcSize" th:field="*{dhcSize}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>毒害草建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="dhcMoney" th:field="*{dhcMoney}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>已垦草原治理建设规模：</label>
+                    <div class="col-sm-8">
+                        <input name="ykcyzlSize" th:field="*{ykcyzlSize}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>已垦草原治理建设投资：</label>
+                    <div class="col-sm-8">
+                        <input name="ykcazlMoney" th:field="*{ykcazlMoney}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>总合计面积：</label>
+                    <div class="col-sm-8">
+                        <input id="zmj" name="zmj"  class="form-control" type="text" th:onchange="zysumMoney()" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>总合计金额：</label>
+                    <div class="col-sm-8">
+                        <input name="zhj" id="zhj"  class="form-control" type="text" th:onchange="zysumMoney()" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>中央投资：</label>
+                    <div class="col-sm-8">
+                        <input name="zyMoney" th:field="*{zyMoney}" class="form-control" type="text" disabled="disabled"
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; "></span>地方投资：</label>
+                    <div class="col-sm-8">
+                        <input name="dfMoney" th:field="*{dfMoney}" class="form-control" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </div>
+       <!-- <div class="col-sm-6">
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><span style="color: red; "></span>合计：</label>
+                <div class="col-sm-8">
+                    <input name="zdhj" id="zdhj"  class="form-control"  disabled="disabled">
+                </div>
+            </div>
+        </div>-->
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandler()"  ><i class="fa fa-check"></i>保 存</button>&nbsp;
+
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+    function submitHandler() {
+        alert(123)
+                $.modal.confirm("确认提交发布信息", function() {
+                    $.operate.save(prefix + "/add", $('#form-publish-edit').serialize());
+                })
+
+    }
+        //求和围栏部分面积
+    $(function () {
+
+        var jmSize = document.getElementById("jmSize").value;
+        var xmSize = document.getElementById("xmSize").value;
+        var smhzlSize = document.getElementById("smhzlSize").value;
+        var hqlxSize = document.getElementById("hqlxSize").value;
+        if(jmSize==''){
+            var jmSize=0;
+        }
+        if(xmSize==''){
+            var xmSize=0;
+        }
+        if(smhzlSize==''){
+            var smhzlSize=0;
+        }
+        if(hqlxSize==''){
+            var hqlxSize=0;
+        }
+
+        hj.value=(parseFloat(xmSize)+parseFloat(jmSize)+parseFloat(smhzlSize)+parseFloat(hqlxSize)).toFixed(2);
+
+    });
+
+    //求和围栏部分资金
+    $(function () {
+
+        var jmMoney=$("#jmMoney").val();
+        var xmMoney = $("#xmMoney").val();
+        var hqlxMoney=$("#hqlxMoney").val();
+        var smhzlMoney = $("#smhzlMoney").val();
+
+        //判断不为空
+        if(jmMoney==''){
+            var jmMoney=0;
+        }
+        if(xmMoney==''){
+            var xmMoney=0;
+        }
+        if(hqlxMoney==''){
+            var hqlxMoney=0;
+        }
+        if(smhzlMoney==''){
+            var smhzlMoney=0;
+        }
+
+        tzhj.value=(parseFloat(jmMoney)+parseFloat(xmMoney)+parseFloat(hqlxMoney)+parseFloat(smhzlMoney)).toFixed(2);
+
+    });
+
+    //求出全有的规模面积
+
+    $(function () {
+        var thzyglSize = document.getElementById("thzyglSize").value;
+        var rgscdSize = document.getElementById("rgscdSize").value;
+        var hspjSize = document.getElementById("hspjSize").value;
+        var httSize = document.getElementById("httSize").value;
+        var dhcSize = document.getElementById("dhcSize").value;
+        var ykcyzlSize = document.getElementById("ykcyzlSize").value;
+        var hj = document.getElementById("hj").value;
+
+        //判断不为空
+        if(thzyglSize==''){
+            var thzyglSize=0;
+        }
+        if(rgscdSize==''){
+            var rgscdSize=0;
+        }
+        if(hspjSize==''){
+            var hspjSize=0;
+        }
+        if(httSize==''){
+            var httSize=0;
+        }
+        if(dhcSize==''){
+            var dhcSize=0;
+        }
+        if(ykcyzlSize==''){
+            var ykcyzlSize=0;
+        }
+        if(hj==''){
+            var hj=0;
+        }
+
+
+        zmj.value=(parseFloat(thzyglSize)+parseFloat(rgscdSize)+parseFloat(hspjSize)+parseFloat(httSize)+parseFloat(dhcSize)+parseFloat(ykcyzlSize)+parseFloat(hj)).toFixed(2);
+
+    });
+
+    //求出全有的投入金额
+
+    $(function () {
+
+        var thzyglMoney=$("#thzyglMoney").val();
+        var rgscdMoney = $("#rgscdMoney").val();
+        var hspjMoney=$("#hspjMoney").val();
+        var httMoney = $("#httMoney").val();
+        var dhcMoney = $("#dhcMoney").val();
+        var ykcazlMoney = $("#ykcazlMoney").val();
+        var tzhj = $("#tzhj").val();
+
+        //判断不为空
+        if(thzyglMoney==''){
+            var thzyglMoney=0;
+        }
+        if(rgscdMoney==''){
+            var rgscdMoney=0;
+        }
+        if(hspjMoney==''){
+            var hspjMoney=0;
+        }
+        if(httMoney==''){
+            var httMoney=0;
+        }
+        if(dhcMoney==''){
+            var dhcMoney=0;
+        }
+        if(ykcazlMoney==''){
+            var ykcazlMoney=0;
+        }
+        if(tzhj==''){
+            var tzhj=0;
+        }
+
+
+        //相加
+        zhj.value=(parseFloat(thzyglMoney)+parseFloat(rgscdMoney)+parseFloat(hspjMoney)+parseFloat(httMoney)+parseFloat(dhcMoney)+parseFloat(ykcazlMoney)+parseFloat(tzhj)).toFixed(2);
+    });
+
+
+    //求出全有的投入金额
+    $(function () {
+        var zyMoney=$("#zyMoney").val();
+        var dfMoney = $("#dfMoney").val();
+
+
+        //判断不为空
+        if(zyMoney==''){
+            var zyMoney=0;
+        }
+        if(dfMoney==''){
+            var dfMoney=0;
+        }
+
+        //相加
+        zdhj.value=(parseFloat(zyMoney)+parseFloat(dfMoney)).toFixed(2);
+    });
+
+
+
+    var prefix = ctx + "system/publish";
+    $("#form-publish-edit").validate({
+        focusCleanup: true
+    });
+
+  /*  function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-publish-edit').serialize());
+        }
+    }*/
+
+
+</script>
+</body>
+</html>

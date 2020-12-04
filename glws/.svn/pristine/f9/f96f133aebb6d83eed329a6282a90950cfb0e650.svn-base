@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('人工种草地分省报表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <!--搜索条件-->
+        <!--<div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+
+                        <li class="select-time">
+                            <p>年度：</p>
+                            <input type="text" name="year" class="layui-layer-input" placeholder="请选择" id="test2"/>
+                        </li>
+&lt;!&ndash;                        <li>&ndash;&gt;
+&lt;!&ndash;                            <select name="province" th:with="type=${@dict.getType('sys_province')}">&ndash;&gt;
+&lt;!&ndash;                                <option value="">请选择任务省份</option>&ndash;&gt;
+&lt;!&ndash;                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>&ndash;&gt;
+&lt;!&ndash;                            </select>&ndash;&gt;
+&lt;!&ndash;                        </li>&ndash;&gt;
+                        <li>
+                            <button class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</button>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>-->
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="EcharsLineChart()" shiro:hasPermission="system:build:export">
+                <i class="fa fa-download"></i> 折线图展示
+            </a>
+            <a class="btn btn-warning" onclick="EcharsHistogram()" shiro:hasPermission="system:build:export">
+                <i class="fa fa-download"></i> 柱状图展示
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: echarts-js" />
+<script src="/static/js/bootstrap-table-export.js"></script>
+<script src="/static/js/tableExport.js"></script>
+<script src="/static/js/jquery.base64.js"></script>
+<script src="/static/js/html2canvas.js"></script>
+<script src="/static/js/base64.js"></script>
+<script src="/static/js/sprintf.js"></script>
+<script src="/static/js/jspdf.js"></script>
+
+<script th:inline="javascript">
+    var prefix = ctx + "system/grass";
+
+    var year= [[${year}]];
+    var province= [[${province}]];
+    $(function () {
+        $.post(prefix + "/list",{yea:year,provinc:province}, function(response) {
+            let datas = response.datas;
+            let yearCols = response.yearCols;
+            let provinceRows = response.provinceRows;
+            yearCols = yearCols.map((year) => ({
+                field: String(year),
+                title: String(year),
+                rowspan: 2,
+                colspan: 1,
+                align: 'center',
+                valign: 'middle',
+                width: '10%',
+                visible: true,
+                footerFormatter:function (value) {
+                    var sumBalance = 0;
+                    for (var i in value) {
+                        sumBalance += parseFloat(value[i].year);
+                    }
+                    return sumBalance;
+                }
+            }));
+
+
+            var options = {
+                exportUrl: prefix + "/export",
+                striped: true,
+                pagination:false,
+                showExport: true,
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+                modalName: "人工种草分省报表",
+                exportOptions: {
+                    fileName:"人工种草分省报表",
+                    worksheetName:"人工种草分省报表",
+                    tableName:"人工种草分省报表",
+                    ignoreColumn: []  //忽略第一列和最后一列,默认忽略第一列
+                },
+                columns: [
+                    [
+                        {
+                            field: 'province',
+                            title: '省份/年份',
+                            rowspan: 2,
+                            colspan: 1,
+                            align: 'center',
+                            valign: 'middle',
+                            width: '10%'
+                        },
+                    ].concat(yearCols),
+                    [
+
+
+                    ]
+                ],
+                data: datas.concat([datas.reduce((x, y) => { // 在原来的datas里面添加上合计后的结果
+                    console.log(x,y);
+            let sumObject = {}; // 所有合计的内容全部添加到这个对象中
+            Object.keys(y).forEach(z => { // 遍历所有的键，例如2014,2015...
+                if (z === "province") { // 给城市字段变为合计
+                sumObject[z] = "合计";
+                return;
+            }
+            // 每次让对象的中的值变成相加后的结果
+            sumObject[z] = String(((Number(x[z]) || 0) + (Number(y[z]) || 0)).toFixed(2));
+        });
+            // 返回相加后的对象
+            return sumObject;
+        }, {})])
+        };
+            console.dir(options);
+            $.table.init(options);
+        });
+    });
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+   function EcharsLineChart(){
+        var url = prefix + '/EcharsLineChart';
+        $.modal.openFull("人工种草地分省折线图报表", url);
+    }
+
+    function EcharsHistogram(){
+        var url = prefix + '/EcharsHistogram';
+        $.modal.openFull("人工种草地分省柱状图报表", url);
+    }
+
+</script>
+</body>
+</html>

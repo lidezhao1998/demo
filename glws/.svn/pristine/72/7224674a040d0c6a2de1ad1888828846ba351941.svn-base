@@ -1,0 +1,248 @@
+package com.ruoyi.zaihai.ReserveManagement.domain;
+
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.core.domain.BaseEntity;
+
+import java.util.Date;
+
+/**
+ * 入库对象 k_instock
+ * 
+ * @author ruoyi
+ * @date 2020-06-16
+ */
+public class KInstock extends BaseEntity
+{
+    private static final long serialVersionUID = 1L;
+
+    /** id */
+    private Long id;
+
+    /** 物资名称 */
+    @Excel(name = "物资名称")
+    private String name;
+
+    /** 入库时间 */
+    @Excel(name = "入库时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date warehousingTime;
+
+    /** 入库方式 */
+    @Excel(name = "入库方式")
+    private String warehousingMode;
+
+    /** 入库地點*/
+    @Excel(name = "入库地点")
+    private String address;
+
+    /** 接货人 */
+    @Excel(name = "接货人")
+    private String receiver;
+
+    /** 接货人电话 */
+    @Excel(name = "接货人电话")
+    private Long receiverNumber;
+
+    @Override
+    public String toString() {
+        return "KInstock{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", warehousingTime=" + warehousingTime +
+                ", warehousingMode='" + warehousingMode + '\'' +
+                ", address='" + address + '\'' +
+                ", receiver='" + receiver + '\'' +
+                ", receiverNumber=" + receiverNumber +
+                ", deliveryPerson='" + deliveryPerson + '\'' +
+                ", reasonNumber=" + reasonNumber +
+                ", goodsNumber=" + goodsNumber +
+                ", goodsMoney=" + goodsMoney +
+                ", reason='" + reason + '\'' +
+                ", status='" + status + '\'' +
+                ", createName='" + createName + '\'' +
+                ", updateName='" + updateName + '\'' +
+                ", reserveId=" + reserveId +
+                '}';
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    /** 送货人 */
+    @Excel(name = "送货人")
+    private String deliveryPerson;
+
+    public String getDeliveryPerson() {
+        return deliveryPerson;
+    }
+
+    public void setDeliveryPerson(String deliveryPerson) {
+        this.deliveryPerson = deliveryPerson;
+    }
+
+    /** 送货人电话 */
+    @Excel(name = "送货人电话")
+    private Long reasonNumber;
+
+    /** 货物数量 */
+    @Excel(name = "货物数量")
+    private Long goodsNumber;
+
+    /** 货物金额 */
+    @Excel(name = "货物金额")
+    private Long goodsMoney;
+
+    /** 原因 */
+    @Excel(name = "原因")
+    private String reason;
+
+    /** 状态 */
+    @Excel(name = "状态")
+    private String status;
+
+    /** 创建人 */
+    @Excel(name = "创建人")
+    private String createName;
+
+    /** 修改人 */
+    @Excel(name = "修改人")
+    private String updateName;
+
+    /** 储备库id */
+    @Excel(name = "储备库id")
+    private Long reserveId;
+
+    public void setId(Long id) 
+    {
+        this.id = id;
+    }
+
+    public Long getId() 
+    {
+        return id;
+    }
+    public void setName(String name) 
+    {
+        this.name = name;
+    }
+
+    public String getName() 
+    {
+        return name;
+    }
+    public void setWarehousingTime(Date warehousingTime) 
+    {
+        this.warehousingTime = warehousingTime;
+    }
+
+    public Date getWarehousingTime() 
+    {
+        return warehousingTime;
+    }
+    public void setWarehousingMode(String warehousingMode) 
+    {
+        this.warehousingMode = warehousingMode;
+    }
+
+    public String getWarehousingMode() 
+    {
+        return warehousingMode;
+    }
+    public void setReceiver(String receiver) 
+    {
+        this.receiver = receiver;
+    }
+
+    public String getReceiver() 
+    {
+        return receiver;
+    }
+    public void setReceiverNumber(Long receiverNumber) 
+    {
+        this.receiverNumber = receiverNumber;
+    }
+
+    public Long getReceiverNumber() 
+    {
+        return receiverNumber;
+    }
+
+
+    public void setReasonNumber(Long reasonNumber)
+    {
+        this.reasonNumber = reasonNumber;
+    }
+
+    public Long getReasonNumber() 
+    {
+        return reasonNumber;
+    }
+    public void setGoodsNumber(Long goodsNumber) 
+    {
+        this.goodsNumber = goodsNumber;
+    }
+
+    public Long getGoodsNumber() 
+    {
+        return goodsNumber;
+    }
+    public void setGoodsMoney(Long goodsMoney) 
+    {
+        this.goodsMoney = goodsMoney;
+    }
+
+    public Long getGoodsMoney() 
+    {
+        return goodsMoney;
+    }
+    public void setReason(String reason) 
+    {
+        this.reason = reason;
+    }
+
+    public String getReason() 
+    {
+        return reason;
+    }
+    public void setStatus(String status) 
+    {
+        this.status = status;
+    }
+
+    public String getStatus() 
+    {
+        return status;
+    }
+    public void setCreateName(String createName) 
+    {
+        this.createName = createName;
+    }
+
+    public String getCreateName() 
+    {
+        return createName;
+    }
+    public void setUpdateName(String updateName) 
+    {
+        this.updateName = updateName;
+    }
+
+    public String getUpdateName() 
+    {
+        return updateName;
+    }
+    public void setReserveId(Long reserveId) 
+    {
+        this.reserveId = reserveId;
+    }
+
+    public Long getReserveId() 
+    {
+        return reserveId;
+    }
+
+}

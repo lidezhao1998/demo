@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('改良分省报表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <p>年度：</p>
+                            <input class="layui-layer-input" id="test2" name="year" placeholder="请选择年度" type="year"/>
+                        </li>
+                        <li>
+                            省份：<select name="province" th:with="type=${@dict.getType('sys_province')}">
+                            <option value="">请选择省份</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:improve:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+            <a class="btn btn-warning" onclick="Echars()" shiro:hasPermission="system:build:export">
+                <i class="fa fa-download"></i> 图表展示
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var prefix = ctx + "system/improve";
+
+    $(function () {
+
+        $.post(prefix + "/list", function (response) {
+            let datas = response.datas;
+            let yearCols = response.yearCols;
+            yearCols = yearCols.map((year) => ({
+                field: String(year),
+                title: String(year),
+                rowspan: 2,
+                colspan: 1,
+                align: 'center',
+                valign: 'middle',
+                width: '10%',
+            }));
+            var options = {
+                exportUrl: prefix + "/export",
+                striped: true,
+                showFooter: false,
+                columns: [
+                    [
+                        {
+                            field: 'province',
+                            title: '省份',
+                            rowspan: 2,
+                            colspan: 1,
+                            align: 'center',
+                            valign: 'middle',
+                            width: '10%',
+                        },
+                    ].concat(yearCols),
+                    []
+                ],
+                data: datas.concat([datas.reduce((x, y) => { // 在原来的datas里面添加上合计后的结果
+                    console.log(x,y);
+                    let sumObject = {}; // 所有合计的内容全部添加到这个对象中
+                    Object.keys(y).forEach(z => { // 遍历所有的键，例如2014,2015...
+                        if (z === "province") { // 给城市字段变为合计
+                            sumObject[z] = "合计";
+                            return;
+                        }
+                        // 每次让对象的中的值变成相加后的结果
+                        sumObject[z] = String((Number(x[z]) || 0) + (Number(y[z]) || 0));
+                    });
+                    // 返回相加后的对象
+                    return sumObject;
+                }, {})])
+            };
+            console.dir(options);
+            $.table.init(options);
+        });
+    });
+
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test2'
+            , type: 'year'
+        });
+    });
+
+    //图表展示
+    function Echars() {
+        var url = prefix + '/Echars';
+        $.modal.openFull("含饲棚围栏建设任务报表", url);
+    }
+
+    function queryParams() {
+
+    }
+
+
+</script>
+</body>
+</html>

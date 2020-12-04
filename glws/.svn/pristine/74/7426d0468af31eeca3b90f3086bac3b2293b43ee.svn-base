@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.extinterface.mapper.MobileDeviceDataMapper">
+    <resultMap type="com.ruoyi.system.domain.gis.SysCity" id="SysCityResult">
+   <id property="id" column="id"/>
+   <result property="pid" column="pid"/>
+   <result property="ancestors" column="ancestors"/>
+   <result property="cityName" column="cityName"/>
+   <result property="geoStr" column="geoStr"/>
+   <result property="area" column="area"/>
+   <result property="perimeter" column="perimeter"/>
+   <result property="canter" column="canter"/>
+</resultMap>
+   <resultMap type="com.sinosoft.extinterface.domain.A5gInterface" id="A5gInterface">
+      <id property="id" column="id"/>
+      <result property="name" column="name"/>
+      <result property="url" column="url"/>
+      <result property="dictDataCode" column="dictDataCode"/>
+   </resultMap>
+    <insert id="insertmobileDevice">
+      insert into a_mobile_device (
+        region,
+        those_responsible,
+        phone,
+        lat,
+        lon,
+        monitoring_code,
+        monitoring_name
+      )
+      values (
+      #{region},
+      #{thoseResponsible},
+      #{phone},
+      #{lat},
+      #{lon},
+      #{monitoringCode},
+      #{monitoringName}
+      );
+
+
+
+
+
+
+
+    </insert>
+    <select id="getCityById" resultType="com.ruoyi.system.domain.gis.SysCity">
+        select dict_code id,dict_label cityName from sys_dict_data where dict_code = #{id}
+    </select>
+   <select id="getDistrictSheng" resultType="com.ruoyi.system.domain.gis.SysCity">
+       SELECT dict_code id,dict_label cityName FROM sys_dict_data WHERE dict_type="sys_province"
+    </select>
+   <select id="getDistrictShi" resultType="com.ruoyi.system.domain.gis.SysCity">
+        SELECT dict_code id,dict_label cityName FROM sys_dict_data so WHERE dict_parent= #{id}
+    </select>
+   <select id="getA5gInterface" resultType="com.sinosoft.extinterface.domain.A5gInterface">
+       SELECT id,name,url,dict_data_code dictDataCode FROM a_5g_interface WHERE dict_data_code=#{id}
+
+    </select>
+    <select id="selectmobileDeviceListMapper" resultType="com.sinosoft.extinterface.domain.MobileDevice">
+        SELECT
+        m.id,
+        m.region,
+        m.those_responsible thoseResponsible,
+        m.phone,
+        m.lat,
+        m.lon,
+        m.monitoring_code monitoringCode,
+        m.monitoring_name monitoringName,
+        m.a5g_id a5gId
+        FROM
+        a_mobile_device m
+        <where>
+            1=1
+            <if test="monitoringName != null and monitoringName != ''">
+                AND  m.monitoring_name like concat('%', #{monitoringName}, '%')
+            </if>
+            <if test="thoseResponsible != null and thoseResponsible != ''">
+                AND  m.those_responsible like concat('%', #{thoseResponsible}, '%')
+            </if>
+            <if test="monitoringCode != null and monitoringCode != ''">
+                AND  m.monitoring_code like concat('%', #{monitoringCode}, '%')
+            </if>
+        </where>
+
+
+
+    </select>
+    <select id="getMobileDeviceById" resultType="com.sinosoft.extinterface.domain.MobileDevice">
+                SELECT
+        m.id,
+        m.region,
+        m.those_responsible thoseResponsible,
+        m.phone,
+        m.lat,
+        m.lon,
+        m.monitoring_code monitoringCode,
+        m.monitoring_name monitoringName,
+        m.a5g_id a5gId
+        FROM
+        a_mobile_device m
+
+         where  m.id=#{id}
+
+
+    </select>
+</mapper>

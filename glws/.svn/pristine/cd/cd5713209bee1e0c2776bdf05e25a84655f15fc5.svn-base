@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原检测点数据')"/>
+    <link th:href="@{/css/gis.css}" rel="stylesheet"/>
+    <script>
+        /*常规监测*/
+        var isHasPermissionNormalInspectionMenuPass = false;
+        var isHasPermissionNormalInspectionMenuAdd = false;
+        var isHasPermissionNormalInspectionMenuDelete = false;
+        var isHasPermissionNormalInspectionMenuGisDetails = false;
+        var isHasPermissionNormalInspectionMenuEdit = false;
+        var isHasPermissionNormalInspectionMenuReject = false;
+    </script>
+</head>
+<body class="gray-bg" onLoad="load()">
+<div class="row" style="height: 100%">
+<!--    <div id="map">
+        <div class="header-r">
+            <div class="header-r-bg">
+                <a href="javascript:;" onclick="drawGis('Point','tab')">标记点</a>
+            </div>
+        </div>
+        <div id="menu">
+            <input type="button" id="off"/>
+        </div>
+        &lt;!&ndash;<div id="mouse-position">
+        </div>&ndash;&gt;
+    </div>-->
+    <div id="tab-2" class="tab-pane">
+        <div class="panel-body">
+            <div class="container-div">
+                <div class="row">
+                    <div class="col-sm-12 search-collapse" style="margin-top: 5px">
+                        <form id="normalInspection-form">
+                            <div class="select-list">
+                                <ul>
+                                    <li>
+                                        调查人：<input type="text" name="surveyUser"/>
+                                    </li>
+                                    <li>
+                                        区域：<input type="text" name="area"/>
+                                    </li>
+
+                                    <!--<li class="select-time">-->
+                                    <!--<label>调查时间： </label>-->
+                                    <!--<input type="text" class="time-input" id="surveyTime" placeholder="开始时间" name="params[surveyTime]"/>-->
+                                    <!--</li>-->
+                                    <li>
+                                        <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('normalInspection-form','normalInspection-table')"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('normalInspection-form','normalInspection-table')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="btn-group-sm" id="normalInspection_toolbar" role="group">
+                        <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="integration:normalInspectionMenu:add">
+                            <i class="fa fa-upload"></i> 导入
+                        </a>
+                        <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="integration:normalInspectionMenu:edit">-->
+                        <!--<i class="fa fa-edit"></i> 修改-->
+                        <!--</a>-->
+                        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="integration:normalInspectionMenu:batchRemove">
+                            <i class="fa fa-remove"></i> 批量删除
+                        </a>
+                        <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="integration:recoveryquestion:export">-->
+                        <!--<i class="fa fa-download"></i> 导出-->
+                        <!--</a>-->
+                        <a class="btn btn-warning multiple disabled" onclick="auditAllnormalInspection()" shiro:hasPermission="integration:normalInspectionMenu:batchReview">
+                            <i class="fa fa-download"></i> 批量审核
+                        </a>
+                    </div>
+                    <div class="col-sm-12 select-table table-striped">
+                        <table id="normalInspection-table"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--查看-->
+<shiro:hasPermission name="integration:normalInspectionMenu:gisDetail">
+    <script>
+        isHasPermissionNormalInspectionMenuGisDetails = true;
+    </script>
+</shiro:hasPermission>
+<!--通过-->
+<shiro:hasPermission name="integration:normalInspectionMenu:pass">
+    <script>
+        isHasPermissionNormalInspectionMenuPass = true;
+    </script>
+</shiro:hasPermission>
+<!--编辑-->
+<shiro:hasPermission name="integration:normalInspectionMenu:edit">
+    <script>
+        isHasPermissionNormalInspectionMenuEdit = true;
+    </script>
+</shiro:hasPermission>
+<!--删除-->
+<shiro:hasPermission name="integration:normalInspectionMenu:delete">
+    <script>
+        isHasPermissionNormalInspectionMenuDelete = true;
+    </script>
+</shiro:hasPermission>
+<!--驳回-->
+<shiro:hasPermission name="integration:recoveryquestion:reject">
+    <script>
+        isHasPermissionNormalInspectionMenuReject = true;
+    </script>
+</shiro:hasPermission>
+</body>
+
+<th:block th:include="include :: footer"/>
+<script th:src="@{/js/gis/glmaGis.js}"></script>
+<script th:src="@{/js/gis/gisComparison.js}"></script>
+<script th:inline="javascript">
+    var normalInspectionPrefix = ctx + "integration/normalInspection";
+    $(function() {
+        var normalInspectionoptions = {
+            id: "normalInspection-table",
+            toolbar: "normalInspection_toolbar",
+            showSearch: false,
+            showToggle: false,
+            showColumns: false,
+            showRefresh: false,
+            url: normalInspectionPrefix + "/list",
+            detailUrl: normalInspectionPrefix + "/detail/{id}",
+            createUrl: normalInspectionPrefix + "/add",
+            updateUrl: normalInspectionPrefix + "/edit/{id}",
+            removeUrl: normalInspectionPrefix + "/remove",
+            exportUrl: normalInspectionPrefix + "/export",
+            sortName: "id",
+            sortOrder: "desc",
+            modalName: "常规监测",
+            columns: [{
+                checkbox: true,
+                formatter:  function (value, row, index) {
+                    if (row.status == 1){
+                        return {
+                            disabled : true//设置是否可用
+                        };
+                    }
+                }
+
+            },{
+                field : 'id',
+                title : 'ID'
+            },
+                {
+                    field: 'surveyUser',
+                    title: '调查人'
+                },
+                {
+                    field: 'surveyTime',
+                    title: '调查时间',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value);
+                    }
+                },
+                {
+                    field: 'eastLongitude',
+                    title: '东经'
+                },
+                {
+                    field: 'northrrnLatitude',
+                    title: '北纬'
+                },
+                {
+                    field: 'altitude',
+                    title: '海拔'
+                },
+                {
+                    field: 'area',
+                    title: '区域'
+                },
+                {
+                    field: 'sampleNumber',
+                    title: '样方编号'
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        if(value==1){
+                            return "已审核";
+                        }else{
+                            return "未审核";
+                        }
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        if (isHasPermissionNormalInspectionMenuGisDetails){
+                            actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>GIS查看</a>');
+                        }
+                        if(row.status!=1){
+                            /*审核通过*/
+                            if (isHasPermissionNormalInspectionMenuPass){
+                                actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="auditnormalInspection(\'' + row.id + '\')"><i class="fa fa-search"></i>审核通过</a>');
+                            }
+                            /*编辑按钮*/
+                            if (isHasPermissionNormalInspectionMenuEdit){
+                                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            }
+                            /*删除按钮*/
+                            if (isHasPermissionNormalInspectionMenuDelete){
+                                actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            }
+                        }else{
+                            /*驳回审核*/
+                            if (isHasPermissionNormalInspectionMenuReject){
+                                actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="unauditnormalInspection(\'' + row.id + '\')"><i class="fa fa-search"></i>取消审核</a>');
+                            }
+                        }
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(normalInspectionoptions);
+    });
+
+    function auditnormalInspection(id) {
+        $.modal.confirm("确定审核通过吗？", function() {
+            $.operate.post(normalInspectionPrefix + "/audit", {"id": id });
+        })
+    }
+    function auditAllnormalInspection() {
+        var ids=$("#normalInspection-table").bootstrapTable("getAllSelections")
+        if (ids.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确定要审核通过" + ids.length + "条数据吗?", function() {
+            var data="0";
+            for(var i=0;i<ids.length;i++){
+                data+=","+ids[i].id
+            }
+            $.operate.post(normalInspectionPrefix + "/auditAll",{"ids":data});
+        });
+    }
+    function unauditnormalInspection(id) {
+        $.modal.confirm("确定取消审核吗？", function() {
+            $.operate.post(normalInspectionPrefix + "/unaudit", {"id": id });
+        })
+    }
+</script>
+</html>

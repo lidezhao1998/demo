@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.PublicDataMapper">
+    
+    <resultMap type="PublicData" id="PublicDataResult">
+        <result property="dataid"    column="DATAID"    />
+        <result property="dataName"    column="DATA_NAME"    />
+        <result property="unit"    column="UNIT"    />
+        <result property="value"    column="VALUE"    />
+        <result property="source"    column="SOURCE"    />
+    </resultMap>
+
+    <sql id="selectPublicDataVo">
+        select DATAID, DATA_NAME, UNIT, VALUE, SOURCE from public_data
+    </sql>
+
+    <select id="selectPublicDataList" parameterType="PublicData" resultMap="PublicDataResult">
+        <include refid="selectPublicDataVo"/>
+        <where>  
+            <if test="dataName != null  and dataName != ''"> and DATA_NAME like concat('%', #{dataName}, '%')</if>
+            <if test="unit != null  and unit != ''"> and UNIT = #{unit}</if>
+            <if test="value != null "> and VALUE = #{value}</if>
+            <if test="source != null  and source != ''"> and SOURCE like concat('%', #{source}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectPublicDataById" parameterType="Long" resultMap="PublicDataResult">
+        <include refid="selectPublicDataVo"/>
+        where DATAID = #{dataid}
+    </select>
+        
+    <insert id="insertPublicData" parameterType="PublicData" useGeneratedKeys="true" keyProperty="dataid">
+        insert into public_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dataName != null  and dataName != ''">DATA_NAME,</if>
+            <if test="unit != null  and unit != ''">UNIT,</if>
+            <if test="value != null ">VALUE,</if>
+            <if test="source != null  and source != ''">SOURCE,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dataName != null  and dataName != ''">#{dataName},</if>
+            <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="value != null ">#{value},</if>
+            <if test="source != null  and source != ''">#{source},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePublicData" parameterType="PublicData">
+        update public_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dataName != null  and dataName != ''">DATA_NAME = #{dataName},</if>
+            <if test="unit != null  and unit != ''">UNIT = #{unit},</if>
+            <if test="value != null ">VALUE = #{value},</if>
+            <if test="source != null  and source != ''">SOURCE = #{source},</if>
+        </trim>
+        where DATAID = #{dataid}
+    </update>
+
+    <delete id="deletePublicDataById" parameterType="Long">
+        delete from public_data where DATAID = #{dataid}
+    </delete>
+
+    <delete id="deletePublicDataByIds" parameterType="String">
+        delete from public_data where DATAID in 
+        <foreach item="dataid" collection="array" open="(" separator="," close=")">
+            #{dataid}
+        </foreach>
+    </delete>
+    
+</mapper>

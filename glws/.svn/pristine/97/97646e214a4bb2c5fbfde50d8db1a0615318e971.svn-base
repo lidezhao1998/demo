@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.integration.mapper.RecoveryQuestionMapper">
+    
+    <resultMap type="RecoveryQuestion" id="RecoveryQuestionResult">
+    	<id     property="id"      column="id"      />
+        <result property="address"    column="address"    />
+        <result property="surveyUser"    column="survey_user"    />
+        <result property="eastLongitude"     column="east_longitude"     />
+        <result property="northrrnLatitude"   column="northrrn_latitude"   />
+        <result property="altitude"    column="altitude"    />
+        <result property="grasslandClass"    column="grassland_class"    />
+        <result property="grasslandType"    column="grassland_type"    />
+        <result property="terrainOriginal"    column="terrain_original"    />
+        <result property="forageSpecies"    column="forage_species"    />
+        <result property="greenDate"    column="green_date"    />
+        <result property="compareWay"    column="compare_way"    />
+        <result property="compareDayss"    column="compare_days"    />
+        <result property="phenology"    column="phenology"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"      column="create_by"      />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"      column="update_by"      />
+        <result property="updateTime"    column="update_time"    />
+        <result property="avgTemp"    column="avg_temp"    />
+    </resultMap>
+    
+    <sql id="selectRecoveryQuestionVo">
+        select id,address,survey_user,east_longitude,northrrn_latitude,altitude,grassland_class,grassland_type,terrain_original,forage_species,
+        green_date,compare_way,compare_days,create_by,create_time,update_by,update_time,phenology,avg_temp,status
+		from a_recovery_question
+    </sql>
+    
+    <!-- 查询条件 -->
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="id !=null">
+				and id = #{id}
+			</if>
+
+		</where>
+	</sql>
+    
+    <select id="selectRecoveryQuestion" parameterType="RecoveryQuestion" resultMap="RecoveryQuestionResult">
+        <include refid="selectRecoveryQuestionVo"/>
+        <include refid="sqlwhereSearch"/>
+    </select>
+    
+    <select id="selectRecoveryQuestionList" parameterType="RecoveryQuestion" resultMap="RecoveryQuestionResult">
+        <include refid="selectRecoveryQuestionVo"/>
+        <where>
+			<if test="id != null and id != ''">
+				AND id =#{id}
+			</if>
+            <if test="surveyUser != null and surveyUser != ''">
+                AND survey_user =#{surveyUser}
+            </if>
+            <if test="grasslandClass != null and grasslandClass != ''">
+                AND grassland_class =#{grasslandClass}
+            </if>
+            <if test="greenDate != null and greenDate != ''">
+                and date_format(green_date,'%y%m%d') = date_format(#{params.greenDate},'%y%m%d')
+            </if>
+            <if test="address != null and address != ''">
+                AND address like concat('%', #{address}, '%')
+            </if>
+            <if test="phenology != null and phenology != ''">
+                AND phenology = #{phenology}
+            </if>
+            <if test="status != null and status.toString != '' and status.toString!='-1'">
+                AND status = #{status}
+            </if>
+		</where>
+        order by id
+    </select>
+
+
+
+    <select id="selectRecoveryQuestionListOrderBy" parameterType="RecoveryQuestion" resultMap="RecoveryQuestionResult">
+        <include refid="selectRecoveryQuestionVo"/>
+        <where>
+            <if test="id != null and id != ''">
+                AND id =#{id}
+            </if>
+            <if test="surveyUser != null and surveyUser != ''">
+                AND survey_user =#{surveyUser}
+            </if>
+            <if test="grasslandClass != null and grasslandClass != ''">
+                AND grassland_class =#{grasslandClass}
+            </if>
+            <if test="greenDate != null and greenDate != ''">
+                and date_format(green_date,'%y%m%d') = date_format(#{params.greenDate},'%y%m%d')
+            </if>
+            <if test="address != null and address != ''">
+                AND address like concat('%', #{address}, '%')
+            </if>
+            <if test="phenology != null and phenology != ''">
+                AND phenology = #{phenology}
+            </if>
+        </where>
+        order by green_date asc
+    </select>
+
+
+    <insert id="insertRecoveryQuestion" parameterType="RecoveryQuestion">
+        insert into a_recovery_question (
+        <if test="surveyUser != null and surveyUser != '' ">survey_user,</if>
+        <if test="eastLongitude != null and eastLongitude != '' ">east_longitude,</if>
+        <if test="northrrnLatitude != null and northrrnLatitude != '' ">northrrn_latitude,</if>
+        <if test="altitude != null and altitude != '' ">altitude,</if>
+        <if test="grasslandClass != null and grasslandClass != ''">grassland_class,</if>
+        <if test="grasslandType != null and grasslandType != '' ">grassland_type,</if>
+        <if test="terrainOriginal != null and terrainOriginal != ''">terrain_original,</if>
+        <if test="forageSpecies != null and forageSpecies != '' ">forage_species,</if>
+        <if test="greenDate != null ">green_date,</if>
+        <if test="compareWay != null and compareWay != '' ">compare_way,</if>
+        <if test="compareDayss != null and compareDayss != ''">compare_days,</if>
+        <if test="phenology != null and phenology != ''">phenology,</if>
+        <if test="address != null and address != ''">address,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="surveyUser != null and surveyUser != '' ">#{surveyUser},</if>
+        <if test="eastLongitude != null and eastLongitude != '' ">#{eastLongitude},</if>
+        <if test="northrrnLatitude != null and northrrnLatitude != '' ">#{northrrnLatitude},</if>
+        <if test="altitude != null and altitude != '' ">#{altitude},</if>
+        <if test="grasslandClass != null and grasslandClass != ''">#{grasslandClass},</if>
+        <if test="grasslandType != null and grasslandType != '' ">#{grasslandType},</if>
+        <if test="terrainOriginal != null and terrainOriginal != ''">#{terrainOriginal},</if>
+        <if test="forageSpecies != null and forageSpecies != '' ">#{forageSpecies},</if>
+        <if test="greenDate != null ">#{greenDate},</if>
+        <if test="compareWay != null and compareWay != '' ">#{compareWay},</if>
+        <if test="compareDayss != null and compareDayss != ''">#{compareDayss},</if>
+        <if test="phenology != null and phenology != ''">#{phenology},</if>
+        <if test="address != null and address != ''">#{address},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+
+    <update id="updateRecoveryQuestion" parameterType="RecoveryQuestion">
+        update a_recovery_question
+        <set>
+            <if test="surveyUser != null and surveyUser != '' ">survey_user= #{surveyUser},</if>
+            <if test="eastLongitude != null and eastLongitude != '' ">east_longitude= #{eastLongitude},</if>
+            <if test="northrrnLatitude != null and northrrnLatitude != '' ">northrrn_latitude= #{northrrnLatitude},</if>
+            <if test="altitude != null and altitude != '' ">altitude= #{altitude},</if>
+            <if test="grasslandClass != null and grasslandClass != ''">grassland_class= #{grasslandClass},</if>
+            <if test="grasslandType != null and grasslandType != '' ">grassland_type= #{grasslandType},</if>
+            <if test="terrainOriginal != null and terrainOriginal != ''">terrain_original= #{terrainOriginal},</if>
+            <if test="forageSpecies != null and forageSpecies != '' ">forage_species= #{forageSpecies},</if>
+            <if test="greenDate != null ">green_date= #{greenDate},</if>
+            <if test="compareWay != null and compareWay != '' ">compare_way= #{compareWay},</if>
+            <if test="compareDayss != null and compareDayss != ''">compare_days= #{compareDayss},</if>
+            <if test="phenology != null and phenology != ''">phenology= #{phenology},</if>
+            <if test="address != null and address != ''">address= #{address},</if>
+            <if test="status != null">status= #{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <update id="updateStatusByIds">
+        update a_recovery_question set status =1 where id in
+        <foreach collection="array" item="ids" open="("  separator=","  close=")">
+            #{ids}
+        </foreach>
+    </update>
+
+    <delete id="deleteRecoveryQuestions" parameterType="String">
+        delete from a_recovery_question where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+        	#{id}
+        </foreach>
+    </delete>
+    
+</mapper>

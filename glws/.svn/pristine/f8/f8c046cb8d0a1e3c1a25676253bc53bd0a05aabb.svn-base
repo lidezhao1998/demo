@@ -1,0 +1,432 @@
+package com.ruoyi.system.service.impl;
+
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.*;
+import com.ruoyi.system.mapper.TTaskPublishMapper;
+import com.ruoyi.system.service.ISysDictDataService;
+import com.ruoyi.system.service.ITTaskPublishService;
+import com.ruoyi.system.service.ITTaskReportService;
+import com.ruoyi.system.service.ITTaskResolveService;
+import org.apache.poi.ss.formula.functions.T;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.text.DecimalFormat;
+import java.util.*;
+
+/**
+ * 退牧还草工程任务发布Service业务层处理
+ *
+ * @author feiyanxu
+ * @date 2019-11-28
+ */
+@Service
+public class TTaskPublishServiceImpl implements ITTaskPublishService
+{
+    @Autowired
+    private TTaskPublishMapper tTaskPublishMapper;
+    @Autowired
+    private ITTaskReportService iTTaskReportService;
+    @Autowired
+    private ISysDictDataService iSysDictDataService;
+    @Autowired
+    private ITTaskPublishService tTaskPublishService;
+    @Autowired
+    private ITTaskResolveService tTaskResolveService;
+    /**
+     * 查询退牧还草工程任务发布
+     *
+     * @param publishId 退牧还草工程任务发布ID
+     * @return 退牧还草工程任务发布
+     */
+    @Override
+    public TTaskPublish selectTTaskPublishById(Long publishId)
+    {
+        return tTaskPublishMapper.selectTTaskPublishById(publishId);
+    }
+
+    /**
+     * 查询退牧还草工程任务发布列表
+     *
+     * @param tTaskPublish 退牧还草工程任务发布
+     * @return 退牧还草工程任务发布
+     */
+    @Override
+    public List<TTaskPublish> selectTTaskPublishList(TTaskPublish tTaskPublish)
+    {
+        return tTaskPublishMapper.selectTTaskPublishList(tTaskPublish);
+    }
+
+    /**
+     * 查询退牧还草工程任务发布列表
+     *
+     * @param tTaskPublish 退牧还草工程任务发布
+     * @return 退牧还草工程任务发布
+     */
+    @Override
+    public List<TTaskPublish> selectCityPublishList(TTaskPublish tTaskPublish)
+    {
+        return tTaskPublishMapper.selectCityPublishList(tTaskPublish);
+    }
+
+    /**
+     * 查询当前登录省份的任务量总和
+     *
+     * @param tTaskPublish 查询当前登录省份的任务量总和
+     * @return 查询当前登录省份的任务量总和
+     */
+    @Override
+    public TTaskPublish selectCityPublish(TTaskPublish tTaskPublish){
+        return tTaskPublishMapper.selectCityPublish(tTaskPublish);
+    }
+
+    /**
+     * 查询省级以分解任务
+     *
+     * @param tTaskPublish 查询省级以分解任务
+     * @return 查询省级以分解任务
+     */
+    @Override
+    public TTaskPublish selectProvinceResolve(TTaskPublish tTaskPublish){
+        return  tTaskPublishMapper.selectProvinceResolve(tTaskPublish);
+    }
+
+    /**
+     * 查询工程资金汇总表
+     *
+     * @return 查询工程资金汇总表集合
+     */
+    @Override
+    public List<TTaskPublish> selectSummaryList(TTaskPublish tTaskPublish){
+        return tTaskPublishMapper.selectSummaryList(tTaskPublish);
+    }
+
+    /**
+     * 查询全国发布任务总和
+     *
+     * @return 查询全国发布任务总和
+     */
+    @Override
+    public TTaskPublish selectCountry(TTaskPublish tTaskPublish){
+        return tTaskPublishMapper.selectCountry(tTaskPublish);
+    }
+
+    /**
+     * 查询发布任务信息(省级)
+     *
+     * @return 查询发布任务信息(省级)
+     */
+    @Override
+    public TTaskPublish selectPublishTotalScale(Long resolveId)
+    {
+        return  tTaskPublishMapper.selectPublishTotalScale(resolveId);
+    }
+
+    /**
+     * 查询长江经济带发布量
+     *
+     * @return 查询长江经济带发布量
+     */
+    @Override
+    public TTaskPublish selectYangtseRiver(TTaskPublish tTaskPublish)
+    {
+        return  tTaskPublishMapper.selectYangtseRiver(tTaskPublish);
+    }
+
+    /**
+     * 新增退牧还草工程任务发布
+     *
+     * @param tTaskPublish 退牧还草工程任务发布
+     * @return 结果
+     */
+    @Override
+    public int insertTTaskPublish(TTaskPublish tTaskPublish)
+    {
+        tTaskPublish.setCreateTime(DateUtils.getNowDate());
+        return tTaskPublishMapper.insertTTaskPublish(tTaskPublish);
+    }
+
+    /**
+     * 修改退牧还草工程任务发布
+     *
+     * @param tTaskPublish 退牧还草工程任务发布
+     * @return 结果
+     */
+    @Override
+    public int updateTTaskPublish(TTaskPublish tTaskPublish)
+    {
+        tTaskPublish.setUpdateTime(DateUtils.getNowDate());
+        return tTaskPublishMapper.updateTTaskPublish(tTaskPublish);
+    }
+
+    /**
+     * 修改省已分解任务
+     *
+     * @param tTaskResolve 修改省已分解任务
+     * @return 结果
+     */
+    public int updateTTaskPublishCity(TTaskResolve tTaskResolve){
+        tTaskResolve.setUpdateTime(DateUtils.getNowDate());
+        return tTaskPublishMapper.updateTTaskPublishCity(tTaskResolve);
+    }
+
+    /**
+     * 删除退牧还草工程任务发布对象
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    @Override
+    public int deleteTTaskPublishByIds(String ids)
+    {
+        return tTaskPublishMapper.deleteTTaskPublishByIds(Convert.toStrArray(ids));
+    }
+
+    /**
+     * 删除退牧还草工程任务发布信息
+     *
+     * @param publishId 退牧还草工程任务发布ID
+     * @return 结果
+     */
+    @Override
+    public int deleteTTaskPublishById(Long publishId)
+    {
+        return tTaskPublishMapper.deleteTTaskPublishById(publishId);
+    }
+
+
+
+    @Override
+    public int updateTTaskPublishchehui(TTaskPublish tTaskPublish) {
+        return tTaskPublishMapper.updateTTaskPublishchehui(tTaskPublish);
+    }
+
+
+    //查询数据库中最大的id
+    @Override
+    public Object getByid() {
+        return tTaskPublishMapper.getByid();
+    }
+
+    @Override
+    public void updateTTaskResolveStatus(TTaskPublish tTaskPublish) {
+        tTaskPublishMapper.updateTTaskResolveStatus(tTaskPublish);
+
+    }
+
+    /**
+     * 修改退牧还草工程任务发布信息
+     *
+     * @param publishId 撤回退牧还草工程任务发布
+     * @return 结果
+     */
+    @Override
+    public TTaskPublish selectTTaskResolveById(Long publishId) {
+        return tTaskPublishMapper.selectTTaskResolveById(publishId);
+    }
+    /**
+     * 查询退牧还草工程任务领取分解修改状态
+     *
+     * @param publishId 退牧还草工程任务领取分解ID
+     * @return 返回状态
+     */
+    @Override
+    public void updateTTaskPublishStatus(long publishId) {
+        tTaskPublishMapper.updateTTaskPublishStatus(publishId);
+    }
+
+    /**
+     * 查询退牧还草工程任务领取分解修改状态
+     *
+     * @param publishId 退牧还草工程任务发布
+     * @return 返回状态
+     */
+    @Override
+    public int updateTTaskPublishRelease(long publishId) {
+        return tTaskPublishMapper.updateTTaskPublishRelease(publishId);
+    }
+    /**
+     * 添加分解的市级信息到发布表中
+     *
+     * @param tTaskResolve 发布任务
+     * @return
+     */
+    @Override
+    public void insertTTaskPublishCity(TTaskResolve tTaskResolve) {
+        tTaskPublishMapper.insertTTaskPublishCity(tTaskResolve);
+    }
+
+    /**
+     * 省市级任务查询
+     *
+     * @param tTaskPublish 根据年份，省，市查询
+     * @return 结果
+     */
+    @Override
+    public List<TTaskPublish> selectProvince(TTaskPublish tTaskPublish)
+    {
+        return tTaskPublishMapper.selectProvince(tTaskPublish);
+    }
+
+    @Override
+    public int removePublishTTaskResolveByIds(String ids)
+    {
+        return tTaskPublishMapper.removePublishTTaskResolveByIds(Convert.toStrArray(ids));
+    }
+
+
+    /**
+     * 导入发布数据
+     *
+     * @param publishList 发布数据列表
+     * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
+     * @param operName 操作用户
+     * @return 结果
+     */
+    @Override
+    public String importPublish(List<PublishOperateModel> publishList, Boolean isUpdateSupport, String operName)
+    {
+        if (StringUtils.isNull(publishList) || publishList.size() == 0)
+        {
+            throw new BusinessException("导入用户数据不能为空！");
+        }
+        int successNum = 0;
+
+        StringBuilder successMsg = new StringBuilder();
+
+        successMsg.append("<br/>" + successNum + "、账号 " + "0" + " 导入成功");
+
+        return successMsg.toString();
+    }
+
+    /**
+     * 查询国家级未发布列表
+     */
+    public List<TTaskPublish> selectTTaskPublishCountryList(){
+        return tTaskPublishMapper.selectTTaskPublishCountryList();
+    }
+
+    /**
+     * 查询国家级未发布列表
+     */
+    public List<TTaskPublish> queryCountryList(String year){
+        List<TTaskPublish> CountryList = tTaskPublishMapper.queryCountryList(year);
+        List<SysDictData> list = iSysDictDataService.selectDictDataByType("sys_province");
+        List<TTaskPublish> tTaskPublishes = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Boolean flag = true;
+            SysDictData sysDictData = list.get(i);
+            String label = sysDictData.getDictLabel();
+            for(int y = 0; y < CountryList.size(); y++){
+                TTaskPublish tTaskPublish = CountryList.get(y);
+                if(label.equals(tTaskPublish.getProvince())){
+                    tTaskPublishes.add(tTaskPublish);
+                    flag = false;
+                    continue;
+                }
+            }
+            if(flag){
+                TTaskPublish publish = new TTaskPublish();
+                publish.setProvince(label);
+                publish.setYear(year);
+                tTaskPublishes.add(publish);
+            }
+        }
+        return tTaskPublishes;
+    }
+
+    /**
+     * 退牧还草任务完成情况
+     */
+    public List<HashMap> getMissionCompletion(){
+        //获取登录用户的部门
+        String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
+        //获取角色
+        List<SysRole> roles = ShiroUtils.getSysUser().getRoles();
+        //获取角色
+        String roleName="";
+        for (int i = 0; i < roles.size(); i++) {
+            SysRole sysRole = roles.get(i);
+            roleName += sysRole.getRoleName()+",";
+        }
+        //获取当前年份
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        //保留两位小数
+        DecimalFormat df = new DecimalFormat("0.00");
+        TTaskPublish tTaskPublish = new TTaskPublish();
+        TTaskResolve tTaskResolve = new TTaskResolve();
+        TTaskReport tTaskReport = new TTaskReport();
+        tTaskPublish.setYear(year + "");
+        tTaskResolve.setYear(year + "");
+        tTaskReport.setYear(year + "");
+        List<HashMap> progressCompletionLists = new ArrayList<>();
+        if (roleName.contains("国家级")) {
+            //查询省级当前年份任务集合
+            List<TTaskPublish> listData = tTaskPublishService.selectTTaskPublishList(tTaskPublish);
+            for(TTaskPublish taskPublish : listData){
+                tTaskReport.setProvince(taskPublish.getProvince());
+                //查询上报任务完成量
+                TTaskReport  taskReport = iTTaskReportService.selectLatestTTaskReport(tTaskReport);
+                HashMap<String, String> map = new HashMap<>();
+                if(taskReport != null){
+                    String schedule = df.format(taskReport.getTotalScale() / taskPublish.getTotalScale());
+                    map.put("address",taskPublish.getProvince());
+                    map.put("schedule",schedule);
+                    progressCompletionLists.add(map);
+                }else{
+                    map.put("address",taskPublish.getProvince());
+                    map.put("schedule","0");
+                    progressCompletionLists.add(map);
+                }
+            }
+        } else if(roleName.contains("省级")){
+            tTaskPublish.setProvince(deptName);
+            //查询市级当前年份任务集合
+            List<TTaskPublish> listCityData = tTaskPublishService.selectCityPublishList(tTaskPublish);
+            for(TTaskPublish taskPublish : listCityData){
+                tTaskReport.setProvince(taskPublish.getProvince());
+                tTaskReport.setCity(taskPublish.getAddress());
+                //查询上报任务完成量
+                TTaskReport  taskReport = iTTaskReportService.selectLatestTTaskReport(tTaskReport);
+                HashMap<String, String> map = new HashMap<>();
+                if(taskReport != null){
+                    String schedule = df.format(taskReport.getTotalScale() / taskPublish.getTotalScale());
+                    map.put("address",taskPublish.getAddress());
+                    map.put("schedule",schedule);
+                    progressCompletionLists.add(map);
+                }else{
+                    map.put("address",taskPublish.getAddress());
+                    map.put("schedule","0");
+                    progressCompletionLists.add(map);
+                }
+            }
+        }else if(roleName.contains("市级")){
+            tTaskResolve.setProvince(deptName);
+            //查询区级当前年份任务集合
+            List<TTaskResolve> listAreaData = tTaskResolveService.selectAreaResolveListH(tTaskResolve);
+            for(TTaskResolve taskResolve : listAreaData){
+                tTaskReport.setCity(taskResolve.getProvince());
+                tTaskReport.setAddress(taskResolve.getAddress());
+                //查询上报任务完成量
+                TTaskReport  taskReport = iTTaskReportService.selectLatestTTaskReport(tTaskReport);
+                HashMap<String, String> map = new HashMap<>();
+                if(taskReport != null){
+                    String schedule = df.format(taskReport.getTotalScale() / taskResolve.getTotalScale());
+                    map.put("address",taskResolve.getAddress());
+                    map.put("schedule",schedule);
+                    progressCompletionLists.add(map);
+                }else{
+                    map.put("address",taskResolve.getAddress());
+                    map.put("schedule","0");
+                    progressCompletionLists.add(map);
+                }
+            }
+        }
+        return progressCompletionLists;
+    }
+}
