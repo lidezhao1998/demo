@@ -96,7 +96,6 @@ function setInnerText(element, text) {
 }
 
 var TiandiMap_vec = new ol.layer.Tile({
-    name: "天地图矢量图层",
     source: new ol.source.XYZ({
         url: "http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=" + TiandituKey,//TiandituKey为天地图密钥
         wrapX: false
@@ -109,6 +108,13 @@ var TiandiMap_cva = new ol.layer.Tile({
     })
 });
 var TiandiMap_img = new ol.layer.Tile({
+    name: "天地图影像图层",
+    source: new ol.source.XYZ({
+        url: "http://t0.tianditu.com/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=" + TiandituKey,//TiandituKey为天地图密钥
+        wrapX: false
+    })
+});
+var TiandiMap_img1 = new ol.layer.Tile({
     name: "天地图影像图层",
     source: new ol.source.XYZ({
         url: "http://t0.tianditu.com/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=" + TiandituKey,//TiandituKey为天地图密钥
@@ -256,7 +262,7 @@ function loadMap() {
         //地图容器div的ID
         target: 'map',
         //地图容器中加载的图层
-        layers: [TiandiMap_vec, TiandiMap_cva, TiandiMap_img, TiandiMap_cia, Provinces, evaporation,rainfall,erodibility],
+        layers: [TiandiMap_vec, TiandiMap_cva,evaporation,rainfall,erodibility, TiandiMap_img, TiandiMap_cia, Provinces],
         //地图视图设置
         view: new ol.View({
             //地图初始中心点

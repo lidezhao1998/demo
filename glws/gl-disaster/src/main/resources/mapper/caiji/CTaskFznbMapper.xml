@@ -102,6 +102,23 @@
         </where>
         group  by city
     </select>
+<!--详情信息县级列表数据-->
+    <select id="selectCTaskFznbCountyList" parameterType="CTaskFznb" resultMap="CTaskFznbResult">
+        <include refid="selectCTaskSumFznbVo"/>
+        <where>
+            <if test="number != null  and number != ''">and NUMBER = #{number}</if>
+            <if test="year != null ">and YEAR = #{year}</if>
+            <if test="province != null  and province != ''">and PROVINCE like concat('%',#{province},'%')</if>
+            <if test="city != null  and city != ''">and CITY like concat(#{city},'%')</if>
+            <if test="county != null  and county != ''">and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''">and TYPE = #{type}</if>
+            <if test="creatTime != null ">and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null ">and UPDATE_TIME = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''">and CREATE_BY = #{createBy}</if>
+            <!--<if test="code != null  and code != ''">and CODE = #{code}</if>-->
+        </where>
+        group  by county
+    </select>
 
     <!-- 省级列表详情展示区县级列表 -->
     <select id="selectCTaskFznbAreaListByProvince" parameterType="String" resultMap="CTaskFznbResult">

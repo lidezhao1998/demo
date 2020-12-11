@@ -180,7 +180,7 @@ public class CPlotController extends BaseController
     @GetMapping("/samplingDetail/{id}")
     public String samplingDetail(@PathVariable("id") Long id, ModelMap mmap)
     {
-        CPlot cPlot = cPlotService.selectCPlotDetailById(id);
+        CPlot cPlot = cPlotService.selectCPlotById(id);
         String url=prefix1+"/pestEditdt";
         if(cPlot.getHarmfulSpeciesType().equals("害虫")){
             url=prefix1+"/pestEditdt";

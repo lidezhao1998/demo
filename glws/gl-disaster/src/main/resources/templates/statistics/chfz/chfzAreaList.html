@@ -52,7 +52,7 @@
                         <!--</div>-->
                         <!--</li>-->
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="search1()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -487,6 +487,39 @@
                 }
             }
         });
+
+    }
+
+    function  search1 (formId, tableId, data) {
+
+        var a=$("#addrArea").val();
+        if(a=="" || a==null){
+        }else{
+            table.set(tableId);
+            var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+            var params = $.common.isEmpty(tableId) ? $("#" + table.options.id).bootstrapTable('getOptions') : $("#" + tableId).bootstrapTable('getOptions');
+            params.queryParams = function (params) {
+                var search = $.common.formToJSON(currentId);
+                if ($.common.isNotEmpty(data)) {
+                    $.each(data, function (key) {
+                        search[key] = data[key];
+                    });
+                }
+                search.pageSize = params.limit;
+                search.pageNum = params.offset / params.limit + 1;
+                search.searchValue = params.search;
+                search.orderByColumn = params.sort;
+                search.isAsc = params.order;
+                return search;
+            };
+            if ($.common.isNotEmpty(tableId)) {
+                $("#" + tableId).bootstrapTable('refresh', params);
+            } else {
+                $("#" + table.options.id).bootstrapTable('refresh', params);
+            }
+        }
+
+
 
     }
 

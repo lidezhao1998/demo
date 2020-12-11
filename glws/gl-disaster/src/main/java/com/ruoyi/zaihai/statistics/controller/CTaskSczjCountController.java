@@ -192,7 +192,7 @@ public class CTaskSczjCountController extends BaseController {
             cTaskSczj.setCity(city);
 
         }
-        List<CTaskSczj> list= cTaskSczjMapper.selectCTaskSczjCityList(cTaskSczj);
+        List<CTaskSczj> list= cTaskSczjMapper.selectCTaskSczjCountyList(cTaskSczj);
 
         return getDataTable(list);
     }

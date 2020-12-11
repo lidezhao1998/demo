@@ -188,5 +188,16 @@ public class CTaskScnyServiceImpl implements ICTaskScnyService
         cTaskScnyMapper.updateCTaskSczjRoleName(taskScny);
     }
 
+    /**
+     * 县级详情信息列表
+     *
+     * @param
+     * @return 县级详情信息
+     */
+    @Override
+    public List<CTaskScny> selectCTaskScnyCountyList(CTaskScny cTaskScny) {
+        return cTaskScnyMapper.selectCTaskScnyCountyList(cTaskScny);
+    }
+
 
 }

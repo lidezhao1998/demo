@@ -50,8 +50,9 @@ public class CTaskSczjjSelectController extends BaseController
 
     @RequiresPermissions("caiji:sczjjselect:view")
     @GetMapping()
-    public String sczj()
+    public String sczj(ModelMap mmap)
     {
+
         return prefix + "/sczjjselect";
     }
 
@@ -91,7 +92,7 @@ public class CTaskSczjjSelectController extends BaseController
 
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(CTaskSelectAll cTaskSelectAll) {
+    public TableDataInfo list(CTaskSelectAll cTaskSelectAll, ModelMap mmap) {
 
         String codeAddess ="";
         /*获取用户确认权限*/
@@ -124,10 +125,6 @@ public class CTaskSczjjSelectController extends BaseController
             }
         }
         cTaskSelectAll.setCode(codeS);
-/*
-        List<CTaskSelectAll> list = icTaskSelectAllService.selectCTaskSelectAllList(cTaskSelectAll);
-
-*/
         startPage();
         if(StringUtils.isNotEmpty(cTaskSelectAll.getProvince())){
             SysDictData sysDictData= iSysDictDataService.selectDictDataById(Long.valueOf(cTaskSelectAll.getProvince()));
@@ -135,16 +132,13 @@ public class CTaskSczjjSelectController extends BaseController
         }
         if(StringUtils.isNotEmpty(cTaskSelectAll.getCity())){
             SysDictData sysDictData1= iSysDictDataService.selectDictDataById(Long.valueOf(cTaskSelectAll.getCity()));
-            cTaskSelectAll.setCity(sysDictData1.getDictLabel().substring(0,2));
+            cTaskSelectAll.setCity(sysDictData1.getDictLabel());
         }
         if(StringUtils.isNotEmpty(cTaskSelectAll.getCounty())){
             SysDictData sysDictData2= iSysDictDataService.selectDictDataById(Long.valueOf(cTaskSelectAll.getCounty()));
             cTaskSelectAll.setCounty(sysDictData2.getDictLabel());
         }
-        if(StringUtils.isNotEmpty(cTaskSelectAll.getProvince())){
-            SysDictData sysDictData= iSysDictDataService.selectDictDataById(Long.valueOf(cTaskSelectAll.getProvince()));
-            cTaskSelectAll.setProvince(sysDictData.getDictLabel());
-        }
+
         List<CTaskSelectAll> list = icTaskSelectAllService.selectCTaskSelectAllList1(cTaskSelectAll);
         if(list!=null&& list.size()>0){
             for (int i = 0; i < list.size(); i++) {

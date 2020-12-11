@@ -103,4 +103,7 @@ public interface KStockMapper
      */
     @Select("select INVENTORY,ADDRESS,NAME from k_stock")
     List<KStock> getOptionHistogram(KStock stock);
+
+    @Select("select count(1) from k_stock where RESERVE_ID=#{dictId}")
+    int countDictDataByType(Long dictId);
 }

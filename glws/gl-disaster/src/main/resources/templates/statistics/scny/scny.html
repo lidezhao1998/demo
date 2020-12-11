@@ -279,6 +279,8 @@
                 var length= row.rows.length;
                 if (roleName=='国家级') {
                     $('#city').hide();
+                    $('#area').hide();
+
                     $('#bootstrap-table').bootstrapTable('hideColumn', 'city');
                     $('#bootstrap-table').bootstrapTable('hideColumn', 'county');
                     document.getElementById("bootstrap-table").rows[length].cells[0].innerHTML="-";

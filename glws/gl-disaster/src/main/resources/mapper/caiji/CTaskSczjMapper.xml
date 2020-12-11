@@ -253,11 +253,26 @@
         group by city
     </select>
 
+    <!--省级用户详情县级数据-->
+    <select id="selectCTaskSczjCountyList" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
+        <include refid="selectCTaskSczjSumVo"/>
+        <where>
+            <if test="year != null and year != ''">and YEAR = #{year}</if>
+            <if test="province != null  and province != ''">and PROVINCE like concat(#{province},'%')</if>
+            <if test="city != null  and city != ''">and CITY like concat(#{city},'%')</if>
+            <if test="county != null  and county != ''">and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''">and TYPE = #{type}</if>
+        </where>
+        group by county
+    </select>
+
     <!--县级二级列表-->
     <select id="selectCTaskSczjAreaList" parameterType="CTaskSczj" resultMap="CTaskSczjResult">
         <include refid="selectCTaskSczjSumVo"/>
-
-        where COUNTY = #{county} group by county
+        <where>
+        <if test="county != null  and county != ''">and COUNTY = #{county}</if>
+        </where>
+         group by county
     </select>
 
     <!-- 省级列表详情展示区县级列表 -->

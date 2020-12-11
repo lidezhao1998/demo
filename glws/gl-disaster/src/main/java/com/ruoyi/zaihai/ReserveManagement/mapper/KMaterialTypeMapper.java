@@ -59,7 +59,7 @@ public interface KMaterialTypeMapper
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    int deleteKMaterialTypeByIds(String[] ids);
+    int deleteKMaterialTypeByIds(Long[] ids);
 
     Object selectDictTypeById(Long dictId);
 

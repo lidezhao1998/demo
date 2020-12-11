@@ -225,7 +225,7 @@
 
                     }
                 ],onLoadSuccess: function (row) {
-                    if (row.rows!=null && row.rows.length>=0){
+                    if (row.rows!=null && row.rows.length>0){
                         var roleName = row.rows[0].params.roleName;
                         var codeAddess = row.rows[0].params.codeAddess;
 
@@ -310,13 +310,14 @@
                     }
                 }
             });
+            getCities();
         }
 
         // ===== 加载市列表 =====
         function getCities(value) {
             $("#addressCity").empty();
             $("#addrArea").empty();
-            var url = ctx + "caiji/survey/getCitiesLable";
+            var url = ctx + "caiji/survey/getCities";
             var data = "provinceCode=" + value;
             $.ajax({
                 "url": url,
@@ -329,7 +330,6 @@
                     document.getElementById("addressCity").appendChild(op);
                     for (var i = 0; i < data.length; i++) {
                         var op = document.createElement("option");
-
                         op.value = data[i].dictCode;
                         op.text = data[i].dictLabel;
                         document.getElementById("addressCity").appendChild(op);

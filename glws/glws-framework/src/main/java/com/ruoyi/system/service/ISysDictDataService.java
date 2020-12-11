@@ -160,4 +160,9 @@ public interface ISysDictDataService
      * 根据部门名称查询代码
      * */
     String selectDictCodeByDictLabel(String dictLabel);
+
+    /**
+     * 根直辖市查询区级
+     * */
+    String selectDictValueCityCode(String cityCode);
 }

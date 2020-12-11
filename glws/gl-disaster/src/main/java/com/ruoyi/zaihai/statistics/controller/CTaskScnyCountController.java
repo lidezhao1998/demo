@@ -67,12 +67,12 @@ public class CTaskScnyCountController extends BaseController {
     public TableDataInfo list(CTaskScny cTaskScny) {
         startPage();
         //获取当前年份
-      /*  Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        if(cTaskScny.getYear()==""){
-            cTaskScny.setYear(year+"");
-        }*/
-        //查询登录人的用户信息(登录名)
+
+        //查询登录人的用户信/*  Calendar cal = Calendar.getInstance();
+        //        int year = cal.get(Calendar.YEAR);
+        //        if(cTaskScny.getYear()==""){
+        //            cTaskScny.setYear(year+"");
+        //        }*/息(登录名)
         String operName = ShiroUtils.getSysUser().getLoginName();
         //获取登录用户的部门
         String deptName = ShiroUtils.getSysUser().getDept().getDeptName();
@@ -191,7 +191,7 @@ public class CTaskScnyCountController extends BaseController {
             cTaskScny.setCity(city);
 
         }
-        List<CTaskScny>   list = cTaskScnyService.selectCTaskScnyCityList(cTaskScny);
+        List<CTaskScny>   list = cTaskScnyService.selectCTaskScnyCountyList(cTaskScny);
 
 
         return getDataTable(list);

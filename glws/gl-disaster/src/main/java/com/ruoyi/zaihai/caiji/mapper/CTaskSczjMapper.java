@@ -310,4 +310,12 @@ public interface CTaskSczjMapper
      */
     @Select(" select  CITY name, sum(CONTROLAREA) value from  c_task_sczj group by CITY")
     List<Map<String, Object>> getControlareaCityCount();
+
+
+    /**
+     * @description 省级用户详情县级数据
+     * @author feiyanxu
+     * @date
+     */
+    List<CTaskSczj> selectCTaskSczjCountyList(CTaskSczj cTaskSczj);
 }

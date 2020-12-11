@@ -124,10 +124,17 @@ public interface SysDictDataMapper
      * @param
      * @return 字典标签
      */
-    /*@Select("select dict_code from sys_dict_data where dict_label=#{provinceLabel}")*/
     @Select("select dict_code from sys_dict_data where dict_label like '%${provinceLabel}%' limit 1")
     String selectDictValueCode(@Param("provinceLabel")String provinceLabel);
 
+    /**
+     * 直辖市根据字典键值查询字典dictcode
+     *
+     * @param
+     * @return 直辖市字典标签
+     */
+    @Select("select dict_code from sys_dict_data where  dict_code=(select max(dict_code) from sys_dict_data where dict_label like'%${provinceLabel}%')  limit 1")
+    String selectDictValueCityCode(@Param("provinceLabel")String provinceLabel);
 
     List<SysDictData> getCities(String provinceCode);
 

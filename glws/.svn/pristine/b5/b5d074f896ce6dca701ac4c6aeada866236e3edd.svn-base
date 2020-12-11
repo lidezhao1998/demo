@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.zaihai.ReserveManagement.mapper.KMaterialTypeMapper">
+    
+    <resultMap type="KMaterialType" id="KMaterialTypeResult">
+        <result property="id"    column="ID"    />
+        <result property="code"    column="CODE"    />
+        <result property="materialType"    column="MATERIAL_TYPE"    />
+        <result property="materialName"    column="MATERIAL_NAME"    />
+        <result property="remark"    column="REMARK"    />
+        <result property="createBy"    column="CREATE_BY"    />
+        <result property="createTime"    column="CREATE_TIME"    />
+        <result property="updateBy"    column="UPDATE_BY"    />
+        <result property="updateTime"    column="UPDATE_TIME"    />
+    </resultMap>
+
+    <sql id="selectKMaterialTypeVo">
+        select ID, CODE, MATERIAL_TYPE,MATERIAL_NAME, REMARK, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME from k_material_type
+    </sql>
+
+    <select id="selectKMaterialTypeList" parameterType="KMaterialType" resultMap="KMaterialTypeResult">
+        <include refid="selectKMaterialTypeVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and CODE = #{code}</if>
+            <if test="materialType != null  and materialType != ''"> and MATERIAL_TYPE = #{materialType}</if>
+            <if test="materialName != null  and materialName != ''"> and MATERIAL_NAME like concat('%', #{materialName}, '%')</if>
+            <if test="remark != null  and remark != ''"> and REMARK = #{remark}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <if test="createTime != null "> and CREATE_TIME = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and UPDATE_BY = #{updateBy}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="params != null">
+                <if test="params.beginCreateTime!=null and params.beginCreateTime!=''">
+                    and    CREATE_TIME &gt;=#{params.beginCreateTime}
+                </if>
+                <if test="params.endCreateTime!=null and params.endCreateTime!=''">
+                    and   CREATE_TIME &lt;=DATE_ADD(#{params.endCreateTime},INTERVAL 1 DAY)
+                </if>
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectKMaterialTypeById" parameterType="Long" resultMap="KMaterialTypeResult">
+        <include refid="selectKMaterialTypeVo"/>
+        where ID = #{id}
+    </select>
+
+    <select id="selectKMaterialTypeByCode" parameterType="String" resultMap="KMaterialTypeResult">
+        select ID, CODE, MATERIAL_TYPE,MATERIAL_NAME, REMARK, CREATE_BY, CREATE_TIME, UPDATE_BY, UPDATE_TIME from k_material_type
+        where MATERIAL_TYPE = #{code}
+
+    </select>
+        
+    <insert id="insertKMaterialType" parameterType="KMaterialType" useGeneratedKeys="true" keyProperty="id">
+        insert into k_material_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE,</if>
+            <if test="materialType != null  and materialType != ''">MATERIAL_TYPE,</if>
+            <if test="materialName != null  and materialName != ''">MATERIAL_NAME,</if>
+            <if test="remark != null  and remark != ''">REMARK,</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY,</if>
+            CREATE_TIME
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY,</if>
+            <if test="updateTime != null ">UPDATE_TIME,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="materialType != null  and materialType != ''">#{materialType},</if>
+            <if test="materialName != null  and materialName != ''">#{materialName},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            sysdate(),            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKMaterialType" parameterType="KMaterialType">
+        update k_material_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''">CODE = #{code},</if>
+            <if test="materialType != null  and materialType != ''">MATERIAL_TYPE = #{materialType},</if>
+            <if test="materialName != null  and materialName != ''">MATERIAL_NAME = #{materialName},</if>
+            <if test="remark != null  and remark != ''">REMARK = #{remark},</if>
+            <if test="createBy != null  and createBy != ''">CREATE_BY = #{createBy},</if>
+            <if test="createTime != null ">CREATE_TIME = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">UPDATE_BY = #{updateBy},</if>
+            <if test="updateTime != null ">UPDATE_TIME = #{updateTime},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteKMaterialTypeById" parameterType="Long">
+        delete from k_material_type where ID = #{id}
+    </delete>
+
+    <delete id="deleteKMaterialTypeByIds" parameterType="Long">
+        delete from k_material_type where ID in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectDictTypeById" parameterType="Long" resultMap="KMaterialTypeResult">
+        <include refid="selectKMaterialTypeVo"/>
+        where ID = #{dictId}
+    </select>
+    <select id="selectKMaterialTypeByType" parameterType="String" resultMap="KMaterialTypeResult">
+        <include refid="selectKMaterialTypeVo"/>
+        where MATERIAL_TYPE = #{type}
+    </select>
+
+
+
+
+    <select id="selectDictTypeAll" resultMap="KMaterialTypeResult">
+        <include refid="selectKMaterialTypeVo"/>
+    </select>
+    <select id="checkCode" parameterType="string" resultType="java.lang.String">
+         select  CODE from  k_material_type where CODE=#{code}
+    </select>
+
+
+</mapper>

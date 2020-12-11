@@ -107,4 +107,11 @@ public interface CTaskFznbMapper
      * @return 发生防治年报集合
      */
     List<CTaskFznb> selectCTaskFznbAreaList(CTaskFznb cTaskFznb);
+    /**
+     * 县级详情页信息
+     *
+     * @param cTaskFznb 发生防治年报
+     * @return 发生防治年报集合
+     */
+    List<CTaskFznb> selectCTaskFznbCountyList(CTaskFznb cTaskFznb);
 }

@@ -2055,7 +2055,7 @@ public class CGroundSurveyController extends BaseController
     public List<SysDictData> getAreasLable( ModelMap mmap,String cityCode)
     {
         /*根据市名称查询code*/
-        String code=iSysDictDataService.selectDictValueCode(cityCode);
+        String code=iSysDictDataService.selectDictValueCityCode(cityCode);
         List<SysDictData> list=iSysDictDataService.getAreas(code);
 
         return list;

@@ -71,7 +71,9 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">取样面积类型：</label>
                         <div class="col-sm-8">
-                            <div name="detailedType" th:text="*{samplingArea}" class="form-control-static"></div>
+                            <div name="detailedType" class="form-control-static"
+                                 th:text="${@dict.getLabels(cPlot.samplingArea)}"></div>
+                            <input name="detailedType" id="samplingArea" class="form-control"   type="hidden" th:field="*{samplingArea}" >
                         </div>
                         <!-- <label class="col-sm-3 control-label">取样面积：</label>
                          <div class="col-sm-8">
@@ -119,7 +121,7 @@
                       </div>
                   </div>-->
 
-                <div class="row">
+                <div class="row" id="hidden">
                     <div id="plantNumber1">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -132,6 +134,10 @@
                     </div>
 
 
+
+                </div>
+
+                <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">换算标准密度：</label>
@@ -142,9 +148,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">取样时间：</label>
@@ -200,7 +204,7 @@
         getKeType();
             conversion();
         // document.getElementById("hidden").style.display="none";//隐藏
-        document.getElementById("plantNumber1").style.display = "none";//隐藏
+       // document.getElementById("plantNumber1").style.display = "none";//隐藏
         //document.getElementById("hidden").style.display="";//显示
     });
     var prefix = ctx + "caiji/plot";
@@ -338,10 +342,10 @@
     }
 
     function conversion() {
-        var type=$("#samplingArea option:selected").val();
+        var type=$("#samplingArea").val();
         var sumName="每公顷鼠洞数";
         var sumName1="每公顷鼠丘数";
-        /*alert(type)*/
+       /* alert(type)*/
         //一亩鼠丘
         if(type=='1000134'){
             document.getElementById("cdNumber").style.display="";//显示
@@ -349,7 +353,7 @@
             $("#plantNumber").val("");
             var data = $("#quantityDetermination").val();
             var a=(data*15);
-            $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
+           // $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
             $("#danwei" ) .text(sumName);
         }else if(type=='1000135'){
             document.getElementById("cdNumber").style.display="";//显示
@@ -357,21 +361,21 @@
             $("#plantNumber").val("");
             var data = $("#quantityDetermination").val();
             var a=(data*4).toFixed(2);
-            $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
+           // $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
             $("#danwei" ) .text(sumName);
         }else if(type=='1000136'){
             document.getElementById("cdNumber").style.display="";//隐藏
             document.getElementById("hidden").style.display="";//显示
             var data = $("#quantityDetermination").val();
             var a=(data*15);
-            $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
+           // $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
             $("#danwei" ) .text(sumName1);
         }else if(type=='1000137'){
             document.getElementById("cdNumber").style.display="";//隐藏
             document.getElementById("hidden").style.display="";//显示
             var data = $("#quantityDetermination").val();
             var a=(data*4);
-            $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
+           // $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
             $("#danwei" ) .text(sumName1);
         }
     }

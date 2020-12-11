@@ -71,7 +71,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">科种类：</label>
                     <div class="col-sm-8">
-                        <div name="sectiondType"  class="form-control-static" th:text="${@dict.getLabels(cPlot.detailedType)}"></div>
+                        <div name="sectiondType"  class="form-control-static" th:text="${@dict.getLabels(cPlot.sectiondType)}"></div>
                     </div>
 
                 </div>
@@ -95,7 +95,9 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">取样面积类型：</label>
                     <div class="col-sm-8">
-                        <div name="detailedType"  th:text="*{samplingArea}" class="form-control-static"></div>                    </div>
+                        <div name="detailedType" class="form-control-static"
+                             th:text="${@dict.getLabels(cPlot.samplingArea)}"></div>
+                        <input name="detailedType" id="samplingArea" class="form-control"   type="hidden" th:field="*{samplingArea}" >               </div>
                     <!-- <label class="col-sm-3 control-label">取样面积：</label>
                      <div class="col-sm-8">
                          <select name="samplingArea" id="detailedType"  class="form-control m-b" th:with="type=${@dict.getCode('1000021')}" required>
@@ -163,7 +165,7 @@
                         <label class="col-sm-4 control-label">换算标准密度：</label>
                         <div class="col-sm-8">
                             <div name="standardDensity"  class="form-control-static" th:text="*{standardDensity}"></div>
-                            <span  >密度单位：</span><span id="danwei">每平米害虫数</span>
+                            <span  >密度单位：</span><span id="danwei">盖度百分比</span>
 
                         </div>
                     </div>

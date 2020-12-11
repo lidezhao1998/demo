@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+
+<head>
+    <th:block th:include="include :: header('新增入库')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<style>
+    #tab02,#tab02 tr th,#tab02 tr td{
+        border: 1px solid #ccc;
+    }
+    #tab02{
+         border-collapse: collapse;
+     }
+
+    /*修改表头颜色*/
+    .wrapper .table-striped table thead{
+        background-color: #50c2c1;
+        color: white;
+    }
+
+
+</style>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-instock-add">
+            <h4 class="form-header h4">物资类型</h4>
+
+
+
+            <div class="row">
+
+                <!--<div class="col-sm-6">
+                    <div class="form-group">
+                        &lt;!&ndash;
+                                       <div class="layui-input-block" style="margin-top: 30px">
+                        &ndash;&gt;
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>物资：</label>
+                        &lt;!&ndash;
+                                         <em class="i-bit"></em><span>物资类型：</span>
+                        &ndash;&gt;
+                        <div class="col-sm-8">
+
+                        <select
+                                id="manufactorType" name="manufactorType" onchange="getCities()" style="width: 165px;height:30px;border:1px solid #e5e6e7 " required="required" >
+                        </select>
+                        <select
+                                id="manufactorName" name="name" onchange="getAreas()"   style="width: 165px;height:30px;border:1px solid #e5e6e7 " required="required">
+                        </select>
+                        &lt;!&ndash;</div>&ndash;&gt;
+
+                        </div>
+                    </div>
+                </div>
+-->
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>储备库：</label>
+                        <div class="col-sm-8">
+
+                            <select
+                                    id="reserve" name="reserve" onchange="getReserve()" style="width: 165px;height:30px;border:1px solid #e5e6e7 " required="required" >
+                            </select>
+
+                            <!--</div>-->
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>入库时间：</label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input name="warehousingTime" id="test2" class="form-control" placeholder="yyyy-MM-dd HH:mm:ss" type="text" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <h4 class="form-header h4">物资信息</h4>
+            <div class="col-sm-12 select-table">
+                <div class="row" style="margin-left:1.5px;margin-bottom: 1px">
+                    <div >
+                        <button type="button" style="background-color: rgba(48,146,62, 0.9)" class="btn btn-sm btn-primary" onclick="addRow()"><i class="fa fa-check"></i>新增</button>&nbsp;
+                        <button type="button"  style="background-color: rgba(48,146,62, 0.9)" class="btn btn-sm btn-primary" onclick="resolveAll()"><i class="fa fa-check"></i>全部入库</button>&nbsp;
+
+                    </div>
+                </div>
+                <table id="mytable"  class="tg" name="test"border="0px solid rgba(48,146,62, 0.9)" cellspacing="0" cellpadding="0" style="width: 100%;height: 35px">
+                    <tr id="tr1"  align="center" style="background-color: rgba(48,146,62, 0.9)">
+                        <td style="width: 10%;height:35px;" ><font size="2" color="white">物资序号</font></td>
+                        <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>物资类型</font></td>
+                        <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>物资名称</font></td>
+                        <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>型号</font></td>
+                        <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>数量(千)</font></td>
+                        <td style="width: 15%;height:35px; " ><font size="2" color="white"><span style="color: red; ">*</span>厂商信息</font></td>
+<!--
+                        <td>入库人</td>
+-->
+                        <td style="width: 15%;height:35px; "><font size="2" color="white"><span style="color: red; ">*</span>备注</font></td>
+                    </tr>
+                    <tr id="tr2">
+                        <td>
+
+                            <input  id="publishID_1" name="publishId_1"   value="1" style="width: 100%;height: 35px;" required readonly="readonly" >
+<!--
+                            <input  id="id" name="id"  type="hidden"  >
+-->
+                        </td>
+                        <td>
+
+                            <select
+                                    id="manufactorType" name="manufactorType" onchange="getCities()" style="width: 100%;height:35px; "
+                            >
+                            </select> </td>
+                        <td>
+                            <select
+                                    id="manufactorName" name="manufactorName"   style="width: 100%;height:35px; "
+                            >
+                            </select></td>
+                        <td><input id="model" name="model" type="text" style="width: 100%; height: 35px"  > </td>
+                        <td><input id="goodsNumber" name="goodsNumber" type="text"  style="width: 100%; height: 35px"  min maxlength="6" onkeyup="value=value.replace(/[^\d]/g,'')"
+                        > </td>
+                        <td><input  id="manufactor" name="manufactor" type="text"  style="width: 100%; height: 35px"  > </td>
+                        <td><input id="reason" name="reason" type="text" style="width: 100%; height: 35px" > </td>
+
+
+                    </tr>
+                </table>
+
+            </div>
+        </form>
+       <!-- <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandler()"  ><i class="fa fa-check"></i>入 库</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-sm btn-primary" th:onclick="submitHandlerSave()"  ><i class="fa fa-check"></i>保 存</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+&lt;!&ndash;
+            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('form-publish-add', 'bootstrap-table1')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+&ndash;&gt;
+
+        </div>-->
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "reserves/instock";
+
+        $("#form-instock-add").validate({
+            onkeyup: false,
+            rules:{
+
+                email:{
+                    email:true,
+                    remote: {
+                        url: prefix + "/checkEmailUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "email": function () {
+                                return $.common.trim($("#email").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                            return $.validate.unique(data);
+                        }
+                    }
+                },
+                receiverNumber:{
+                    isPhone:true,
+                   /* remote: {
+                        url: prefix + "/checkPhoneUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "phonenumber": function () {
+                                return $.common.trim($("#phonenumber").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                            return $.validate.unique(data);
+                        }
+                    }*/
+                },
+                reasonNumber:{
+                    isPhone:true,
+
+                },
+            },
+            messages: {
+                "loginName": {
+                    remote: "用户已经存在"
+                },
+                "email": {
+                    remote: "Email已经存在"
+                },
+                "phonenumber":{
+                    remote: "手机号码已经存在"
+                }
+            },
+            focusCleanup: true
+        });
+
+       /* $("#form-instock-add").validate({
+            focusCleanup: true
+        });*/
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-instock-add').serialize());
+            }
+        }
+
+
+        function submitHandlerSave() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/addrk", $('#form-instock-add').serialize());
+            }
+        }
+
+        $("input[name='warehousingTime']").datetimepicker({
+            format: "yyyy-mm-dd hh:ii:ss",
+            minView: "month",
+            autoclose: true,
+
+        });
+
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#test2',
+                format: 'yyyy-MM-dd HH:mm:ss', //时间格式  常用时间格式:yyyy-MM-dd HH:mm:ss
+                value:new Date()
+
+
+            });
+        });
+
+
+        //省市区三级联动
+        $(function(){
+            getProvinces();
+            var op1 = document.createElement("option");
+            document.getElementById("manufactorName").appendChild(op1);
+
+        });
+    </script>
+    <script type="text/javascript">
+        // ===== 加载物资类型 =====
+        function getProvinces() {
+            var url=ctx+"reserves/instock/getType";
+                $.ajax({
+                    "url": url,
+                    "type": "GET",
+                    "dataType": "json",
+                    "success": function(data) {
+                        //alert(JSON.stringify(data))
+                        var op = document.createElement("option");
+                        document.getElementById("manufactorType").appendChild(op);
+                        for (var i = 0; i < data.length; i++) {
+                            var op = document.createElement("option");
+                            op.value = data[i].materialType;
+                            op.text = data[i].materialName;
+                            document.getElementById("manufactorType").appendChild(op);
+                        }
+                    }
+                });
+
+            getCities();
+        }
+
+
+        // ===== 加载物资列表 =====
+        function getCities() {
+            $("#manufactorName").empty();
+            var url=ctx+"reserves/instock/getGoods";
+            var data = "provinceCode=" + $("#manufactorType").val();
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+
+                    var op = document.createElement("option");
+                    document.getElementById("manufactorName").appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].materialId;
+                        op.text = data[i].materialName;
+                        document.getElementById("manufactorName").appendChild(op);
+                    }
+                }
+            });
+
+        }
+
+
+        function getType(number) {
+            var url=ctx+"reserves/instock/getType";
+            $.ajax({
+                "url": url,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+                    //alert(JSON.stringify(data))
+                    var op = document.createElement("option");
+                    document.getElementById("manufactorType_"+number).appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].materialType;
+                        op.text = data[i].materialName;
+                        document.getElementById("manufactorType_"+number).appendChild(op);
+                    }
+                }
+            });
+
+
+
+            getName(number);
+
+        }
+
+        function getName(number) {
+            $("#manufactorName_"+number).empty();
+            var url=ctx+"reserves/instock/getGoods";
+            var data = "provinceCode=" + $("#manufactorType_"+number).val();
+            $.ajax({
+                "url": url,
+                "data": data,
+                "type": "GET",
+                "dataType": "json",
+                "success": function(data) {
+
+                    var op = document.createElement("option");
+                    document.getElementById("manufactorName_"+number).appendChild(op);
+                    for (var i = 0; i < data.length; i++) {
+                        var op = document.createElement("option");
+                        op.value = data[i].materialId;
+                        op.text = data[i].materialName;
+                        document.getElementById("manufactorName_"+number).appendChild(op);
+                    }
+                }
+            });
+
+        }
+
+
+
+        $(function(){
+            //加载储备库
+                var url=ctx+"reserves/reserve/getReserve";
+                $.ajax({
+                    "url": url,
+                    "type": "GET",
+                    "dataType": "json",
+                    "success": function(data) {
+                        var op = document.createElement("option");
+                        document.getElementById("reserve").appendChild(op);
+                        for (var i = 0; i < data.length; i++) {
+                            var op = document.createElement("option");
+                            op.value = data[i].id;
+                            op.text = data[i].librayName;
+                            document.getElementById("reserve").appendChild(op);
+                        }
+                    }
+                });
+
+        })
+
+        /* 删除一行 */
+        function del11(obj) {
+            var tab = obj.parentNode.parentNode;
+            tab.parentNode.removeChild(tab);
+            dataValidation();
+        }
+
+
+        //追加一行
+        function addRow() {
+            var tableNode =	document.getElementById("mytable");
+            var trNodeList = tableNode.getElementsByTagName("tr");
+            //得到最后一行(tr)的所有td
+            var tdNodeList = trNodeList[trNodeList.length - 1].getElementsByTagName("td");
+            var td_input_name = tdNodeList[0].getElementsByTagName("input")[0].name;
+            var strIndex = td_input_name.indexOf("_");
+            var number = td_input_name.substring(strIndex + 1)
+
+            var trNode = document.createElement("tr");
+            number++;
+            $("#mytable").append("<tr>" +
+                "<td> <input name=\"publishId_"+number+"\"  id=\"publishId\" value="+number+" type=\"text\" style=\"width: 100%; height:35px;\"  min readonly=\"readonly\"> </td>" +
+                "<td><select id=\"manufactorType_"+number+"\"  name=\"manufactorType\" onchange=\"getName("+number+")\" style=\"width: 100%;height:35px;\" > </select> </td>"+
+            "<td><select id=\"manufactorName_"+number+"\" name=\"manufactorName\" style=\"width: 100%;height:35px;\" > </select> </td>"+
+           "<td> <input name=\"model\" type=\"text\" style=\"width: 100%; height:35px;\"  > </td>"+
+            "<td> <input name=\"goodsNumber\" type=\"text\" style=\"width: 100%; height:35px;\"  min maxlength=\"6\" onkeyup=\"value=value.replace(/[^\\d]/g,'')\"> </td>"+
+            "<td> <input name=\"manufactor\" type=\"text\"  style=\"width: 100%; height:35px;\"  > </td>"+
+            "<td> <input name=\"reason\" type=\"text\" style=\"width: 100%; height:35px;\"  > </td>" +
+                " <td><a class=\"btn btn-danger btn-xs\" onclick=\"del11(this)\"><i class=\"fa fa-remove\"></i>删除</a></td></tr>")
+            getType(number)
+            //数据校验
+            $('input').blur(function () {
+                dataValidation(this);
+            })
+        }
+
+
+
+        function resolveAll() {
+            if ($.validate.form()) {
+                var reserve=$("#reserve").val();
+                var warehousing=$("#test2").val();
+
+                for(var i = 0; i < $('select').length; i++){
+                    let current = $('select').eq(i).val();
+                    if(current == ""){
+                        layer.alert("未选择出库物资 !")
+
+                        return;
+                    }
+                }
+
+                for(var i = 0; i < $('input').length; i++){
+                    let current = $('input').eq(i).val();
+                    if(current == ""){
+                        layer.alert("请完整填写出库信息 !")
+
+
+                        return;
+                    }
+                }
+            /*let list = ['wlScale','wlInvestment','jmSize','jmMoney','xmSize','xmMoney','hqlxSize','hqlxMoney','smhzlSize','smhzlMoney','thzyglSize','thzyglMoney','rgscdSize','rgscdMoney','hspjSize','hspjMoney','httSize','httMoney','dhcSize','dhcMoney'];
+            for(var i = 0; i < list.length; i++){
+                let current = $('#' + list[i]).text();
+                if(parseInt(current) != 0){
+                    $.modal.confirm("未全部分解,请全部分解后提交", function () {})
+                    return;
+                }
+            }*/
+            var orderItemArray = new Array();
+            $("#form-instock-add tr").each(function () {
+                //this代表当前dom对象tr
+                var that = this;
+                var orderItemObj = new Object();
+                $(that).find("select,input").each(function () {
+                    var name = $(this).attr("name");
+                    orderItemObj[name] = $(this).val();
+                });
+                orderItemObj["warehousingTime"] = warehousing;
+                orderItemObj["reserveId"] = reserve;
+                orderItemArray.push(orderItemObj);
+            });
+            var url = prefix + "/addFenJie";
+            $.ajax({
+                url: url,
+                dataType: "json",
+                contentType: "application/json;charsetset=UTF-8",//必
+                type: "post",
+                cache: false,
+                data: JSON.stringify(orderItemArray),//必须
+               // data: JSON.stringify({orderItemArray: orderItemArray,reserve: reserve,warehousingTime:warehousingTime}),
+                success: function (obj) {
+                    if (obj == "400") {
+                        layer.alert('入库成功！', function (index) {
+                            //加载刷新父类页面并关闭弹窗
+                            window.parent.location.reload();
+                            parent.layer.closeAll('iframe');
+                        });
+                    } else if (obj == "404") {
+                        layer.alert("入库失败！");
+                    } else {
+                        layer.alert("发布失败，请查看网络！！！");
+                    }
+                },
+                error: function (textStatus, e) {
+                    layer.alert("系统ajax交互错误: ");
+                }
+            });
+            }
+        }
+
+    </script>
+</body>
+</html>

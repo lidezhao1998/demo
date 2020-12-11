@@ -24,24 +24,43 @@
                     <div class="select-list">
                         <ul>
 
+
+
                             <li>
-                                <p>物资：</p>
-                                <input type="text" name="name"/>
+                                <div >
+                                <em class="i-bit"></em><span>物资类型：</span>
+
+                                <select
+                                        id="manufactorType" name="emergencyType" onchange="getCities(this.value)"
+                                        style="width: 150px;height:30px; ">
+                                </select>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div >
+                                <em class="i-bit"></em><span>物资名称：</span>
+
+                                <select
+                                        id="manufactorName" name="name"
+                                        style="width: 150px;height:30px; ">
+                                </select>
+                                </div>
                             </li>
 <!--                            <li>-->
 <!--                                <p>品牌：</p>-->
 <!--                                <input type="text" name="brand"/>-->
 <!--                            </li>-->
 
-                            <li>
+                          <!--  <li>
                                 <p>储备地点：</p>
                                 <input type="text" name="storageLocation"/>
-                            </li>
+                            </li>-->
 
-                            <li>
+                          <!--  <li>
                                 <p>类别：</p>
                                 <input type="text" name="emergencyType"/>
-                            </li>
+                            </li>-->
 
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -119,6 +138,12 @@
                     valign: 'middle',
                     title : '储备库名称'
                 },
+                   /* {
+                        field : 'emergencyType',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '类别'
+                    },*/
 
                 {
                     field : 'name',
@@ -145,18 +170,13 @@
                     field : 'replenishment', 
                     title : '补货数量'
                 },
-                {
+             /*   {
                     field : 'storageLocation',
                     align: 'center',
                     valign: 'middle',
                     title : '储备地点'
-                },
-                {
-                    field : 'emergencyType',
-                    align: 'center',
-                    valign: 'middle',
-                    title : '类别'
-                },
+                },*/
+
                 // {
                 //     field : 'remarks',
                 //     align: 'center',
@@ -182,6 +202,66 @@
             };
             $.table.init(options);
         });
+
+
+
+        //省市区三级联动
+        $(function(){
+            getProvinces();
+            var op1 = document.createElement("option");
+            document.getElementById("manufactorName").appendChild(op1);
+
+        });
+    </script>
+     <script type="text/javascript">
+         // ===== 加载物资类型 =====
+         function getProvinces() {
+             var url=ctx+"reserves/instock/getType";
+             $.ajax({
+                 "url": url,
+                 "type": "GET",
+                 "dataType": "json",
+                 "success": function(data) {
+                     //alert(JSON.stringify(data))
+                     var op = document.createElement("option");
+                     document.getElementById("manufactorType").appendChild(op);
+                     for (var i = 0; i < data.length; i++) {
+                         var op = document.createElement("option");
+                         op.value = data[i].materialType;
+                         op.text = data[i].materialName;
+                         document.getElementById("manufactorType").appendChild(op);
+                     }
+                 }
+             });
+
+             getCities();
+         }
+
+
+         // ===== 加载物资列表 =====
+         function getCities() {
+             $("#manufactorName").empty();
+             var url=ctx+"reserves/instock/getGoods";
+             var data = "provinceCode=" + $("#manufactorType").val();
+             $.ajax({
+                 "url": url,
+                 "data": data,
+                 "type": "GET",
+                 "dataType": "json",
+                 "success": function(data) {
+
+                     var op = document.createElement("option");
+                     document.getElementById("manufactorName").appendChild(op);
+                     for (var i = 0; i < data.length; i++) {
+                         var op = document.createElement("option");
+                         op.value = data[i].materialId;
+                         op.text = data[i].materialName;
+                         document.getElementById("manufactorName").appendChild(op);
+                     }
+                 }
+             });
+
+         }
     </script>
 </body>
 </html>

@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="selectDictValueToLabelsWzN"   parameterType="String" resultMap="SysDictDataResult">
 
-    SELECT MATERIAL_NAME as dict_value ,MATERIAL_NAME as dict_label FROM k_manufactor WHERE MATERIAL_TYPE=(SELECT MATERIAL_TYPE FROM k_material_type where MATERIAL_NAME=#{id});
+    SELECT MATERIAL_ID as dict_value ,MATERIAL_NAME as dict_label FROM k_manufactor WHERE MATERIAL_TYPE=(SELECT MATERIAL_TYPE FROM k_material_type where MATERIAL_TYPE	=#{id});
 
 	</select>
 	

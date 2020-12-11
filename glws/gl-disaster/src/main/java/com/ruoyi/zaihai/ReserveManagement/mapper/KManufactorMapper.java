@@ -2,6 +2,7 @@ package com.ruoyi.zaihai.ReserveManagement.mapper;
 
 
 import com.ruoyi.zaihai.ReserveManagement.domain.KManufactor;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -68,4 +69,7 @@ public interface KManufactorMapper
      * @return 查询物资
      */
     List<KManufactor> getGoods(String provinceCode);
+
+    @Select("select count(1) from k_manufactor where MATERIAL_TYPE=#{type}")
+    int countDictDataByType(String type);
 }

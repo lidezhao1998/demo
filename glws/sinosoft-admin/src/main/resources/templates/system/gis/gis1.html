@@ -26,6 +26,7 @@
                         <a href="javascript:;" style="font-size: 16px;color:red" id="gisZoom"></a></strong>
                         <a href="javascript:;" id="comparison" onclick="comparison()">比对</a>
                         <a href="javascript:;" id="show3d" onclick="show3D()">3D</a>
+                        <a href="javascript:;" id="jl" onclick="jl()">卷帘</a>
                         <a href="javascript:;" id="ranging" onclick="measurementGis('LineString')">测距</a>
                         <a href="javascript:;" id="measuringSurface" onclick="measurementGis('Polygon')">测面</a>
                         <a href="javascript:;" id="markPoint" onclick="drawGis('Point','tab')">标记点</a>
@@ -137,6 +138,34 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div id="map-jl" style="display: none">
+                <div style="pointer-events:none">
+                    <input id="swipe" type="range" onchange="jlOnChange()" style="width: 100%;pointer-events:auto">
+                </div>
+                <div class="select-list" style="padding-left:36%;padding-top: 5px;padding-bottom: 2px">
+                    <ul>
+                        <li>
+                            <select name="project_type_left" id="project_type_left"  th:with="type=${@dict.getGisFeatures()}" disabled>
+                                <option th:each="dict : ${type}" th:text="${dict.name}" th:value="${dict.id}" th:fild="*{project_type}"></option>
+                            </select>
+                        </li>
+                        <li>  &nbsp;&nbsp;<img src="/img/change.png">&nbsp;&nbsp;
+                        </li>
+                        <li>
+                            <select name="project_type_right"  id="project_type_right" onchange="jiChenge()" th:with="type=${@dict.getGisFeatures()}">
+                                <option value="0">----请选择----</option>
+                                <option th:each="dict : ${type}" th:text="${dict.name}" th:value="${dict.id}" th:fild="*{project_type}"></option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <div class="header-r">
+                    <div class="header-r-bg">
+                        <a href="javascript:;" id="jlQuit" style="" onclick="jlQuit()">退出</a>
+                    </div>
+                </div>
+                <div id="map-jl-show"></div>
             </div>
         </div>
     </div>

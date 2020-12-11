@@ -85,8 +85,9 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">取样面积类型：</label>
                         <div class="col-sm-8">
-                            <div name="detailedType" th:text="*{samplingArea}" class="form-control-static"></div>
-
+                            <div name="detailedType" class="form-control-static"
+                                 th:text="${@dict.getLabels(cPlot.samplingArea)}"></div>
+                            <input name="detailedType" id="samplingArea" class="form-control"   type="hidden" th:field="*{samplingArea}" >
                         </div>
                         <!-- <label class="col-sm-3 control-label">取样面积：</label>
                          <div class="col-sm-8">
@@ -141,7 +142,7 @@
                         <label class="col-sm-4 control-label">换算标准密度：</label>
                         <div class="col-sm-8">
                             <div name="standardDensity" class="form-control-static" th:text="*{standardDensity}"></div>
-
+                            <span  >密度单位：</span><span id="danwei"></span>
 
                         </div>
                     </div>
@@ -208,7 +209,7 @@
 
 
            // document.getElementById("hidden").style.display="none";//隐藏
-            //document.getElementById("plantNumber1").style.display="none";//隐藏
+            document.getElementById("plantNumber1").style.display="none";//隐藏
             //document.getElementById("hidden").style.display="";//显示
             conversion();
         });
@@ -347,24 +348,20 @@
 
   function conversion() {
       debugger
-      var type=$("#samplingArea option:selected").val();
+      var type=$("#samplingArea").val();
       var string="每平米害虫数";
       var string1="每网害虫数";
       var suName="测定数量：";
       var suName1="每株害虫数：";
-      /*alert(type)*/
       //害虫兆隆每平米
       if(type=='1000138'){
           document.getElementById("cdNumber").style.display="";//显示
           // document.getElementById("hidden").style.display="none";//隐藏
           document.getElementById("plantNumber1").style.display="none";//隐藏
-          var data = $("#quantityDetermination").val();
-          /*alert(data)*/
-          var a=(data + "("+ string +")")
-          $("#standardDensity" ) .val(data);//赋值给一个id为ridStr的input文本框
+
           $("#danwei" ) .text(string);
-          $("#sumName" ) .text(suName);
-          $("#plantNumber").val("");
+         // $("#sumName" ) .text(suName);
+        //  $("#plantNumber").val("");
       }else if(type=='1000139'){
 
           document.getElementById("cdNumber").style.display="";//显示
@@ -373,10 +370,10 @@
 
           var data = $("#quantityDetermination").val();
           var a=(data*4)
-          $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
+         // $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
           $("#danwei" ) .text(string);
-          $("#sumName" ) .text(suName);
-          $("#plantNumber").val("");
+         // $("#sumName" ) .text(suName);
+         // $("#plantNumber").val("");
       }else if(type=='1000140'){
           document.getElementById("cdNumber").style.display="";//显示
           //document.getElementById("hidden").style.display="none";//隐藏
@@ -385,44 +382,28 @@
 
           var data = $("#quantityDetermination").val();
           var a=(data*2 )
-          $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
+         // $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
           $("#danwei" ) .text(string);
-          $("#sumName" ) .text(suName);
-          $("#plantNumber").val("");
+         // $("#sumName" ) .text(suName);
+         // $("#plantNumber").val("");
       }else if(type=='1000141'){
           /*alert(3)*/
           document.getElementById("cdNumber").style.display="";//隐藏
           document.getElementById("plantNumber1").style.display="";//显示
           //document.getElementById("hidden").style.display="";//显示
-          var plantNumber = $("#plantNumber").val();
-          var quantityDetermination = $("#quantityDetermination").val();
-          //var eachpestNumber = $("#eachpestNumber").val() ;
-          var number= (plantNumber*quantityDetermination)/100;
-          $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
           $("#danwei" ) .text(string);
-          $("#sumName" ) .text(suName1);
 
       }else if(type=='1000142'){
 
           document.getElementById("cdNumber").style.display="";//显示
           document.getElementById("plantNumber1").style.display="none";//隐藏
           //document.getElementById("hidden").style.display="";//显示
-          var quantityDetermination = $("#quantityDetermination").val();
-          var number=(quantityDetermination)/100  ;
-          $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
           $("#danwei" ) .text(string1);
-          $("#sumName" ) .text(suName);
-          $("#plantNumber").val("");
       }else if(type=='1000143'){
           document.getElementById("cdNumber").style.display="";//隐藏
           document.getElementById("plantNumber1").style.display="none";//隐藏
           // document.getElementById("hidden").style.display="";//显示
-          var quantityDetermination = $("#quantityDetermination").val();
-          var number=(quantityDetermination)/200 ;
-          $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
           $("#danwei" ) .text(string1);
-          $("#sumName" ) .text(suName);
-          $("#plantNumber").val("");
       }
 
 

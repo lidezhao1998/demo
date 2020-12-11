@@ -54,8 +54,8 @@ public class KStock extends BaseEntity
     @Excel(name = "储备地点")
     private String storageLocation;
 
-    /** 应急货物种类 */
-    @Excel(name = "应急货物种类")
+    /** 类别 */
+    @Excel(name = "类别")
     private String emergencyType;
 
     /** 备注 */

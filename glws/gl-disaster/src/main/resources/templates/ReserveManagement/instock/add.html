@@ -343,7 +343,7 @@
                     document.getElementById("manufactorName_"+number).appendChild(op);
                     for (var i = 0; i < data.length; i++) {
                         var op = document.createElement("option");
-                        op.value = data[i].materialName;
+                        op.value = data[i].materialId;
                         op.text = data[i].materialName;
                         document.getElementById("manufactorName_"+number).appendChild(op);
                     }

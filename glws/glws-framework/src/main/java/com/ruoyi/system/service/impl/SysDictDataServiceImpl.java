@@ -246,4 +246,11 @@ public class SysDictDataServiceImpl implements ISysDictDataService
     public String selectDictCodeByDictLabel(String dictLabel){
         return dictDataMapper.selectDictCodeByDictLabel(dictLabel);
     }
+    /**
+     * 直辖市查询区级
+     * */
+    @Override
+    public String selectDictValueCityCode(String cityCode) {
+        return dictDataMapper.selectDictValueCityCode(cityCode);
+    }
 }

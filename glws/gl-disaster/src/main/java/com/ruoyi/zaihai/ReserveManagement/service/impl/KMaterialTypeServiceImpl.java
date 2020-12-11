@@ -1,8 +1,11 @@
 package com.ruoyi.zaihai.ReserveManagement.service.impl;
 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.system.domain.SysDictType;
 import com.ruoyi.zaihai.ReserveManagement.domain.KMaterialType;
+import com.ruoyi.zaihai.ReserveManagement.mapper.KManufactorMapper;
 import com.ruoyi.zaihai.ReserveManagement.mapper.KMaterialTypeMapper;
 import com.ruoyi.zaihai.ReserveManagement.service.IKMaterialTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,9 @@ public class KMaterialTypeServiceImpl implements IKMaterialTypeService
 {
     @Autowired
     private KMaterialTypeMapper kMaterialTypeMapper;
+
+    @Autowired
+    private KManufactorMapper kManufactorMapper;
 
     /**
      * 查询物资类型
@@ -55,6 +61,15 @@ public class KMaterialTypeServiceImpl implements IKMaterialTypeService
     @Override
     public int insertKMaterialType(KMaterialType kMaterialType)
     {
+        KMaterialType kMaterial =new KMaterialType();
+        kMaterial.setMaterialType(kMaterialType.getMaterialType());
+            List<KMaterialType> list=kMaterialTypeMapper.selectKMaterialTypeList(kMaterial);
+            //String type=dictType.getMaterialType();
+            if (list.size()> 0)
+            {
+                throw new BusinessException(String.format("%1$s已存在,不能重复",kMaterialType.getMaterialType()));
+            }
+
         kMaterialType.setCreateTime(DateUtils.getNowDate());
         return kMaterialTypeMapper.insertKMaterialType(kMaterialType);
     }
@@ -81,7 +96,17 @@ public class KMaterialTypeServiceImpl implements IKMaterialTypeService
     @Override
     public int deleteKMaterialTypeByIds(String ids)
     {
-        return kMaterialTypeMapper.deleteKMaterialTypeByIds(Convert.toStrArray(ids));
+        Long[] dictIds = Convert.toLongArray(ids);
+        for (Long dictId : dictIds)
+        {
+            KMaterialType dictType = selectKMaterialTypeById(dictId);
+            String type=dictType.getMaterialType();
+            if (kManufactorMapper.countDictDataByType(type) > 0)
+            {
+                throw new BusinessException(String.format("%1$s已分配,不能删除", dictType.getMaterialName()));
+            }
+        }
+        return kMaterialTypeMapper.deleteKMaterialTypeByIds(dictIds);
     }
 
     /**

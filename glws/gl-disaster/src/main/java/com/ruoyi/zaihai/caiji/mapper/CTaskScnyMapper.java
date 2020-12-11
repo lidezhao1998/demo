@@ -109,4 +109,11 @@ public interface CTaskScnyMapper
      */
     void updateCTaskSczjRoleName( CTaskScny taskScny);
 
+    /**
+     * 县级详情信息列表
+     *
+     * @param
+     * @return 县级详情信息
+     */
+    List<CTaskScny> selectCTaskScnyCountyList(CTaskScny cTaskScny);
 }

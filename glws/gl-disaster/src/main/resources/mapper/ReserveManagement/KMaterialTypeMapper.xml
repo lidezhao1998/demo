@@ -9,7 +9,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="code"    column="CODE"    />
         <result property="materialType"    column="MATERIAL_TYPE"    />
         <result property="materialName"    column="MATERIAL_NAME"    />
-
         <result property="remark"    column="REMARK"    />
         <result property="createBy"    column="CREATE_BY"    />
         <result property="createTime"    column="CREATE_TIME"    />
@@ -96,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from k_material_type where ID = #{id}
     </delete>
 
-    <delete id="deleteKMaterialTypeByIds" parameterType="String">
+    <delete id="deleteKMaterialTypeByIds" parameterType="Long">
         delete from k_material_type where ID in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}

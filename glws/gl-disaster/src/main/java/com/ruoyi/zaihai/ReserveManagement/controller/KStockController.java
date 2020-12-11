@@ -12,6 +12,7 @@ import com.ruoyi.zaihai.ReserveManagement.domain.KManufactor;
 import com.ruoyi.zaihai.ReserveManagement.domain.KStock;
 import com.ruoyi.zaihai.ReserveManagement.domain.Reserve;
 import com.ruoyi.zaihai.ReserveManagement.mapper.KManufactorMapper;
+import com.ruoyi.zaihai.ReserveManagement.mapper.KStockMapper;
 import com.ruoyi.zaihai.ReserveManagement.service.IKStockService;
 import com.ruoyi.zaihai.ReserveManagement.service.IReserveService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -41,6 +42,10 @@ public class KStockController extends BaseController
 
     @Autowired
     private KManufactorMapper kManufactorMapper;
+
+
+    @Autowired
+    private KStockMapper kStockMapper;
 
     @RequiresPermissions("reserves:stock:view")
     @GetMapping()
@@ -93,7 +98,11 @@ public class KStockController extends BaseController
                     for (int k = 0; k < list.size(); k++) {
                         KStock stock =  list.get(k);
                         KManufactor kManufactor = kManufactorMapper.selectKManufactorById(Long.parseLong(stock.getName()));
-                        stock.setName(kManufactor.getMaterialName());
+                        if(kManufactor==null){
+                        }else{
+                            stock.setName(kManufactor.getMaterialName());
+
+                        }
                     }
                     return getDataTable(list);
 
@@ -149,6 +158,9 @@ public class KStockController extends BaseController
     public String edit(@PathVariable("id") Long id, ModelMap mmap)
     {
         KStock kStock = kStockService.selectKStockById(id);
+        KManufactor kManufactor = kManufactorMapper.selectKManufactorById(Long.parseLong(kStock.getName()));
+        kStock.setName(kManufactor.getMaterialName());
+
         mmap.put("kStock", kStock);
         return prefix + "/edit";
     }

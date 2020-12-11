@@ -618,7 +618,7 @@ public class KInstockController extends BaseController {
                 //判断库存表中是否已存在,存在累加数值不存在新增数据
                 for (int i = 0; i < list.size(); i++) {
                     KStock rk= list.get(i);
-                if (rk.getName().equals(tTaskResolve.getManufactorName()) && rk.getReserveId() ==tTaskResolve.getReserveId()) {
+                if (rk.getName().equals(tTaskResolve.getManufactorName()) && rk.getReserveId().equals(tTaskResolve.getReserveId())) {
                     ckCount = tTaskResolve.getGoodsNumber() + rk.getInventory();
                     rk.setInventory(ckCount);
                     //修改库存数量
@@ -691,7 +691,7 @@ public class KInstockController extends BaseController {
                 for (int i = 0; i < list.size(); i++) {
                     KStock rk= list.get(i);
 
-                    if (rk.getName().equals(tTaskResolve.getManufactorName()) && rk.getReserveId() ==tTaskResolve.getReserveId()) {
+                    if (rk.getName().equals(tTaskResolve.getManufactorName()) && rk.getReserveId().equals(tTaskResolve.getReserveId())) {
                         ckCount =  rk.getInventory()-tTaskResolve.getGoodsNumber();
                         if(ckCount<0){
                             return "404";

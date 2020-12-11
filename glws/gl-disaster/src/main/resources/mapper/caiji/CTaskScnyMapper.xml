@@ -86,7 +86,7 @@
 
     </select>
 
-
+    <!--市级用户登录后展示页面-->
     <select id="selectCTaskScnyCityList" parameterType="CTaskScny" resultMap="CTaskScnyResult">
         <include refid="selectCTaskSumScnyVo"/>
         <where>
@@ -106,6 +106,27 @@
             <!--<if test="code != null  and code != ''"> and CODE = #{code}</if>-->
         </where>
         group  by city
+    </select>
+<!--省级用户详情页面县级-->
+    <select id="selectCTaskScnyCountyList" parameterType="CTaskScny" resultMap="CTaskScnyResult">
+        <include refid="selectCTaskSumScnyVo"/>
+        <where>
+            <if test="number != null  and number != ''"> and NUMBER = #{number}</if>
+            <if test="year != null  and year != ''"> and YEAR = #{year}</if>
+            <if test="week != null  and week != ''"> and WEEK = #{week}</if>
+            <if test="province != null  and province != ''">and PROVINCE like concat('%',#{province},'%')</if>
+            <if test="city != null  and city != ''"> and CITY like concat(#{city},'%')</if>
+            <if test="county != null  and county != ''"> and COUNTY = #{county}</if>
+            <if test="type != null  and type != ''"> and TYPE = #{type}</if>
+            <if test="projectType != null  and projectType != ''"> and PROJECT_TYPE = #{projectType}</if>
+
+            <if test="remarks != null  and remarks != ''"> and REMARKS = #{remarks}</if>
+            <if test="creatTime != null "> and CREAT_TIME = #{creatTime}</if>
+            <if test="updateTime != null "> and UPDATE_TIME = #{updateTime}</if>
+            <if test="createBy != null  and createBy != ''"> and CREATE_BY = #{createBy}</if>
+            <!--<if test="code != null  and code != ''"> and CODE = #{code}</if>-->
+        </where>
+        group  by county
     </select>
 
     <!-- 省级列表详情展示区县级列表 -->

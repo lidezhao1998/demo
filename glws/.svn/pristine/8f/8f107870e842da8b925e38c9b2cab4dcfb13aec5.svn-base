@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('草原鼠害发生与防治情况列表详情页面')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-sczj-detail" th:object="${cTaskSczj}">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">编号：</label>
+                    <div class="col-sm-8">
+                        <div name="number" class="form-control-static" th:text="*{number}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group" style="margin-top: 10px ">
+                    <label class="col-sm-3 control-label">年度：</label>
+                    <div class="input-group date">
+                        <div class="col-sm-8">
+                            <div name="year" class="form-control-static" placeholder="yyyy-MM-dd" th:text="*{year}" style="font-weight: bold">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">周：</label>
+                    <div class="col-sm-8">
+                        <div name="week" class="form-control-static" th:text="*{week}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">省：</label>
+                    <div class="col-sm-8">
+                        <div name="province" class="form-control-static" th:text="*{province}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">市：</label>
+                    <div class="col-sm-8">
+                        <div name="city" class="form-control-static" th:text="*{city}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">县：</label>
+                    <div class="col-sm-8">
+                        <div name="county" class="form-control-static" th:text="*{county}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">类型：</label>
+                    <div class="col-sm-8">
+                        <div name="type" class="form-control-static" style="font-weight: bold"  th:text="*{type}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">危害总面积：</label>
+                    <div class="col-sm-8">
+                        <div name="harmTotalarea" class="form-control-static" th:text="*{harmTotalarea}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">其中工程区危害面积：</label>
+                    <div class="col-sm-8">
+                        <div name="engineeringhazard" class="form-control-static" th:text="*{engineeringhazard}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">严重危害总面积：</label>
+                    <div class="col-sm-8">
+                        <div name="seriousArea" class="form-control-static" th:text="*{seriousArea}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">其中区工程区严重危害面积：</label>
+                    <div class="col-sm-8">
+                        <div name="engineeringSeriousArea" class="form-control-static" th:text="*{engineeringSeriousArea}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">化学防治：</label>
+                    <div class="col-sm-8">
+                        <div name="chemistryControl" class="form-control-static" th:text="*{chemistryControl}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">C型肉毒素：</label>
+                    <div class="col-sm-8">
+                        <div name="cBotulinumtoxin" class="form-control-static" th:text="*{cBotulinumtoxin}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">D型肉毒素：</label>
+                    <div class="col-sm-8">
+                        <div name="dBotulinumtoxin" class="form-control-static" th:text="*{dBotulinumtoxin}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">雷公藤：</label>
+                    <div class="col-sm-8">
+                        <div name="tripterygium" class="form-control-static" th:text="*{tripterygium}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">莪术醇：</label>
+                    <div class="col-sm-8">
+                        <div name="curcumae" class="form-control-static" th:text="*{curcumae}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">招鹰控鼠：</label>
+                    <div class="col-sm-8">
+                        <div name="hawkMouse" class="form-control-static" th:text="*{hawkMouse}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">野化狐狸控鼠：</label>
+                    <div class="col-sm-8">
+                        <div name="foxRat" class="form-control-static" th:text="*{foxRat}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">物理防治：</label>
+                    <div class="col-sm-8">
+                        <div name="physicalControl" class="form-control-static" th:text="*{physicalControl}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">防治面积：</label>
+                    <div class="col-sm-8">
+                        <div name="defensiveArea" class="form-control-static" th:text="*{defensiveArea}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">控制面积：</label>
+                    <div class="col-sm-8">
+                        <div name="controlarea" class="form-control-static" th:text="*{controlarea}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">招鹰灭鼠：</label>
+                    <div class="col-sm-8">
+                        <div name="hawkDeratization" class="form-control-static" th:text="*{hawkDeratization}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">野化狐狸灭鼠：</label>
+                    <div class="col-sm-8">
+                        <div name="rodentControl" class="form-control-static" th:text="*{rodentControl}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">技术人员(人/天)：</label>
+                    <div class="col-sm-8">
+                        <div name="artisan" class="form-control-static" th:text="*{artisan}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">出工(人/天)：</label>
+                    <div class="col-sm-8">
+                        <div name="work" class="form-control-static" th:text="*{work}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">飞机(架/次)：</label>
+                    <div class="col-sm-8">
+                        <div name="plane" class="form-control-static" th:text="*{plane}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">防治器械(台/套/天)：</label>
+                    <div class="col-sm-8">
+                        <div name="controlApparatus" class="form-control-static" th:text="*{controlApparatus}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">车辆(辆/天)：</label>
+                    <div class="col-sm-8">
+                        <div name="car" class="form-control-static" th:text="*{car}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">备注：</label>
+                    <div class="col-sm-8">
+                        <div name="remarks" class="form-control-static" th:text="*{remarks}" style="font-weight: bold">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+      <!--  <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">创建人：</label>
+                    <div class="col-sm-8">
+                        <div name="total" class="form-control-static" th:text="*{createBy}" style="font-weight: bold">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </form>
+    <div class="button-p" style="margin-left: 70%">
+        <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+    </div>
+</div>
+<th:block th:include="include :: footer" />
+<th:block th:include="include :: datetimepicker-js" />
+<script type="text/javascript">
+
+    var prefix = ctx + "caiji/sczj";
+
+</script>
+</body>
+</html>

@@ -65,6 +65,7 @@ public class GisMapController extends BaseController {
             }else{
                 gisMapById.setGeo(gisMap.getGeo());
                 gisMapById.setAddress(gisMap.getAddress());
+                gisMapById.setType(gisMap.getType());
                 gisMapById.setName(gisMap.getAddress());
                 gisMapById.setCentre(gisMap.getCentre());
                 gisMapById.setArea(gisMap.getArea());

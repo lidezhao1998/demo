@@ -7,6 +7,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.zaihai.ReserveManagement.domain.KMaterialType;
+import com.ruoyi.zaihai.ReserveManagement.service.IKManufactorService;
 import com.ruoyi.zaihai.ReserveManagement.service.IKMaterialTypeService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class KMaterialTypeController extends BaseController
 
     @Autowired
     private IKMaterialTypeService kMaterialTypeService;
+
+    @Autowired
+    private IKManufactorService kManufactorService;
 
     @RequiresPermissions("reserves:type:view")
     @GetMapping()
@@ -117,7 +121,14 @@ public class KMaterialTypeController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        return toAjax(kMaterialTypeService.deleteKMaterialTypeByIds(ids));
+        try
+        {
+            return toAjax(kMaterialTypeService.deleteKMaterialTypeByIds(ids));
+        }
+        catch (Exception e)
+        {
+            return error(e.getMessage());
+        }
     }
 
 

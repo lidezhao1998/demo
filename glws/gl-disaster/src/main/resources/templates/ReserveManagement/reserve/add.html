@@ -60,7 +60,20 @@
     function submitHandler() {
 
         if ($.validate.form()) {
-            $.operate.save(prefix + "/add", $('#form-reserve-add').serialize());
+            var data=$('#form-reserve-add').serialize();
+            $.ajax({
+                "url": prefix + "/add",
+                "type": "POST",
+                "data": data,
+                "dataType": "json",
+                "success": function (data) {
+                    window.parent.location.reload();
+                    parent.layer.closeAll('iframe');
+
+                }
+            });
+           // $.operate.save(prefix + "/add", );
+
         }
     }
 
@@ -78,7 +91,6 @@
                     $("#dj").val("");
 
                 }else{
-                    alert(2)
                     $("#latitude").val(data.latitude);
 
                 }

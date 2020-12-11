@@ -1,8 +1,10 @@
 package com.ruoyi.zaihai.ReserveManagement.service.impl;
 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.zaihai.ReserveManagement.domain.Reserve;
+import com.ruoyi.zaihai.ReserveManagement.mapper.KStockMapper;
 import com.ruoyi.zaihai.ReserveManagement.mapper.ReserveMapper;
 import com.ruoyi.zaihai.ReserveManagement.service.IReserveService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,10 @@ public class ReserveServiceImpl implements IReserveService
 {
     @Autowired
     private ReserveMapper reserveMapper;
+
+
+    @Autowired
+    private KStockMapper kStockMapper;
 
     /**
      * 查询储备库
@@ -79,6 +85,15 @@ public class ReserveServiceImpl implements IReserveService
     @Override
     public int deleteReserveByIds(String ids)
     {
+          Long[] dictIds = Convert.toLongArray(ids);
+        for (Long dictId : dictIds)
+        {
+            Reserve dictType = selectReserveById(dictId);
+            if (kStockMapper.countDictDataByType(dictId) > 0)
+            {
+                throw new BusinessException(String.format("%1$s已分配,不能删除", dictType.getLibrayName()));
+            }
+        }
         return reserveMapper.deleteReserveByIds(Convert.toStrArray(ids));
     }
 

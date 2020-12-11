@@ -192,8 +192,11 @@ public class ReserveController extends BaseController
      */
     @RequestMapping("/getListCbkGisMap/{splitCoord}")
     public String getListCbkGisMap(@PathVariable("splitCoord") String splitCoord,ModelMap model) {
-
         Reserve reserve = reserveService.selectReserveByLatitude(splitCoord);
+
+        String provinceLabel = iSysDictDataService.selectDictValueToLabel(reserve.getAddress());
+        reserve.setAddress(provinceLabel);
+
         model.put("reserve", reserve);
         return prefix + "/look";
     }
@@ -207,7 +210,14 @@ public class ReserveController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        return toAjax(reserveService.deleteReserveByIds(ids));
+        try
+        {
+            return toAjax(reserveService.deleteReserveByIds(ids));
+        }
+        catch (Exception e)
+        {
+            return error(e.getMessage());
+        }
     }
 
     /**

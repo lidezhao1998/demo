@@ -52,6 +52,7 @@ public class GisMapController extends BaseController {
                 model.put("gisMap", gisMapById);
             }else{
                 gisMapById.setGeo(gisMap.getGeo());
+                gisMapById.setType(gisMap.getType());
                 gisMapById.setAddress(gisMap.getAddress());
                 gisMapById.setName(gisMap.getAddress());
                 gisMapById.setCentre(gisMap.getCentre());

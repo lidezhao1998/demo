@@ -138,7 +138,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">每百平米植株数：</label>
                         <div class="col-sm-8">
-                                <input name="plantNumber" id="plantNumber" class="form-control"  type="text" onchange="plant()" th:onkeyup="value=value.replace( /[^\d]/g,'')" maxlength="8">
+                                <input name="plantNumber" id="plantNumber" class="form-control"  type="text" onchange="plant()" th:onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g,'$1')" maxlength="8">
                         </div>
                     </div>
                 </div>

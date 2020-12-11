@@ -1,0 +1,2360 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('退牧还草工程资金汇总报表')"/>
+    <style>
+        #china-map {
+            width: 850px;
+            height: 850px;
+            margin: auto;
+        }
+        /*修改表头颜色*/
+        .bootstrap-table table thead{
+            background-color:rgba(48,146,62, 0.9);
+            color: white;
+        }
+
+        #box {
+            display: none;
+            background-color: goldenrod;
+            width: 180px;
+            height: 30px;
+        }
+
+        #box-title {
+            display: block;
+        }
+    </style>
+    <style type="text/css">
+        body {
+            background-color: rgba(144, 238, 144, 0.2);
+        }
+
+    </style>
+    <script src="../js/map/province/Convert_Pinyin.js"></script>
+    <script src="../ajax/report/echarts/dark.js"></script>
+
+</head>
+<body class="gray-bg">
+
+<!--选项卡-->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="tabs-container">
+            <ul class="nav nav-tabs">
+                <li class=""><a data-toggle="tab" href="#tab-5" aria-expanded="false"  id="display"> 鼠害</a>
+                </li>
+                <li class=""><a data-toggle="tab" href="#tab-6" aria-expanded="false" >虫害</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab-5" class="tab-pane active">
+                    <div class="panel-body">
+                        <div class="col-sm-18 select-table" id="sh">
+                            <div class="row">
+                                <form class="form-horizontal m" id="form-knowledge-edit" th:object="${cTaskSczj}" >
+
+                                    <table class="VirusSummary_1-1-265_26c8Iu VirusSummary_1-1-265_2fRxdu" style="color:rgba(0, 190, 199, 0.6);"
+                                           align="center" width="700px">
+                                        <tbody>
+                                        <tr>
+                                            <td cellspacing="280px">
+                                                <div class="VirusSummary_1-1-265_6xUfqo">
+                                                    <div class="VirusSummary_1-1-265_Af8Lb3"
+                                                         style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">危害总面积(万亩)
+                                                    </div>
+                                                    <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                                        <div style="color:#2867DE;font-weight: 700;font-size:25px;text-align: center"
+                                                             th:text="${cTaskSczj.harmTotalarea}" class="form-control-static" type="text"
+                                                             disabled="disabled">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div style="text-align: center">
+                                                    <h7 class="text-navy">
+                                                        <i class="fa fa-play fa-rotate-270"></i>上周+
+                                                        <div style="color:#2867DE;font-size:9px;" th:text="${cTaskSczWeek.harmTotalarea}"></div>
+                                                    </h7>
+
+                                                </div>
+                                            </td>
+                                            <td cellspacing="280px">
+                                                <div class="VirusSummary_1-1-265_1erbWM">
+                                                    <div class="VirusSummary_1-1-265_Af8Lb3"
+                                                         style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">严重危害总面积(万亩)
+                                                    </div>
+                                                    <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                                        <div style="color:#FF7800;font-weight: 700;font-size:25px;text-align: center"
+                                                             th:text="${cTaskSczj.seriousArea}" class="form-control-static" type="text"
+                                                             disabled="disabled"></div>
+
+                                                    </div>
+                                                </div>
+                                                <div style="text-align: center">
+                                                    <h7 class="text-navy">
+                                                        <i class="fa fa-play fa-rotate-270"></i>上周+
+                                                        <div style="color:#FF7800;font-size:9px;" th:text="${cTaskSczWeek.seriousArea}">+</div>
+                                                    </h7>
+                                                </div>
+
+                                            </td>
+                                            <td cellspacing="280px">
+                                                <div class="VirusSummary_1-1-265_2ahJaj">
+                                                    <div class="VirusSummary_1-1-265_Af8Lb3"
+                                                         style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">工程区危害面积(万亩)
+                                                    </div>
+                                                    <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                                        <div style="color:#7FD357;font-weight: 700;font-size:25px;text-align: center"
+                                                             th:text="${cTaskSczj.engineeringhazard}" class="form-control-static" type="text"
+                                                             disabled="disabled"></div>
+                                                    </div>
+                                                </div>
+                                                <div style="text-align: center">
+                                                    <h7 class="text-navy">
+                                                        <i class="fa fa-play fa-rotate-270"></i>上周+
+                                                        <div style="color:#7FD357;font-size:9px;" th:text="${cTaskSczWeek.engineeringhazard}"></div>
+                                                    </h7>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td cellspacing="280px">
+                                                <div class="VirusSummary_1-1-265_28rIkx">
+                                                    <div class="VirusSummary_1-1-265_Af8Lb3"
+                                                         style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">工程区危害总面积(万亩)
+                                                    </div>
+                                                    <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                                        <div style="color:#FF3C07;font-weight: 700;font-size:25px;text-align: center"
+                                                             th:text="${cTaskSczj.engineeringSeriousArea}" class="form-control-static"
+                                                             type="text" disabled="disabled"></div>
+                                                    </div>
+                                                </div>
+                                                <div style="text-align: center">
+                                                    <h7 class="text-navy">
+                                                        <i class="fa fa-play fa-rotate-270"></i>上周+
+                                                        <div style="color:#FF3C07;font-size:9px;" th:text="${cTaskSczWeek.engineeringSeriousArea}"></div>
+                                                    </h7>
+                                                </div>
+                                            </td>
+                                            <td cellspacing="280px">
+                                                <div class="VirusSummary_1-1-265_28rIkx">
+                                                    <div class="VirusSummary_1-1-265_Af8Lb3"
+                                                         style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">当年防治面积(万亩)
+                                                    </div>
+                                                    <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                                        <div style="color:#00B4B5;font-weight: 700;font-size:25px;text-align: center"
+                                                             th:text="${cTaskSczj.defensiveArea}" class="form-control-static" type="text"
+                                                             disabled="disabled"></div>
+                                                    </div>
+                                                </div>
+                                                <div style="text-align: center">
+                                                    <h7 class="text-navy">
+                                                        <i class="fa fa-play fa-rotate-270"></i>上周+
+                                                        <div style="color:#00B4B5;font-size:9px;" th:text="${cTaskSczWeek.defensiveArea}"></div>
+                                                    </h7>
+                                                </div>
+                                            </td>
+                                            <td cellspacing="280px">
+                                                <div class="VirusSummary_1-1-265_28rIkx">
+                                                    <div class="VirusSummary_1-1-265_Af8Lb3"
+                                                         style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">持续控制面积(万亩)
+                                                    </div>
+                                                    <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                                        <div style="color:#366B98;font-weight: 700;font-size:25px;text-align: center"
+                                                             th:text="${cTaskSczj.controlarea}" class="form-control-static" type="text"
+                                                             disabled="disabled"></div>
+                                                    </div>
+                                                </div>
+                                                <div style="text-align: center">
+                                                    <h7 class="text-navy">
+                                                        <i class="fa fa-play fa-rotate-270"></i>上周+
+                                                        <div style="color:#366B98;font-size:9px;" th:text="${cTaskSczWeek.controlarea}"></div>
+                                                    </h7>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-11">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                                        <i class="fa fa-wrench"></i>
+                                    </a>
+
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                    <!--地图-->
+                                    <div class="ibox-content" id="hideenChina">
+                                        <div style="height:700px"  class="echarts" id="echarts-map-chart"></div>
+                                    </div>
+
+                                    <div class="ibox-content" id="hideenProvince">
+                                        <div style="height:700px"  class="echarts" id="echarts-map-chart2"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--选项卡-->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="tabs-container">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="false"> 折线图</a>
+                                            </li>
+                                            <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">柱状图</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div id="tab-1" class="tab-pane active">
+                                                <div class="panel-body">
+                                                    <div id="echarts-line-chart" style="width: 1300px;height:600px;"></div>
+
+                                                </div>
+                                            </div>
+                                            <div id="tab-2" class="tab-pane">
+                                                <div class="panel-body">
+                                                    <div id="echarts-histogram-chart" style="width: 1300px;height:600px;"></div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                        <div class="ibox float-e-margins" id="type">
+                                            <div class="ibox-title">
+                                                <h4>待办信息列表</h4>
+
+                                            </div>
+
+                                                    <div class="col-sm-12 select-table table-striped">
+                                                        <table id="bootstrap-table"></table>
+                                                    </div>
+                                        </div>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--虫害首页数据-->
+                <div id="tab-6" class="tab-pane active">
+                    <div class="panel-body">
+                        <div class="col-sm-18 select-table">
+
+                            <div class="row">
+
+                                <form class="form-horizontal m" id="form-knowledge-edit" th:object="${cTaskchfz}">
+                                    <table class="VirusSummary_1-1-265_26c8Iu VirusSummary_1-1-265_2fRxdu" style="color:rgba(0, 190, 199, 0.6);"
+                                           align="center" width="700px">
+                                        <tbody>
+                                        <tr>
+                                            <td cellspacing="280px">
+                                                <div class="VirusSummary_1-1-265_6xUfqo">
+                                                    <div class="VirusSummary_1-1-265_Af8Lb3"
+                                                         style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">危害总面积(万亩)
+                                                    </div>
+                                                    <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                                        <div style="color:#2867DE;font-weight: 700;font-size:25px;text-align: center"
+                                                             th:text="${cTaskchfz.harmTotalarea}" class="form-control-static" type="text"
+                                                             disabled="disabled">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div style="text-align: center">
+                                                    <h7 class="text-navy">
+                                                        <i class="fa fa-play fa-rotate-270"></i>上周+
+                                                        <div style="color:#2867DE;font-size:9px;" th:text="${cTaskchfzWeek.harmTotalarea}"></div>
+                                                    </h7>
+
+                                                </div>
+                                            </td>
+                                            <td cellspacing="280px">
+                                                <div class="VirusSummary_1-1-265_1erbWM">
+                                                    <div class="VirusSummary_1-1-265_Af8Lb3"
+                                                         style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">严重危害总面积(万亩)
+                                                    </div>
+                                                    <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                                        <div style="color:#FF7800;font-weight: 700;font-size:25px;text-align: center"
+                                                             th:text="${cTaskchfz.seriousArea}" class="form-control-static" type="text"
+                                                             disabled="disabled"></div>
+
+                                                    </div>
+                                                </div>
+                                                <div style="text-align: center">
+                                                    <h7 class="text-navy">
+                                                        <i class="fa fa-play fa-rotate-270"></i>上周+
+                                                        <div style="color:#FF7800;font-size:9px;" th:text="${cTaskchfzWeek.seriousArea}">+</div>
+                                                    </h7>
+                                                </div>
+
+                                            </td>
+
+
+                                            <td cellspacing="280px">
+                                                <div class="VirusSummary_1-1-265_2ahJaj">
+                                                    <div class="VirusSummary_1-1-265_Af8Lb3"
+                                                         style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">工程区危害面积(万亩)
+                                                    </div>
+                                                    <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                                        <div style="color:#7FD357;font-weight: 700;font-size:25px;text-align: center"
+                                                             th:text="${cTaskchfz.engineeringhazard}" class="form-control-static" type="text"
+                                                             disabled="disabled"></div>
+                                                    </div>
+                                                </div>
+                                                <div style="text-align: center">
+                                                    <h7 class="text-navy">
+                                                        <i class="fa fa-play fa-rotate-270"></i>上周+
+                                                        <div style="color:#7FD357;font-size:9px;" th:text="${cTaskchfzWeek.engineeringhazard}"></div>
+                                                    </h7>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td cellspacing="280px">
+                                                <div class="VirusSummary_1-1-265_28rIkx">
+                                                    <div class="VirusSummary_1-1-265_Af8Lb3"
+                                                         style="color:#3C454C;font-weight: 700;font-size:15px;text-align: center">工程区危害总面积(万亩)
+                                                    </div>
+                                                    <div class="VirusSummary_1-1-265_1lOkwH VirusSummary_1-1-265_2fhqEt">
+                                                        <div style="color:#FF3C07;font-weight: 700;font-size:25px;text-align: center"
+                                                             th:text="${cTaskchfz.engineeringSeriousArea}" class="form-control-static"
+                                                             type="text" disabled="disabled"></div>
+                                                    </div>
+                                                </div>
+                                                <div style="text-align: center">
+                                                    <h7 class="text-navy">
+                                                        <i class="fa fa-play fa-rotate-270"></i>上周+
+                                                        <div style="color:#FF3C07;font-size:9px;" th:text="${cTaskchfzWeek.engineeringSeriousArea}"></div>
+                                                    </h7>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-11">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                                        <i class="fa fa-wrench"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                    <!--地图-->
+                                    <div class="ibox-content" id="hiddenChina2">
+                                        <div style="height:700px" id="echarts-map"></div>
+                                    </div>
+
+                                    <div class="ibox-content" id="hiddenProvince2">
+                                        <div style="height:700px" id="echarts-map2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--选项卡-->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="tabs-container">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active"><a data-toggle="tab" href="#tab-7" aria-expanded="false"> 折线图</a>
+                                            </li>
+                                            <li class=""><a data-toggle="tab" href="#tab-8" aria-expanded="false">柱状图</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div id="tab-7" class="tab-pane active">
+                                                <div class="panel-body">
+                                                    <div id="echarts-line-chart1" style="width: 1300px;height:600px;"></div>
+
+                                                </div>
+                                            </div>
+                                            <div id="tab-8" class="tab-pane" >
+                                                <div class="panel-body">
+
+                                                    <div id="echarts-histogram-chart1" style="width: 1300px;height:600px;"></div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--折线图-->
+                                <!-- <div  id="echarts-line-chart" style="width: 1300px;height:600px;"></div>-->
+
+                                <div class="ibox float-e-margins" id="type2">
+                                    <div class="ibox-title">
+                                        <h4>待办信息列表</h4>
+                                    </div>
+
+                                    <div class="col-sm-12 select-table table-striped">
+                                        <table id="bootstrap-table2"></table>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+    <th:block th:include="include :: footer"/>
+    <th:block th:include="include :: echarts-js"/>
+
+    <script th:inline="javascript">
+        //var prefix = ctx + "system/summary";
+
+
+        /*地图统计*/
+        $(function () {
+
+            document.getElementById("hideenProvince").style.display = "none";//隐藏
+            document.getElementById("hiddenProvince2").style.display = "none";//隐藏
+
+
+            var a=[[${grade}]];
+            if(a=='1'){
+                var prefix = ctx + "zaihai/sczjtj";
+
+                //document.getElementById("sh").style.display = "none";//显示
+                var dataList = []
+                var dataList2 = []
+                var dataList3 = []
+                var dataList4 = []
+                var dataList5 = []
+                var dataList6 = []
+
+                //后端获取json数据
+                //请求地图数据
+                $.ajax({
+                    url: prefix + "/getRequestCountSczj",    //请求发送到dataActiont处
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success) {
+                            dataList = data.dataList;
+                            dataList2 = data.engineeringhazardList;
+                            dataList3 = data.seriousAreaList;
+                            dataList4 = data.engineeringSeriousAreaList;
+                            dataList5 = data.defensiveArea;
+                            dataList6 = data.controlarea;
+
+                            var mapChart = echarts.init(document.getElementById("echarts-map-chart"));
+                            var mapoption = {
+
+                                title: {
+                                    text: '草原鼠害发生情况统计地图',
+                                    subtext: '',
+                                    x: 'center'
+                                },
+                                tooltip: {
+                                    trigger: 'item'
+                                },
+                                legend: {
+                                    orient: 'vertical',
+                                    x: 'left',
+                                    data: ['危害总面积', '严重危害总面积', '工程区危害面积', '工程区严重危害面积', '当年防治面积', '持续控制面积'],
+                                    selected: {
+                                        '工程区危害面积': false,
+                                        '严重危害总面积': false,
+                                        '工程区严重危害面积': false,
+                                        '当年防治面积': false,
+                                        '持续控制面积': false,
+                                    },
+                                    formatter: function (params) {
+                                        if (params.indexOf('\n') == -1) {
+                                            return params;
+                                        } else {
+                                            return '{white|' + params.split('\n')[0] + '}\n' + params.split('\n')[1];
+                                        }
+                                    },
+                                    textStyle: {
+                                        rich: {
+                                            white: {
+                                                color: "#fff",
+                                                fontSize: 12,
+                                                padding: [6, 0, 0, 0]
+                                            }
+                                        }
+                                    }
+                                },
+                                dataRange: {
+                                    min: 0,
+                                    max: 25000,
+                                    x: 'left',
+                                    y: 'bottom',
+                                    text: ['高', '低'],           // 文本，默认为数值文本
+                                    calculable: true
+                                },
+                                toolbox: {
+                                    show: true,
+                                    orient: 'vertical',
+                                    x: 'right',
+                                    y: 'center',
+                                    feature: {
+                                        mark: {show: true},
+/*
+                                        dataView: {show: true, readOnly: false},
+*/
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                roamController: {
+                                    show: true,
+                                    x: 'right',
+                                    mapTypeControl: {
+                                        'china': true
+                                    }
+                                },
+                                series: [
+
+                                    {
+                                        name: '危害总面积',
+                                        type: 'map',
+                                        mapType: 'china',
+                                        itemStyle: {
+                                            normal: {
+                                                label: {show: true}, color: '#2867DE',
+                                                areaStyle: {
+                                                    color: '#2867DE',//默认的地图板块颜色
+                                                }
+                                            },//默认是否显示省份名称
+
+                                            emphasis: {label: {show: true}},
+
+                                        },
+
+                                        data: dataList
+                                    },
+                                    {
+                                        name: '严重危害总面积',
+                                        type: 'map',
+                                        mapType: 'china',
+                                        itemStyle: {
+                                            normal: {label: {show: true},color: '#FF7800'},
+                                            emphasis: {label: {show: true}},
+                                            areaStyle: {
+                                                color: '#FF7800',//默认的地图板块颜色
+                                            },
+                                        },
+                                        data: dataList3
+                                    },
+                                    {
+                                        name: '工程区危害面积',
+                                        type: 'map',
+                                        mapType: 'china',
+                                        itemStyle: {
+                                            normal: {label: {show: true},color: '#7FD357'},
+                                            emphasis: {label: {show: true}},
+                                            areaStyle: {
+                                                color: '#7FD357',//默认的地图板块颜色
+                                            },
+                                        },
+                                        data: dataList2
+                                    },
+                                    {
+                                        name: '工程区严重危害面积',
+                                        type: 'map',
+                                        mapType: 'china',
+                                        itemStyle: {
+                                            normal: {label: {show: true},color: '#FF3C07'},
+                                            emphasis: {label: {show: true}},
+                                            areaStyle: {
+                                                color: '#FF3C07',//默认的地图板块颜色
+                                            },
+                                        },
+                                        data: dataList4
+                                    },
+                                    {
+                                        name: '当年防治面积',
+                                        type: 'map',
+                                        mapType: 'china',
+                                        itemStyle: {
+                                            normal: {label: {show: true},color: '#00B4B5'},
+                                            emphasis: {label: {show: true}},
+                                            areaStyle: {
+                                                color: '#00B4B5',//默认的地图板块颜色
+                                            },
+                                        },
+                                        data: dataList5
+                                    },
+                                    {
+                                        name: '持续控制面积',
+                                        type: 'map',
+                                        mapType: 'china',
+                                        itemStyle: {
+                                            normal: {label: {show: true},color: '#366B98'},
+                                            emphasis: {label: {show: true}},
+                                            areaStyle: {
+                                                color: '#366B98',//默认的地图板块颜色
+                                            },
+                                        },
+                                        data: dataList6
+                                    }
+
+
+                                ]
+                            };
+                            //点击函数
+                            mapChart.setOption(mapoption);//先渲染出空地图
+                            mapChart.on('dblclick', function (params) {
+                                document.getElementById("hideenProvince").style.display = "none";//隐藏
+                                document.getElementById("hideenChina").style.display = "";//隐藏
+
+                            });
+
+
+                            //点击回显
+                            mapChart.on('click', function (params) {
+                                document.getElementById("hideenProvince").style.display = "";//隐藏
+                                document.getElementById("hideenChina").style.display = "none";//隐藏
+
+                                var province=params.name;
+                                var type='1';
+                                showProvince(province,type);
+
+                            });
+                            mapChart.setOption(mapoption);//先渲染出空地图
+                            $(window).resize(mapChart.resize);
+
+
+                        } else {
+                            console.log("getRequestCount 加载失败")
+                        }
+                    },
+                    error: function (jqXHR) {
+                        alert("getRequestCount：" + jqXHR.status);
+                        // }
+                    }
+                });
+
+
+            }else if(a=='2'){
+                var prefix = ctx + "zaihai/sczjtj";
+
+                //展示对应的省
+                var dataList = []
+                var dataList2 = []
+                var dataList3 = []
+                var dataList4 = []
+                var dataList5 = []
+                var dataList6 = []
+
+                //将省份转化为拼音
+                    var province=[[${province}]];
+                    var chinaName = province;
+                    if(chinaName=='陕西'){
+                        var pro='shanxi1';
+                    }else{
+                        //获取全写拼音（调用js中方法）
+                        var fullName = pinyin.getFullChars(chinaName);
+                        //获取简写拼音（调用js中方法）
+                        var easyName = pinyin.getCamelChars(chinaName);
+                        //给两个文本框赋值
+                        var pro=fullName.toLowerCase();
+                    }
+
+                    //初始化echarts
+                    var myChart = echarts.init(document.getElementById("echarts-map-chart"));
+
+                    loadBdScript('$' + pro + 'JS', '../js/map/province/' + pro + '.js', function () {
+                        $.ajax({
+                            url: prefix + "/getCityCount",    //请求发送到dataActiont处
+                            type: 'post',
+                            dataType: 'json',
+                            success: function (data) {
+
+                                dataList = data.dataList;
+                                dataList2 = data.engineeringhazardList;
+                                dataList3 = data.seriousAreaList;
+                                dataList4 = data.engineeringSeriousAreaList;
+                                dataList5 = data.defensiveArea;
+                                dataList6 = data.controlarea;
+
+                                // echart图表自适应
+                                window.addEventListener("resize", function () {
+                                    myChart.resize();
+                                });
+
+                                //关键是配置项
+                                var option = {
+
+                                    title: {
+                                        textStyle: {//主标题文本样式{"fontSize": 18,"fontWeight": "bolder","color": "#333"}
+                                            fontFamily: 'Arial',
+                                            fontSize: 25,
+                                            fontStyle: 'normal',
+                                            fontWeight: 'normal',
+                                            fontColor:'red',//设置主标题字体颜色
+
+                                        },
+                                        text: chinaName,
+                                        subtext: '',
+                                        x: 'center'
+                                    },
+                                    tooltip: {
+                                        trigger: 'item'
+                                    },
+                                    legend: {
+                                        orient: 'vertical',
+                                        x: 'left',
+                                        data: ['危害总面积', '严重危害总面积', '工程区危害面积', '工程区严重危害面积', '当年防治面积', '持续控制面积'],
+                                        selected: {
+                                            '严重危害总面积': false,
+                                            '工程区危害面积': false,
+                                            '工程区严重危害面积': false,
+                                            '当年防治面积': false,
+                                            '持续控制面积': false,
+                                        },
+
+                                        formatter: function (params) {
+                                            if (params.indexOf('\n') == -1) {
+                                                return params;
+                                            } else {
+                                                return '{white|' + params.split('\n')[0] + '}\n' + params.split('\n')[1];
+                                            }
+                                        },
+                                        textStyle: {
+                                            rich: {
+                                                white: {
+                                                    color: "#fff",
+                                                    fontSize: 12,
+                                                    padding: [6, 0, 0, 0]
+                                                }
+                                            }
+                                        }
+                                    },
+                                    dataRange: {
+                                        /*                            orient: 'horizontal',*/
+                                        min: 0,
+                                        max: 250000,
+                                        x: 'left',
+                                        y: 'bottom',
+                                        text: ['高', '低'],           // 文本，默认为数值文本
+                                        calculable: true
+                                        /*
+                                                                    splitNumber: 0
+                                        */
+                                    },
+                                    toolbox: {
+                                        show: true,
+                                        orient: 'vertical',
+                                        x: 'right',
+                                        y: 'center',
+                                        feature: {
+                                            mark: {show: true},
+/*
+                                            dataView: {show: true, readOnly: false},
+*/
+                                            restore: {show: true},
+                                            saveAsImage: {show: true}
+                                        }
+                                    },
+
+                                    roamController: {
+                                        show: true,
+                                        x: 'right',
+
+                                    },
+                                    series: [
+
+                                        {
+                                            name: '危害总面积',
+                                            type: 'map',
+                                            mapType:province,
+                                            itemStyle: {
+                                                normal: {
+                                                    label: {show: true},
+                                                    color: '#2867DE',
+                                                    fontSize: 5,
+                                                    borderColor: '#3B5077',//地图边框颜色
+                                                    textStyle: {
+                                                        fontSize: 5,
+                                                        fontWeight: 'bold',
+                                                        color: '#2867DE'
+                                                    }
+                                                },//默认是否显示省份名称
+                                                areaStyle: {
+                                                    color: '#2867DE',//默认的地图板块颜色
+                                                },
+                                                emphasis: {label: {show: true}},
+
+                                            },
+
+
+                                            data: dataList
+                                        },
+
+                                        {
+                                            name: '严重危害总面积',
+                                            type: 'map',
+                                            mapType:province,
+                                            itemStyle: {
+                                                normal: {
+                                                    label: {show: true},
+                                                    color: '#FF7800',
+                                                    fontSize: 5,
+                                                    borderColor: '#3B5077',//地图边框颜色
+                                                    textStyle: {
+                                                        fontSize: 5,
+                                                        fontWeight: 'bold',
+                                                        color: '#FF7800'
+                                                    }
+                                                },//默认是否显示省份名称
+
+                                                emphasis: {label: {show: true}},
+
+                                            },
+
+                                            data: dataList3
+                                        },
+
+                                        {
+                                            name: '工程区危害面积',
+                                            type: 'map',
+                                            mapType:province,
+                                            itemStyle: {
+                                                normal: {
+                                                    label: {show: true},
+                                                    color: '#7FD357',
+                                                    fontSize: 5,
+                                                    borderColor: '#3B5077',//地图边框颜色
+                                                    textStyle: {
+                                                        fontSize: 5,
+                                                        fontWeight: 'bold',
+                                                        color: '#7FD357'
+                                                    }
+                                                },//默认是否显示省份名称
+
+                                                emphasis: {label: {show: true}},
+
+                                            },
+
+                                            data: dataList2
+                                        },
+
+                                        {
+                                            name: '工程区严重危害面积',
+                                            type: 'map',
+                                            mapType:province,
+                                            itemStyle: {
+                                                normal: {
+                                                    label: {show: true},
+                                                    color: '#FF3C07',
+                                                    fontSize: 5,
+                                                    borderColor: '#3B5077',//地图边框颜色
+                                                    textStyle: {
+                                                        fontSize: 5,
+                                                        fontWeight: 'bold',
+                                                        color: '#FF3C07'
+                                                    }
+                                                },//默认是否显示省份名称
+
+                                                emphasis: {label: {show: true}},
+
+                                            },
+
+                                            data: dataList4
+                                        },
+
+                                        {
+                                            name: '当年防治面积',
+                                            type: 'map',
+                                            mapType:province,
+                                            itemStyle: {
+                                                normal: {
+                                                    label: {show: true},
+                                                    color: '#00B4B5',
+                                                    fontSize: 5,
+/*
+                                                    areaColor: '#1782d2', //默认的地图板块颜色
+*/
+                                                    borderColor: '#3B5077',//地图边框颜色
+                                                    textStyle: {
+                                                        fontSize: 5,
+                                                        fontWeight: 'bold',
+                                                        color: '#00B4B5'
+                                                    }
+                                                },//默认是否显示省份名称
+
+                                                emphasis: {label: {show: true}},
+
+                                            },
+
+                                            data: dataList5
+                                        },
+
+                                        {
+                                            name: '持续控制面积',
+                                            type: 'map',
+                                            mapType:province,
+                                            itemStyle: {
+                                                normal: {
+                                                    label: {show: true},
+                                                    color: '#366B98',
+                                                    fontSize: 5,
+                                                    borderColor: '#3B5077',//地图边框颜色
+                                                    textStyle: {
+                                                        fontSize: 5,
+                                                        fontWeight: 'bold',
+                                                        color: '#366B98'
+                                                    }
+                                                },//默认是否显示省份名称
+
+                                                emphasis: {label: {show: true}},
+
+                                            },
+
+                                            data: dataList6
+                                        },
+
+
+
+                                    ]
+
+
+                                };
+                               /* myChart.on('dblclick', function () {
+                                    document.getElementById("hidden").style.display = "none";//显示
+                                    document.getElementById("hiddenMap").style.display = "";//显示
+
+                                });*/
+                                //使用刚指定的配置项和数据显示图表。
+                                myChart.setOption(option);
+                                $(window).resize(myChart.resize);
+                            }
+                        });
+
+                    });
+
+
+
+            }else{
+                //隐藏国家级省级地图
+                document.getElementById("hideenProvince").style.display = "none";//显示
+                document.getElementById("hideenChina").style.display = "none";//显示
+
+            }
+
+        });
+
+
+
+        // 加载对应的JS
+        function loadBdScript(scriptId, url, callback) {
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            if (script.readyState) {  //IE
+                script.onreadystatechange = function () {
+                    if (script.readyState === "loaded" || script.readyState === "complete") {
+                        script.onreadystatechange = null;
+                        callback();
+                    }
+                };
+            } else {  // Others
+                script.onload = function () {
+                    callback();
+                };
+            }
+            script.src = url;
+            script.id = scriptId;
+            document.getElementsByTagName("head")[0].appendChild(script);
+        };
+
+        /*折线图*/
+        $(function () {
+            var prefix = ctx + "zaihai/sczjtj";
+
+            var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+            var harmTotalarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var engineeringhazard = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var seriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var engineeringSeriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var defensiveArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var controlarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+
+            var province = [[${province}]]
+
+            var lineChart = echarts.init(document.getElementById("echarts-line-chart"));
+            $.ajax({
+                type: "post",
+                async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                url: prefix + "/getRatOption",    //请求发送到dataActiont处
+                data: {province: province},
+                dataType: "json",        //返回数据形式为json
+                success: function (result) {
+                    //请求成功时执行该函数内容，result即为服务器返回的json对象
+                    if (result) {
+                        for (var i = 0; i < result.length; i++) {
+                            year.push(result[i].year);
+                            harmTotalarea.push(result[i].harmTotalarea);
+                            engineeringhazard.push(result[i].engineeringhazard);
+                            seriousArea.push(result[i].seriousArea);
+                            engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                            defensiveArea.push(result[i].defensiveArea);
+                            controlarea.push(result[i].controlarea);
+
+                            week.push(result[i].week);
+                        }
+                        lineChart.hideLoading();    //隐藏加载动画
+                        lineChart.setOption({        //加载数据图表
+                            title: {
+                                text: '草原鼠害防治统计折线图'
+                            },
+                            tooltip: {
+                                trigger: 'axis',
+
+                            },
+                            legend: {
+                                width: "70%",
+                                data: ['危害总面积', '严重危害面积', '工程区危害面积', '工程区严重危害面积', '当年防治面积', '持续控制面积'],
+                                selected: {
+                                    '工程区严重危害面积': false,
+                                    '严重危害面积': false,
+                                    '工程区危害面积': false,
+                                    '当年防治面积': false,
+                                    '持续控制面积': false,
+
+                                },
+                            },
+                            calculable: true,
+                            xAxis: {
+                                boundaryGap: false,
+                                data: week
+                            },
+                            yAxis: {
+                                type: 'value'
+                            },
+                            series: [
+                                {
+                                    name: '危害总面积',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '危害总面积',
+                                    data: harmTotalarea
+                                },
+                                {
+                                    name: '严重危害面积',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '危害总面积',
+                                    data: seriousArea
+                                },
+                                {
+                                    name: '工程区危害面积',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '工程区危害面积',
+                                    data: engineeringhazard
+                                },
+                                {
+                                    name: '工程区严重危害面积',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '工程区严重危害面积',
+                                    data: engineeringSeriousArea
+                                },
+                                {
+                                    name: '当年防治面积',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '当年防治面积',
+                                    data: defensiveArea
+                                },
+                                {
+                                    name: '持续控制面积',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '持续控制面积',
+                                    data: controlarea
+                                }
+                            ]
+
+                        });
+                        window.onresize = lineChart.resize;
+                    }
+                },
+                error: function (errorMsg) {
+                    //请求失败时执行该函数
+                    alert("图表请求数据失败!");
+                    lineChart.hideLoading();
+                }
+            });
+
+        });
+
+
+
+        /*柱状图*/
+        $(function () {
+
+            var prefix = ctx + "zaihai/sczjtj";
+            var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+            var harmTotalarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var engineeringhazard = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var seriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var engineeringSeriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var province = [];
+            var city = [];
+
+            var defensiveArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var controlarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var lineChart = echarts.init(document.getElementById("echarts-histogram-chart"));
+                $.ajax({
+                    type: "post",
+                    async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                    url: prefix + "/getOptionRatHistogram",    //请求发送到dataActiont处
+                    data: {province: province},
+                    dataType: "json",        //返回数据形式为json
+                    success: function (result) {
+                        //请求成功时执行该函数内容，result即为服务器返回的json对象
+                        if (result) {
+                            for (var i = 0; i < result.length; i++) {
+                                if(result[i].roleName =='2') {
+                                    year.push(result[i].year);
+                                    harmTotalarea.push(result[i].harmTotalarea);
+                                    engineeringhazard.push(result[i].engineeringhazard);
+                                    seriousArea.push(result[i].seriousArea);
+                                    engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                    city.push(result[i].city);
+                                    defensiveArea.push(result[i].defensiveArea);
+                                    controlarea.push(result[i].controlarea);
+                                }else if(result[i].roleName =='3'){
+                                    year.push(result[i].year);
+                                    harmTotalarea.push(result[i].harmTotalarea);
+                                    engineeringhazard.push(result[i].engineeringhazard);
+                                    seriousArea.push(result[i].seriousArea);
+                                    engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                    city.push(result[i].county);
+                                    defensiveArea.push(result[i].defensiveArea);
+                                    controlarea.push(result[i].controlarea);
+                                }else{
+                                    year.push(result[i].year);
+                                    harmTotalarea.push(result[i].harmTotalarea);
+                                    engineeringhazard.push(result[i].engineeringhazard);
+                                    seriousArea.push(result[i].seriousArea);
+                                    engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                    city.push(result[i].province);
+                                    defensiveArea.push(result[i].defensiveArea);
+                                    controlarea.push(result[i].controlarea);
+                                }
+                            }
+                            lineChart.hideLoading();    //隐藏加载动画
+                            lineChart.setOption({        //加载数据图表
+                                title: {
+                                    text: '草原鼠害防治统计柱状图'
+                                },
+                                tooltip: {
+                                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                        type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                                    }
+                                },
+                                legend: {
+                                    width: "70%",
+                                    data: ['危害总面积', '严重危害面积', '工程区危害面积', '工程区严重危害面积', '当年防治面积', '持续控制面积'],
+
+                                },
+                                calculable: true,
+                                xAxis: {
+                                    data: city
+                                },
+                                yAxis: {
+                                    type: 'value'
+                                },
+                                series: [{
+                                    name: '危害总面积',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: harmTotalarea
+                                },
+                                    {
+                                        name: '严重危害面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: seriousArea
+                                    },
+                                    {
+                                        name: '工程区危害面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: engineeringhazard
+                                    },
+                                    {
+                                        name: '工程区严重危害面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: engineeringSeriousArea
+                                    },
+                                    {
+                                        name: '当年防治面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: defensiveArea
+                                    },
+                                    {
+                                        name: '持续控制面积',
+                                        type: 'bar',
+                                        stack: '总量',
+                                        barWidth: 40,//柱图宽度
+                                        data: controlarea
+                                    }
+                                ]
+
+                            });
+                            window.onresize = lineChart.resize;
+
+                        }
+                    },
+                    error: function (errorMsg) {
+                        //请求失败时执行该函数
+                        alert("图表请求数据失败!");
+                        lineChart.hideLoading();
+                    }
+                });
+        });
+
+        /*鼠害待办列表*/
+        $(function() {
+            var type=[[${grade}]];
+            if(type =='1') {
+                document.getElementById("type").style.display = "none";//隐藏
+
+            }
+            //var prefix = ctx + "workflow/write";
+            var prefix = ctx + "caiji/surveyassess";
+
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                detailUrl: prefix + "/detail/{id}",
+                exportUrl: prefix + "/export",
+                pageList:[5,10,15,20],//分页步进值
+                pageSize: 5,
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                showRefresh: false,
+               // rowStyle: rowStyle,//通过自定义函数设置行样式
+                Icons: 'glyphicon-export',
+                modalName: "待办信息列表数据",
+                columns: [
+                    /* {
+                         field : 'recordid',
+                         align: 'center',
+                         valign: 'middle',
+                         title : '编号'
+                     },*/
+                    {
+                        field : 'title',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '任务编号'
+                    },
+                    {
+                        field : 'filetypename',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '类型名称'
+                    },
+
+                    {
+                        field : 'receivetime',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '上报时间'
+                    },
+                    {
+                        field : 'createTime',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '创建时间'
+                    },
+
+                    {
+                        title: '操作',
+                        align: 'center',
+                        align: 'center',
+                        valign: 'middle',
+                        formatter: function(value, row, index) {
+                            var actions = [];
+                            actions.push('<a  href="javascript:void(0)" onclick="detail(\'' + row.id + '\')"><i class="fa fa-key"></i>审核</a>');
+                            return actions.join('');
+                        }
+                    }
+
+
+                ]
+            };
+            $.table.init(options);
+        });
+
+        function rowStyle(row, index) {
+            var classes = ['active', 'success', 'info', 'warning', 'danger'];
+            if (index % 2 === 0 && index / 2 < classes.length) {
+                return {
+                    classes: classes[index / 2]
+                };
+            }
+            return {};
+
+
+        }
+
+
+
+
+        /*地图统计*/
+        $(function () {
+            var a=[[${grade}]];
+            if(a=='1') {
+
+                var prefix = ctx + "zaihai/chfztj";
+
+                var dataList = []
+                var dataList2 = []
+                var dataList3 = []
+                var dataList4 = []
+
+                //后端获取json数据
+                //请求地图数据
+                $.ajax({
+                    url: prefix + "/getRequestCount",    //请求发送到dataActiont处
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+
+
+                        if (data.success) {
+                            dataList = data.dataList;
+                            dataList2 = data.engineeringhazardList;
+                            dataList3 = data.seriousAreaList;
+                            dataList4 = data.engineeringSeriousAreaList;
+
+                            var mpChart = echarts.init(document.getElementById("echarts-map"));
+                            var mapoption = {
+
+                                title: {
+                                    text: '草原虫害发生情况统计地图',
+                                    subtext: '',
+                                    x: 'center'
+                                },
+                                tooltip: {
+                                    trigger: 'item'
+                                },
+                                legend: {
+                                    orient: 'vertical',
+                                    x: 'left',
+                                    data: ['危害总面积', '严重危害总面积', '工程区危害面积', '工程区严重危害面积'],
+                                    selected: {
+                                        '工程区危害面积': false,
+                                        '严重危害总面积': false,
+                                        '工程区严重危害面积': false,
+                                    },
+                                    formatter: function (params) {
+                                        if (params.indexOf('\n') == -1) {
+                                            return params;
+                                        } else {
+                                            return '{white|' + params.split('\n')[0] + '}\n' + params.split('\n')[1];
+                                        }
+                                    },
+                                    textStyle: {
+                                        rich: {
+                                            white: {
+                                                color: "#fff",
+                                                fontSize: 12,
+                                                padding: [6, 0, 0, 0]
+                                            }
+                                        }
+                                    }
+                                },
+                                dataRange: {
+                                    min: 0,
+                                    max: 25000,
+                                    x: 'left',
+                                    y: 'bottom',
+                                    text: ['高', '低'],           // 文本，默认为数值文本
+                                    calculable: true
+                                },
+                                toolbox: {
+                                    show: true,
+                                    orient: 'vertical',
+                                    x: 'right',
+                                    y: 'center',
+                                    feature: {
+                                        mark: {show: true},
+/*
+                                        dataView: {show: true, readOnly: false},
+*/
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+                                roamController: {
+                                    show: true,
+                                    x: 'right',
+                                    mapTypeControl: {
+                                        'china': true
+                                    }
+                                },
+                                series: [
+
+                                    {
+                                        name: '危害总面积',
+                                        type: 'map',
+                                        mapType: 'china',
+                                        itemStyle: {
+                                            normal: {
+                                                label: {show: true}, color: '#2867DE',
+                                                areaStyle: {
+                                                    color: '#2867DE',//默认的地图板块颜色
+                                                }
+                                            },//默认是否显示省份名称
+
+                                            emphasis: {label: {show: true}},
+
+                                        },
+
+                                        data: dataList
+                                    },
+                                    {
+                                        name: '严重危害总面积',
+                                        type: 'map',
+                                        mapType: 'china',
+                                        itemStyle: {
+                                            normal: {label: {show: true},color: '#FF7800'},
+                                            emphasis: {label: {show: true}},
+                                            areaStyle: {
+                                                color: '#FF7800',//默认的地图板块颜色
+                                            },
+                                        },
+                                        data: dataList3
+                                    },
+                                    {
+                                        name: '工程区危害面积',
+                                        type: 'map',
+                                        mapType: 'china',
+                                        itemStyle: {
+                                            normal: {label: {show: true},color: '#7FD357'},
+                                            emphasis: {label: {show: true}},
+                                            areaStyle: {
+                                                color: '7FD357',//默认的地图板块颜色
+                                            },
+                                        },
+                                        data: dataList2
+                                    },
+                                    {
+                                        name: '工程区严重危害面积',
+                                        type: 'map',
+                                        mapType: 'china',
+                                        itemStyle: {
+                                            normal: {label: {show: true},color: '#FF3C07'},
+                                            emphasis: {label: {show: true}},
+                                            areaStyle: {
+                                                color: '#FF3C07',//默认的地图板块颜色
+                                            },
+                                        },
+                                        data: dataList4
+                                    }
+
+                                ]
+                            };
+
+                            //点击函数
+                            mpChart.setOption(mapoption);//先渲染出空地图
+                            mpChart.on('dblclick', function (params) {
+                                document.getElementById("hiddenProvince2").style.display = "none";//隐藏
+                                document.getElementById("hiddenChina2").style.display = "";//隐藏
+
+                            });
+
+
+                            //点击回显
+                            mpChart.on('click', function (params) {
+                                document.getElementById("hiddenProvince2").style.display = "";//隐藏
+                                document.getElementById("hiddenChina2").style.display = "none";//隐藏
+
+                                var province=params.name;
+                                var type='2';
+                                showProvince(province,type);
+
+                            });
+                            mpChart.setOption(mapoption);//先渲染出空地图
+                            $(window).resize(mpChart.resize);
+
+
+                        } else {
+                            console.log("getRequestCount 加载失败")
+                        }
+                    },
+                    error: function (jqXHR) {
+                        alert("getRequestCount发生错误：" + jqXHR.status);
+                        // }
+                    }
+                });
+            }
+            else if(a=='2'){
+                var prefix = ctx + "zaihai/chfztj";
+
+                //展示对应的省
+                var dataList = []
+                var dataList2 = []
+                var dataList3 = []
+                //将省份转化为拼音
+                var province=[[${province}]];
+                var chinaName = province;
+                if(chinaName=='陕西'){
+                    var pro='shanxi1';
+                }else{
+                    //获取全写拼音（调用js中方法）
+                    var fullName = pinyin.getFullChars(chinaName);
+                    //获取简写拼音（调用js中方法）
+                    var easyName = pinyin.getCamelChars(chinaName);
+                    //给两个文本框赋值
+                    var pro=fullName.toLowerCase();
+                }
+
+                //初始化echarts
+                var myChart = echarts.init(document.getElementById("echarts-map"));
+
+                loadBdScript('$' + pro + 'JS', '../js/map/province/' + pro + '.js', function () {
+                    $.ajax({
+                        url: prefix + "/getCityInsectCount",    //请求发送到dataActiont处
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+
+                            dataList = data.dataList;
+                            dataList2 = data.engineeringhazardList;
+                            dataList3 = data.seriousAreaList;
+                            dataList4 = data.engineeringSeriousAreaList;
+                            // echart图表自适应
+                            window.addEventListener("resize", function () {
+                                myChart.resize();
+                            });
+
+                            //关键是配置项
+                            var option = {
+
+                                title: {
+                                    textStyle: {//主标题文本样式{"fontSize": 18,"fontWeight": "bolder","color": "#333"}
+                                        fontFamily: 'Arial',
+                                        fontSize: 25,
+                                        fontStyle: 'normal',
+                                        fontWeight: 'normal',
+                                        fontColor:'red',//设置主标题字体颜色
+
+                                    },
+                                    text: chinaName,
+                                    subtext: '',
+                                    x: 'center'
+                                },
+                                tooltip: {
+                                    trigger: 'item'
+                                },
+                                legend: {
+                                    orient: 'vertical',
+                                    x: 'left',
+                                    data: ['危害总面积', '严重危害总面积', '工程区危害面积', '工程区严重危害面积'],
+                                    selected: {
+                                        '严重危害总面积': false,
+                                        '工程区危害面积': false,
+                                        '工程区严重危害面积': false,
+
+                                    },
+                                    formatter: function (params) {
+                                        if (params.indexOf('\n') == -1) {
+                                            return params;
+                                        } else {
+                                            return '{white|' + params.split('\n')[0] + '}\n' + params.split('\n')[1];
+                                        }
+                                    },
+                                    textStyle: {
+                                        rich: {
+                                            white: {
+                                                color: "#fff",
+                                                fontSize: 12,
+                                                padding: [6, 0, 0, 0]
+                                            }
+                                        }
+                                    }
+                                },
+                                dataRange: {
+                                    /*                            orient: 'horizontal',*/
+                                    min: 0,
+                                    max: 250000,
+                                    x: 'left',
+                                    y: 'bottom',
+                                    text: ['高', '低'],           // 文本，默认为数值文本
+                                    calculable: true
+                                    /*
+                                                                splitNumber: 0
+                                    */
+                                },
+                                toolbox: {
+                                    show: true,
+                                    orient: 'vertical',
+                                    x: 'right',
+                                    y: 'center',
+                                    feature: {
+                                        mark: {show: true},
+/*
+                                        dataView: {show: true, readOnly: false},
+*/
+                                        restore: {show: true},
+                                        saveAsImage: {show: true}
+                                    }
+                                },
+
+                                roamController: {
+                                    show: true,
+                                    x: 'right',
+
+                                },
+                                series: [
+                                    {
+                                        name: '危害总面积',
+                                        type: 'map',
+                                        mapType:province,
+                                        itemStyle: {
+                                            normal: {
+                                                label: {show: true},
+                                                color: '#2867DE',
+                                                fontSize: 5,
+                                                borderColor: '#3B5077',//地图边框颜色
+                                                textStyle: {
+                                                    fontSize: 5,
+                                                    fontWeight: 'bold',
+                                                    color: '#2867DE'
+                                                }
+                                            },//默认是否显示省份名称
+                                            areaStyle: {
+                                                color: '#2867DE',//默认的地图板块颜色
+                                            },
+                                            emphasis: {label: {show: true}},
+
+                                        },
+
+
+                                        data: dataList
+                                    },
+
+                                    {
+                                        name: '严重危害总面积',
+                                        type: 'map',
+                                        mapType:province,
+                                        itemStyle: {
+                                            normal: {
+                                                label: {show: true},
+                                                color: '#FF7800',
+                                                fontSize: 5,
+                                                borderColor: '#3B5077',//地图边框颜色
+                                                textStyle: {
+                                                    fontSize: 5,
+                                                    fontWeight: 'bold',
+                                                    color: '#FF7800'
+                                                }
+                                            },//默认是否显示省份名称
+
+                                            emphasis: {label: {show: true}},
+
+                                        },
+
+                                        data: dataList3
+                                    },
+
+                                    {
+                                        name: '工程区危害面积',
+                                        type: 'map',
+                                        mapType:province,
+                                        itemStyle: {
+                                            normal: {
+                                                label: {show: true},
+                                                color: '#7FD357',
+                                                fontSize: 5,
+                                                borderColor: '#3B5077',//地图边框颜色
+                                                textStyle: {
+                                                    fontSize: 5,
+                                                    fontWeight: 'bold',
+                                                    color: '#7FD357'
+                                                }
+                                            },//默认是否显示省份名称
+
+                                            emphasis: {label: {show: true}},
+
+                                        },
+
+                                        data: dataList2
+                                    },
+
+                                    {
+                                        name: '工程区严重危害面积',
+                                        type: 'map',
+                                        mapType:province,
+                                        itemStyle: {
+                                            normal: {
+                                                label: {show: true},
+                                                color: '#FF3C07',
+                                                fontSize: 5,
+                                                borderColor: '#3B5077',//地图边框颜色
+                                                textStyle: {
+                                                    fontSize: 5,
+                                                    fontWeight: 'bold',
+                                                    color: '#FF3C07'
+                                                }
+                                            },//默认是否显示省份名称
+
+                                            emphasis: {label: {show: true}},
+
+                                        },
+
+                                        data: dataList4
+                                    },
+
+
+                                ]
+
+                            };
+                            /* myChart.on('dblclick', function () {
+                                 document.getElementById("hidden").style.display = "none";//显示
+                                 document.getElementById("hiddenMap").style.display = "";//显示
+
+                             });*/
+                            //使用刚指定的配置项和数据显示图表。
+                            myChart.setOption(option);
+                            $(window).resize(myChart.resize);
+                        }
+                    });
+
+                });
+
+
+
+            }else{
+                //隐藏国家级省级地图
+                document.getElementById("hiddenChina2").style.display = "none";//显示
+                document.getElementById("hiddenProvince2").style.display = "none";//显示
+
+            }
+
+        });
+
+
+
+        /*虫害折线图*/
+        $(function () {
+            var prefix = ctx + "zaihai/chfztj";
+
+            var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+            var harmTotalarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var engineeringhazard = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var seriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var engineeringSeriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+
+            var province = [[${province}]]
+
+            var lineChart = echarts.init(document.getElementById("echarts-line-chart1"));
+            $.ajax({
+                type: "post",
+                async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                url: prefix + "/getPageOption",    //请求发送到dataActiont处
+                data: {province: province},
+                dataType: "json",        //返回数据形式为json
+                success: function (result) {
+                    //请求成功时执行该函数内容，result即为服务器返回的json对象
+                    if (result) {
+
+                        for (var i = 0; i < result.length; i++) {
+                            year.push(result[i].year);
+                            harmTotalarea.push(result[i].harmTotalarea);
+                            engineeringhazard.push(result[i].engineeringhazard);
+                            seriousArea.push(result[i].seriousArea);
+                            engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                            week.push(result[i].week);
+                        }
+                        lineChart.hideLoading();    //隐藏加载动画
+                        lineChart.setOption({        //加载数据图表
+                            title: {
+                                text: '草原虫害防治统计折线图'
+                            },
+                            tooltip: {
+                                trigger: 'axis',
+
+                            },
+                            legend: {
+                                width: "50%",
+                                data: ['危害总面积', '严重危害面积', '工程区危害面积', '工程区严重危害面积'],
+                                selected: {
+                                    '工程区严重危害面积': false,
+                                    '严重危害面积': false,
+                                    '工程区危害面积': false,
+                                },
+                            },
+                            calculable: true,
+                            xAxis: {
+                                boundaryGap: false,
+                                data: week
+                            },
+                            yAxis: {
+                                type: 'value'
+                            },
+                            series: [
+                                {
+                                    name: '危害总面积',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '危害总面积',
+                                    data: harmTotalarea
+                                },
+                                {
+                                    name: '严重危害面积',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '危害总面积',
+                                    data: engineeringhazardseriousArea
+                                },
+                                {
+                                    name: '工程区危害面积',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '工程区危害面积',
+                                    data: engineeringhazard
+                                },
+                                {
+                                    name: '工程区严重危害面积',
+                                    type: 'line',
+                                    smooth: true,
+                                    stack: '工程区严重危害面积',
+                                    data: engineeringSeriousArea
+                                }
+                            ]
+
+                        });
+                        window.onresize = lineChart.resize;
+                    }
+                },
+                error: function (errorMsg) {
+                    //请求失败时执行该函数
+                    alert("图表请求数据失败!");
+                    lineChart.hideLoading();
+                }
+            });
+
+        });
+
+        /*虫害柱状图*/
+        $(function () {
+            var prefix = ctx + "zaihai/chfztj";
+
+            var year = [];    //横坐标数组（实际用来盛放X轴坐标值）
+            var harmTotalarea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var engineeringhazard = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var seriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var engineeringSeriousArea = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var week = [];    //纵坐标数组（实际用来盛放Y坐标值）
+            var province = [];
+
+
+            var lineChart = echarts.init(document.getElementById("echarts-histogram-chart1"));
+            $.ajax({
+                type: "post",
+                async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                url: prefix + "/getOptionHistogram",    //请求发送到dataActiont处
+                data: {province: province},
+                dataType: "json",        //返回数据形式为json
+                success: function (result) {
+                    //请求成功时执行该函数内容，result即为服务器返回的json对象
+                    if (result) {
+
+                        for (var i = 0; i < result.length; i++) {
+                            if(result[i].roleName =='2') {
+                                year.push(result[i].year);
+                                harmTotalarea.push(result[i].harmTotalarea);
+                                engineeringhazard.push(result[i].engineeringhazard);
+                                seriousArea.push(result[i].seriousArea);
+                                engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                province.push(result[i].city);
+
+                            }else if(result[i].roleName =='3'){
+                                year.push(result[i].year);
+                                harmTotalarea.push(result[i].harmTotalarea);
+                                engineeringhazard.push(result[i].engineeringhazard);
+                                seriousArea.push(result[i].seriousArea);
+                                engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                province.push(result[i].county);
+
+                            }else{
+                                year.push(result[i].year);
+                                harmTotalarea.push(result[i].harmTotalarea);
+                                engineeringhazard.push(result[i].engineeringhazard);
+                                seriousArea.push(result[i].seriousArea);
+                                engineeringSeriousArea.push(result[i].engineeringSeriousArea);
+                                province.push(result[i].province);
+
+                            }
+
+
+                        }
+                        lineChart.hideLoading();    //隐藏加载动画
+                        lineChart.setOption({        //加载数据图表
+                            title: {
+                                text: '草原虫害防治统计柱状图'
+                            },
+                            tooltip: {
+                                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                    type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                                }
+                            },
+                            legend: {
+                                width: "50%",
+                                data: ['危害总面积', '严重危害面积', '工程区危害面积', '工程区严重危害面积'],
+                                /*selected:{
+                                    '工程区危害总面积' :false,
+                                    '严重危害面积' :false,
+                                    '工程区危害面积' :false,
+                                },*/
+                            },
+                            calculable: true,
+                            xAxis: {
+                                data: province
+                            },
+                            yAxis: {
+                                type: 'value'
+                            },
+                            series: [{
+                                name: '危害总面积',
+                                type: 'bar',
+                                stack: '总量',
+                                barWidth: 40,//柱图宽度
+                                data: harmTotalarea
+                            },
+                                {
+                                    name: '严重危害面积',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data:  seriousArea
+                                },
+                                {
+                                    name: '工程区危害面积',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: engineeringhazard
+                                },
+                                {
+                                    name: '工程区严重危害面积',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: 40,//柱图宽度
+                                    data: engineeringSeriousArea
+                                }
+                            ]
+
+                        });
+                        window.onresize = lineChart.resize;
+
+                    }
+                },
+                error: function (errorMsg) {
+                    //请求失败时执行该函数
+                    alert("图表请求数据失败!");
+                    lineChart.hideLoading();
+                }
+            });
+
+        });
+
+        /*待办列表*/
+        $(function() {
+            var type=[[${grade}]];
+            if(type =='1') {
+                document.getElementById("type2").style.display = "none";//隐藏
+
+            }else if(type =='3'){
+                document.getElementById("type2").style.display = "none";//隐藏
+                document.getElementById("type").style.display = "none";//隐藏
+
+            }
+            var editFlag = [[${@permission.hasPermi('system:surveyassess:edit')}]];
+            var removeFlag = [[${@permission.hasPermi('system:surveyassess:remove')}]];
+           // var prefix = ctx + "workflow/write";
+            var prefix = ctx + "caiji/surveyassess";
+
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                detailUrl: prefix + "/detail/{id}",
+                exportUrl: prefix + "/export",
+                pageList:[5,10,15,20],//分页步进值
+                pageSize: 5,
+                showSearch: false,
+                showToggle: false,
+                showColumns: false,
+                id:"bootstrap-table2",
+                showRefresh: false,
+                //rowStyle: rowStyle,//通过自定义函数设置行样式
+                Icons: 'glyphicon-export',
+                modalName: "待办信息列表数据",
+                columns: [
+
+                    {
+                        field : 'title',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '任务编号'
+                    },
+                    {
+                        field : 'filetypename',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '类型名称'
+                    },
+
+                    {
+                        field : 'receivetime',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '上报时间'
+                    },
+                    {
+                        field : 'createTime',
+                        align: 'center',
+                        valign: 'middle',
+                        title : '创建时间'
+                    },
+                    {
+                        title: '操作',
+                        align: 'center',
+                        align: 'center',
+                        valign: 'middle',
+                        formatter: function(value, row, index) {
+                            var actions = [];
+                            actions.push('<a  href="javascript:void(0)" onclick="detail(\'' + row.id + '\')"><i class="fa fa-key"></i>审核</a>');
+                            return actions.join('');
+                        }
+                    }
+
+                ]
+            };
+            $.table.init(options);
+        });
+/*
+        function rowStyle(row, index) {
+            var classes = ['active', 'success', 'info', 'warning', 'danger'];
+            if (index % 2 === 0 && index / 2 < classes.length) {
+                return {
+                    classes: classes[index / 2]
+                };
+            }
+            return {};
+
+        }*/
+            //定时点击选项卡
+            setTimeout(function () {
+                $("#display").trigger("click");
+
+            },500);//1000毫秒=1秒后执行test方法
+
+        //展示对应的省
+        function showProvince(province,type) {
+            if(type=='1'){
+                var prefix = ctx + "zaihai/sczjtj";
+                url=prefix + "/getCityCount";
+            }else{
+                var prefix = ctx + "zaihai/chfztj";
+                url=prefix + "/getCityInsectCount";
+            }
+
+            var dataList = [];
+            var dataList2 = [];
+            var dataList3 = [];
+            var dataList4 = [];
+
+            //将省份转化为拼音
+            var chinaName = province;
+            if(chinaName=='陕西'){
+                var pro='shanxi1';
+            }else{
+                //获取全写拼音（调用js中方法）
+                var fullName = pinyin.getFullChars(chinaName);
+                //获取简写拼音（调用js中方法）
+                var easyName = pinyin.getCamelChars(chinaName);
+                //给两个文本框赋值
+                var pro=fullName.toLowerCase();
+            }
+
+            if( type=='1'){
+                var myChart = echarts.init(document.getElementById("echarts-map-chart2"));
+
+            }else{
+                //初始化echarts
+                var myChart = echarts.init(document.getElementById("echarts-map2"));
+            }
+
+            loadBdScript('$' + pro + 'JS', '../js/map/province/' + pro + '.js', function () {
+
+                $.ajax({
+                    url: url,    //请求发送到dataActiont处
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        dataList = data.dataList;
+                        dataList2 = data.engineeringhazardList;
+                        dataList3 = data.seriousAreaList;
+                        dataList4 = data.engineeringSeriousAreaList;
+
+                        // echart图表自适应
+                        window.addEventListener("resize", function () {
+                            myChart.resize();
+                        });
+
+                        //关键是配置项
+                        var option = {
+
+                            title: {
+                                textStyle: {//主标题文本样式{"fontSize": 18,"fontWeight": "bolder","color": "#333"}
+                                    fontFamily: 'Arial',
+                                    fontSize: 25,
+                                    fontStyle: 'normal',
+                                    fontWeight: 'normal',
+                                    fontColor:'red',//设置主标题字体颜色
+
+                                },
+                                text: chinaName,
+                                subtext: '',
+                                x: 'center'
+                            },
+                            tooltip: {
+                                trigger: 'item'
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                x: 'left',
+                                data: ['危害总面积', '严重危害总面积', '工程区危害面积', '工程区严重危害面积'],
+                               // data: ['鼠害危害面积', '虫害危害面积'],
+                                selected: {
+                                    '严重危害总面积': false,
+                                    '工程区危害面积': false,
+                                    '工程区严重危害面积': false,
+
+                                },
+                                formatter: function (params) {
+                                    if (params.indexOf('\n') == -1) {
+                                        return params;
+                                    } else {
+                                        return '{white|' + params.split('\n')[0] + '}\n' + params.split('\n')[1];
+                                    }
+                                },
+                                textStyle: {
+                                    rich: {
+                                        white: {
+                                            color: "#fff",
+                                            fontSize: 12,
+                                            padding: [6, 0, 0, 0]
+                                        }
+                                    }
+                                }
+                            },
+                            dataRange: {
+                                /*                            orient: 'horizontal',*/
+                                min: 0,
+                                max: 250000,
+                                x: 'left',
+                                y: 'bottom',
+                                text: ['高', '低'],           // 文本，默认为数值文本
+                                calculable: true
+                                /*
+                                                            splitNumber: 0
+                                */
+                            },
+                            toolbox: {
+                                show: true,
+                                orient: 'vertical',
+                                x: 'right',
+                                y: 'center',
+                                feature: {
+                                    mark: {show: true},
+/*
+                                    dataView: {show: true, readOnly: false},
+*/
+                                    restore: {show: true},
+                                    saveAsImage: {show: true}
+                                }
+                            },
+
+                            roamController: {
+                                show: true,
+                                x: 'right',
+
+                            },
+                            series: [
+                                {
+                                    name: '危害总面积',
+                                    type: 'map',
+                                    mapType:province,
+                                    itemStyle: {
+                                        normal: {
+                                            label: {show: true},
+                                            color: '#2867DE',
+                                            fontSize: 5,
+                                            borderColor: '#3B5077',//地图边框颜色
+                                            textStyle: {
+                                                fontSize: 5,
+                                                fontWeight: 'bold',
+                                                color: '#2867DE'
+                                            }
+                                        },//默认是否显示省份名称
+                                        areaStyle: {
+                                            color: '#2867DE',//默认的地图板块颜色
+                                        },
+                                        emphasis: {label: {show: true}},
+
+                                    },
+
+
+                                    data: dataList
+                                },
+
+                                {
+                                    name: '严重危害总面积',
+                                    type: 'map',
+                                    mapType:province,
+                                    itemStyle: {
+                                        normal: {
+                                            label: {show: true},
+                                            color: '#FF7800',
+                                            fontSize: 5,
+                                            borderColor: '#3B5077',//地图边框颜色
+                                            textStyle: {
+                                                fontSize: 5,
+                                                fontWeight: 'bold',
+                                                color: '#FF7800'
+                                            }
+                                        },//默认是否显示省份名称
+
+                                        emphasis: {label: {show: true}},
+
+                                    },
+
+                                    data: dataList3
+                                },
+
+                                {
+                                    name: '工程区危害面积',
+                                    type: 'map',
+                                    mapType:province,
+                                    itemStyle: {
+                                        normal: {
+                                            label: {show: true},
+                                            color: '#7FD357',
+                                            fontSize: 5,
+                                            borderColor: '#3B5077',//地图边框颜色
+                                            textStyle: {
+                                                fontSize: 5,
+                                                fontWeight: 'bold',
+                                                color: '#7FD357'
+                                            }
+                                        },//默认是否显示省份名称
+
+                                        emphasis: {label: {show: true}},
+
+                                    },
+
+                                    data: dataList2
+                                },
+
+                                {
+                                    name: '工程区严重危害面积',
+                                    type: 'map',
+                                    mapType:province,
+                                    itemStyle: {
+                                        normal: {
+                                            label: {show: true},
+                                            color: '#FF3C07',
+                                            fontSize: 5,
+                                            borderColor: '#3B5077',//地图边框颜色
+                                            textStyle: {
+                                                fontSize: 5,
+                                                fontWeight: 'bold',
+                                                color: '#FF3C07'
+                                            }
+                                        },//默认是否显示省份名称
+
+                                        emphasis: {label: {show: true}},
+
+                                    },
+
+                                    data: dataList4
+                                },
+
+
+                            ]
+                        };
+                        myChart.on('dblclick', function () {
+                            if( type=='1'){
+                                document.getElementById("hideenChina").style.display = "";//显示
+                                document.getElementById("hideenProvince").style.display = "none";//显示
+
+                            }else{
+                                document.getElementById("hiddenChina2").style.display = "";//显示
+                                document.getElementById("hiddenProvince2").style.display = "none";//显示
+                        }
+
+                        });
+                        //使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+                        $(window).resize(myChart.resize);
+                    }
+                });
+
+            });
+        }
+
+        function detail(dds){
+            var prefix = ctx + "caiji/surveyassess";
+
+            $.modal.openTab("核查地面调查数据页面",prefix + "/check/"+dds);
+
+        }
+
+
+
+
+    </script>
+</body>
+</html>

@@ -97,7 +97,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label" id="sumName">测定数量：</label>
                     <div class="col-sm-8">
-                        <input name="quantityDetermination" id="quantityDetermination" class="form-control" onchange="conversion()"  type="text" th:field="*{quantityDetermination}" required th:onkeyup="value=value.replace( /[^\d]/g,'')" maxlength="8">
+                        <input name="quantityDetermination" id="quantityDetermination" class="form-control" onchange="conversion()"  type="text" th:field="*{quantityDetermination}" th:onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g,'$1')" required  maxlength="8">
                     </div>
                 </div>
             </div>
@@ -121,7 +121,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">每百平米植株数：</label>
                             <div class="col-sm-8">
-                                <input name="plantNumber" id="plantNumber" class="form-control"  type="text" onchange="plant()" th:field="*{plantNumber}" th:onkeyup="value=value.replace( /[^\d]/g,'')" maxlength="8">
+                                <input name="plantNumber" id="plantNumber" class="form-control"  type="text" onchange="plant()" th:field="*{plantNumber}"  maxlength="8">
                             </div>
                         </div>
                     </div>
@@ -136,7 +136,7 @@
                         <label class="col-sm-3 control-label">换算标准密度：</label>
                         <div class="col-sm-8">
                             <input  id="standardDensity" name="standardDensity" readonly="readonly" class="form-control" type="text"  style="box-shadow:inset 1 0px 0px rgba(0,0,0,0.075); color: red;font-size: 18px;"  th:field="*{standardDensity}" required>
-                            <span  >密度单位：</span><span id="danwei">每平米害虫数</span>
+                            <span  >密度单位：</span><span id="danwei">盖度百分比</span>
 
                         </div>
                     </div>
@@ -256,6 +256,7 @@
                     $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
                 }else{
                     alert("请填写合理的值")
+                    $("#quantityDetermination").val("");
                 }
             }
 
@@ -270,6 +271,7 @@
                     $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
                 }else{
                     alert("请填写合理的值")
+                    $("#quantityDetermination").val("");
                 }
             }
 

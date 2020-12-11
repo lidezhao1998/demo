@@ -877,3 +877,144 @@ function quit3D() {
     $("#map").show();
     $("#cesiumContainer").hide();
 }
+function jlQuit() {
+    $("#map").show();
+    $("#map-jl").hide();
+    window.location.reload();
+
+}
+function jlGisMap(cqlName) {
+    var gisSource = new ol.source.TileWMS({
+        url: gisUrl + urlLayer,
+        params: {
+            FORMAT: 'image/png',
+            VERSION: '1.1.1',
+            tiled: true,
+            exceptions: 'application/vnd.ogc.se_inimage',
+            LAYERS: gisMapName,
+            CQL_FILTER: cqlName
+        }
+    });
+    var vector = new ol.layer.Tile({
+        source: gisSource
+    });
+    return vector;
+}
+var mapJl,precompose1,precompose2,precompose3,precompose4,rightTitle=TiandiMap_img;
+function jiChenge() {
+    var right= $("#project_type_right").val();
+    jlUpdate(right);
+}
+function jlUpdate(right) {
+    if(precompose1!=null){
+        ol.Observable.unByKey(precompose1);
+        ol.Observable.unByKey(precompose2);
+        ol.Observable.unByKey(precompose3);
+        ol.Observable.unByKey(precompose4);
+    }
+    var count = mapJl.getLayers().getLength();
+    if (count != 4) {
+        for (var i = count - 1; i > 3; i--) {
+            mapJl.removeLayer(mapJl.getLayers().item(i));
+        }
+    }
+    rightTitle=TiandiMap_img;
+    if(right!=0){
+         rightTitle = new ol.layer.Tile({
+             id:right,
+            source: new ol.source.TileWMS({
+                url: gisUrl + urlLayer,
+                params: {
+                    FORMAT: 'image/png',
+                    VERSION: '1.1.1',
+                    tiled: true,
+                    exceptions: 'application/vnd.ogc.se_inimage',
+                    LAYERS: gisMapName,
+                    CQL_FILTER: "project_type ="+right
+                }
+            })
+        });
+    }
+    mapJl.addLayer(rightTitle);
+     var swipe1 = document.getElementById('swipe');   // 用于控制卷帘位置的DOM元素
+    precompose1= rightTitle.on('precompose', function(event){// 在Bing地图渲染之前触发
+        var ctx = event.context;                 //获得canvas渲染上下文
+        var width = ctx.canvas.width * (swipe1.value / 100);  // 用于保存卷帘的位置
+        ctx.save();                 // 保存canvas设置
+        ctx.beginPath();            // 开始绘制路径
+        ctx.rect(width, 0, ctx.canvas.width - width, ctx.canvas.height);    // 绘制矩形
+        ctx.clip();                 // 裁剪Bing地图，以形成卷帘效果
+    })
+    precompose2= rightTitle.on('postcompose', function(event){     // 在Bing地图渲染之后触发
+        var ctx = event.context;
+        ctx.restore();              // 恢复canvas设置
+    });
+    precompose3= TiandiMap_img.on('precompose', function(event){// 在Bing地图渲染之前触发
+        var ctx = event.context;                 //获得canvas渲染上下文
+        var width = ctx.canvas.width * (swipe1.value / 100);  // 用于保存卷帘的位置
+        ctx.save();                 // 保存canvas设置
+        ctx.beginPath();            // 开始绘制路径
+        ctx.rect(width, 0, ctx.canvas.width - width, ctx.canvas.height);    // 绘制矩形
+        ctx.clip();                 // 裁剪Bing地图，以形成卷帘效果
+    })
+    precompose4= TiandiMap_img.on('postcompose', function(event){     // 在Bing地图渲染之后触发
+        var ctx = event.context;
+        ctx.restore();              // 恢复canvas设置
+    });
+
+    swipe1.addEventListener('input', function(){     // 在每次用户改变swipe控件时触发
+        mapJl.render();
+    }, false);
+}
+function jl() {
+    $("#map").hide();
+    $("#map-jl").show();
+    var left =$("#project_type_left").val();
+    leftTitle = new ol.layer.Tile({
+        id:left,
+        source: new ol.source.TileWMS({
+            url: gisUrl + urlLayer,
+            params: {
+                FORMAT: 'image/png',
+                VERSION: '1.1.1',
+                tiled: true,
+                exceptions: 'application/vnd.ogc.se_inimage',
+                LAYERS: gisMapName,
+                CQL_FILTER: "project_type ="+left
+            }
+        })
+    });
+    var rightGisMap=TiandiMap_img;
+    mapJl = new ol.Map({
+        target: 'map-jl-show',
+        layers: [
+            TiandiMap_img1,TiandiMap_cia,leftTitle,TiandiMap_img
+        ],
+        view: new ol.View({
+            projection: "EPSG:4326",
+            center: [105, 35],
+            zoom: 5,
+            minZoom: 5,
+            maxZoom: 18,
+        })
+    });
+     var swipe = document.getElementById('swipe');   // 用于控制卷帘位置的DOM元素
+     precompose1= rightGisMap.on('precompose', function(event){// 在Bing地图渲染之前触发
+        var ctx = event.context;                 //获得canvas渲染上下文
+        var width = ctx.canvas.width * (swipe.value / 100);  // 用于保存卷帘的位置
+
+        ctx.save();                 // 保存canvas设置
+        ctx.beginPath();            // 开始绘制路径
+        ctx.rect(width, 3, ctx.canvas.width - width, ctx.canvas.height);    // 绘制矩形
+        ctx.clip();                 // 裁剪Bing地图，以形成卷帘效果
+    })
+     precompose2= rightGisMap.on('postcompose', function(event){     // 在Bing地图渲染之后触发
+        var ctx = event.context;
+        ctx.restore();              // 恢复canvas设置
+    });
+    swipe.addEventListener('input', function(){     // 在每次用户改变swipe控件时触发
+        mapJl.render();
+    }, false);
+    return false;
+
+}

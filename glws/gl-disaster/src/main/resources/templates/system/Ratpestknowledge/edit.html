@@ -309,7 +309,7 @@
                                             <label class="col-sm-3 control-label">世代数：</label>
                                             <div class="col-sm-8">
                                                 <input name="generationNumber" th:field="*{generationNumber}"
-                                                       class="form-control" type="text">
+                                                       class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
 
                                             </div>
                                         </div>
@@ -583,7 +583,7 @@
                                             <label class="col-sm-3 control-label">三龄前摄食量：</label>
                                             <div class="col-sm-8">
                                                 <input name="threeIntake" th:field="*{threeIntake}" class="form-control"
-                                                       type="text">
+                                                       type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
 
                                             </div>
                                         </div>
@@ -596,7 +596,7 @@
                                             <label class="col-sm-3 control-label">三龄至成虫前摄食量：</label>
                                             <div class="col-sm-8">
                                                 <input name="threeBigIntake" th:field="*{threeBigIntake}"
-                                                       class="form-control" type="text">
+                                                       class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
 
                                             </div>
                                         </div>
@@ -606,7 +606,7 @@
                                             <label class="col-sm-3 control-label">成虫期摄食量：</label>
                                             <div class="col-sm-8">
                                                 <input name="adultFoodIntake" th:field="*{adultFoodIntake}"
-                                                       class="form-control" type="text">
+                                                       class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
 
                                             </div>
                                         </div>
@@ -619,7 +619,7 @@
                                             <label class="col-sm-3 control-label">成虫期摄食量：</label>
                                             <div class="col-sm-8">
                                                 <input name="foodRation" th:field="*{foodRation}" class="form-control"
-                                                       type="text">
+                                                       type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
 
                                             </div>
                                         </div>
@@ -629,7 +629,7 @@
                                             <label class="col-sm-3 control-label">三龄前损失量：</label>
                                             <div class="col-sm-8">
                                                 <input name="threeLoss" th:field="*{threeLoss}" class="form-control"
-                                                       type="text">
+                                                       type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
 
                                             </div>
                                         </div>
@@ -919,7 +919,7 @@
                                             <label class="col-sm-3 control-label">三龄至成虫前损失量：</label>
                                             <div class="col-sm-8">
                                                 <input name="threeBigLoss" th:field="*{threeBigLoss}"
-                                                       class="form-control" type="text">
+                                                       class="form-control" type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
 
                                             </div>
                                         </div>
@@ -929,7 +929,7 @@
                                             <label class="col-sm-3 control-label">成虫期损失量：</label>
                                             <div class="col-sm-8">
                                                 <input name="bigLoss" th:field="*{bigLoss}" class="form-control"
-                                                       type="text">
+                                                       type="text" onkeyup="value=value.replace(/[^\d^\.]+/g,'')">
 
                                             </div>
                                         </div>

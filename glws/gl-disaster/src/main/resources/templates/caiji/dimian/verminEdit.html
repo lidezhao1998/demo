@@ -97,7 +97,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label" id="sumName">测定数量：</label>
                         <div class="col-sm-8">
-                            <input name="quantityDetermination" id="quantityDetermination" class="form-control" onchange="conversion()"  type="text" th:field="*{quantityDetermination}" required th:onkeyup="value=value.replace( /[^\d]/g,'')" maxlength="8">
+                            <input name="quantityDetermination" id="quantityDetermination" class="form-control" onchange="conversion()"  type="text" th:field="*{quantityDetermination}" required th:onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g,'$1')" maxlength="8">
                         </div>
                     </div>
                 </div>

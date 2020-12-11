@@ -192,7 +192,7 @@ public class CTaskFznbCountController extends BaseController {
             cTaskFznb.setCity(city);
 
         }
-        List<CTaskFznb> list= cTaskFznbMapper.selectCTaskFznbCityList(cTaskFznb);
+        List<CTaskFznb> list= cTaskFznbMapper.selectCTaskFznbCountyList(cTaskFznb);
 
         return getDataTable(list);
     }

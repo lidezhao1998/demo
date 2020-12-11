@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增害虫取样信息')" />
+    <th:block th:include="include :: select2-css"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: jquery-steps-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal " id="form-allocation-add" th:object="${cPlot}">
+            <input id="photoUrl" name="photoUrl" class="form-control" type="hidden"  th:field="*{photoUrl}">
+            <input id="plotId" name="plotId" class="form-control" type="hidden"  th:field="*{plotId}">
+            <input id="groundId" name="groundId" class="form-control" type="hidden" th:value="*{groundId}">
+            <input id="samplingNumber" name="samplingNumber" class="form-control" type="hidden" th:value="*{samplingNumber}">
+            <input id="harmfulSpeciesType" name="harmfulSpeciesType" class="form-control" type="hidden" value="001">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">目种类：</label>
+                        <div class="col-sm-8">
+                            <select name="detailedType"  id="detailedType"   onchange="getKeType() " class="form-control"
+                                    th:with="type=${@dict.getCode('1000159')}"   required>
+                                <option>请选择</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictCode}" th:field="*{detailedType}" ></option>
+
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">科种类：</label>
+                        <div class="col-sm-8">
+                            <select name="sectiondType"  id="sectiondType"   class="form-control"
+                                    required>
+                                <option>请选择</option>
+
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <!--<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">编号：</label>
+                        <div class="col-sm-8">
+                            <input name="samplingNumber" class="form-control" type="text" required>
+                        </div>
+                    </div>
+                </div>-->
+                <!--<div class="col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">有害生物种类：</label>
+                        <div class="col-sm-8">
+                            <input name="harmfulSpeciesType" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>-->
+                <!--<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">具体种类：</label>
+                        <div class="col-sm-8">
+                            <input id="detailedType" name="detailedType" class="form-control" th:field="*{detailedType}" type="text" required>
+                        </div>
+                    </div>
+                </div>-->
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">取样面积类型：</label>
+                        <div class="col-sm-8">
+                            <select name="samplingArea" onchange="conversion()" id="samplingArea"   class="form-control" th:with="type=${@dict.getCode('1000021')}" required>
+                                <option>请选择</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictCode}" th:field="*{samplingArea}"></option>
+                            </select>
+                        </div>
+                       <!-- <label class="col-sm-3 control-label">取样面积：</label>
+                        <div class="col-sm-8">
+                            <select name="samplingArea" id="detailedType"  class="form-control m-b" th:with="type=${@dict.getCode('1000021')}" required>
+                                <option>请选择</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" id="dj2"></option>
+                            </select>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+
+
+
+                <!--<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">具体种类：</label>
+                        <div class="col-sm-8">
+                            <input name="detailedType" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>-->
+
+            <div class="row">
+                <div class="col-sm-6" id="cdNumber">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" id="sumName">测定数量：</label>
+                        <div class="col-sm-8">
+                            <input name="quantityDetermination" id="quantityDetermination" class="form-control" onchange="conversion()"  type="text" th:field="*{quantityDetermination}" required th:onkeyup="value=value.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g,'$1')" maxlength="8">
+                        </div>
+                    </div>
+                </div>
+
+
+          <!--<div  id="hidden">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">每株害虫数：</label>
+                        <div class="col-sm-8">
+                            <input  id="eachpestNumber" name="eachpestNumber"  class="form-control" type="text" onchange="eachpest()"   required>
+
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+
+                <div class="row">
+                    <div id="plantNumber1">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">每百平米植株数：</label>
+                        <div class="col-sm-8">
+                                <input name="plantNumber" id="plantNumber" class="form-control"  type="text" onchange="plant()" th:field="*{plantNumber}" th:onkeyup="value=value.replace( /[^\d]/g,'')" maxlength="8">
+                        </div>
+                    </div>
+                </div>
+                    </div>
+
+
+
+
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">换算标准密度：</label>
+                        <div class="col-sm-8">
+                            <input  id="standardDensity" name="standardDensity" readonly="readonly" class="form-control" type="text"  style="box-shadow:inset 1 0px 0px rgba(0,0,0,0.075); color: red;font-size: 18px;"  th:field="*{standardDensity}" required>
+                           <span  >密度单位：</span><span id="danwei">每平米害虫数</span>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">取样时间：</label>
+                        <div class="col-sm-8">
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input id="samplingTime" name="samplingTime" class="form-control" placeholder="yyyy-MM-dd" type="text" th:value="${#dates.format(cPlot.samplingTime, 'yyyy-MM-dd')}"  required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+            <div class="col-sm-pt">
+                <div class="form-group1">
+                    <label class="font-noraml">照片：</label>
+                    <div class="file-loading">
+                        <input id="fileinput-demo-2" name="photo" type="file" multiple>
+                    </div>
+                </div>
+             <!--   <div class="row">
+                    <div class="col-sm-11">
+                        <div class="form-group1" style="color: red">
+                            注：上传图片格式'jpg', 'gif', 'png','bmp','jpeg';<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 单次最多上传图片数量10个;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 单个图片限制大小10MB。
+
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+            </div>
+        </form>
+
+        <!--<div class="button-b" style="margin-left: 70%" id="button-set">
+            &lt;!&ndash;<button type="button" class="btn btn-w-m btn-primary" onclick="saveup()"id="saveup" >&ndash;&gt;&lt;!&ndash;保存并上报</button>&ndash;&gt;
+            <button type="button" class="btn btn-w-m btn-primary" onclick="save()"id="save" >保 存</button>
+            <button type="button" class="btn btn-w-m btn-danger" onclick="closeItem()" >关 闭</button>
+        </div>-->
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js"/>
+    <th:block th:include="include :: bootstrap-select-js"/>
+    <th:block th:include="include :: jquery-steps-js"/>
+    <th:block th:include="include :: datetimepicker-js"/>
+    <th:block th:include="include :: bootstrap-fileinput-js"/>
+    <th:block th:include="include :: dimianCommon-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "caiji/plot";
+        var prefix1 = ctx + "caiji/survey";
+        var sectiondType = [[${cPlot.sectiondType}]];
+        $(function(){
+            getKeType();
+            chush(null,null,true,[[${initialPreview}]],[[${initialPreviewConfig}]],document.getElementById("photoUrl"));
+
+           // document.getElementById("hidden").style.display="none";//隐藏
+           // document.getElementById("plantNumber1").style.display="none";//隐藏
+            //document.getElementById("hidden").style.display="";//显示
+            conversion();
+            $("input[name='samplingTime']").datetimepicker({
+                format: "yyyy-mm-dd",
+                minView: "month",
+                autoclose: true
+            });
+        });
+
+
+        function submitHandler() {
+            /*alert(JSON.stringify($('#form-allocation-add').serialize()))*/
+            if ($.validate.form()) {
+                var formData = new FormData(document.getElementById("form-allocation-add"));
+                if(savefiles.length>0){
+                    // alert(savefiles.length);
+                    for(var i=0;i<savefiles.length;i++){
+                        formData.append("file", savefiles[i]);
+                    }
+                }
+                /* var files1=$("#fileinput-demo-2").get(0).files ;
+                 for(var i=0;i<files1.length;i++){
+                     formData.append("file", document.getElementById("fileinput-demo-2").files[i]);
+                 };*/
+                $.ajax({
+                    url: prefix + "/editY",
+                    type: 'post',
+                    cache: false,
+                    data: formData,
+                    dataType:'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        $.operate.successCallback(result);
+                    }
+                });
+            }
+        }
+
+
+
+
+
+
+
+
+        function conversion() {
+            debugger
+            var type=$("#samplingArea option:selected").val();
+            var string="每平米害虫数";
+            var string1="每网害虫数";
+            var suName="测定数量：";
+            var suName1="每株害虫数：";
+            /*alert(type)*/
+            //害虫兆隆每平米
+            if(type=='1000138'){
+                document.getElementById("cdNumber").style.display="";//显示
+                // document.getElementById("hidden").style.display="none";//隐藏
+                document.getElementById("plantNumber1").style.display="none";//隐藏
+                var data = $("#quantityDetermination").val();
+                /*alert(data)*/
+                var a=(data + "("+ string +")")
+                $("#standardDensity" ) .val(data);//赋值给一个id为ridStr的input文本框
+                $("#danwei" ) .text(string);
+                $("#sumName" ) .text(suName);
+                $("#plantNumber").val("");
+            }else if(type=='1000139'){
+
+                document.getElementById("cdNumber").style.display="";//显示
+                //document.getElementById("hidden").style.display="none";//隐藏
+                document.getElementById("plantNumber1").style.display="none";//隐藏
+
+                var data = $("#quantityDetermination").val();
+                var a=(data*4)
+                $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
+                $("#danwei" ) .text(string);
+                $("#sumName" ) .text(suName);
+                $("#plantNumber").val("");
+            }else if(type=='1000140'){
+                document.getElementById("cdNumber").style.display="";//显示
+                //document.getElementById("hidden").style.display="none";//隐藏
+                document.getElementById("plantNumber1").style.display="none";//隐藏
+
+
+                var data = $("#quantityDetermination").val();
+                var a=(data*2 )
+                $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
+                $("#danwei" ) .text(string);
+                $("#sumName" ) .text(suName);
+                $("#plantNumber").val("");
+            }else if(type=='1000141'){
+                /*alert(3)*/
+                document.getElementById("cdNumber").style.display="";//隐藏
+                document.getElementById("plantNumber1").style.display="";//显示
+                //document.getElementById("hidden").style.display="";//显示
+                var plantNumber = $("#plantNumber").val();
+                var quantityDetermination = $("#quantityDetermination").val();
+                //var eachpestNumber = $("#eachpestNumber").val() ;
+                var number= (plantNumber*quantityDetermination)/100;
+                $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
+                $("#danwei" ) .text(string);
+                $("#sumName" ) .text(suName1);
+
+            }else if(type=='1000142'){
+
+                document.getElementById("cdNumber").style.display="";//显示
+                document.getElementById("plantNumber1").style.display="none";//隐藏
+                //document.getElementById("hidden").style.display="";//显示
+                var quantityDetermination = $("#quantityDetermination").val();
+                var number=(quantityDetermination)/100  ;
+                $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
+                $("#danwei" ) .text(string1);
+                $("#sumName" ) .text(suName);
+                $("#plantNumber").val("");
+            }else if(type=='1000143'){
+                document.getElementById("cdNumber").style.display="";//隐藏
+                document.getElementById("plantNumber1").style.display="none";//隐藏
+                // document.getElementById("hidden").style.display="";//显示
+                var quantityDetermination = $("#quantityDetermination").val();
+                var number=(quantityDetermination)/200 ;
+                $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
+                $("#danwei" ) .text(string1);
+                $("#sumName" ) .text(suName);
+                $("#plantNumber").val("");
+            }
+
+
+        }
+
+
+        //
+        function plant() {
+            var plantNumber = $("#plantNumber").val();
+            var eachpestNumber = $("#quantityDetermination").val();
+            if(eachpestNumber==null){
+                alert("请填写完整")
+            }else{
+                var number=(plantNumber*eachpestNumber)/100;
+                $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
+            }
+        }
+
+
+    </script>
+</body>
+</html>

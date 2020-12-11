@@ -138,8 +138,8 @@ public class CTaskChfzCountController extends BaseController {
     @RequestMapping("/detailList/{province}")
     public String detailList(@PathVariable("province") String province, ModelMap modelMap)
     {
-        startPage();
-        List<CTaskChfz> list = cTaskChfzMapper.selectCTaskChfzAreaListByProvince(province);
+       // startPage();
+       //List<CTaskChfz> list = cTaskChfzMapper.selectCTaskChfzAreaListByProvince(province);
         List<SysRole> roles = ShiroUtils.getSysUser().getRoles();
 
         for (int i = 0; i < roles.size(); i++) {
@@ -197,7 +197,7 @@ public class CTaskChfzCountController extends BaseController {
             cTaskChfz.setCity(city);
 
         }
-        List<CTaskChfz> list= cTaskChfzMapper.selectCTaskChfzCityList(cTaskChfz);
+        List<CTaskChfz> list= cTaskChfzMapper.selectCTaskChfzCountyList(cTaskChfz);
 
 
         return getDataTable(list);

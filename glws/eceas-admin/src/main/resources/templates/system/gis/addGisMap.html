@@ -31,7 +31,7 @@
             <label class="col-sm-3 control-label">专题类型：</label>
             <div class="col-sm-8">
                 <select name="project_type" th:with="type=${@dict.getGisFeatures('1')}" class="form-control">
-                    <option th:each="dict : ${type}" th:text="${dict.name}" th:value="${dict.id}" th:fild="*{project_type}"></option>
+                    <option th:each="dict : ${type}" th:text="${dict.name}" th:value="${dict.id}" th:selected="${gisMap.project_type} == ${dict.id} ? true :false"></option>
                 </select>
             </div>
         </div>

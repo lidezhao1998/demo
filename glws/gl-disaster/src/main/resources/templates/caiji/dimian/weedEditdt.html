@@ -114,7 +114,7 @@
               </div>-->
 
             <div class="row">
-                <div id="plantNumber1">
+               <!-- <div id="plantNumber1">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">每百平米植株数：</label>
@@ -123,7 +123,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
 
 
 
@@ -134,7 +134,7 @@
                         <label class="col-sm-4 control-label">换算标准密度：</label>
                         <div class="col-sm-8">
                             <div name="standardDensity"  class="form-control-static" th:text="*{standardDensity}"></div>
-                            <span  >密度单位：</span><span id="danwei">每平米害虫数</span>
+                            <span  >密度单位：</span><span id="danwei">盖度百分比</span>
 
                         </div>
                     </div>
@@ -329,88 +329,7 @@
 
 
 
-    function conversion() {
-        debugger
-        var type=$("#samplingArea option:selected").val();
-        var string="每平米害虫数";
-        var string1="每网害虫数";
-        var suName="测定数量：";
-        var suName1="每株害虫数：";
-        /*alert(type)*/
-        //害虫兆隆每平米
-        if(type=='0'){
-            document.getElementById("cdNumber").style.display="";//显示
-            // document.getElementById("hidden").style.display="none";//隐藏
-            document.getElementById("plantNumber1").style.display="none";//隐藏
-            var data = $("#quantityDetermination").val();
-            /*alert(data)*/
-            var a=(data + "("+ string +")")
-            $("#standardDensity" ) .val(data);//赋值给一个id为ridStr的input文本框
-            $("#danwei" ) .text(string);
-            $("#sumName" ) .text(suName);
-            $("#plantNumber").val("");
-        }else if(type=='1'){
 
-            document.getElementById("cdNumber").style.display="";//显示
-            //document.getElementById("hidden").style.display="none";//隐藏
-            document.getElementById("plantNumber1").style.display="none";//隐藏
-
-            var data = $("#quantityDetermination").val();
-            var a=(data*4)
-            $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
-            $("#danwei" ) .text(string);
-            $("#sumName" ) .text(suName);
-            $("#plantNumber").val("");
-        }else if(type=='2'){
-            document.getElementById("cdNumber").style.display="";//显示
-            //document.getElementById("hidden").style.display="none";//隐藏
-            document.getElementById("plantNumber1").style.display="none";//隐藏
-
-
-            var data = $("#quantityDetermination").val();
-            var a=(data*2 )
-            $("#standardDensity").val(a);//赋值给一个id为ridStr的input文本框
-            $("#danwei" ) .text(string);
-            $("#sumName" ) .text(suName);
-            $("#plantNumber").val("");
-        }else if(type=='3'){
-            /*alert(3)*/
-            document.getElementById("cdNumber").style.display="";//隐藏
-            document.getElementById("plantNumber1").style.display="";//显示
-            //document.getElementById("hidden").style.display="";//显示
-            var plantNumber = $("#plantNumber").val();
-            var quantityDetermination = $("#quantityDetermination").val();
-            //var eachpestNumber = $("#eachpestNumber").val() ;
-            var number= (plantNumber*quantityDetermination)/100;
-            $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
-            $("#danwei" ) .text(string);
-            $("#sumName" ) .text(suName1);
-
-        }else if(type=='4'){
-
-            document.getElementById("cdNumber").style.display="";//显示
-            document.getElementById("plantNumber1").style.display="none";//隐藏
-            //document.getElementById("hidden").style.display="";//显示
-            var quantityDetermination = $("#quantityDetermination").val();
-            var number=(quantityDetermination)/100  ;
-            $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
-            $("#danwei" ) .text(string1);
-            $("#sumName" ) .text(suName);
-            $("#plantNumber").val("");
-        }else if(type=='5'){
-            document.getElementById("cdNumber").style.display="";//隐藏
-            document.getElementById("plantNumber1").style.display="none";//隐藏
-            // document.getElementById("hidden").style.display="";//显示
-            var quantityDetermination = $("#quantityDetermination").val();
-            var number=(quantityDetermination)/200 ;
-            $("#standardDensity").val(number);//赋值给一个id为ridStr的input文本框
-            $("#danwei" ) .text(string1);
-            $("#sumName" ) .text(suName);
-            $("#plantNumber").val("");
-        }
-
-
-    }
 
     //
     function plant() {
